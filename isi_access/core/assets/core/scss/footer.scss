@@ -1,0 +1,10 @@
+@import './isi_access/core/assets/core/scss/variables';
+
+footer {
+    margin-top: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+
+    color: $footer-color;
+    background-color: $footer-background-color;
+}

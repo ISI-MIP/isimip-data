@@ -1,1 +1,1 @@
-require('base')
+import 'bootstrap';
