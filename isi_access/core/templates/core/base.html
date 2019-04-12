@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ request.site.name }}</title>
+
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <meta property="og:title" content="{{ request.site.name }}" />
+        <meta property="og:url" content="{{ request.site.domain }}" />
+
+        <meta name='baseurl' content="{% url 'home' %}" />
+        <meta name='staticurl' content="{% static '' %}" />
+
+        <link rel="shortcut icon" href="{% static 'core/img/favicon.png' %}" type="image/png" />
+
+        {% block head %}
+        <link rel="stylesheet" href="{% static 'base.css' %}" />
+        <script src="{% static 'base.js' %}"></script>
+        {% endblock %}
+    </head>
+    <body>
+        <nav>
+            {% include 'core/base_navigation.html' %}
+        </nav>
+
+        <header>
+            {% include 'core/base_header.html' %}
+        </header>
+
+        <main>
+            {% block main %}{% endblock %}
+        </main>
+
+        <footer>
+            {% include 'core/base_footer.html' %}
+        </footer>
+
+        {% if not debug %}
+        {% include 'core/base_analytics.html' %}
+        {% endif %}
+    </body>
+</html>

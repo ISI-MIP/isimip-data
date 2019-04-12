@@ -1,0 +1,16 @@
+config/settings/local.py
+
+__pycache__
+*.pyc
+*~
+*-
+*.swp
+.DS_Store
+
+/static_root
+/media_root
+/assets
+/node_modules
+/env
+/.coverage
+/htmlcov

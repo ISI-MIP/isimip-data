@@ -1,0 +1,12 @@
+# in aphabetical order
+celery>=4.3
+coverage>=4.5
+Django>=2.2
+django-allauth>=0.39
+django-extensions>=2.1
+django-filter>=2.1
+django-sendfile>=0.3
+djangorestframework>=3.9
+drf-extensions>=0.4.0
+psycopg2-binary>=2.8
+rules>=2.0
