@@ -12,14 +12,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # isi_access apps
-    'isi_access.core',
+    # isimip_data apps
+    'isimip_data.core',
     # 3rd party apps
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
-    'django_extensions',
-    'rules'
+    'django_extensions'
 ]
 
 MIDDLEWARE = [

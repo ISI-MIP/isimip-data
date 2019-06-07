@@ -7,7 +7,7 @@ ALLOWED_HOSTS = ['localhost']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'isi_access',
+        'NAME': 'isimip_data',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',

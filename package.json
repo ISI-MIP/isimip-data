@@ -1,12 +1,17 @@
 {
-  "name": "isi_access",
+  "name": "isimip-data",
   "version": "0.1.0",
   "scripts": {
-    "build": "webpack --config webpack.common.js --mode development",
-    "watch": "webpack --config webpack.common.js --watch --mode development"
+    "build:prod": "webpack --config webpack.prod.js --mode production",
+    "build": "webpack --config webpack.dev.js --mode development",
+    "watch": "webpack --config webpack.dev.js --watch --mode development"
   },
   "author": "Potsdam Institute for Climate Impact Research",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ISI-MIP/isimip-data"
+  },
   "dependencies": {
     "bootstrap": "^4.3.1",
     "css-loader": "^2.1.1",
@@ -15,7 +20,8 @@
     "node-sass": "^4.11.0",
     "popper.js": "^1.15.0",
     "sass-loader": "^7.1.0",
-    "webpack": "^4.29.6"
+    "webpack": "^4.33.0",
+    "webpack-merge": "4.2.1"
   },
   "devDependencies": {
     "webpack-cli": "^3.3.0"

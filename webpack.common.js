@@ -5,12 +5,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 module.exports = {
   entry: {
     base: [
-      './isi_access/core/assets/core/scss/base.scss',
-      './isi_access/core/assets/core/js/base.js',
+      './isimip_data/core/assets/core/scss/base.scss',
+      './isimip_data/core/assets/core/js/base.js',
     ],
     home: [
-      './isi_access/core/assets/core/scss/home.scss',
-      './isi_access/core/assets/core/js/home.js',
+      './isimip_data/core/assets/core/scss/home.scss',
+      './isimip_data/core/assets/core/js/home.js',
     ]
   },
   output: {
