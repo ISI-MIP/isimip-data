@@ -47,3 +47,5 @@ cp config/settings/sample.local.py config/settings/local.py
 ```bash
 npm run watch
 ```
+
+The application is now accessible on http://localhost:8000 in your local browser.
