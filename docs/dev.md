@@ -12,7 +12,7 @@ git clone git@github.com/ISI-MIP/isimip-data
 ```bash
 python3 -m venv env
 source env/bin/activate
-pip install -r requirements.txt
+pip install -r requirements/dev.txt
 ```
 
 3. Install and build front-end dependencies:
