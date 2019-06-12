@@ -1,7 +1,16 @@
-@import 'variables';
+@import 'colors';
 
-@import '~bootstrap/scss/functions';
+// match bootstap3's behavior
+$container-max-widths: (
+  sm: 540px,
+  md: 750px,
+  lg: 970px,
+  xl: 1170px
+);
+
 @import '~bootstrap/scss/bootstrap';
 
+@import 'fonts';
 @import 'layout';
+@import 'header';
 @import 'footer';
