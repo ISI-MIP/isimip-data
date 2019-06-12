@@ -1,14 +1,41 @@
-<div class="container">
-    <div class="row">
-        <div class="col-8">
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.
-        </div>
-        <div class="col-4">
-            <ul class="list-unstyled">
-                <li>Lorem ipsum dolor sit amet</li>
-                <li>labore et dolore magna</li>
-                <li>Stet clita kasd gubergren</li>
-            </ul>
+{% load staticfiles %}
+{% load i18n %}
+
+<footer>
+    <nav>
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="https://www.isimip.org/newsletter/">Newsletter</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://www.isimip.org/supporters/">Supporters</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://www.isimip.org/news/">News</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://www.isimip.org/impressum/">Impressum &amp; Privacy</a>
+            </li>
+        </ul>
+    </nav>
+    <hr />
+    <div class="logos">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="row">
+                        <div class="col-xs-4 offset-xs-4 col-sm-12 offset-sm-0 col-md-10 offset-md-1">
+                            <img src="{% static 'images/logo-neutral-dark.png' %}" class="image">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 offset-sm-1 col-md-4 offset-md-2 text-center">
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                </div>
+                <div class="col-sm-3 offset-md-1 text-center">
+                    Except where otherwise noted, content on this site is released under the <a href="https://creativecommons.org/publicdomain/zero/1.0/">Creative Commons CC0 waiver</a>.
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</footer>

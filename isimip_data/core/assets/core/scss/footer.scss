@@ -1,0 +1,64 @@
+footer {
+    background-color: $color-neutral-dark;
+    color: $color-white;
+    overflow: auto;
+    padding-bottom: 30px;
+
+    a {
+        color: $color-white;
+
+        &:focus, &:hover {
+            color: $color-white;
+        }
+    }
+
+    nav {
+        margin-top: 25px;
+        margin-bottom: 15px;
+
+        ul.nav {
+            justify-content: center;
+
+            li.nav-item {
+                a.nav-link {
+                    background-color: transparent;
+                    font-size: 16px;
+
+                    &:focus, &:hover {
+                        color: $color-primary;
+                    }
+
+                    @media(min-width:992px) {
+                        padding: 10px 35px 10px 35px;
+                    }
+                }
+
+                &.active {
+                    a {
+                        color: $color-primary-light;
+
+                        &:focus, &:hover {
+                            background-color: transparent;
+                            color: $color-primary;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    hr {
+        margin: 15px 15px 25px 15px;
+        border-color: $color-neutral;
+    }
+
+    .logos {
+        font-size: 12px;
+    }
+
+    .image {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}
