@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # isimip_data apps
     'isimip_data.core',
+    'isimip_data.metadata',
     'isimip_data.search',
     # 3rd party apps
     'rest_framework',
@@ -66,11 +67,19 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('DJANGO_PSQL_DBNAME'),
-        'USER': os.getenv('DJANGO_PSQL_USER'),
-        'PASSWORD': os.getenv('DJANGO_PSQL_PASSWORD'),
-        'HOST': os.getenv('DJANGO_PSQL_HOST'),
-        'PORT': os.getenv('DJANGO_PSQL_PORT'),
+        'NAME': os.getenv('DJANGO_DBNAME'),
+        'USER': os.getenv('DJANGO_DBUSER'),
+        'PASSWORD': os.getenv('DJANGO_DBPASS'),
+        'HOST': os.getenv('DJANGO_DBHOST'),
+        'PORT': os.getenv('DJANGO_DBPORT'),
+    },
+    'metadata': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('DJANGO_METADATA_DBNAME'),
+        'USER': os.getenv('DJANGO_METADATA_DBUSER'),
+        'PASSWORD': os.getenv('DJANGO_METADATA_DBPASS'),
+        'HOST': os.getenv('DJANGO_METADATA_DBHOST'),
+        'PORT': os.getenv('DJANGO_METADATA_DBPORT'),
     }
 }
 

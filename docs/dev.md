@@ -29,6 +29,14 @@ cp config/settings/sample.local.py config/settings/local.py
 
 5. Edit `local.py` for a random `SECRET_KEY`, `DEBUG = True`, and the connection to the PostgreSQL database. If not already done, the database can be set up using the output of `./manage.py sqlcreate`, e.g.:
 
+Configure database:
+
+```
+GRANT CONNECT ON DATABASE isimip_metadata TO isimip_data;
+GRANT USAGE ON SCHEMA public TO isimip_data;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO isimip_data
+```
+
 6. Setup database tables and admin user:
 
 ```bash
