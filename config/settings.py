@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # isimip_data apps
     'isimip_data.core',
+    'isimip_data.search',
     # 3rd party apps
     'rest_framework',
     'rest_framework.authtoken',

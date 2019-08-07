@@ -6,12 +6,12 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 module.exports = {
   entry: {
     base: [
-      './isimip_data/core/assets/core/scss/base.scss',
-      './isimip_data/core/assets/core/js/base.js',
+      './isimip_data/core/assets/scss/base.scss',
+      './isimip_data/core/assets/js/base.js',
     ],
-    home: [
-      './isimip_data/core/assets/core/scss/home.scss',
-      './isimip_data/core/assets/core/js/home.js',
+    search: [
+      './isimip_data/search/assets/scss/search.scss',
+      './isimip_data/search/assets/js/search.js',
     ]
   },
   resolve: { extensions: ["*", ".js", ".jsx"] },
@@ -63,7 +63,7 @@ module.exports = {
       {
         from: '**/*',
         to: './/images/',
-        context: './isimip_data/core/assets/core/images/',
+        context: './isimip_data/core/assets/images/',
       }
     ])
   ]
