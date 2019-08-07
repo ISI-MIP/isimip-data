@@ -1,6 +1,12 @@
 import os
 
-from . import BASE_DIR
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+
+DEBUG = True if os.getenv('DJANGO_DEBUG') else False
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '::1'] + os.getenv('ALLOWED_HOSTS', '').split()
 
 INTERNAL_IPS = ('127.0.0.1',)
 
@@ -17,9 +23,13 @@ INSTALLED_APPS = [
     # 3rd party apps
     'rest_framework',
     'rest_framework.authtoken',
-    'django_filters',
-    'django_extensions'
+    'django_filters'
 ]
+
+if DEBUG:
+    INSTALLED_APPS += [
+        'django_extensions'
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,6 +62,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('DJANGO_PSQL_DBNAME'),
+        'USER': os.getenv('DJANGO_PSQL_USER'),
+        'PASSWORD': os.getenv('DJANGO_PSQL_PASSWORD'),
+        'HOST': os.getenv('DJANGO_PSQL_HOST'),
+        'PORT': os.getenv('DJANGO_PSQL_PORT'),
+    }
+}
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Berlin'
@@ -62,10 +83,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root/')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'assets/')
+    os.path.join(BASE_DIR, 'static/')
 ]
 
 MEDIA_URL = '/media/'
@@ -76,5 +98,10 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_FROM = 'info@example.com'
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_FROM = 'info@example.com'
+
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_FROM = 'info@example.com'

@@ -1,16 +1,17 @@
-config/settings/local.py
+__pycache__/
+*.py[cod]
 
-__pycache__
-*.pyc
 *~
 *-
 *.swp
+*.save
 .DS_Store
 
+/static
 /static_root
 /media_root
-/assets
 /node_modules
 /env
+/.env
 /.coverage
 /htmlcov

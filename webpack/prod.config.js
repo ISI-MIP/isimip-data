@@ -1,7 +1,8 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const common = require('./webpack.common.js')
 const TerserPlugin = require('terser-webpack-plugin')
+
+const common = require('./common.config.js')
 
 module.exports = merge(common, {
   plugins: [

@@ -14,15 +14,22 @@ module.exports = {
       './isimip_data/core/assets/core/js/home.js',
     ]
   },
+  resolve: { extensions: ["*", ".js", ".jsx"] },
   output: {
     libraryTarget: 'this',
     library: '[name]',
-    path: path.resolve('./assets/'),
+    path: path.resolve('./static/'),
     publicPath: '/static/',
     filename: '[name].js'
   },
   module: {
     rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /(node_modules|bower_components)/,
+        loader: "babel-loader",
+        options: { presets: ["@babel/env"] }
+      },
       {
         test: /\.s?css$/,
         use: [

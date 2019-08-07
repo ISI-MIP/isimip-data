@@ -17,9 +17,8 @@
 
         <link rel="shortcut icon" href="{% static 'core/img/favicon.png' %}" type="image/png" />
 
-        {% block head %}
+        {% block style %}
         <link rel="stylesheet" href="{% static 'base.css' %}" />
-        <script src="{% static 'base.js' %}"></script>
         {% endblock %}
     </head>
     <body>
@@ -33,10 +32,14 @@
 
         <footer>
             {% include 'core/base_footer.html' %}
+
+            {% if not debug %}
+            {% include 'core/base_analytics.html' %}
+            {% endif %}
         </footer>
 
-        {% if not debug %}
-        {% include 'core/base_analytics.html' %}
-        {% endif %}
+        {% block script %}
+        <script src="{% static 'base.js' %}"></script>
+        {% endblock %}
     </body>
 </html>
