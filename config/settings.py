@@ -4,11 +4,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
-DEBUG = True if os.getenv('DJANGO_DEBUG') else False
+if os.getenv('DJANGO_DEBUG'):
+    DEBUG = (os.getenv('DJANGO_DEBUG').upper() == 'TRUE')
+else:
+    DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '::1'] + os.getenv('ALLOWED_HOSTS', '').split()
+if os.getenv('DJANGO_ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split()
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '::1']
 
-INTERNAL_IPS = ('127.0.0.1',)
+INTERNAL_IPS = ['127.0.0.1']
 
 INSTALLED_APPS = [
     # django apps
@@ -30,7 +36,8 @@ INSTALLED_APPS = [
 
 if DEBUG:
     INSTALLED_APPS += [
-        'django_extensions'
+        'django_extensions',
+        'debug_toolbar',
     ]
 
 MIDDLEWARE = [
@@ -43,6 +50,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
+
+if DEBUG:
+    MIDDLEWARE = [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ] + MIDDLEWARE
 
 ROOT_URLCONF = 'config.urls'
 
@@ -92,7 +104,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root/')
