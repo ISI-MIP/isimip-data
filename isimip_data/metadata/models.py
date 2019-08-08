@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.search import SearchVectorField
 
 
 class Dataset(models.Model):
@@ -9,6 +10,7 @@ class Dataset(models.Model):
     name = models.TextField()
     version = models.TextField()
     attributes = JSONField()
+    search_vector = SearchVectorField(null=True)
 
     class Meta:
         db_table = 'datasets'
@@ -27,6 +29,7 @@ class File(models.Model):
     checksum = models.TextField()
     checksum_type = models.TextField()
     attributes = JSONField()
+    search_vector = SearchVectorField(null=True)
 
     class Meta:
         db_table = 'files'

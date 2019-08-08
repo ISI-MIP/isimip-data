@@ -2,16 +2,21 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
+from rest_framework import routers
+
 from isimip_data.metadata.views import dataset, file
 from isimip_data.search.views import search
+from isimip_data.search.viewsets import DatasetViewSet
+
+router = routers.DefaultRouter()
+router.register(r'datasets', DatasetViewSet, basename='dataset')
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
     path('datasets/<dataset_name>/', dataset, name='dataset'),
     path('files/<file_name>/', file, name='file'),
-
+    path('api/v1/', include(router.urls)),
     path('', search, name='search'),
 ]
 
