@@ -6,10 +6,11 @@ from rest_framework import routers
 
 from isimip_data.metadata.views import dataset, file
 from isimip_data.search.views import search
-from isimip_data.search.viewsets import DatasetViewSet
+from isimip_data.search.viewsets import DatasetViewSet, FileViewSet
 
 router = routers.DefaultRouter()
 router.register(r'datasets', DatasetViewSet, basename='dataset')
+router.register(r'files', FileViewSet, basename='file')
 
 
 urlpatterns = [

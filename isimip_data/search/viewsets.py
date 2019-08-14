@@ -1,31 +1,49 @@
-from django.contrib.postgres.search import SearchVector
-from django.contrib.postgres.search import SearchQuery
-from django.contrib.postgres.search import SearchRank
+from django_filters.rest_framework import DjangoFilterBackend
 
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.response import Response
+from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.pagination import PageNumberPagination
 
-from isimip_data.metadata.models import Dataset
+from isimip_data.metadata.models import Dataset, File
 
-from .serializers import DatasetSerializer
+from .serializers import DatasetSerializer, FileSerializer
+from .filters import SearchFilterBackend, AttributeFilterBackend
 
 
-class DatasetViewSet(GenericViewSet):
+class Pagination(PageNumberPagination):
+    page_size = 10
+
+
+class DatasetViewSet(ReadOnlyModelViewSet):
 
     serializer_class = DatasetSerializer
     queryset = Dataset.objects.using('metadata')
+    pagination_class = Pagination
 
-    def list(self, request, *args, **kwargs):
+    filter_backends = (
+        DjangoFilterBackend,
+        SearchFilterBackend,
+        AttributeFilterBackend
+    )
+    filterset_fields = (
+        'name',
+        'version',
+        'checksum'
+    )
 
-        search_term = request.GET.get('search', '')
-        search_query = SearchQuery(search_term)
-        search_rank = SearchRank('search_vector', search_query)
 
-        queryset = self.get_queryset().filter(
-            search_vector=search_query
-        ).annotate(
-            rank=search_rank
-        ).order_by('-rank')
+class FileViewSet(ReadOnlyModelViewSet):
 
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+    serializer_class = FileSerializer
+    queryset = File.objects.using('metadata')
+    pagination_class = Pagination
+
+    filter_backends = (
+        DjangoFilterBackend,
+        SearchFilterBackend,
+        AttributeFilterBackend
+    )
+    filterset_fields = (
+        'name',
+        'version',
+        'checksum'
+    )

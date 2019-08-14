@@ -127,3 +127,11 @@ if DEBUG:
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     EMAIL_FROM = 'info@example.com'
+
+FILES_BASE_URL = os.getenv('DJANGO_FILES_BASE_URL')
+ATTRIBUTES_FILTER = (
+    'simulation_round',
+    'sector',
+    'model',
+    'gcm'
+)
