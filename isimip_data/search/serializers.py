@@ -39,4 +39,4 @@ class FileSerializer(serializers.ModelSerializer):
         )
 
     def get_url(self, obj):
-        return settings.FILES_BASE_URL + obj.path
+        return settings.FILES_BASE_URL % obj.attributes + obj.path
