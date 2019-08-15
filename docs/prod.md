@@ -1,6 +1,55 @@
 Production setup
 ================
 
+## Prerequisites
+
+First install the basic prerequisites from your linux distribution. For openSUSE Leap 15 use:
+
+```bash
+# as root
+zypper install python3 python3-devel
+zypper install postgresql10 postgresql10-server postgresql10-contrib postgresql10-devel
+zypper install nginx
+```
+
+## PostgreSQL
+
+Configure the database to allow for username/password connections:
+
+```
+# in /var/lib/pgsql/data/pg_hba.conf
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            md5
+# IPv6 local connections:
+host    all             all             ::1/128                 md5
+```
+
+Start the database:
+
+```
+systemctl enable postgresql
+systemctl start postgresql
+```
+
+Login to the database as `postgres` user and create a `isimip_data` and a `isimip_metadata` user:
+
+```sql
+CREATE USER isimip_data WITH ENCRYPTED PASSWORD 'ISIMIP_DATA_PASSWORD' CREATEDB;
+CREATE DATABASE isimip_data WITH ENCODING 'UTF-8' OWNER isimip_data;
+
+CREATE USER isimip_metadata WITH ENCRYPTED PASSWORD 'ISIMIP_METADATA_PASSWORD' CREATEDB;
+CREATE DATABASE isimip_metadata WITH ENCODING 'UTF-8' OWNER isimip_metadata;
+```
+
+Now the database is ready for this application as well as the [isimip-publisher](https://github.com/ISI-MIP/isimip-publisher). After the `datasets` and `files` tables are created in `isimip_metadata` run the following to let the `isimip_data` access the tables (read-only).
+
+```bash
+# as postgres
+psql isimip_metadata -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO isimip_data;'
+```
+
+## Python environment
+
 In production, you should create a dedicated user the application. All steps for the installation, which do not need root access, should be done using this user. We assume this user is called `isimip`, it’s home is `/home/isimip` and the application is located in `/home/isimip/isimip-data`. The user can be created using:
 
 ```bash
@@ -18,7 +67,7 @@ echo "source ~/env/bin/activate" >> ~/.bashrc
 . ~/.bashrc
 ```
 
-#### Back end
+## Django application
 
 Clone the repository:
 
@@ -39,36 +88,27 @@ pip install -r requirements/prod.txt
 Create the local configuration file `.env`:
 
 ```bash
-DJANGO_SECRET_KEY=<a secret random string>
+DJANGO_SECRET_KEY=A_SECRET_RANDOM_KEY
 
 # database connection for the django database
 DJANGO_DBNAME=isimip_data
 DJANGO_DBUSER=isimip_data
+DJANGO_DBPASS=ISIMIP_DATA_PASSWORD
+DJANGO_DBHOST=localhost
 
 # database connection for the metadata database
 DJANGO_METADATA_DBNAME=isimip_metadata
 DJANGO_METADATA_DBUSER=isimip_data
+DJANGO_DBPASS=ISIMIP_DATA_PASSWORD
+DJANGO_DBHOST=localhost
 
 DJANGO_FILES_BASE_URL=http://files.isimip.org/%(simulation_round)s/%(sector)s/%(model)s/
 ```
 
-5. Configure database:
+Setup database tables and admin user:
 
 ```bash
-# as postgres user
-
-
-CREATE USER isimip_data WITH ENCRYPTED PASSWORD 'isimip_data' CREATEDB;
-CREATE DATABASE isimip_data WITH ENCODING 'UTF-8' OWNER "isimip_data";
-GRANT ALL PRIVILEGES ON DATABASE isimip_data TO isimip_data;
-
-\c isimip_metadata
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO isimip_data
-```
-
-6. Setup database tables and admin user:
-
-```bash
+# as isimip, in /home/isimip/isimip-data
 ./manage.py migrate
 ./manage.py createsuperuser
 ```
@@ -120,24 +160,17 @@ This service needs to be started and enabled like any other service:
 ```bash
 # as root
 systemctl daemon-reload
-systemctl start isimip-data
 systemctl enable isimip-data
+systemctl start isimip-data
 systemctl status isimip-data
 ```
 
 #### NGINX
 
-Next, install NGINX:
-
-```bash
-# as root
-sudo apt-get install nginx
-```
-
 Crate the Nginx configuration as follows (again with root/sudo permissions):
 
 ```
-# /etc/nginx/sites-available/YOURDOMAIN
+# /etc/nginx/vhosts.d/YOURDOMAIN
 server {
     listen 80;
     server_name YOURDOMAIN;
@@ -157,6 +190,9 @@ server {
 }
 ```
 
+Start nginx:
 
-
-
+```
+systemctl enable nginx
+systemctl start nginx
+```
