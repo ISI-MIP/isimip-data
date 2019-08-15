@@ -4,36 +4,53 @@ Development Setup
 1. Clone the repository:
 
 ```bash
-git clone git@github.com/ISI-MIP/isimip-data
+git clone git@github.com:ISI-MIP/isimip-data
+cd isimip-data
 ```
 
 2. Create a virtual environment and install Python dependencies:
 
 ```bash
 python3 -m venv env
-source env/bin/activate
+source env/bin/activate  # this needs to be done for each new terminal session
 pip install -r requirements/dev.txt
 ```
 
 3. Install and build front-end dependencies:
 
 ```bash
+nvm install
 npm install
+npm run build
 ```
 
-4. Create the local configuration file `local.py`:
+4. Create the local configuration file `.env`:
 
 ```bash
-cp config/settings/sample.local.py config/settings/local.py
+DJANGO_SECRET_KEY=<a secret random string>
+DJANGO_DEBUG=True
+
+# database connection for the django database
+DJANGO_DBNAME=isimip_data
+DJANGO_DBUSER=isimip_data
+DJANGO_DBPASS=isimip_data
+
+# database connection for the metadata database
+DJANGO_METADATA_DBNAME=isimip_metadata
+DJANGO_METADATA_DBUSER=isimip_data
+DJANGO_METADATA_DBPASS=isimip_data
+
+DJANGO_FILES_BASE_URL=http://isimip-files/%(simulation_round)s/%(sector)s/%(model)s/
 ```
 
-5. Edit `local.py` for a random `SECRET_KEY`, `DEBUG = True`, and the connection to the PostgreSQL database. If not already done, the database can be set up using the output of `./manage.py sqlcreate`, e.g.:
+5. Configure database (`./manage.py sqlcreate` shows the commands needed for your setup):
 
-Configure database:
+```psql
+CREATE USER isimip_data WITH ENCRYPTED PASSWORD 'isimip_data' CREATEDB;
+CREATE DATABASE isimip_data WITH ENCODING 'UTF-8' OWNER "isimip_data";
+GRANT ALL PRIVILEGES ON DATABASE isimip_data TO isimip_data;
 
-```
-GRANT CONNECT ON DATABASE isimip_metadata TO isimip_data;
-GRANT USAGE ON SCHEMA public TO isimip_data;
+\c isimip_metadata
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO isimip_data
 ```
 
