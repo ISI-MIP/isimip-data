@@ -25,9 +25,17 @@ class SearchFilterBackend(BaseFilterBackend):
 class AttributeFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
+        # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#std:fieldlookup-hstorefield.contains
+        # and https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#containment-and-key-operations
+        # for optimal jsonb lookups: queryset.filter(field={'foo': 'bar', 'egg': 'spam'})
+
+        attribute_filter = {}
         for key in settings.ATTRIBUTES_FILTER:
             value = request.GET.get(key)
             if value:
-                queryset = queryset.filter(**{'attributes__%s' % key: value})
+                attribute_filter[key] = value
+
+        if attribute_filter:
+            queryset = queryset.filter(attributes__contains=attribute_filter)
 
         return queryset
