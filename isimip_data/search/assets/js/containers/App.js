@@ -5,6 +5,8 @@ import DatasetApi from '../api/DatasetApi'
 import Search from '../components/Search'
 import Results from '../components/Results'
 import Pagination from '../components/Pagination'
+import Facets from '../components/Facets'
+
 
 class App extends Component {
 
@@ -18,8 +20,20 @@ class App extends Component {
       datasets: {
         count: 0,
         results: []
-      }
-    };
+      },
+      facets: [
+        {
+          title: 'Simulation round',
+          attribute: 'simulation_round',
+          items: []
+        },
+        {
+          title: 'Sector',
+          attribute: 'sector',
+          items: []
+        }
+      ]
+    }
     this.handleSearch = this.handleSearch.bind(this);
     this.handlePagination = this.handlePagination.bind(this)
   }
@@ -38,10 +52,25 @@ class App extends Component {
   }
 
   fetch() {
-    const { params } = this.state
+    const { params, facets } = this.state
 
+    // fetch the datasets
     DatasetApi.fetchDatasets(params).then(datasets => {
       this.setState({ datasets })
+    })
+
+    // fetch the facets
+    const promises = []
+    facets.map(facet => {
+      promises.push(DatasetApi.fetchDatasetsFacets(facet.attribute, params))
+    })
+    Promise.all(promises).then(results => {
+      this.setState({
+        facets: facets.map((facet, index) => {
+          facet.items = results[index]
+          return facet
+        })
+      })
     })
   }
 
@@ -65,7 +94,7 @@ class App extends Component {
   }
 
   render() {
-    const { params, datasets } = this.state
+    const { params, facets, datasets } = this.state
 
     return (
       <div className="row">
@@ -73,7 +102,7 @@ class App extends Component {
           <Search onSubmit={this.handleSearch} />
         </div>
         <div className="col-lg-3">
-
+          <Facets facets={facets}/>
         </div>
         <div className="col-lg-9">
           <Pagination count={datasets.count} page={params.page} pageSize={10} onSubmit={this.handlePagination} />
