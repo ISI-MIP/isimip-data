@@ -6,7 +6,7 @@ function Results(props) {
   const { results } = props
 
   return (
-    <ol className="results">
+    <ul className="results">
       {
         results.map(result => {
           return (
@@ -16,7 +16,7 @@ function Results(props) {
           )
         })
       }
-    </ol>
+    </ul>
   )
 }
 

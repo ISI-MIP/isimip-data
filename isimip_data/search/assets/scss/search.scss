@@ -2,21 +2,50 @@
 
 .search {
     margin-bottom: 20px;
-}
 
-.sidebar {
-    min-height: 200px;
-    background-color: silver;
-}
-
-.results {
-    > li {
-        padding: 10px;
+    .search {
+        button {
+            width: 100px;
+        }
     }
 }
 
 .facets {
     .facet {
         margin-bottom: 20px;
+
+        .card-header {
+            padding: 0.5rem 0.75rem;
+        }
+
+        .facet-item {
+            padding: 0.5rem 0.75rem 0.5rem 2rem;
+
+            input {
+                margin-top: 0.15rem;
+            }
+        }
+    }
+}
+
+.pagination {
+    .page-item {
+        text-align: center;
+        width: 50px;
+
+        &:first-child,
+        &:last-child {
+            width: 100px;
+        }
+    }
+    .page-item {
+        text-align: center;
+        width: 50px;
+    }
+}
+
+.results {
+    > li {
+        padding: 10px;
     }
 }

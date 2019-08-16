@@ -5,13 +5,14 @@ import Facet from './Facet'
 
 
 function Facets(props) {
-  const { facets } = props
+  const { facets, params, onChange } = props
 
   return (
     <div className="facets">
       {
         facets.map(facet => {
-          return <Facet key={facet.attribute} facet={facet} />
+          const checked = params[facet.attribute] || []
+          return <Facet key={facet.attribute} facet={facet} checked={checked} onChange={onChange} />
         })
       }
     </div>
@@ -19,7 +20,9 @@ function Facets(props) {
 }
 
 Facets.propTypes = {
-  facets: PropTypes.array.isRequired
+  facets: PropTypes.array.isRequired,
+  params: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired
 }
 
 export default Facets

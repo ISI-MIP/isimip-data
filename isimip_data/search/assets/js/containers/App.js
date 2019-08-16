@@ -15,7 +15,9 @@ class App extends Component {
     this.state = {
       params: {
         search: '',
-        page: 1
+        page: 1,
+        sector: ['biomes', 'health']
+
       },
       datasets: {
         count: 0,
@@ -31,11 +33,18 @@ class App extends Component {
           title: 'Sector',
           attribute: 'sector',
           items: []
+        },
+        {
+          title: 'Model',
+          attribute: 'model',
+          items: []
         }
       ]
     }
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleReset = this.handleReset.bind(this);
     this.handlePagination = this.handlePagination.bind(this)
+    this.handleFacets = this.handleFacets.bind(this)
   }
 
   componentDidMount() {
@@ -48,7 +57,7 @@ class App extends Component {
         search: '',
         page: 1
       }
-    })
+    }, this.fetch)
   }
 
   fetch() {
@@ -84,6 +93,10 @@ class App extends Component {
     this.setState({ params }, this.fetch)
   }
 
+  handleReset() {
+    this.reset()
+  }
+
   handlePagination(page) {
     const { params } = this.state
 
@@ -93,20 +106,43 @@ class App extends Component {
     this.setState({ params }, this.fetch)
   }
 
+  handleFacets(attribute, key, value) {
+    const { params } = this.state
+
+    // create the array in params if it not already exists
+    if (params[attribute] == undefined) {
+      params[attribute] = []
+    }
+
+    // find the current index of key
+    const index = params[attribute].indexOf(key)
+
+    console.log(params[attribute], index);
+
+    if (index == -1 && value) {
+      params[attribute].push(key)
+    } else if (index > -1 && !value) {
+      params[attribute].splice(index, 1)
+    }
+
+    this.setState({ params }, this.fetch)
+  }
+
   render() {
     const { params, facets, datasets } = this.state
 
     return (
       <div className="row">
         <div className="col-lg-12">
-          <Search onSubmit={this.handleSearch} />
+          <Search onSubmit={this.handleSearch} onReset={this.handleReset} />
         </div>
         <div className="col-lg-3">
-          <Facets facets={facets}/>
+          <Facets facets={facets} params={params} onChange={this.handleFacets}/>
         </div>
         <div className="col-lg-9">
           <Pagination count={datasets.count} page={params.page} pageSize={10} onSubmit={this.handlePagination} />
           <Results results={datasets.results} />
+          <Pagination count={datasets.count} page={params.page} pageSize={10} onSubmit={this.handlePagination} />
         </div>
       </div>
     )

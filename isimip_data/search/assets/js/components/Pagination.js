@@ -15,16 +15,15 @@ class Pagination extends Component {
 
   handleClick(e, page) {
     e.preventDefault()
-    const { onSubmit } = this.props
-    onSubmit(page)
+    this.props.onSubmit(page)
   }
 
   render() {
     const { count, page, pageSize, onSubmit } = this.props
     const pageCount = Math.ceil(count / pageSize)
 
-    const startPage = Math.max(1, Math.min(page - 5, pageCount - 10))
-    const endPage = Math.min(Math.max(page + 5, 10), pageCount)
+    const startPage = Math.max(1, Math.min(page - 4, pageCount - 8))
+    const endPage = Math.min(Math.max(page + 4, 9), pageCount)
 
     const pages = range(startPage, endPage)
     const items = pages.map(currentPage => {
@@ -39,7 +38,7 @@ class Pagination extends Component {
     })
 
     return (
-      <nav aria-label="Page navigation example">
+      <nav>
         <ul className="pagination">
           <li className={'page-item' + ((page == startPage) ? ' disabled' : '')}>
             <a className="page-link" href="" onClick={e => this.handleClick(e, page - 1)}>

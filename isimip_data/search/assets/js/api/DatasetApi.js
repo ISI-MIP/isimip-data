@@ -1,9 +1,21 @@
+const encodeParams = params => {
+  return Object.entries(params).map(item => {
+    const [key, value] = item
+
+    if (Array.isArray(value)) {
+      return value.map(v => {
+        return encodeURIComponent(key) + '=' + encodeURIComponent(v)
+      }).join('&')
+    } else {
+      return encodeURIComponent(key) + '=' + encodeURIComponent(value)
+    }
+  }).join('&')
+}
+
 class DatasetApi {
 
   static fetchDatasets(params) {
-    const urlParams = new URLSearchParams(params)
-
-    return fetch('/api/v1/datasets/?' + urlParams).then(response => {
+    return fetch('/api/v1/datasets/?' + encodeParams(params)).then(response => {
       return response.json()
     }).catch(error => {
       return error
@@ -11,9 +23,7 @@ class DatasetApi {
   }
 
   static fetchDatasetsFacets(attribute, params) {
-    const urlParams = new URLSearchParams(params)
-
-    return fetch('/api/v1/datasets/facets/' + attribute + '/?' + urlParams).then(response => {
+    return fetch('/api/v1/datasets/facets/' + attribute + '/?' + encodeParams(params)).then(response => {
       return response.json()
     }).catch(error => {
       return error
