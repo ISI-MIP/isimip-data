@@ -2,6 +2,8 @@ import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
 import DatasetApi from '../api/DatasetApi'
+import FacetApi from '../api/FacetApi'
+
 import Search from '../components/Search'
 import Results from '../components/Results'
 import Pagination from '../components/Pagination'
@@ -23,23 +25,7 @@ class App extends Component {
         count: 0,
         results: []
       },
-      facets: [
-        {
-          title: 'Simulation round',
-          attribute: 'simulation_round',
-          items: []
-        },
-        {
-          title: 'Sector',
-          attribute: 'sector',
-          items: []
-        },
-        {
-          title: 'Model',
-          attribute: 'model',
-          items: []
-        }
-      ]
+      facets: []
     }
     this.handleSearch = this.handleSearch.bind(this);
     this.handleReset = this.handleReset.bind(this);
@@ -48,7 +34,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.fetch()
+    FacetApi.fetchFacets().then(facets => {
+      this.setState({ facets }, this.fetch)
+    })
   }
 
   reset() {

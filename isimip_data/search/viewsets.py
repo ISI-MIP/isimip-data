@@ -39,7 +39,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
 
     @action(detail=False, url_path='facets/(?P<attribute>[A-Za-z0-9_]+)')
     def facets(self, request, attribute):
-        if attribute not in settings.ATTRIBUTES_FILTER:
+        if not Facet.objects.filter(attribute=attribute).exists():
             raise NotFound
         else:
             field = 'attributes__%s' % attribute

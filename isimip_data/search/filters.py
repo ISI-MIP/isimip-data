@@ -4,6 +4,8 @@ from django.db.models import Q
 
 from rest_framework.filters import BaseFilterBackend
 
+from .models import Facet
+
 
 class SearchFilterBackend(BaseFilterBackend):
 
@@ -30,12 +32,14 @@ class AttributeFilterBackend(BaseFilterBackend):
         # and https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#containment-and-key-operations
         # for optimal jsonb lookups: queryset.filter(field={'foo': 'bar', 'egg': 'spam'})
 
-        for key in settings.ATTRIBUTES_FILTER:
-            if key != view.attribute_filter_exclude:
+        facets = Facet.objects.all()
+        for facet in facets:
+            attribute = facet.attribute
+            if facet.attribute != view.attribute_filter_exclude:
                 q = Q()
-                for value in request.GET.getlist(key):
+                for value in request.GET.getlist(attribute):
                     if value:
-                        q |= Q(attributes__contains={key: value})
+                        q |= Q(attributes__contains={attribute: value})
                 queryset = queryset.filter(q)
 
         return queryset

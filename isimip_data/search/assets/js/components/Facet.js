@@ -16,21 +16,24 @@ class Facet extends Component {
   render() {
     const { facet, checked } = this.props
 
-    const facet_items = facet.items.map((item, index) => {
-      const [key, count] = item
-      const id = item + '-facet-' + index
-      const isChecked = (checked.indexOf(key) > -1)
+    let facet_items
+    if (facet.items) {
+      facet_items = facet.items.map((item, index) => {
+        const [key, count] = item
+        const id = item + '-facet-' + index
+        const isChecked = (checked.indexOf(key) > -1)
 
-      return (
-        <li key={index} className="list-group-item facet-item d-flex justify-content-between align-items-center">
-          <label className="form-check-label" htmlFor={id}>
-            <input type="checkbox" className="form-check-input" id={id} checked={isChecked}
-                onChange={e => this.handleChange(key, e)} /> {key}
-          </label>
-          <span className="badge badge-secondary badge-pill pull-right">{count}</span>
-        </li>
-      )
-    })
+        return (
+          <li key={index} className="list-group-item facet-item d-flex justify-content-between align-items-center">
+            <label className="form-check-label" htmlFor={id}>
+              <input type="checkbox" className="form-check-input" id={id} checked={isChecked}
+                  onChange={e => this.handleChange(key, e)} /> {key}
+            </label>
+            <span className="badge badge-secondary badge-pill pull-right">{count}</span>
+          </li>
+        )
+      })
+    }
 
     return (
       <div className="card facet small">
