@@ -23,15 +23,17 @@ class Facet extends Component {
         const id = item + '-facet-' + index
         const isChecked = (checked.indexOf(key) > -1)
 
-        return (
-          <li key={index} className="list-group-item facet-item d-flex justify-content-between align-items-center">
-            <label className="form-check-label" htmlFor={id}>
-              <input type="checkbox" className="form-check-input" id={id} checked={isChecked}
-                  onChange={e => this.handleChange(key, e)} /> {key}
-            </label>
-            <span className="badge badge-secondary badge-pill pull-right">{count}</span>
-          </li>
-        )
+        if (key !== null) {
+          return (
+            <li key={index} className="list-group-item facet-item d-flex justify-content-between align-items-center">
+              <label className="form-check-label" htmlFor={id}>
+                <input type="checkbox" className="form-check-input" id={id} checked={isChecked}
+                    onChange={e => this.handleChange(key, e)} /> {key}
+              </label>
+              <span className="badge badge-secondary badge-pill pull-right">{count}</span>
+            </li>
+          )
+        }
       })
     }
 
