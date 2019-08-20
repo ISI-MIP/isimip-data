@@ -4,6 +4,8 @@ from rest_framework import serializers
 
 from isimip_data.metadata.models import Dataset, File
 
+from .models import Facet
+
 
 class DatasetSerializer(serializers.ModelSerializer):
 
@@ -40,3 +42,15 @@ class FileSerializer(serializers.ModelSerializer):
 
     def get_url(self, obj):
         return settings.FILES_BASE_URL % obj.attributes + obj.path
+
+
+class FacetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Facet
+        fields = (
+            'id',
+            'title',
+            'attribute',
+            'order'
+        )

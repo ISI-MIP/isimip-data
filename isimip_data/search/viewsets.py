@@ -11,7 +11,8 @@ from rest_framework.exceptions import NotFound
 
 from isimip_data.metadata.models import Dataset, File
 
-from .serializers import DatasetSerializer, FileSerializer
+from .models import Facet
+from .serializers import DatasetSerializer, FileSerializer, FacetSerializer
 from .filters import SearchFilterBackend, AttributeFilterBackend
 
 
@@ -48,6 +49,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
             values = queryset.values_list(field).annotate(count=Count(field)).order_by(field)
             return Response(values)
 
+
 class FileViewSet(ReadOnlyModelViewSet):
 
     serializer_class = FileSerializer
@@ -64,3 +66,9 @@ class FileViewSet(ReadOnlyModelViewSet):
         'version',
         'checksum'
     )
+
+
+class FacetViewSet(ReadOnlyModelViewSet):
+
+    serializer_class = FacetSerializer
+    queryset = Facet.objects.all()

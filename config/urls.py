@@ -6,12 +6,12 @@ from rest_framework import routers
 
 from isimip_data.metadata.views import dataset, file
 from isimip_data.search.views import search
-from isimip_data.search.viewsets import DatasetViewSet, FileViewSet
+from isimip_data.search.viewsets import DatasetViewSet, FileViewSet, FacetViewSet
 
 router = routers.DefaultRouter()
 router.register(r'datasets', DatasetViewSet, basename='dataset')
 router.register(r'files', FileViewSet, basename='file')
-
+router.register(r'facets', FacetViewSet, basename='facet')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -1,5 +1,6 @@
 # common dependencies in aphabetical order
 Django>=2.2
+django-admin-sortable2>=0.7.3
 django-filter>=2.1
 # django-rq>=2.0
 # django-redis-cache>=2.0
