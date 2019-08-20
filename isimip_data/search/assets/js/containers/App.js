@@ -16,7 +16,7 @@ class App extends Component {
       params: {
         search: '',
         page: 1,
-        sector: ['biomes', 'health']
+        sector: []
 
       },
       datasets: {
