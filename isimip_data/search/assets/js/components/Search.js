@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes, faSearch } from '@fortawesome/free-solid-svg-icons'
 
 class Search extends Component {
 
@@ -36,10 +38,10 @@ class Search extends Component {
                 onChange={this.setValue} value={value} />
             <div className="input-group-append">
               <button className="btn btn-outline-warning" type="button" onClick={this.handleReset}>
-                <i className="fas fa-fw fa-times"></i>
+                <FontAwesomeIcon className="fa-fw" icon={faTimes} />
               </button>
               <button className="btn btn-outline-success" type="button" onClick={this.handleSubmit}>
-                <i className="fas fa-fw fa-search"></i>
+                <FontAwesomeIcon className="fa-fw" icon={faSearch} />
               </button>
             </div>
           </div>
