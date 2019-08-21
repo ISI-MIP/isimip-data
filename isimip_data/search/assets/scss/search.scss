@@ -16,15 +16,7 @@
 
         .card-header {
             padding: 0.5rem 0.75rem;
-
-            button {
-                padding: 0;
-
-                &.btn:focus, &.btn:active {
-                  outline: none !important;
-                  box-shadow: none !important;
-                }
-            }
+            cursor: pointer;
         }
 
         .facet-item {
