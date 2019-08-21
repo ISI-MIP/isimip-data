@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 import DatasetApi from '../api/DatasetApi'
 
@@ -50,10 +52,8 @@ class Facet extends Component {
     const { open, items } = this.state
     const checked = params[facet.attribute] || []
 
-    let button = <i className="fas fa-chevron-up"></i>
     let list_group
     if (open) {
-      button = <i className="fas fa-chevron-down"></i>
       list_group = items.map((item, index) => {
         const [key, count] = item
         const id = item + '-facet-' + index
@@ -79,8 +79,8 @@ class Facet extends Component {
       <div className="card facet small">
         <div className="card-header d-flex justify-content-between align-items-center">
           {facet.title}
-          <button onClick={this.toggleFacet}>
-            {button}
+          <button type="button" className="btn btn-sm" onClick={this.toggleFacet}>
+            {open ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronUp} />}
           </button>
         </div>
         <ul className="list-group list-group-flush">
