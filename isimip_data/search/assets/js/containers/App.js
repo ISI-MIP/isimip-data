@@ -1,13 +1,9 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-import DatasetApi from '../api/DatasetApi'
-import FacetApi from '../api/FacetApi'
-
 import Search from '../components/Search'
-import Results from '../components/Results'
-import Pagination from '../components/Pagination'
-import Facets from '../components/Facets'
+import Results from '../containers/Results'
+import Facets from '../containers/Facets'
 
 
 class App extends Component {
@@ -17,85 +13,39 @@ class App extends Component {
     this.state = {
       params: {
         search: '',
-        page: 1,
-        sector: []
-
-      },
-      datasets: {
-        count: 0,
-        results: []
-      },
-      facets: []
+        page: 1
+      }
     }
     this.handleSearch = this.handleSearch.bind(this);
     this.handleReset = this.handleReset.bind(this);
-    this.handlePagination = this.handlePagination.bind(this)
-    this.handleFacets = this.handleFacets.bind(this)
+    this.handlePaginationClick = this.handlePaginationClick.bind(this)
+    this.handleFacetChange = this.handleFacetChange.bind(this)
   }
 
-  componentDidMount() {
-    FacetApi.fetchFacets().then(facets => {
-      this.setState({ facets }, this.fetch)
-    })
+  handleSearch(search) {
+    const params = Object.assign({}, this.state.params)
+    params.search = search
+    params.page = 1
+    this.setState({ params })
   }
 
-  reset() {
+  handleReset() {
     this.setState({
       params: {
         search: '',
         page: 1
       }
-    }, this.fetch)
-  }
-
-  fetch() {
-    const { params, facets } = this.state
-
-    // fetch the datasets
-    DatasetApi.fetchDatasets(params).then(datasets => {
-      this.setState({ datasets })
-    })
-
-    // fetch the facets
-    const promises = []
-    facets.map(facet => {
-      promises.push(DatasetApi.fetchDatasetsFacets(facet.attribute, params))
-    })
-    Promise.all(promises).then(results => {
-      this.setState({
-        facets: facets.map((facet, index) => {
-          facet.items = results[index]
-          return facet
-        })
-      })
     })
   }
 
-  handleSearch(search) {
-    const { params } = this.state
-
-    params.search = search
-    params.page = 1
-
-    // update state and call fetch as callback
-    this.setState({ params }, this.fetch)
-  }
-
-  handleReset() {
-    this.reset()
-  }
-
-  handlePagination(page) {
-    const { params } = this.state
-
+  handlePaginationClick(page) {
+    const params = Object.assign({}, this.state.params)
     params.page = page
-
-    // update state and call fetch as callback
-    this.setState({ params }, this.fetch)
+    this.setState({ params: params })
   }
 
-  handleFacets(attribute, key, value) {
-    const { params } = this.state
+  handleFacetChange(attribute, key, value) {
+    const params = Object.assign({}, this.state.params)
 
     // create the array in params if it not already exists
     if (params[attribute] == undefined) {
@@ -105,19 +55,19 @@ class App extends Component {
     // find the current index of key
     const index = params[attribute].indexOf(key)
 
-    console.log(params[attribute], index);
-
     if (index == -1 && value) {
+      // the key does not exist but should -> push
       params[attribute].push(key)
     } else if (index > -1 && !value) {
+      // the key exists, but shouln't -> splice
       params[attribute].splice(index, 1)
     }
 
-    this.setState({ params }, this.fetch)
+    this.setState({ params })
   }
 
   render() {
-    const { params, facets, datasets } = this.state
+    const { params } = this.state
 
     return (
       <div className="row">
@@ -125,12 +75,10 @@ class App extends Component {
           <Search onSubmit={this.handleSearch} onReset={this.handleReset} />
         </div>
         <div className="col-lg-3">
-          <Facets facets={facets} params={params} onChange={this.handleFacets}/>
+          <Facets params={params} onFacetChange={this.handleFacetChange}/>
         </div>
         <div className="col-lg-9">
-          <Pagination count={datasets.count} page={params.page} pageSize={10} onSubmit={this.handlePagination} />
-          <Results results={datasets.results} />
-          <Pagination count={datasets.count} page={params.page} pageSize={10} onSubmit={this.handlePagination} />
+          <Results params={params} onPaginationClick={this.handlePaginationClick} />
         </div>
       </div>
     )

@@ -15,11 +15,11 @@ class Pagination extends Component {
 
   handleClick(e, page) {
     e.preventDefault()
-    this.props.onSubmit(page)
+    this.props.onClick(page)
   }
 
   render() {
-    const { count, page, pageSize, onSubmit } = this.props
+    const { count, page, pageSize } = this.props
     const pageCount = Math.ceil(count / pageSize)
 
     const startPage = Math.max(1, Math.min(page - 4, pageCount - 8))
@@ -61,7 +61,7 @@ Pagination.propTypes = {
   count: PropTypes.number.isRequired,
   page: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired
 }
 
 export default Pagination
