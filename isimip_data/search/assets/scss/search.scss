@@ -25,6 +25,11 @@
                 margin-top: 0.15rem;
             }
         }
+
+        .list-group {
+            max-height: 200px;
+            overflow: scroll;
+        }
     }
 }
 
