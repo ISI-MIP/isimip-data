@@ -4,7 +4,14 @@ class DatasetApi {
 
   static fetchDatasets(params) {
     return fetch('/api/v1/datasets/?' + encodeParams(params)).then(response => {
-      return response.json()
+      if (response.ok) {
+        return response.json()
+      } else {
+        return {
+          count: 0,
+          results: []
+        }
+      }
     }).catch(error => {
       return error
     });

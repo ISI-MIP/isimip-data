@@ -46,6 +46,7 @@ class App extends Component {
 
   handleFacetChange(attribute, key, value) {
     const params = Object.assign({}, this.state.params)
+    params.page = 1
 
     // create the array in params if it not already exists
     if (params[attribute] == undefined) {
