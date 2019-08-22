@@ -64,5 +64,20 @@ h4 {
     .result {
         font-size: smaller;
         margin-bottom: 10px;
+
+        .result-options {
+            float: right;
+            padding-left: 10px;
+        }
+
+        .result-files {
+            li {
+                margin-bottom: 10px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
     }
 }

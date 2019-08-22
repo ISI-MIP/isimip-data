@@ -7,8 +7,28 @@ from isimip_data.metadata.models import Dataset, File
 from .models import Facet
 
 
+class DatasetFileSerializer(serializers.ModelSerializer):
+
+    url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = File
+        fields = (
+            'id',
+            'name',
+            'version',
+            'url',
+            'checksum',
+            'checksum_type'
+        )
+
+    def get_url(self, obj):
+        return settings.FILES_BASE_URL % obj.attributes + obj.path
+
+
 class DatasetSerializer(serializers.ModelSerializer):
 
+    files = DatasetFileSerializer(many=True)
     search_rank = serializers.FloatField(required=False, default=0.0)
 
     class Meta:
@@ -18,6 +38,7 @@ class DatasetSerializer(serializers.ModelSerializer):
             'name',
             'version',
             'attributes',
+            'files',
             'search_rank',
         )
 

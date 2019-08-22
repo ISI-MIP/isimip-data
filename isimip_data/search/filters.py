@@ -35,7 +35,7 @@ class AttributeFilterBackend(BaseFilterBackend):
         facets = Facet.objects.all()
         for facet in facets:
             attribute = facet.attribute
-            if facet.attribute != view.attribute_filter_exclude:
+            if facet.attribute != getattr(view, 'attribute_filter_exclude', None):
                 q = Q()
                 for value in request.GET.getlist(attribute):
                     if value:

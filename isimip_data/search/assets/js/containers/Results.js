@@ -47,7 +47,7 @@ class Results extends Component {
         <Pagination count={count} page={params.page} pageSize={10} onClick={onPaginationClick} />
         {
           results.map(dataset => {
-            return <Result dataset={dataset} />
+            return <Result key={dataset.id} dataset={dataset} />
           })
         }
         <Pagination count={count} page={params.page} pageSize={10} onClick={onPaginationClick} />

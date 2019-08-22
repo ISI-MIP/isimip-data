@@ -21,7 +21,7 @@ class Dataset(models.Model):
 class File(models.Model):
 
     id = models.UUIDField(primary_key=True)
-    dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE)
+    dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE, related_name='files')
 
     name = models.TextField()
     version = models.TextField()

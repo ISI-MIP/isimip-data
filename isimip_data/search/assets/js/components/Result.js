@@ -1,19 +1,37 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFile } from '@fortawesome/free-solid-svg-icons'
+import { faFile as faFileRegular } from '@fortawesome/free-regular-svg-icons'
 
 class Result extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      showAttributes: false,
+      showFiles: false
+    }
+    this.toggleAttributes = this.toggleAttributes.bind(this)
+    this.toggleFiles = this.toggleFiles.bind(this)
+  }
+
+  toggleAttributes(e) {
+    e.preventDefault()
+    this.setState({ showAttributes: !this.state.showAttributes})
+  }
+
+  toggleFiles(e) {
+    e.preventDefault()
+    this.setState({ showFiles: !this.state.showFiles})
   }
 
   renderAttributes(dataset) {
     return (
-      <li class="list-group-item">
+      <li className="list-group-item">
         <h4 className="card-title">Attributes</h4>
         {
-          Object.entries(dataset.attributes).map(([key, value]) => {
+          Object.entries(dataset.attributes).map(([key, value], index) => {
             return (
               <div key={key} className="row">
                 <div className="col-lg-3">
@@ -30,31 +48,52 @@ class Result extends Component {
     )
   }
 
-  // renderFiles(dataset) {
-  //   return (
-  //     <li class="list-group-item">
-  //       <h4 className="card-title">Files</h4>
-  //       {
-  //         Object.entries(dataset.files).map(([key, value], index) => {
-  //           return <span key={index}></span>
-  //         })
-  //       }
-  //     </li>
-  //   )
-  // }
+  renderFiles(dataset) {
+    return (
+      <li className="list-group-item result-files">
+        <h4 className="card-title">Files</h4>
+        <ul className="list-unstyled">
+        {
+          dataset.files.map(file => {
+            return (
+              <li key={file.id}>
+                <a href={file.url} target="_blank">{file.name}</a><br />
+                Checksum: {file.checksum}<br />
+                Checksum type: {file.checksum_type}
+              </li>
+            )
+          })
+        }
+        </ul>
+      </li>
+    )
+  }
 
   render() {
     const { dataset } = this.props
+    const { showAttributes, showFiles } = this.state
 
     return (
       <div className="card result">
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">
+            <ul className="list-inline result-options">
+              <li className="list-inline-item">
+                <a href="" onClick={this.toggleAttributes}>
+                  {showAttributes ? 'Hide Attributes' : 'Show Attributes'}
+                </a>
+              </li>
+              <li className="list-inline-item">
+                <a href="" onClick={this.toggleFiles}>
+                  {showFiles ? 'Hide Files' : 'Show Files'}
+                </a>
+              </li>
+            </ul>
             <h4 className="card-title">{dataset.name}</h4>
             <p className="card-text">Version: {dataset.version}</p>
           </li>
-          {this.renderAttributes(dataset)}
-          
+          {showAttributes ? this.renderAttributes(dataset) : null}
+          {showFiles ? this.renderFiles(dataset) : null}
         </ul>
       </div>
     )
