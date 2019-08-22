@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+const pagesPadding = 4
 
 const range = (start, end) => {
   return Array(end - start + 1).fill().map((_, idx) => start + idx)
@@ -22,8 +23,8 @@ class Pagination extends Component {
     const { count, page, pageSize } = this.props
     const pageCount = Math.ceil(count / pageSize)
 
-    const startPage = Math.max(1, Math.min(page - 4, pageCount - 8))
-    const endPage = Math.min(Math.max(page + 4, 9), pageCount)
+    const startPage = Math.max(1, Math.min(page - pagesPadding, pageCount - (2 * pagesPadding)))
+    const endPage = Math.min(Math.max(page + pagesPadding, 2 * pagesPadding + 1), pageCount)
 
     const pages = range(startPage, endPage)
     const items = pages.map(currentPage => {
