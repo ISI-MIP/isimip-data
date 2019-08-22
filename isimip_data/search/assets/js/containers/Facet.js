@@ -76,7 +76,7 @@ class Facet extends Component {
       )
     } else {
       return (
-        <div class="card-body text-center">
+        <div className="card-body text-center">
           <FontAwesomeIcon icon={faSpinner} spin />
         </div>
       )
