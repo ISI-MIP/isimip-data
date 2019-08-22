@@ -1,5 +1,10 @@
 @import 'isimip_data/core/assets/scss/base.scss';
 
+h4 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
 .search {
     margin-bottom: 20px;
 
@@ -11,8 +16,10 @@
 }
 
 .facets {
+    font-size: smaller;
+
     .facet {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
 
         .card-header {
             padding: 0.5rem 0.75rem;
@@ -35,6 +42,9 @@
 }
 
 .pagination {
+    font-size: smaller;
+    margin-bottom: 20px;
+
     .page-item {
         text-align: center;
         width: 50px;
@@ -51,7 +61,8 @@
 }
 
 .results {
-    > li {
-        padding: 10px;
+    .result {
+        font-size: smaller;
+        margin-bottom: 10px;
     }
 }

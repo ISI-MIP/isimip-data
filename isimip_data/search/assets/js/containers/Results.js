@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import DatasetApi from '../api/DatasetApi'
 
 import Pagination from '../components/Pagination'
+import Result from '../components/Result'
 
 
 class Results extends Component {
@@ -44,17 +45,11 @@ class Results extends Component {
     return (
       <div className="results">
         <Pagination count={count} page={params.page} pageSize={10} onClick={onPaginationClick} />
-        <ul>
-          {
-            results.map(dataset => {
-              return (
-                <li key={dataset.id}>
-                  <p><b>{dataset.name}</b></p>
-                </li>
-              )
-            })
-          }
-        </ul>
+        {
+          results.map(dataset => {
+            return <Result dataset={dataset} />
+          })
+        }
         <Pagination count={count} page={params.page} pageSize={10} onClick={onPaginationClick} />
       </div>
     )
