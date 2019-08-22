@@ -26,6 +26,32 @@ class Result extends Component {
     this.setState({ showFiles: !this.state.showFiles})
   }
 
+  renderDataset(dataset) {
+    const { showAttributes, showFiles } = this.state
+
+    return (
+      <li className="list-group-item">
+        <ul className="list-inline result-options">
+          <li className="list-inline-item">
+            <a href="" onClick={this.toggleAttributes}>
+              {showAttributes ? 'Hide Attributes' : 'Show Attributes'}
+            </a>
+          </li>
+          <li className="list-inline-item">
+            <a href="" onClick={this.toggleFiles}>
+              {showFiles ? 'Hide Files' : 'Show Files'}
+            </a>
+          </li>
+        </ul>
+        <h4 className="card-title">{dataset.name}</h4>
+        <p className="card-text">
+          Version: {dataset.version}<br />
+          Search rank: {dataset.search_rank}
+        </p>
+      </li>
+    )
+  }
+
   renderAttributes(dataset) {
     return (
       <li className="list-group-item">
@@ -76,22 +102,7 @@ class Result extends Component {
     return (
       <div className="card result">
         <ul className="list-group list-group-flush">
-          <li className="list-group-item">
-            <ul className="list-inline result-options">
-              <li className="list-inline-item">
-                <a href="" onClick={this.toggleAttributes}>
-                  {showAttributes ? 'Hide Attributes' : 'Show Attributes'}
-                </a>
-              </li>
-              <li className="list-inline-item">
-                <a href="" onClick={this.toggleFiles}>
-                  {showFiles ? 'Hide Files' : 'Show Files'}
-                </a>
-              </li>
-            </ul>
-            <h4 className="card-title">{dataset.name}</h4>
-            <p className="card-text">Version: {dataset.version}</p>
-          </li>
+          {this.renderDataset(dataset)}
           {showAttributes ? this.renderAttributes(dataset) : null}
           {showFiles ? this.renderFiles(dataset) : null}
         </ul>

@@ -17,6 +17,8 @@ class SearchFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
         # this is the compicated part, we emply both trigram similarity and full text search here
+        # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/search/
+        # and http://rachbelaid.com/postgres-full-text-search-is-good-enough/
         search = request.GET.get('search')
         if search:
             # first, split the search string along _ and whitespace into words
@@ -36,12 +38,16 @@ class SearchFilterBackend(BaseFilterBackend):
             search_string = ' & '.join(search_strings)
             logger.debug('search_string = %s', search_string)
 
+            # get the search_query and the search_rank objects
+            search_query = SearchQuery(search_string, search_type='raw')
+            search_rank = SearchRank('search_vector', search_query)
+
             # last, perform a full text search with ranking on the search_vector field
             queryset = queryset.filter(
-                search_vector=SearchQuery(search_string, search_type='raw')
+                search_vector=search_query
             ).annotate(
-                search_rank=SearchRank('search_vector', search_string),
-            ).order_by('-search_rank')
+                search_rank=search_rank,
+            ).order_by('-search_rank', 'name')
 
         return queryset
 
