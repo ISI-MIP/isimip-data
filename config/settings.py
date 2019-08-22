@@ -134,71 +134,72 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [],
 }
 
+SEARCH_SIMILARITY = 0.25
+
 FILES_BASE_URL = os.getenv('DJANGO_FILES_BASE_URL')
 
-LOGGING_DIR = os.getenv('DJANGO_LOGGING_DIR')
-if LOGGING_DIR:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'filters': {
-            'require_debug_false': {
-                '()': 'django.utils.log.RequireDebugFalse'
-            },
-            'require_debug_true': {
-                '()': 'django.utils.log.RequireDebugTrue'
-            }
+LOGGING_DIR = os.getenv('DJANGO_LOGGING_DIR', 'log')
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
         },
-        'formatters': {
-            'default': {
-                'format': '[%(asctime)s] %(levelname)s: %(message)s'
-            },
-            'name': {
-                'format': '[%(asctime)s] %(levelname)s %(name)s: %(message)s'
-            },
-            'console': {
-                'format': '[%(asctime)s] %(message)s'
-            }
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue'
+        }
+    },
+    'formatters': {
+        'default': {
+            'format': '[%(asctime)s] %(levelname)s: %(message)s'
         },
-        'handlers': {
-            'mail_admins': {
-                'level': 'ERROR',
-                'filters': ['require_debug_false'],
-                'class': 'django.utils.log.AdminEmailHandler'
-            },
-            'error_log': {
-                'level': 'ERROR',
-                'class': 'logging.FileHandler',
-                'filename': os.path.join(LOGGING_DIR, 'error.log'),
-                'formatter': 'default'
-            },
-            'isimip_data_log': {
-                'level': 'DEBUG',
-                'class':'logging.FileHandler',
-                'filename': os.path.join(LOGGING_DIR, 'isimip_data.log'),
-                'formatter': 'name'
-            },
-            'console': {
-                'level': 'INFO',
-                'filters': ['require_debug_true'],
-                'class': 'logging.StreamHandler',
-                'formatter': 'console'
-            }
+        'name': {
+            'format': '[%(asctime)s] %(levelname)s %(name)s: %(message)s'
         },
-        'loggers': {
-            'django': {
-                'handlers': ['console'],
-                'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
-            },
-            'django.request': {
-                'handlers': ['mail_admins', 'error_log'],
-                'level': 'ERROR',
-                'propagate': True
-            },
-            'isimip_data': {
-                'handlers': ['isimip_data_log'],
-                'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
-                'propagate': False
-            }
+        'console': {
+            'format': '[%(asctime)s] %(message)s'
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'error_log': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOGGING_DIR, 'error.log'),
+            'formatter': 'default'
+        },
+        'isimip_data_log': {
+            'level': 'DEBUG',
+            'class':'logging.FileHandler',
+            'filename': os.path.join(LOGGING_DIR, 'isimip_data.log'),
+            'formatter': 'name'
+        },
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+        'django.request': {
+            'handlers': ['mail_admins', 'error_log'],
+            'level': 'ERROR',
+            'propagate': True
+        },
+        'isimip_data': {
+            'handlers': ['isimip_data_log'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': False
         }
     }
+}

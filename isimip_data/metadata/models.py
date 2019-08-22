@@ -35,3 +35,13 @@ class File(models.Model):
         db_table = 'files'
         managed = False
         ordering = ('name', )
+
+
+class Word(models.Model):
+
+    word = models.TextField(primary_key=True)
+
+    class Meta:
+        db_table = 'words'
+        managed = False
+        ordering = ('word', )
