@@ -33,15 +33,19 @@ class Search extends Component {
     return (
       <div className="search">
         <form onSubmit={this.handleSubmit}>
-          <div className="input-group">
-            <input className="form-control form-control-lg" type="text" placeholder="Enter search query"
-                onChange={this.setValue} value={value} />
-            <div className="input-group-append">
-              <button className="btn btn-outline-warning" type="button" onClick={this.handleReset}>
-                <FontAwesomeIcon className="fa-fw" icon={faTimes} />
+          <div className="form-row">
+            <div class="col-lg">
+              <input className="form-control form-control-lg" type="text" placeholder="Enter search query"
+                  onChange={this.setValue} value={value} />
+            </div>
+            <div class="col-auto">
+              <button className="btn btn-outline-primary btn-lg" type="button" onClick={this.handleSubmit}>
+                Search <FontAwesomeIcon className="fa-fw" icon={faSearch} />
               </button>
-              <button className="btn btn-outline-success" type="button" onClick={this.handleSubmit}>
-                <FontAwesomeIcon className="fa-fw" icon={faSearch} />
+            </div>
+            <div class="col-auto">
+              <button className="btn btn-outline-secondary btn-lg" type="button" onClick={this.handleReset}>
+                Reset <FontAwesomeIcon className="fa-fw" icon={faTimes} />
               </button>
             </div>
           </div>

@@ -1,4 +1,5 @@
-@import 'isimip_data/core/assets/scss/base.scss';
+@import 'isimip_data/core/assets/scss/colors';
+@import 'isimip_data/core/assets/scss/base';
 
 h4 {
     font-size: 1rem;
@@ -8,10 +9,9 @@ h4 {
 .search {
     margin-bottom: 20px;
 
-    .search {
-        button {
-            width: 100px;
-        }
+    button {
+        background-color: $color-white;
+        border: 1px solid #ced4da;
     }
 }
 
@@ -24,6 +24,7 @@ h4 {
         .card-header {
             padding: 0.5rem 0.75rem;
             cursor: pointer;
+            background-color: white;
         }
 
         .facet-item {

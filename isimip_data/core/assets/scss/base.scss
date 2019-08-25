@@ -14,3 +14,9 @@ $container-max-widths: (
 @import 'layout';
 @import 'header';
 @import 'footer';
+
+main {
+    background-image: url('../../../core/assets/images/mountain-range.jpg');
+    background-position: top;
+    background-size: cover;
+}

@@ -58,6 +58,11 @@ class Results extends Component {
             return <Result key={dataset.id} dataset={dataset} />
           })
         }
+        <div className="row">
+          <div className="col-lg-8">
+            <Pagination count={count} page={params.page} pageSize={10} onClick={onPaginationClick} />
+          </div>
+        </div>
       </div>
     )
   }
