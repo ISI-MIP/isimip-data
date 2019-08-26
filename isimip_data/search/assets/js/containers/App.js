@@ -16,8 +16,9 @@ class App extends Component {
         page: 1
       }
     }
-    this.handleSearch = this.handleSearch.bind(this);
-    this.handleReset = this.handleReset.bind(this);
+    this.handleSearch = this.handleSearch.bind(this)
+    this.handleReset = this.handleReset.bind(this)
+    this.handleParamsRemove = this.handleParamsRemove.bind(this)
     this.handlePaginationClick = this.handlePaginationClick.bind(this)
     this.handleFacetChange = this.handleFacetChange.bind(this)
   }
@@ -31,10 +32,7 @@ class App extends Component {
 
   handleReset() {
     this.setState({
-      params: {
-        search: '',
-        page: 1
-      }
+      params: {}
     })
   }
 
@@ -67,6 +65,14 @@ class App extends Component {
     this.setState({ params })
   }
 
+  handleParamsRemove(key, value) {
+    if (key == 'search') {
+      this.handleSearch('')
+    } else {
+      this.handleFacetChange(key, value, false)
+    }
+  }
+
   render() {
     const { params } = this.state
 
@@ -79,7 +85,9 @@ class App extends Component {
           <Facets params={params} onFacetChange={this.handleFacetChange}/>
         </div>
         <div className="col-lg-9">
-          <Results params={params} onPaginationClick={this.handlePaginationClick} />
+          <Results params={params}
+                   onParamsRemove={this.handleParamsRemove}
+                   onPaginationClick={this.handlePaginationClick} />
         </div>
       </div>
     )

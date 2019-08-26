@@ -34,16 +34,16 @@ class Search extends Component {
       <div className="search">
         <form onSubmit={this.handleSubmit}>
           <div className="form-row">
-            <div class="col-lg">
+            <div className="col-lg">
               <input className="form-control form-control-lg" type="text" placeholder="Enter search query"
                   onChange={this.setValue} value={value} />
             </div>
-            <div class="col-auto">
+            <div className="col-auto">
               <button className="btn btn-outline-primary btn-lg" type="button" onClick={this.handleSubmit}>
                 Search <FontAwesomeIcon className="fa-fw" icon={faSearch} />
               </button>
             </div>
-            <div class="col-auto">
+            <div className="col-auto">
               <button className="btn btn-outline-secondary btn-lg" type="button" onClick={this.handleReset}>
                 Reset <FontAwesomeIcon className="fa-fw" icon={faTimes} />
               </button>

@@ -69,6 +69,21 @@ h4 {
     }
 }
 
+.params {
+    font-size: smaller;
+    margin-bottom: 10px;
+
+
+    .list-inline-item {
+        margin-right: 10px;
+
+        .fa-times {
+            margin-left: 2px;
+            color: red;
+        }
+    }
+}
+
 .results {
     .result {
         font-size: smaller;

@@ -5,8 +5,8 @@ import DatasetApi from '../api/DatasetApi'
 
 import Count from '../components/Count'
 import Pagination from '../components/Pagination'
+import Params from '../components/Params'
 import Result from '../components/Result'
-
 
 class Results extends Component {
 
@@ -40,11 +40,12 @@ class Results extends Component {
   }
 
   render() {
-    const { params, onPaginationClick } = this.props
+    const { params, onParamsRemove, onPaginationClick } = this.props
     const { results, count } = this.state
 
     return (
       <div className="results">
+        <Params params={params} onRemove={onParamsRemove} />
         <div className="row">
           <div className="col-lg-8">
             <Pagination count={count} page={params.page} pageSize={10} onClick={onPaginationClick} />
@@ -70,6 +71,7 @@ class Results extends Component {
 
 Results.propTypes = {
   params: PropTypes.object.isRequired,
+  onParamsRemove: PropTypes.func.isRequired,
   onPaginationClick: PropTypes.func.isRequired
 }
 
