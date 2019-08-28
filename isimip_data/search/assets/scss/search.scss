@@ -73,13 +73,20 @@ h4 {
     font-size: smaller;
     margin-bottom: 10px;
 
+    ul {
+        margin-bottom: 0;
 
-    .list-inline-item {
-        margin-right: 10px;
+        .list-inline-item {
+            margin-right: 10px;
 
-        .fa-times {
-            margin-left: 2px;
-            color: red;
+            button {
+                padding: 0;
+
+                .fa-times {
+                    margin-left: 5px;
+                    color: red;
+                }
+            }
         }
     }
 }

@@ -79,7 +79,7 @@ class App extends Component {
     return (
       <div className="row">
         <div className="col-lg-12">
-          <Search onSubmit={this.handleSearch} onReset={this.handleReset} />
+          <Search params={params} onSubmit={this.handleSearch} onReset={this.handleReset} />
         </div>
         <div className="col-lg-3">
           <Facets params={params} onFacetChange={this.handleFacetChange}/>

@@ -23,6 +23,10 @@ class Pagination extends Component {
     const { count, page, pageSize } = this.props
     const pageCount = Math.ceil(count / pageSize)
 
+    if (count == 0) {
+      return null
+    }
+
     const startPage = Math.max(1, Math.min(page - pagesPadding, pageCount - (2 * pagesPadding)))
     const endPage = Math.min(Math.max(page + pagesPadding, 2 * pagesPadding + 1), pageCount)
 

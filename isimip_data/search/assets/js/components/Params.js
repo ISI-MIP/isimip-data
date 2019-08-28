@@ -31,25 +31,27 @@ class Params extends Component {
       }
     })
 
+    let list_items = <li className="list-inline-item">none</li>
+    if (items.length) {
+      list_items = items.map((item, index) => {
+        const [key, value] = item
+        return (
+          <li key={index} className="list-inline-item">
+            {key} = {value}
+            <button className="btn btn-link" onClick={() => onRemove(key, value)}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+          </li>
+        )
+      })
+    }
+
     return (
       <div className="card params">
         <div className="card-body">
-          <h4 className="card-title">Search parameter</h4>
-
+          <h4 className="card-title">Search constraints</h4>
           <ul className="list-inline">
-            {
-              items.map((item, index) => {
-                const [key, value] = item
-                return (
-                  <li key={index} className="list-inline-item">
-                    {key} = {value}
-                    <button className="btn btn-link" onClick={() => onRemove(key, value)}>
-                      <FontAwesomeIcon icon={faTimes} />
-                    </button>
-                  </li>
-                )
-              })
-            }
+            {list_items}
           </ul>
         </div>
       </div>

@@ -7,10 +7,16 @@ class Search extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { value: ''}
+    this.state = { value: this.props.params.search }
     this.setValue = this.setValue.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleReset = this.handleReset.bind(this)
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.params.search !== prevProps.params.search) {
+      this.setState({ value: this.props.params.search })
+    }
   }
 
   setValue(e) {
@@ -56,6 +62,7 @@ class Search extends Component {
 }
 
 Search.propTypes = {
+  params: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
   onReset: PropTypes.func.isRequired
 }
