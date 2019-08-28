@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import ls from 'local-storage'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronUp, faChevronDown, faSpinner, faCheckSquare, faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 
@@ -17,6 +18,15 @@ class Facet extends Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.toggleFacet = this.toggleFacet.bind(this)
+  }
+
+  componentDidMount() {
+    const { facet } = this.props
+    const isOpen = ls.get(`facet.${facet.attribute}.isOpen`)
+
+    if (isOpen) {
+      this.toggleFacet()
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -46,7 +56,9 @@ class Facet extends Component {
   }
 
   toggleFacet() {
+    const { facet } = this.props
     const { isOpen } = this.state
+    ls.set(`facet.${facet.attribute}.isOpen`, !isOpen)
     this.setState({ isOpen: !isOpen }, this.fetch)
   }
 

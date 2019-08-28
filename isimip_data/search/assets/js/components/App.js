@@ -7,18 +7,16 @@ import Results from './Results'
 import Facets from './Facets'
 
 
-const initialState = {
-  params: {
-    search: '',
-    page: 1
-  }
+const initialParams = {
+  search: '',
+  page: 1
 }
 
 class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = initialState
+    this.state = { params: initialParams }
     this.handleSearch = this.handleSearch.bind(this)
     this.handleReset = this.handleReset.bind(this)
     this.handleParamsRemove = this.handleParamsRemove.bind(this)
@@ -26,15 +24,15 @@ class App extends Component {
     this.handleFacetChange = this.handleFacetChange.bind(this)
   }
 
-  // componentDidMount() {
-  //   const previousState = ls.get('appState')
-  //   if (previousState) {
-  //     this.setState(previousState)
-  //   }
-  // }
+  componentDidMount() {
+    const params = ls.get('app.params')
+    if (params) {
+      this.setState({ params: params })
+    }
+  }
 
   persist() {
-    ls.set('appState', this.state)
+    ls.set('app.params', this.state.params)
   }
 
   handleSearch(search) {
@@ -45,7 +43,7 @@ class App extends Component {
   }
 
   handleReset() {
-    this.setState(initialState, this.persist)
+    this.setState({ params: initialParams }, this.persist)
   }
 
   handlePaginationClick(page) {
