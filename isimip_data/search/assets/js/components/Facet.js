@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp, faChevronDown, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faChevronUp, faChevronDown, faSpinner, faCheckSquare } from '@fortawesome/free-solid-svg-icons'
 
 import DatasetApi from '../api/DatasetApi'
 
@@ -88,11 +88,22 @@ class Facet extends Component {
     const { open, items } = this.state
     const checked = params[facet.attribute] || []
 
+    let check
+    if (checked.length) {
+      check = <FontAwesomeIcon className="facet-check text-secondary" icon={faCheckSquare} />
+    }
+
+    console.log(checked);
+
     return (
       <div className="card facet">
         <div className="card-header d-flex justify-content-between align-items-center"  onClick={this.toggleFacet}>
           {facet.title}
-          {open ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronUp} />}
+
+          <div>
+            {check}
+            {open ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronUp} />}
+          </div>
         </div>
         {open ? this.renderListGroup(items, checked) : ''}
       </div>
