@@ -104,8 +104,8 @@ class Result extends Component {
       <div className="card result">
         <ul className="list-group list-group-flush">
           {this.renderDataset(dataset)}
-          {showAttributes ? this.renderAttributes(dataset) : null}
-          {showFiles ? this.renderFiles(dataset) : null}
+          {showAttributes && this.renderAttributes(dataset)}
+          {showFiles && this.renderFiles(dataset)}
         </ul>
       </div>
     )
