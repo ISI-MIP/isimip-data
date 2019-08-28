@@ -93,11 +93,9 @@ class Facet extends Component {
       check = <FontAwesomeIcon className="facet-check text-secondary" icon={faCheckSquare} />
     }
 
-    console.log(checked);
-
     return (
       <div className="card facet">
-        <div className="card-header d-flex justify-content-between align-items-center"  onClick={this.toggleFacet}>
+        <div className="card-header d-flex justify-content-between align-items-center" onClick={this.toggleFacet}>
           {facet.title}
 
           <div>

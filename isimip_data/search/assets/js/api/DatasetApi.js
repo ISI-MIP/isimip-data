@@ -8,22 +8,19 @@ class DatasetApi {
       if (response.ok) {
         return response.json()
       } else {
-        return {
-          count: 0,
-          results: []
-        }
+        throw new Error(response.statusText)
       }
-    }).catch(error => {
-      return error
-    });
+    })
   }
 
   static fetchDatasetsFacets(attribute, params) {
     return fetch('/api/v1/datasets/facets/' + attribute + '/?' + encodeParams(params)).then(response => {
-      return response.json()
-    }).catch(error => {
-      return error
-    });
+      if (response.ok) {
+        return response.json()
+      } else {
+        throw new Error(response.statusText)
+      }
+    })
   }
 
 }

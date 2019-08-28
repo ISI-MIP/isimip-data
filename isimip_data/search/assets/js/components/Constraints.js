@@ -6,14 +6,14 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 const hiddenParams = ['page']
 
-class Params extends Component {
+class Constraints extends Component {
 
   constructor(props) {
     super(props)
   }
 
   render() {
-    const { params, onRemove } = this.props
+    const { params, isLoading, onRemove } = this.props
 
     const items = []
     Object.keys(params).map(key => {
@@ -32,27 +32,30 @@ class Params extends Component {
       }
     })
 
-    let list_items = <li className="list-inline-item">none</li>
-    if (items.length) {
-      list_items = items.map((item, index) => {
-        const [key, value] = item
-        return (
-          <li key={index} className="list-inline-item">
-            {key} = {value}
-            <button className="btn btn-link" onClick={() => onRemove(key, value)}>
-              <FontAwesomeIcon icon={faTimes} />
-            </button>
-          </li>
-        )
-      })
+    if (items.length == 0) {
+      return null
     }
 
     return (
       <div className="card params">
         <div className="card-body">
-          <h4 className="card-title">Search constraints</h4>
           <ul className="list-inline">
-            {list_items}
+            <li className="list-inline-item">
+              <strong>Search constraints</strong>
+            </li>
+            {
+              items.map((item, index) => {
+                const [key, value] = item
+                return (
+                  <li key={index} className="list-inline-item">
+                    {key} = {value}
+                    <button className="btn btn-link" onClick={() => onRemove(key, value)}>
+                      <FontAwesomeIcon icon={faTimes} />
+                    </button>
+                  </li>
+                )
+              })
+            }
           </ul>
         </div>
       </div>
@@ -60,9 +63,9 @@ class Params extends Component {
   }
 }
 
-Params.propTypes = {
+Constraints.propTypes = {
   params: PropTypes.object.isRequired,
   onRemove: PropTypes.func.isRequired
 }
 
-export default Params
+export default Constraints

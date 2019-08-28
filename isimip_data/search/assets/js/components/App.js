@@ -9,7 +9,8 @@ import Facets from './Facets'
 const initialState = {
   params: {
     search: '',
-    page: 1
+    page: 1,
+    sector: ["biomes"]
   }
 }
 
