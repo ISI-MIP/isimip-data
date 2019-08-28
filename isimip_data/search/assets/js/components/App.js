@@ -6,16 +6,18 @@ import Results from './Results'
 import Facets from './Facets'
 
 
+const initialState = {
+  params: {
+    search: '',
+    page: 1
+  }
+}
+
 class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      params: {
-        search: '',
-        page: 1
-      }
-    }
+    this.state = initialState
     this.handleSearch = this.handleSearch.bind(this)
     this.handleReset = this.handleReset.bind(this)
     this.handleParamsRemove = this.handleParamsRemove.bind(this)
@@ -31,9 +33,7 @@ class App extends Component {
   }
 
   handleReset() {
-    this.setState({
-      params: {}
-    })
+    this.setState(initialState)
   }
 
   handlePaginationClick(page) {
