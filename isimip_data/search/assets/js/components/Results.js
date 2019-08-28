@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 
 import DatasetApi from '../api/DatasetApi'
 
-import Count from '../components/Count'
-import Pagination from '../components/Pagination'
-import Params from '../components/Params'
-import Result from '../components/Result'
+import Count from './Count'
+import Pagination from './Pagination'
+import Params from './Params'
+import Result from './Result'
+
 
 class Results extends Component {
 

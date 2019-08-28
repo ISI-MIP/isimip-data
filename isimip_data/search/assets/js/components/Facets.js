@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import Facet from './Facet'
-
 import FacetApi from '../api/FacetApi'
+
+import Facet from './Facet'
 
 
 class Facets extends Component {

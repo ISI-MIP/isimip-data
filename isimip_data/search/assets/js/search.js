@@ -3,7 +3,7 @@ import 'bootstrap'
 import React from "react"
 import ReactDOM from "react-dom"
 
-import App from "./containers/App.js"
+import App from "./components/App.js"
 
 
 ReactDOM.render(<App />, document.getElementById("app"))

@@ -1,9 +1,9 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-import Search from '../components/Search'
-import Results from '../containers/Results'
-import Facets from '../containers/Facets'
+import Search from './Search'
+import Results from './Results'
+import Facets from './Facets'
 
 
 class App extends Component {
