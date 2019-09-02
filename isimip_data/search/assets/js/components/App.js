@@ -1,6 +1,5 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
-import ls from 'local-storage'
 
 import Search from './Search'
 import Results from './Results'
@@ -24,32 +23,21 @@ class App extends Component {
     this.handleFacetChange = this.handleFacetChange.bind(this)
   }
 
-  componentDidMount() {
-    const params = ls.get('app.params')
-    if (params) {
-      this.setState({ params: params })
-    }
-  }
-
-  persist() {
-    ls.set('app.params', this.state.params)
-  }
-
   handleSearch(search) {
     const params = Object.assign({}, this.state.params)
     params.search = search
     params.page = 1
-    this.setState({ params }, this.persist)
+    this.setState({ params })
   }
 
   handleReset() {
-    this.setState({ params: initialParams }, this.persist)
+    this.setState({ params: initialParams })
   }
 
   handlePaginationClick(page) {
     const params = Object.assign({}, this.state.params)
     params.page = page
-    this.setState({ params: params }, this.persist)
+    this.setState({ params: params })
   }
 
   handleFacetChange(attribute, key, value) {
@@ -72,7 +60,7 @@ class App extends Component {
       params[attribute].splice(index, 1)
     }
 
-    this.setState({ params }, this.persist)
+    this.setState({ params })
   }
 
   handleParamsRemove(key, value) {
