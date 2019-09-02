@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ls from 'local-storage'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp, faChevronDown, faSpinner, faCheckSquare, faEllipsisH } from '@fortawesome/free-solid-svg-icons'
+import { faChevronUp, faChevronDown, faSpinner, faCheckSquare, faBan } from '@fortawesome/free-solid-svg-icons'
 
 import DatasetApi from '../api/DatasetApi'
 
@@ -92,11 +92,9 @@ class Facet extends Component {
 
   renderEmpty() {
     return (
-      <ul className="list-group list-group-flush">
-        <li className="list-group-item">
-          <FontAwesomeIcon icon={faEllipsisH} />
-        </li>
-      </ul>
+      <div className="card-body text-center">
+        <FontAwesomeIcon icon={faBan} />
+      </div>
     )
   }
 
@@ -113,13 +111,14 @@ class Facet extends Component {
     const { isOpen, isLoading, items } = this.state
     const checked = params[facet.attribute] || []
     const isChecked = checked.length > 0
-    const isEmpty = items.length == 0
+    const isEmpty = (items.length == 0) || (items.length == 1 && items[0][0] == null)
+
+    console.log(isOpen, isLoading, items.length, items);
 
     return (
       <div className="card facet">
         <div className="card-header d-flex justify-content-between align-items-center" onClick={this.toggleFacet}>
           {facet.title}
-
           <div>
             {isChecked && <FontAwesomeIcon className="facet-check text-secondary" icon={faCheckSquare} />}
             {isOpen ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronUp} />}
