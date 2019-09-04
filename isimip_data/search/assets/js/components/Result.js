@@ -46,8 +46,11 @@ class Result extends Component {
         </ul>
         <h4 className="card-title">{dataset.name}</h4>
         <p className="card-text">
+          Simulation round: {dataset.attributes.simulation_round}<br />
+          Product: {dataset.attributes.product}<br />
+          Sector: {dataset.attributes.sector}<br />
           Version: {dataset.version}<br />
-          Search rank: {dataset.search_rank}
+          {dataset.search_rank > 0 && 'Search rank: ' + dataset.search_rank}
         </p>
       </li>
     )
