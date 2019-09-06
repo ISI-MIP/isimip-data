@@ -1,4 +1,4 @@
-import { encodeParams } from '../utils/api'
+import { encodeParams, getFileName, downloadBlob } from '../utils/api'
 
 
 class DatasetApi {
@@ -23,6 +23,29 @@ class DatasetApi {
     })
   }
 
+  static downloadFileList(dataset) {
+    let fileName
+    return fetch(`/api/v1/datasets/${dataset.id}/filelist/`).then(response => {
+      if (response.ok) {
+        fileName = getFileName(response)
+        return response.blob()
+      } else {
+        throw new Error(response.statusText)
+      }
+    }).then(blob => downloadBlob(blob, fileName))
+  }
+
+  static downloadWgetScript(dataset) {
+    let fileName
+    return fetch(`/api/v1/datasets/${dataset.id}/wget/`).then(response => {
+      if (response.ok) {
+        fileName = getFileName(response)
+        return response.blob()
+      } else {
+        throw new Error(response.statusText)
+      }
+    }).then(blob => downloadBlob(blob, fileName))
+  }
 }
 
 export default DatasetApi

@@ -9,8 +9,6 @@ from .models import Facet
 
 class DatasetFileSerializer(serializers.ModelSerializer):
 
-    url = serializers.SerializerMethodField()
-
     class Meta:
         model = File
         fields = (
@@ -21,9 +19,6 @@ class DatasetFileSerializer(serializers.ModelSerializer):
             'checksum',
             'checksum_type'
         )
-
-    def get_url(self, obj):
-        return settings.FILES_BASE_URL % obj.attributes + obj.path
 
 
 class DatasetSerializer(serializers.ModelSerializer):
@@ -46,7 +41,6 @@ class DatasetSerializer(serializers.ModelSerializer):
 class FileSerializer(serializers.ModelSerializer):
 
     search_rank = serializers.FloatField(required=False, default=0.0)
-    url = serializers.SerializerMethodField()
 
     class Meta:
         model = File
@@ -60,9 +54,6 @@ class FileSerializer(serializers.ModelSerializer):
             'attributes',
             'search_rank',
         )
-
-    def get_url(self, obj):
-        return settings.FILES_BASE_URL % obj.attributes + obj.path
 
 
 class FacetSerializer(serializers.ModelSerializer):

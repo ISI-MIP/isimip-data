@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile } from '@fortawesome/free-solid-svg-icons'
 import { faFile as faFileRegular } from '@fortawesome/free-regular-svg-icons'
 
+import DatasetApi from '../api/DatasetApi'
+import FileApi from '../api/FileApi'
+
 
 class Result extends Component {
 
@@ -15,6 +18,9 @@ class Result extends Component {
     }
     this.toggleAttributes = this.toggleAttributes.bind(this)
     this.toggleFiles = this.toggleFiles.bind(this)
+    this.downloadAllFiles = this.downloadAllFiles.bind(this)
+    this.downloadFileList = this.downloadFileList.bind(this)
+    this.downloadWgetScript = this.downloadWgetScript.bind(this)
   }
 
   toggleAttributes(e) {
@@ -27,6 +33,24 @@ class Result extends Component {
     this.setState({ showFiles: !this.state.showFiles})
   }
 
+  downloadAllFiles(e, dataset) {
+    e.preventDefault()
+
+    dataset.files.map(file => {
+      FileApi.downloadFile(file)
+    })
+  }
+
+  downloadFileList(e, dataset) {
+    e.preventDefault()
+    DatasetApi.downloadFileList(dataset)
+  }
+
+  downloadWgetScript(e, dataset) {
+    e.preventDefault()
+    DatasetApi.downloadWgetScript(dataset)
+  }
+
   renderDataset(dataset) {
     const { showAttributes, showFiles } = this.state
 
@@ -35,12 +59,12 @@ class Result extends Component {
         <ul className="list-inline result-options">
           <li className="list-inline-item">
             <a href="" onClick={this.toggleAttributes}>
-              {showAttributes ? 'Hide Attributes' : 'Show Attributes'}
+              {showAttributes ? 'Hide attributes' : 'Show attributes'}
             </a>
           </li>
           <li className="list-inline-item">
             <a href="" onClick={this.toggleFiles}>
-              {showFiles ? 'Hide Files' : 'Show Files'}
+              {showFiles ? 'Hide files' : 'Show files'}
             </a>
           </li>
         </ul>
@@ -52,6 +76,23 @@ class Result extends Component {
           Version: {dataset.version}<br />
           {dataset.search_rank > 0 && 'Search rank: ' + dataset.search_rank}
         </p>
+        <ul className="list-inline">
+          <li className="list-inline-item">
+            <a href="" onClick={e => this.downloadAllFiles(e, dataset)}>
+              Download all files
+            </a>
+          </li>
+          <li className="list-inline-item">
+            <a href="" onClick={e => this.downloadFileList(e, dataset)}>
+              Download file list
+            </a>
+          </li>
+          <li className="list-inline-item">
+            <a href="" onClick={e => this.downloadWgetScript(e, dataset)}>
+              Download wget script
+            </a>
+          </li>
+        </ul>
       </li>
     )
   }
