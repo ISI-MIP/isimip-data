@@ -57,6 +57,13 @@ In production, you should create a dedicated user the application. All steps for
 useradd -u 2000 -c 'ISIMIP' -s /bin/bash -m isimip
 ```
 
+Create a directory for the logs:
+
+```bash
+mkdir -p /var/log/django/isimip
+chown isimip:isimip /var/log/django/isimip
+```
+
 Using this user, create a virtual env in the home of this user:
 
 ```bash
@@ -88,21 +95,19 @@ pip install -r requirements/prod.txt
 Create the local configuration file `.env`:
 
 ```bash
-DJANGO_SECRET_KEY=A_SECRET_RANDOM_KEY
+SECRET_KEY=<a secret random string>
+DEBUG=True
 
 # database connection for the django database
-DJANGO_DBNAME=isimip_data
-DJANGO_DBUSER=isimip_data
-DJANGO_DBPASS=ISIMIP_DATA_PASSWORD
-DJANGO_DBHOST=localhost
+DATABASE=postgresql://<user>:<pass>@<host>/<db>
 
-# database connection for the metadata database
-DJANGO_METADATA_DBNAME=isimip_metadata
-DJANGO_METADATA_DBUSER=isimip_data
-DJANGO_DBPASS=ISIMIP_DATA_PASSWORD
-DJANGO_DBHOST=localhost
+# database connection for the django database
+DATABASE_METADATA=postgresql://<user>:<pass>@<host>/<db>
 
-DJANGO_FILES_BASE_URL=http://files.isimip.org/%(simulation_round)s/%(sector)s/%(model)s/
+FILES_BASE_URL=http://files.isimip.org/%(simulation_round)s/%(product)s/%(sector)s/%(model)s/
+
+LOG_LEVEL=INFO
+LOG_DIR=/var/log/django/isimip
 ```
 
 Setup database tables and admin user:
