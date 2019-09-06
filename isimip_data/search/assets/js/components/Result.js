@@ -18,6 +18,7 @@ class Result extends Component {
     }
     this.toggleAttributes = this.toggleAttributes.bind(this)
     this.toggleFiles = this.toggleFiles.bind(this)
+    this.downloadFile = this.downloadFile.bind(this)
     this.downloadAllFiles = this.downloadAllFiles.bind(this)
     this.downloadFileList = this.downloadFileList.bind(this)
     this.downloadWgetScript = this.downloadWgetScript.bind(this)
@@ -33,9 +34,13 @@ class Result extends Component {
     this.setState({ showFiles: !this.state.showFiles})
   }
 
+  downloadFile(e, file) {
+    e.preventDefault()
+    FileApi.downloadFile(file)
+  }
+
   downloadAllFiles(e, dataset) {
     e.preventDefault()
-
     dataset.files.map(file => {
       FileApi.downloadFile(file)
     })
@@ -128,7 +133,7 @@ class Result extends Component {
           dataset.files.map(file => {
             return (
               <li key={file.id}>
-                <a href={file.url} target="_blank">{file.name}</a><br />
+                <a href="" onClick={e => this.downloadFile(e, file)}>{file.name}</a><br />
                 Checksum: {file.checksum}<br />
                 Checksum type: {file.checksum_type}
               </li>
