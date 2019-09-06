@@ -113,8 +113,6 @@ class Facet extends Component {
     const isChecked = checked.length > 0
     const isEmpty = (items.length == 0) || (items.length == 1 && items[0][0] == null)
 
-    console.log(isOpen, isLoading, items.length, items);
-
     return (
       <div className="card facet">
         <div className="card-header d-flex justify-content-between align-items-center" onClick={this.toggleFacet}>
