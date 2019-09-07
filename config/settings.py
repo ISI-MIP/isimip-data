@@ -6,15 +6,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-if os.getenv('DEBUG'):
-    DEBUG = (os.getenv('DEBUG').upper() == 'TRUE')
-else:
-    DEBUG = False
+DEBUG = (os.getenv('DEBUG', 'False').upper() == 'TRUE')
 
-if os.getenv('ALLOWED_HOSTS'):
-    ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split()
-else:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '::1']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost 127.0.0.1 ::1').split()
 
 INTERNAL_IPS = ['127.0.0.1']
 
