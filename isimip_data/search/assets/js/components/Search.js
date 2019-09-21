@@ -38,25 +38,29 @@ class Search extends Component {
     const { value } = this.state
 
     return (
-      <div className="search">
-        <form onSubmit={this.handleSubmit}>
-          <div className="form-row">
-            <div className="col-lg">
-              <input className="form-control form-control-lg" type="text" placeholder="Enter search query"
-                  onChange={this.setValue} value={value} />
+      <div className="search card">
+        <div class="card-body">
+          <h1 className="card-title">Welcome to the ISIMIP Data Portal</h1>
+
+          <form onSubmit={this.handleSubmit}>
+            <div className="form-row">
+              <div className="col-lg">
+                <input className="form-control form-control-lg" type="text" placeholder="Enter search query"
+                    onChange={this.setValue} value={value} />
+              </div>
+              <div className="col-auto">
+                <button className="btn btn-outline-primary btn-lg" type="button" onClick={this.handleSubmit}>
+                  Search <FontAwesomeIcon className="fa-fw" icon={faSearch} />
+                </button>
+              </div>
+              <div className="col-auto">
+                <button className="btn btn-outline-secondary btn-lg" type="button" onClick={this.handleReset}>
+                  Reset <FontAwesomeIcon className="fa-fw" icon={faTimes} />
+                </button>
+              </div>
             </div>
-            <div className="col-auto">
-              <button className="btn btn-outline-primary btn-lg" type="button" onClick={this.handleSubmit}>
-                Search <FontAwesomeIcon className="fa-fw" icon={faSearch} />
-              </button>
-            </div>
-            <div className="col-auto">
-              <button className="btn btn-outline-secondary btn-lg" type="button" onClick={this.handleReset}>
-                Reset <FontAwesomeIcon className="fa-fw" icon={faTimes} />
-              </button>
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     )
   }

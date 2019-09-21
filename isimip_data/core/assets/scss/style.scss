@@ -1,0 +1,25 @@
+.card {
+    border: 1px solid $color-neutral;
+    border-radius: 0;
+
+    .card-header:last-child {
+        border-bottom: none;
+    }
+}
+
+.form-control {
+    border: 1px solid $color-neutral;
+    border-radius: 0;
+}
+
+.btn:not(.btn-link) {
+    border: 1px solid $color-neutral;
+    border-radius: 0;
+}
+
+.pagination {
+    .page-link {
+        border: 1px solid $color-neutral !important;
+        border-radius: 0 !important;
+    }
+}

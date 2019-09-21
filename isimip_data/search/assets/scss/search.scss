@@ -7,11 +7,15 @@ h4 {
 }
 
 .search {
-    margin-bottom: 20px;
+    margin-bottom: 0.75rem;
+
+    h1 {
+        margin-bottom: 1.25rem;
+    }
 
     button {
         background-color: $color-white;
-        border: 1px solid #ced4da;
+        border: 1px solid $color-neutral;
     }
 }
 
