@@ -36,7 +36,7 @@ class Results extends Component {
   fetch() {
     const { params } = this.props
 
-    this.setState({ isLoading: true })
+    this.setState({ isLoading: true, results: [] })
     DatasetApi.fetchDatasets(params).then(data => {
       this.setState({
         isLoading: false,
@@ -76,12 +76,6 @@ class Results extends Component {
             return <Result key={dataset.id} dataset={dataset} />
           })
         }
-        <div className="row">
-          <div className="col-lg-8">
-            <Pagination count={count} page={params.page} pageSize={10}
-                        onClick={this.handlePaginationClick} />
-          </div>
-        </div>
       </div>
     )
   }
