@@ -1,33 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import FacetApi from '../api/FacetApi'
-
 import Facet from './Facet'
 
 
 class Facets extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      facets: []
-    }
-  }
-
-  componentDidMount() {
-    this.fetch()
-  }
-
-  fetch() {
-    FacetApi.fetchFacets().then(facets => {
-      this.setState({ facets })
-    })
-  }
-
   render() {
-    const { params, onFacetChange } = this.props
-    const { facets } = this.state
+    const { params, facets, onFacetChange } = this.props
 
     return (
       <div className="facets">
@@ -46,6 +26,7 @@ class Facets extends Component {
 
 Facets.propTypes = {
   params: PropTypes.object.isRequired,
+  facets: PropTypes.array.isRequired,
   onFacetChange: PropTypes.func.isRequired
 }
 

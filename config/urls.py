@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 
 from rest_framework import routers
 
@@ -18,7 +18,7 @@ urlpatterns = [
     path('datasets/<dataset_name>/', dataset, name='dataset'),
     path('files/<file_name>/', file, name='file'),
     path('api/v1/', include(router.urls)),
-    path('', search, name='search'),
+    re_path(r'^.*$', search, name='search'),
 ]
 
 if settings.DEBUG:

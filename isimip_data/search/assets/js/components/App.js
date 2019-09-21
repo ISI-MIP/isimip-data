@@ -1,6 +1,9 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from "react-router";
 
+import FacetApi from '../api/FacetApi'
+import { getLocationParams, getLocationString } from '../utils/location'
 import Search from './Search'
 import Results from './Results'
 import Facets from './Facets'
@@ -15,12 +18,35 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { params: initialParams }
+    this.state = {
+      params: initialParams,
+      facets: []
+    }
     this.handleSearch = this.handleSearch.bind(this)
     this.handleReset = this.handleReset.bind(this)
     this.handleParamsRemove = this.handleParamsRemove.bind(this)
     this.handlePaginationClick = this.handlePaginationClick.bind(this)
     this.handleFacetChange = this.handleFacetChange.bind(this)
+  }
+
+  componentDidMount() {
+    const { location } = this.props
+
+    FacetApi.fetchFacets().then(facets => {
+      const attributes = facets.map(facet => { return facet.attribute })
+      this.setState({
+        params: Object.assign(this.state.params, getLocationParams(location, attributes)),
+        facets: facets
+      })
+    })
+  }
+
+  setLocation() {
+    const { history } = this.props
+    const { params, facets } = this.state
+    const attributes = facets.map(facet => { return facet.attribute })
+
+    history.push(getLocationString(params, attributes))
   }
 
   handleSearch(search) {
@@ -31,7 +57,8 @@ class App extends Component {
   }
 
   handleReset() {
-    this.setState({ params: initialParams })
+    const { history } = this.props
+    this.setState({ params: initialParams }, history.push('/'))
   }
 
   handlePaginationClick(page) {
@@ -60,7 +87,7 @@ class App extends Component {
       params[attribute].splice(index, 1)
     }
 
-    this.setState({ params })
+    this.setState({ params }, this.setLocation)
   }
 
   handleParamsRemove(key, value) {
@@ -72,7 +99,7 @@ class App extends Component {
   }
 
   render() {
-    const { params } = this.state
+    const { params, facets } = this.state
 
     return (
       <div className="row">
@@ -80,7 +107,7 @@ class App extends Component {
           <Search params={params} onSubmit={this.handleSearch} onReset={this.handleReset} />
         </div>
         <div className="col-lg-3">
-          <Facets params={params} onFacetChange={this.handleFacetChange}/>
+          <Facets params={params} facets={facets} onFacetChange={this.handleFacetChange}/>
         </div>
         <div className="col-lg-9">
           <Results params={params}
@@ -92,4 +119,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default withRouter(App)
