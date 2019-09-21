@@ -23,10 +23,6 @@ class Results extends Component {
     this.handlePaginationClick = this.handlePaginationClick.bind(this)
   }
 
-  componentDidMount() {
-    this.fetch()
-  }
-
   componentDidUpdate(prevProps) {
     if (this.props.params !== prevProps.params) {
       this.fetch()
@@ -57,6 +53,7 @@ class Results extends Component {
 
   render() {
     const { params, onParamsRemove, onPaginationClick } = this.props
+    const { page } = params
     const { isLoading, results, count } = this.state
 
     return (
@@ -66,8 +63,8 @@ class Results extends Component {
             <Count count={count} isLoading={isLoading} />
           </div>
           <div className="col-lg-8">
-            <Pagination count={count} page={params.page} pageSize={10}
-                        onClick={this.handlePaginationClick} />
+            {page && <Pagination count={count} page={page} pageSize={10}
+                                 onClick={this.handlePaginationClick} />}
           </div>
         </div>
         <Constraints params={params} onRemove={onParamsRemove} />

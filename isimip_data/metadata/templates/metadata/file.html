@@ -4,22 +4,26 @@
 {% block main %}
 
 <div class="container">
-    <h1>{{ file.name }}</h1>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">{{ file.name }}</h1>
 
-    <p>{% trans 'Version' %}: {{ file.version }}</p>
+            <p>{% trans 'Version' %}: {{ file.version }}</p>
 
-    <p>{% trans 'Checksum' %}: {{ file.checksum }} ({{ file.checksum_type }})</p>
+            <p>{% trans 'Checksum' %}: {{ file.checksum }} ({{ file.checksum_type }})</p>
 
-    <table class="table table-bordered table-condensed">
-        <tbody>
-            {% for key, value in file.attributes.items %}
-            <tr>
-                <td>{{ key }}</td>
-                <td>{{ value }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            <table class="table table-bordered table-condensed">
+                <tbody>
+                    {% for key, value in file.attributes.items %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

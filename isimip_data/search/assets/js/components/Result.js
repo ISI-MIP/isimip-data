@@ -73,7 +73,9 @@ class Result extends Component {
             </a>
           </li>
         </ul>
-        <h4 className="card-title">{dataset.name}</h4>
+        <h4 className="card-title">
+          <a href={`/datasets/${dataset.name}/`}>{dataset.name}</a>
+        </h4>
         <p className="card-text">
           Simulation round: {dataset.attributes.simulation_round}<br />
           Product: {dataset.attributes.product}<br />

@@ -9,21 +9,16 @@ import Results from './Results'
 import Facets from './Facets'
 
 
-const initialParams = {
-  search: '',
-  page: 1
-}
-
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      params: initialParams,
+      params: {},
       facets: []
     }
-    this.handleSearch = this.handleSearch.bind(this)
     this.handleReset = this.handleReset.bind(this)
+    this.handleSearch = this.handleSearch.bind(this)
     this.handleParamsRemove = this.handleParamsRemove.bind(this)
     this.handlePaginationClick = this.handlePaginationClick.bind(this)
     this.handleFacetChange = this.handleFacetChange.bind(this)
@@ -31,11 +26,14 @@ class App extends Component {
 
   componentDidMount() {
     const { location } = this.props
+    const { params } = this.state
 
     FacetApi.fetchFacets().then(facets => {
       const attributes = facets.map(facet => { return facet.attribute })
+      const params = Object.assign({ page: 1 }, getLocationParams(location, attributes))
+      console.log(params);
       this.setState({
-        params: Object.assign(this.state.params, getLocationParams(location, attributes)),
+        params: params,
         facets: facets
       })
     })
@@ -49,27 +47,23 @@ class App extends Component {
     history.push(getLocationString(params, attributes))
   }
 
-  handleSearch(search) {
-    const params = Object.assign({}, this.state.params)
-    params.search = search
-    params.page = 1
-    this.setState({ params })
-  }
-
   handleReset() {
     const { history } = this.props
-    this.setState({ params: initialParams }, history.push('/'))
+    this.setState({ params: {} }, history.push('/'))
+  }
+
+  handleSearch(search) {
+    const params = Object.assign({}, this.state.params, { search: search, page: 1 })
+    this.setState({ params }, this.setLocation)
   }
 
   handlePaginationClick(page) {
-    const params = Object.assign({}, this.state.params)
-    params.page = page
-    this.setState({ params: params })
+    const params = Object.assign({}, this.state.params, { page: page })
+    this.setState({ params }, this.setLocation)
   }
 
   handleFacetChange(attribute, key, value) {
-    const params = Object.assign({}, this.state.params)
-    params.page = 1
+    const params = Object.assign({}, this.state.params, { page: 1 })
 
     // create the array in params if it not already exists
     if (params[attribute] == undefined) {

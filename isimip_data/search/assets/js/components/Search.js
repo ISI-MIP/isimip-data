@@ -8,7 +8,7 @@ class Search extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { value: this.props.params.search }
+    this.state = { value: '' }
     this.setValue = this.setValue.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleReset = this.handleReset.bind(this)
@@ -16,7 +16,7 @@ class Search extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.params.search !== prevProps.params.search) {
-      this.setState({ value: this.props.params.search })
+      this.setState({ value: this.props.params.search || '' })
     }
   }
 
