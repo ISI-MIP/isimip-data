@@ -12,22 +12,18 @@
         </button>
 
         <div class="collapse navbar-collapse">
-            <ul class="navbar-nav  mr-auto">
-                <li class="nav-item active">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item {% if request.resolver_match.url_name == 'search' %}active{% endif %}">
                     <a class="nav-link" href="/">Search</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/docs">Documentation</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/docs">Attribution</a>
                 </li>
             </ul>
 
             <ul class="navbar-nav">
+                {% for link in settings.NAVIGATION %}
                 <li class="nav-item">
-                    <a class="nav-link" href="https://www.isimip.org">About the Project</a>
+                    <a class="nav-link" href="{{ link.href }}" target="_blank">{{ link.title }}</a>
                 </li>
+                {% endfor %}
             </ul>
         </div>
     </div>

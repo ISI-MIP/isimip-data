@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django_settings_export.settings_export',
             ],
         },
     },
@@ -116,9 +117,28 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [],
 }
 
+SETTINGS_EXPORT = [
+    'NAVIGATION'
+]
+
 SEARCH_SIMILARITY = 0.4
 
 FILES_BASE_URL = os.getenv('FILES_BASE_URL')
+
+NAVIGATION = [
+    {
+        'title': 'About the project',
+        'href': 'https://www.isimip.org'
+    },
+    {
+        'title': 'Documentation',
+        'href': 'https://www.isimip.org/outputdata/isimip-data-on-the-esgf-server/'
+    },
+    {
+        'title': 'Terms of Use',
+        'href': 'https://www.isimip.org/gettingstarted/terms-of-use/#general-terms-of-use-for-all-isimip-data-on-the-esg-server'
+    }
+]
 
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
 LOG_DIR = os.getenv('LOG_DIR')

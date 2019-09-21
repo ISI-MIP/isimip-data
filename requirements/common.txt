@@ -2,6 +2,7 @@
 Django>=2.2
 django-admin-sortable2>=0.7.3
 django-filter>=2.1
+django-settings-export>=1.2
 djangorestframework>=3.9
 dj-database-url>=0.5
 drf-extensions>=0.4.0
