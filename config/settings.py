@@ -179,7 +179,7 @@ if LOG_DIR:
             },
             'isimip_data_log': {
                 'level': 'DEBUG',
-                'class':'logging.FileHandler',
+                'class': 'logging.FileHandler',
                 'filename': os.path.join(LOG_DIR, 'isimip_data.log'),
                 'formatter': 'name'
             },

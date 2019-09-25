@@ -31,7 +31,6 @@ class App extends Component {
     FacetApi.fetchFacets().then(facets => {
       const attributes = facets.map(facet => { return facet.attribute })
       const params = Object.assign({ page: 1 }, getLocationParams(location, attributes))
-      console.log(params);
       this.setState({
         params: params,
         facets: facets

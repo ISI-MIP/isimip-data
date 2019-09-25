@@ -5,7 +5,6 @@ import { faFile } from '@fortawesome/free-solid-svg-icons'
 import { faFile as faFileRegular } from '@fortawesome/free-regular-svg-icons'
 
 import DatasetApi from '../api/DatasetApi'
-import FileApi from '../api/FileApi'
 
 
 class Result extends Component {
@@ -18,10 +17,6 @@ class Result extends Component {
     }
     this.toggleAttributes = this.toggleAttributes.bind(this)
     this.toggleFiles = this.toggleFiles.bind(this)
-    this.downloadFile = this.downloadFile.bind(this)
-    this.downloadAllFiles = this.downloadAllFiles.bind(this)
-    this.downloadFileList = this.downloadFileList.bind(this)
-    this.downloadWgetScript = this.downloadWgetScript.bind(this)
   }
 
   toggleAttributes(e) {
@@ -32,28 +27,6 @@ class Result extends Component {
   toggleFiles(e) {
     e.preventDefault()
     this.setState({ showFiles: !this.state.showFiles})
-  }
-
-  downloadFile(e, file) {
-    e.preventDefault()
-    FileApi.downloadFile(file)
-  }
-
-  downloadAllFiles(e, dataset) {
-    e.preventDefault()
-    dataset.files.map(file => {
-      FileApi.downloadFile(file)
-    })
-  }
-
-  downloadFileList(e, dataset) {
-    e.preventDefault()
-    DatasetApi.downloadFileList(dataset)
-  }
-
-  downloadWgetScript(e, dataset) {
-    e.preventDefault()
-    DatasetApi.downloadWgetScript(dataset)
   }
 
   renderDataset(dataset) {
@@ -85,17 +58,12 @@ class Result extends Component {
         </p>
         <ul className="list-inline">
           <li className="list-inline-item">
-            <a href="" onClick={e => this.downloadAllFiles(e, dataset)}>
-              Download all files
-            </a>
-          </li>
-          <li className="list-inline-item">
-            <a href="" onClick={e => this.downloadFileList(e, dataset)}>
+            <a href={`/api/v1/datasets/${dataset.id}/filelist/`}>
               Download file list
             </a>
           </li>
           <li className="list-inline-item">
-            <a href="" onClick={e => this.downloadWgetScript(e, dataset)}>
+            <a href={`/api/v1/datasets/${dataset.id}/wget/`}>
               Download wget script
             </a>
           </li>
@@ -135,7 +103,7 @@ class Result extends Component {
           dataset.files.map(file => {
             return (
               <li key={file.id}>
-                <a href="" onClick={e => this.downloadFile(e, file)}>{file.name}</a><br />
+                <a href={file.url}>{file.name}</a><br />
                 Checksum: {file.checksum}<br />
                 Checksum type: {file.checksum_type}
               </li>
