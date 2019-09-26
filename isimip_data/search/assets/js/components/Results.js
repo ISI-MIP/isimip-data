@@ -5,7 +5,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import DatasetApi from '../api/DatasetApi'
 
-import Constraints from './Constraints'
+import Params from './Params'
 import Count from './Count'
 import Pagination from './Pagination'
 import Result from './Result'
@@ -67,7 +67,7 @@ class Results extends Component {
                                  onClick={this.handlePaginationClick} />}
           </div>
         </div>
-        <Constraints params={params} onRemove={onParamsRemove} />
+        <Params params={params} onRemove={onParamsRemove} />
         {
           results.map(dataset => {
             return <Result key={dataset.id} dataset={dataset} />

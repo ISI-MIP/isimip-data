@@ -6,7 +6,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 const hiddenParams = ['page']
 
-class Constraints extends Component {
+class Params extends Component {
 
   constructor(props) {
     super(props)
@@ -63,9 +63,9 @@ class Constraints extends Component {
   }
 }
 
-Constraints.propTypes = {
+Params.propTypes = {
   params: PropTypes.object.isRequired,
   onRemove: PropTypes.func.isRequired
 }
 
-export default Constraints
+export default Params
