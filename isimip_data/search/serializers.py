@@ -31,6 +31,7 @@ class DatasetSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
+            'path',
             'version',
             'attributes',
             'files',

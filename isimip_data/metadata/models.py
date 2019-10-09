@@ -11,6 +11,7 @@ class Dataset(models.Model):
     id = models.UUIDField(primary_key=True)
 
     name = models.TextField()
+    path = models.TextField()
     version = models.TextField()
     attributes = JSONField()
     search_vector = SearchVectorField(null=True)
@@ -31,6 +32,7 @@ class File(models.Model):
     dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE, related_name='files')
 
     name = models.TextField()
+    path = models.TextField()
     version = models.TextField()
     path = models.TextField()
     checksum = models.TextField()
@@ -45,7 +47,7 @@ class File(models.Model):
 
     @property
     def url(self):
-        return settings.FILES_BASE_URL % self.attributes + self.path
+        return os.path.join(settings.FILES_BASE_URL, '%s_v%s.nc4' % (self.path, self.version))
 
 
 class Word(models.Model):

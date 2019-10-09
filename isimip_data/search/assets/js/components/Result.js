@@ -34,20 +34,9 @@ class Result extends Component {
 
     return (
       <li className="list-group-item">
-        <ul className="list-inline result-options">
-          <li className="list-inline-item">
-            <a href="" onClick={this.toggleAttributes}>
-              {showAttributes ? 'Hide attributes' : 'Show attributes'}
-            </a>
-          </li>
-          <li className="list-inline-item">
-            <a href="" onClick={this.toggleFiles}>
-              {showFiles ? 'Hide files' : 'Show files'}
-            </a>
-          </li>
-        </ul>
+
         <h4 className="card-title">
-          <a href={`/datasets/${dataset.name}/`}>{dataset.name}</a>
+          <a href={`/datasets/${dataset.name}/`}>{dataset.path}</a>
         </h4>
         <p className="card-text">
           Simulation round: {dataset.attributes.simulation_round}<br />
@@ -56,7 +45,7 @@ class Result extends Component {
           Version: {dataset.version}<br />
           {dataset.search_rank > 0 && 'Search rank: ' + dataset.search_rank}
         </p>
-        <ul className="list-inline">
+        <ul className="list-inline float-right">
           <li className="list-inline-item">
             <a href={`/api/v1/datasets/${dataset.id}/filelist/`}>
               Download file list
@@ -65,6 +54,18 @@ class Result extends Component {
           <li className="list-inline-item">
             <a href={`/api/v1/datasets/${dataset.id}/wget/`}>
               Download wget script
+            </a>
+          </li>
+        </ul>
+        <ul className="list-inline">
+          <li className="list-inline-item">
+            <a href="" onClick={this.toggleAttributes}>
+              {showAttributes ? 'Hide attributes' : 'Show attributes'}
+            </a>
+          </li>
+          <li className="list-inline-item">
+            <a href="" onClick={this.toggleFiles}>
+              {showFiles ? 'Hide files' : 'Show files'}
             </a>
           </li>
         </ul>

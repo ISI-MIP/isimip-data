@@ -1,11 +1,6 @@
 @import 'isimip_data/core/assets/scss/colors';
 @import 'isimip_data/core/assets/scss/base';
 
-h4 {
-    font-size: 1rem;
-    font-weight: 600;
-}
-
 .search {
     margin-bottom: 0.75rem;
 
@@ -110,13 +105,13 @@ h4 {
         font-size: smaller;
         margin-bottom: 0.75rem;
 
-        p {
-            margin-bottom: 0.75rem;
+        h4 {
+            font-size: 1rem;
+            font-weight: 600;
         }
 
-        .result-options {
-            float: right;
-            padding-left: 10px;
+        p {
+            margin-bottom: 0.75rem;
         }
 
         .result-files {

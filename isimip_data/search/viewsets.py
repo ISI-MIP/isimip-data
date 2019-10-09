@@ -54,7 +54,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         dataset = self.get_object()
 
         response = Response(dataset.filelist, content_type='text/plain; charset=utf-8')
-        response['Content-Disposition'] = 'attachment; filename=%s_%s.txt' % (dataset.name, dataset.version)
+        response['Content-Disposition'] = 'attachment; filename=%s_v%s.txt' % (dataset.name, dataset.version)
         return response
 
     @action(detail=True, renderer_classes=[TemplateHTMLRenderer])
@@ -64,7 +64,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         response = Response({
             'dataset': dataset
         }, template_name='search/wget.sh', content_type='text/x-shellscript; charset=utf-8')
-        response['Content-Disposition'] = 'attachment; filename=wget_%s_%s.sh' % (dataset.name, dataset.version)
+        response['Content-Disposition'] = 'attachment; filename=wget_%s_v%s.sh' % (dataset.name, dataset.version)
         return response
 
 
