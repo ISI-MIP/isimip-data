@@ -12,6 +12,10 @@ module.exports = {
     search: [
       './isimip_data/search/assets/scss/search.scss',
       './isimip_data/search/assets/js/search.js',
+    ],
+    wizard: [
+      './isimip_data/wizard/assets/scss/wizard.scss',
+      './isimip_data/wizard/assets/js/wizard.js',
     ]
   },
   resolve: { extensions: ["*", ".js", ".jsx"] },

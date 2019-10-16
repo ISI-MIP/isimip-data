@@ -5,6 +5,7 @@ from django.urls import include, path, re_path
 from rest_framework import routers
 
 from isimip_data.metadata.views import dataset, file
+from isimip_data.wizard.views import wizard
 from isimip_data.search.views import search
 from isimip_data.search.viewsets import DatasetViewSet, FileViewSet, FacetViewSet
 
@@ -18,7 +19,8 @@ urlpatterns = [
     path('datasets/<dataset_name>/', dataset, name='dataset'),
     path('files/<file_name>/', file, name='file'),
     path('api/v1/', include(router.urls)),
-    re_path(r'^', search, name='search'),
+    re_path('^search/', search, name='search'),
+    re_path('^', wizard, name='wizard'),
 ]
 
 if settings.DEBUG:
