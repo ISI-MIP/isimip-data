@@ -1,13 +1,41 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import LayerApi from '../api/LayerApi'
+
 import Layer from './Layer'
 
 
 class Layers extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      layers: []
+    }
+  }
+
+  componentDidMount() {
+    this.fetch()
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.params !== prevProps.params) {
+      this.fetch()
+    }
+  }
+
+  fetch() {
+    const { params } = this.state
+    LayerApi.fetchLayers(params).then(layers => {
+      this.setState({ layers })
+    })
+  }
+
+
   render() {
-    const { params, layers, onChange } = this.props
+    const { params, onChange } = this.props
+    const { layers } = this.state
 
     return (
       <div className="layers">
@@ -25,7 +53,6 @@ class Layers extends Component {
 
 Layers.propTypes = {
   params: PropTypes.object.isRequired,
-  layers: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired
 }
 

@@ -56,7 +56,7 @@ class Layer extends Component {
     return (
       <div className="layer">
         <h3>{layer.title}</h3>
-        <div className="card-columns">
+        <div className="card-columns" style={{columnCount: Math.min(4, cards.length)}}>
           {
             cards.map((card, index) => {
               return (
@@ -64,7 +64,9 @@ class Layer extends Component {
                      onClick={e => this.handleClick(card)}>
                   <div className="card-body">
                     <h4 className="card-title">{card.title}</h4>
-                    <p className="card-text"></p>
+                    <p className="card-text">
+                      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod.
+                    </p>
                   </div>
                 </div>
               )

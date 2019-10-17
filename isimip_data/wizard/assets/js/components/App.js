@@ -2,8 +2,6 @@ import React, { Component} from 'react'
 
 import Layers from './Layers'
 
-import FacetApi from 'isimip_data/search/assets/js/api/FacetApi'
-
 
 class App extends Component {
 
@@ -11,37 +9,8 @@ class App extends Component {
     super(props);
     this.state = {
       params: {},
-      facets: [],
-      layers: []
     }
     this.handleLayerChange = this.handleLayerChange.bind(this)
-  }
-
-  componentDidMount() {
-    FacetApi.fetchFacets().then(facets => {
-      this.setState({ facets }, this.update)
-    })
-  }
-
-  update() {
-    const { params, facets } = this.state
-    const layers = []
-
-    let c = true
-    facets.forEach(facet => {
-      if (c) {
-        layers.push({
-          title: facet.title,
-          attribute: facet.attribute
-        })
-
-        if (params[facet.attribute] === undefined) {
-          c = false
-        }
-      }
-    })
-
-    this.setState({ layers })
   }
 
   handleLayerChange(attribute, key) {
@@ -67,7 +36,7 @@ class App extends Component {
   }
 
   render() {
-    const { params, layers } = this.state
+    const { params } = this.state
 
     return (
       <div className="row">
@@ -78,8 +47,11 @@ class App extends Component {
           </p>
 
           <h2>What data are you interested in?</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+          </p>
 
-          <Layers params={params} layers={layers} onChange={this.handleLayerChange}/>
+          <Layers params={params} onChange={this.handleLayerChange}/>
         </div>
       </div>
     )
