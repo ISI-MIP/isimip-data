@@ -5,8 +5,12 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.search import SearchVectorField
 
+from .managers import DatasetManager
+
 
 class Dataset(models.Model):
+
+    objects = DatasetManager()
 
     id = models.UUIDField(primary_key=True)
 

@@ -42,11 +42,10 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         if not Facet.objects.filter(attribute=attribute).exists():
             raise NotFound
         else:
-            field = 'attributes__%s' % attribute
             # exclude the attribute from AttributeFilterBackend
             self.attribute_filter_exclude = attribute
             queryset = self.filter_queryset(self.get_queryset())
-            values = queryset.values_list(field).annotate(count=Count(field)).order_by(field)
+            values = queryset.histogram(attribute)
             return Response(values)
 
     @action(detail=True, renderer_classes=[StaticHTMLRenderer])
