@@ -51,8 +51,8 @@ class App extends Component {
     this.setState({ params: {} }, history.push('/'))
   }
 
-  handleSearch(search) {
-    const params = Object.assign({}, this.state.params, { search: search, page: 1 })
+  handleSearch(query) {
+    const params = Object.assign({}, this.state.params, { query: query, page: 1 })
     this.setState({ params }, this.setLocation)
   }
 
@@ -84,7 +84,7 @@ class App extends Component {
   }
 
   handleParamsRemove(key, value) {
-    if (key == 'search') {
+    if (key == 'query') {
       this.handleSearch('')
     } else {
       this.handleFacetChange(key, value, false)

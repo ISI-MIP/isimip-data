@@ -22,9 +22,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('datasets/<dataset_name>/', dataset, name='dataset'),
     path('files/<file_name>/', file, name='file'),
+
     path('api/v1/', include(router.urls)),
-    re_path('^search/', search, name='search'),
-    re_path('^$', wizard, name='wizard'),
+
+    re_path(r'^search/', search, name='search'),
+    path('', wizard, name='wizard'),
 ]
 
 if settings.DEBUG:

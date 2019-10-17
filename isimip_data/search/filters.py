@@ -19,10 +19,10 @@ class SearchFilterBackend(BaseFilterBackend):
         # this is the compicated part, we emply both trigram similarity and full text search here
         # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/search/
         # and http://rachbelaid.com/postgres-full-text-search-is-good-enough/
-        search = request.GET.get('search')
-        if search:
+        query = request.GET.get('query')
+        if query:
             # first, split the search string along _ and whitespace into words
-            search_words = search.replace('_', ' ').split()
+            search_words = query.replace('_', ' ').split()
 
             # second, lookup similar words in the "words" table and join them with OR
             search_strings = []
