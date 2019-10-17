@@ -48,7 +48,7 @@ class App extends Component {
 
   handleReset() {
     const { history } = this.props
-    this.setState({ params: {} }, history.push('/'))
+    this.setState({ params: {} }, this.setLocation)
   }
 
   handleSearch(query) {
