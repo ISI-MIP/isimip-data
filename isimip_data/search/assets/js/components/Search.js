@@ -40,7 +40,7 @@ class Search extends Component {
     return (
       <div className="search card">
         <div className="card-body">
-          <h1 className="card-title">Welcome to the ISIMIP Data Portal</h1>
+          <h1 className="card-title">Search the ISIMIP Data Portal</h1>
 
           <form onSubmit={this.handleSubmit}>
             <div className="form-row">

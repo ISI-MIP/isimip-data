@@ -18,7 +18,12 @@ module.exports = {
       './isimip_data/wizard/assets/js/wizard.js',
     ]
   },
-  resolve: { extensions: ["*", ".js", ".jsx"] },
+  resolve: {
+    alias: {
+      isimip_data: path.resolve(__dirname, '../isimip_data/')
+    },
+    extensions: ['*', '.js', '.jsx']
+  },
   output: {
     libraryTarget: 'this',
     library: '[name]',
