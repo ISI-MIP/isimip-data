@@ -32,7 +32,7 @@ class App extends Component {
       params[attribute].splice(index, 1)
     }
 
-    this.setState({ params }, this.update)
+    this.setState({ params })
   }
 
   render() {

@@ -26,12 +26,12 @@ class Layers extends Component {
   }
 
   fetch() {
-    const { params } = this.state
-    LayerApi.fetchLayers(params).then(layers => {
+    const { params } = this.props
+
+    LayerApi.fetchLayersWizard(params).then(layers => {
       this.setState({ layers })
     })
   }
-
 
   render() {
     const { params, onChange } = this.props

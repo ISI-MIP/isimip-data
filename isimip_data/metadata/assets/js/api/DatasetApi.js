@@ -1,4 +1,4 @@
-import { encodeParams, getFileName, downloadBlob } from 'isimip_data/core/assets/js/utils/api'
+import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
 
 
 class DatasetApi {

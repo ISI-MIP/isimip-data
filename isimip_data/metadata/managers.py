@@ -14,6 +14,10 @@ class DatasetQuerySet(models.QuerySet):
         field = 'attributes__%s' % attribute
         return self.values_list(field).annotate(count=models.Count(field)).order_by(field)
 
+    def attribute_values(self, attribute):
+        field = 'attributes__%s' % attribute
+        return self.values_list(field).annotate(count=models.Count(field)).values_list(field, flat=True).order_by(field)
+
 
 class DatasetManager(models.Manager):
 

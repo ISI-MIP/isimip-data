@@ -43,6 +43,8 @@ p {
     margin-bottom: 40px;
 
     .card {
+        cursor: pointer;
+
         .card-body {
             :first-child {
                 margin-top: 0;
@@ -50,6 +52,9 @@ p {
         }
         &.active {
             background-color: $color-secondary;
+        }
+        &:hover {
+            background-color: $color-neutral;
         }
     }
 }
