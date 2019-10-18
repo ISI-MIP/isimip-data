@@ -6,9 +6,8 @@ from django.db.models import Q
 
 from rest_framework.filters import BaseFilterBackend
 
-from isimip_data.metadata.models import Word
+from isimip_data.metadata.models import Word, Attribute
 
-from .models import Facet
 
 logger = logging.getLogger(__name__)
 
@@ -59,14 +58,12 @@ class AttributeFilterBackend(BaseFilterBackend):
         # and https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#containment-and-key-operations
         # for optimal jsonb lookups: queryset.filter(field={'foo': 'bar', 'egg': 'spam'})
 
-        facets = Facet.objects.all()
-        for facet in facets:
-            attribute = facet.attribute
-            if facet.attribute != getattr(view, 'attribute_filter_exclude', None):
+        for attribute in Attribute.objects.using('metadata').all():
+            if attribute.key != getattr(view, 'attribute_filter_exclude', None):
                 q = Q()
-                for value in request.GET.getlist(attribute):
+                for value in request.GET.getlist(attribute.key):
                     if value:
-                        q |= Q(attributes__contains={attribute: value})
+                        q |= Q(attributes__contains={attribute.key: value})
                 queryset = queryset.filter(q)
 
         return queryset

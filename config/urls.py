@@ -5,9 +5,10 @@ from django.urls import include, path, re_path
 from rest_framework import routers
 
 from isimip_data.metadata.views import dataset, file
+from isimip_data.metadata.viewsets import DatasetViewSet, FileViewSet
 
 from isimip_data.search.views import search
-from isimip_data.search.viewsets import DatasetViewSet, FileViewSet, FacetViewSet
+from isimip_data.search.viewsets import FacetViewSet
 
 from isimip_data.wizard.views import wizard
 from isimip_data.wizard.viewsets import LayerViewSet

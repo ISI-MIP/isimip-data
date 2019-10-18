@@ -62,3 +62,13 @@ class Word(models.Model):
         db_table = 'words'
         managed = False
         ordering = ('word', )
+
+
+class Attribute(models.Model):
+
+    key = models.TextField(primary_key=True)
+
+    class Meta:
+        db_table = 'attributes'
+        managed = False
+        ordering = ('key', )

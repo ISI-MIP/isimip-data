@@ -1,7 +1,14 @@
 from django.db import models
 
 
+class JSONKeysFunc(models.Func):
+    function = 'jsonb_object_keys'
+
+
 class DatasetQuerySet(models.QuerySet):
+
+    def attributes(self):
+        return self.annotate(keys=JSONKeysFunc('attributes')).order_by().values_list('keys', flat=True).distinct()
 
     def histogram(self, attribute):
         field = 'attributes__%s' % attribute

@@ -1,7 +1,7 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-import DatasetApi from 'isimip_data/search/assets/js/api/DatasetApi'
+import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 
 const cardChunkSize = 6
@@ -28,7 +28,7 @@ class Layer extends Component {
   fetch() {
     const { params, layer } = this.props
 
-    DatasetApi.fetchDatasetsFacets(layer.attribute, params).then(items => {
+    DatasetApi.fetchDatasetsHistogram(layer.attribute, params).then(items => {
       const cards = items.map(item => {
         const [key, count] = item
         const active = params[layer.attribute] ? params[layer.attribute].indexOf(key) > -1  : false

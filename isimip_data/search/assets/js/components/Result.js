@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile } from '@fortawesome/free-solid-svg-icons'
 import { faFile as faFileRegular } from '@fortawesome/free-regular-svg-icons'
 
-import DatasetApi from '../api/DatasetApi'
+import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 
 class Result extends Component {

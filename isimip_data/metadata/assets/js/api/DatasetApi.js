@@ -1,4 +1,4 @@
-import { encodeParams, getFileName, downloadBlob } from '../utils/api'
+import { encodeParams, getFileName, downloadBlob } from 'isimip_data/core/assets/js/utils/api'
 
 
 class DatasetApi {
@@ -13,8 +13,8 @@ class DatasetApi {
     })
   }
 
-  static fetchDatasetsFacets(attribute, params) {
-    return fetch('/api/v1/datasets/facets/' + attribute + '/?' + encodeParams(params)).then(response => {
+  static fetchDatasetsHistogram(attribute, params) {
+    return fetch('/api/v1/datasets/histogram/' + attribute + '/?' + encodeParams(params)).then(response => {
       if (response.ok) {
         return response.json()
       } else {

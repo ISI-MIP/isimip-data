@@ -19,7 +19,7 @@ const getLocationParams = (location, attributes) => {
       }
     }
   }
-  console.log(params);
+
   return params
 }
 
