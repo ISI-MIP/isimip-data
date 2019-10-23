@@ -1,21 +1,32 @@
-const getLocationParams = (location, attributes) => {
-  const tokens = location.pathname.split('/')
-  const params = {}
+const getLocationParams = (path, location) => {
+  // remove the base path
+  const string = location.pathname.replace(path, '')
 
-  // skip the first (empty) token
-  for (let i = 1; i < tokens.length - 1; i++) {
-    // look at every even token
+  // split into array and remove empty elements
+  const tokens = string.split('/').reduce((array, currentElement) => {
+    if (currentElement) {
+      array.push(currentElement)
+    }
+    return array
+  }, [])
+
+  const params = {}
+  for (let i = 0; i < tokens.length; i++) {
+    // look at every odd token, thats a value!
     if (i % 2 == 1) {
-      const key = tokens[i-1], value = tokens[i]
-      if (attributes.indexOf(key) > -1) {
-        if (params[key] == undefined) {
-          params[key] = []
-        }
-        params[key].push(value)
-      } else if (key == 'query') {
+      const key = tokens[i-1],
+            value = tokens[i]
+
+      if (key == 'query') {
         params['query'] = value
       } else if (key == 'page') {
         params['page'] = parseInt(value)
+      } else {
+        if (params[key] == undefined) {
+          params[key] = [value]
+        } else {
+          params[key].push(value)
+        }
       }
     }
   }
@@ -23,24 +34,22 @@ const getLocationParams = (location, attributes) => {
   return params
 }
 
-const getLocationString = (params, attributes) => {
-  let string = '/search/'
+const getLocationString = (path, params) => {
+  let string = path
 
-  attributes.sort().forEach(key => {
-    if (params[key] !== undefined) {
-      params[key].sort().forEach(value => {
+  Object.keys(params).forEach(key => {
+    if (key == 'query') {
+      string += 'query/' + params['query'] + '/'
+    } else if (key == 'page') {
+      if (params['page'] > 1) {
+        string += 'page/' + params['page'] + '/'
+      }
+    } else {
+      params[key].forEach(value => {
         string += key + '/' + value + '/'
       })
     }
   })
-
-  if (params['query']) {
-    string += 'query/' + params['query'] + '/'
-  }
-
-  if (params['page'] && params['page'] > 1) {
-    string += 'page/' + params['page'] + '/'
-  }
 
   return string
 }

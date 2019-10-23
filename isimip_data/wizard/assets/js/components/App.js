@@ -1,6 +1,9 @@
 import React, { Component} from 'react'
 
+import { getLocationString } from 'isimip_data/core/assets/js/utils/location'
+
 import Layers from './Layers'
+import Submit from './Submit'
 
 
 class App extends Component {
@@ -11,6 +14,7 @@ class App extends Component {
       params: {},
     }
     this.handleLayerChange = this.handleLayerChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleLayerChange(attribute, key) {
@@ -35,6 +39,12 @@ class App extends Component {
     this.setState({ params })
   }
 
+  handleSubmit() {
+    const { params } = this.state
+    const searchPath = getLocationString('/search/', params)
+    document.location.href = searchPath
+  }
+
   render() {
     const { params } = this.state
 
@@ -52,6 +62,7 @@ class App extends Component {
           </p>
 
           <Layers params={params} onChange={this.handleLayerChange}/>
+          <Submit params={params} onSubmit={this.handleSubmit}/>
         </div>
       </div>
     )

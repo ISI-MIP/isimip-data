@@ -32,7 +32,7 @@ class App extends Component {
 
     FacetApi.fetchFacets().then(facets => {
       const attributes = facets.map(facet => { return facet.attribute })
-      const params = Object.assign({ page: 1 }, getLocationParams(location, attributes))
+      const params = Object.assign({ page: 1 }, getLocationParams('/search/', location))
       this.setState({
         params: params,
         facets: facets
@@ -45,7 +45,7 @@ class App extends Component {
     const { params, facets } = this.state
     const attributes = facets.map(facet => { return facet.attribute })
 
-    history.push(getLocationString(params, attributes))
+    history.push(getLocationString('/search/', params))
   }
 
   handleReset() {
