@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
+import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
+
 
 const hiddenParams = ['page']
 
@@ -39,7 +41,7 @@ class Params extends Component {
     return (
       <div className="card params">
         <div className="card-body">
-          <ul className="list-inline">
+          <ul className="list-inline params-list">
             <li className="list-inline-item">
               <strong>Search constraints</strong>
             </li>
@@ -56,6 +58,18 @@ class Params extends Component {
                 )
               })
             }
+          </ul>
+          <ul className="list-inline float-right">
+            <li className="list-inline-item">
+              <a href={`/api/v1/datasets/filelist/&${encodeParams(params)}`}>
+                Download file list
+              </a>
+            </li>
+            <li className="list-inline-item">
+              <a href={`/api/v1/datasets/wget/&${encodeParams(params)}`}>
+                Download wget script
+              </a>
+            </li>
           </ul>
         </div>
       </div>

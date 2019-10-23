@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile } from '@fortawesome/free-solid-svg-icons'
 import { faFile as faFileRegular } from '@fortawesome/free-regular-svg-icons'
+import jQuery from 'jquery'
 
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
@@ -17,6 +18,14 @@ class Result extends Component {
     }
     this.toggleAttributes = this.toggleAttributes.bind(this)
     this.toggleFiles = this.toggleFiles.bind(this)
+  }
+
+  componentDidMount() {
+    jQuery('[data-toggle="tooltip"]').tooltip();
+  }
+
+  componentDidUpdate() {
+    jQuery('[data-toggle="tooltip"]').tooltip();
   }
 
   toggleAttributes(e) {
@@ -38,12 +47,31 @@ class Result extends Component {
         <h4 className="card-title">
           <a href={`/datasets/${dataset.name}/`}>{dataset.path}</a>
         </h4>
-        <p className="card-text">
-          Simulation round: {dataset.attributes.simulation_round}<br />
-          Product: {dataset.attributes.product}<br />
-          Sector: {dataset.attributes.sector}<br />
-          Version: {dataset.version}<br />
-          {dataset.search_rank > 0 && 'Search rank: ' + dataset.search_rank}
+        <p className="card-text badges">
+          <span className="badge badge-primary"
+                data-toggle="tooltip" data-placement="bottom" title="Simulation round">
+            {dataset.attributes.simulation_round}
+          </span>
+          <span className="badge badge-secondary"
+                data-toggle="tooltip" data-placement="bottom" title="Product">
+            {dataset.attributes.product}
+          </span>
+          <span className="badge badge-warning"
+                data-toggle="tooltip" data-placement="bottom" title="Sector">
+            {dataset.attributes.sector}
+          </span>
+          <span className="badge badge-success"
+                data-toggle="tooltip" data-placement="bottom" title="Impact model">
+            {dataset.attributes.model}
+          </span>
+          <span className="badge badge-info"
+                data-toggle="tooltip" data-placement="bottom" title="Variable">
+            {dataset.attributes.variable}
+          </span>
+          <span className="badge badge-dark"
+                data-toggle="tooltip" data-placement="bottom" title="Version">
+            {dataset.version}
+          </span>
         </p>
         <ul className="list-inline float-right">
           <li className="list-inline-item">

@@ -74,6 +74,10 @@ module.exports = {
         to: './/images/',
         context: './isimip_data/core/assets/images/',
       }
-    ])
+    ]),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery'
+    })
   ]
 }
