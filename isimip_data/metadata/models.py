@@ -23,14 +23,10 @@ class Dataset(models.Model):
     class Meta:
         db_table = 'datasets'
         managed = False
-        ordering = ('name', )
+        ordering = ('path', )
 
     def __str__(self):
         return self.path
-
-    @property
-    def filelist(self):
-        return os.linesep.join([file.url for file in self.files.all()])
 
 
 class File(models.Model):
@@ -50,7 +46,7 @@ class File(models.Model):
     class Meta:
         db_table = 'files'
         managed = False
-        ordering = ('name', )
+        ordering = ('path', )
 
     def __str__(self):
         return self.path

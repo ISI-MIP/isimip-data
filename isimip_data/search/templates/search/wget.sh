@@ -1,3 +1,3 @@
 #!/bin/bash
-{% for file in dataset.files.all %}wget {{ file.url }}
+{% for file in files %}wget {{ file.url }}
 {% endfor %}

@@ -61,12 +61,12 @@ class Params extends Component {
           </ul>
           <ul className="list-inline float-right">
             <li className="list-inline-item">
-              <a href={`/api/v1/datasets/filelist/&${encodeParams(params)}`}>
+              <a href={`/api/v1/datasets/filelist/?${encodeParams(params)}`}>
                 Download file list
               </a>
             </li>
             <li className="list-inline-item">
-              <a href={`/api/v1/datasets/wget/&${encodeParams(params)}`}>
+              <a href={`/api/v1/datasets/wget/?${encodeParams(params)}`}>
                 Download wget script
               </a>
             </li>
