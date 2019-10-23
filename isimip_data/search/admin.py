@@ -1,9 +1,22 @@
+from django import forms
 from django.contrib import admin
 from adminsortable2.admin import SortableAdminMixin
+
+from isimip_data.metadata.models import Attribute
 
 from .models import Facet
 
 
+class FacetModelForm(forms.ModelForm):
+
+    attribute = forms.ModelChoiceField(queryset=Attribute.objects.using('metadata').all())
+
+    class Meta:
+        model = Facet
+        fields = ('title', 'attribute')
+
+
 @admin.register(Facet)
 class FacetAdmin(SortableAdminMixin, admin.ModelAdmin):
-    pass
+
+    form = FacetModelForm

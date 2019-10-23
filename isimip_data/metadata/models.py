@@ -25,6 +25,9 @@ class Dataset(models.Model):
         managed = False
         ordering = ('name', )
 
+    def __str__(self):
+        return self.path
+
     @property
     def filelist(self):
         return os.linesep.join([file.url for file in self.files.all()])
@@ -49,6 +52,9 @@ class File(models.Model):
         managed = False
         ordering = ('name', )
 
+    def __str__(self):
+        return self.path
+
     @property
     def url(self):
         return os.path.join(settings.FILES_BASE_URL, '%s_v%s.nc4' % (self.path, self.version))
@@ -63,6 +69,9 @@ class Word(models.Model):
         managed = False
         ordering = ('word', )
 
+    def __str__(self):
+        return self.word
+
 
 class Attribute(models.Model):
 
@@ -72,3 +81,6 @@ class Attribute(models.Model):
         db_table = 'attributes'
         managed = False
         ordering = ('key', )
+
+    def __str__(self):
+        return self.key
