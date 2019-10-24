@@ -1,0 +1,29 @@
+[
+  {
+    "model": "wizard.layer",
+    "pk": 1,
+    "fields": {
+      "title": "Sector",
+      "attribute": "sector",
+      "order": 1
+    }
+  },
+  {
+    "model": "wizard.layer",
+    "pk": 4,
+    "fields": {
+      "title": "Variable",
+      "attribute": "variable",
+      "order": 5
+    }
+  },
+  {
+    "model": "wizard.layer",
+    "pk": 5,
+    "fields": {
+      "title": "Period",
+      "attribute": "period",
+      "order": 2
+    }
+  }
+]
