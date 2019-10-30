@@ -1,0 +1,20 @@
+[
+  {
+    "model": "wizard.layer",
+    "pk": 1,
+    "fields": {
+      "title": "Sector",
+      "attribute": "sector",
+      "order": 1
+    }
+  },
+  {
+    "model": "wizard.layer",
+    "pk": 2,
+    "fields": {
+      "title": "Impact model",
+      "attribute": "model",
+      "order": 2
+    }
+  }
+]
