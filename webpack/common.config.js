@@ -12,9 +12,18 @@ module.exports = {
     search: [
       './isimip_data/search/assets/scss/search.scss',
       './isimip_data/search/assets/js/search.js',
+    ],
+    wizard: [
+      './isimip_data/wizard/assets/scss/wizard.scss',
+      './isimip_data/wizard/assets/js/wizard.js',
     ]
   },
-  resolve: { extensions: ["*", ".js", ".jsx"] },
+  resolve: {
+    alias: {
+      isimip_data: path.resolve(__dirname, '../isimip_data/')
+    },
+    extensions: ['*', '.js', '.jsx']
+  },
   output: {
     libraryTarget: 'this',
     library: '[name]',
@@ -65,6 +74,10 @@ module.exports = {
         to: './/images/',
         context: './isimip_data/core/assets/images/',
       }
-    ])
+    ]),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery'
+    })
   ]
 }

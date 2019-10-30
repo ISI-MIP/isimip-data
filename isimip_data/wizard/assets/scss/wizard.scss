@@ -1,0 +1,64 @@
+@import 'isimip_data/core/assets/scss/colors';
+@import 'isimip_data/core/assets/scss/base';
+
+h1, h2, h3, h4 {
+    text-align: center;
+    color: $color-black;
+}
+
+h1 {
+    font-size: 34px;
+    margin-top: 37px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-top: 60px;
+    margin-bottom: 20px;
+}
+
+h4 {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+}
+
+h4 {
+    font-size: 1rem;
+    margin: 1rem 0;
+}
+
+p {
+    margin: 0 auto;
+    max-width: 640px;
+
+    text-align: center;
+
+    font-size: 14px;
+    line-height: 1.42857143;
+}
+
+.layer {
+    margin-top: 40px;
+    margin-bottom: 40px;
+
+    .card {
+        cursor: pointer;
+
+        .card-body {
+            :first-child {
+                margin-top: 0;
+            }
+        }
+        &.active {
+            background-color: $color-secondary;
+        }
+        &:hover {
+            background-color: $color-neutral;
+        }
+    }
+}
+
+.submit {
+    text-align: center;
+}

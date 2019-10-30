@@ -1,0 +1,13 @@
+[Unit]
+Description=isimip-data gunicorn daemon
+After=network.target
+
+[Service]
+User=isimip
+Group=isimip
+WorkingDirectory=/home/isimip/isimip-data
+EnvironmentFile=/home/isimip/isimip-data/.env
+ExecStart=/home/isimip/env/bin/gunicorn --bind localhost:9000 config.wsgi:application
+
+[Install]
+WantedBy=multi-user.target

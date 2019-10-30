@@ -4,7 +4,7 @@ import ls from 'local-storage'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronUp, faChevronDown, faSpinner, faCheckSquare, faBan } from '@fortawesome/free-solid-svg-icons'
 
-import DatasetApi from '../api/DatasetApi'
+import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 
 class Facet extends Component {
@@ -41,7 +41,7 @@ class Facet extends Component {
 
     if (isOpen) {
       this.setState({ isLoading: true })
-      DatasetApi.fetchDatasetsFacets(facet.attribute, params).then(items => {
+      DatasetApi.fetchDatasetsHistogram(facet.attribute, params).then(items => {
         this.setState({
           isLoading: false,
           items: items

@@ -82,7 +82,9 @@
 
     ul {
         margin-bottom: 0;
+    }
 
+    ul.params-list {
         .list-inline-item {
             margin-right: 10px;
 
@@ -99,8 +101,6 @@
 }
 
 .results {
-    min-height: 1800px;
-
     .result {
         font-size: smaller;
         margin-bottom: 0.75rem;
@@ -112,6 +112,12 @@
 
         p {
             margin-bottom: 0.75rem;
+        }
+
+        .badges {
+            span {
+                margin-right: 5px;
+            }
         }
 
         .result-files {

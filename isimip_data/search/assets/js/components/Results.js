@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import DatasetApi from '../api/DatasetApi'
+import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 import Params from './Params'
 import Count from './Count'

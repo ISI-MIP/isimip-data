@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'isimip_data.core',
     'isimip_data.metadata',
     'isimip_data.search',
+    'isimip_data.wizard',
     # 3rd party apps
     'rest_framework',
     'rest_framework.authtoken',
@@ -118,7 +119,8 @@ REST_FRAMEWORK = {
 }
 
 SETTINGS_EXPORT = [
-    'NAVIGATION'
+    'NAVIGATION',
+    'FILES_BASE_URL'
 ]
 
 SEARCH_SIMILARITY = 0.4

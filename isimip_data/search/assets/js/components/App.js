@@ -2,8 +2,10 @@ import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from "react-router";
 
+import { getLocationParams, getLocationString } from 'isimip_data/core/assets/js/utils/location'
+
 import FacetApi from '../api/FacetApi'
-import { getLocationParams, getLocationString } from '../utils/location'
+
 import Search from './Search'
 import Results from './Results'
 import Facets from './Facets'
@@ -30,7 +32,7 @@ class App extends Component {
 
     FacetApi.fetchFacets().then(facets => {
       const attributes = facets.map(facet => { return facet.attribute })
-      const params = Object.assign({ page: 1 }, getLocationParams(location, attributes))
+      const params = Object.assign({ page: 1 }, getLocationParams('/search/', location))
       this.setState({
         params: params,
         facets: facets
@@ -43,16 +45,16 @@ class App extends Component {
     const { params, facets } = this.state
     const attributes = facets.map(facet => { return facet.attribute })
 
-    history.push(getLocationString(params, attributes))
+    history.push(getLocationString('/search/', params))
   }
 
   handleReset() {
     const { history } = this.props
-    this.setState({ params: {} }, history.push('/'))
+    this.setState({ params: {} }, this.setLocation)
   }
 
-  handleSearch(search) {
-    const params = Object.assign({}, this.state.params, { search: search, page: 1 })
+  handleSearch(query) {
+    const params = Object.assign({}, this.state.params, { query: query, page: 1 })
     this.setState({ params }, this.setLocation)
   }
 
@@ -84,7 +86,7 @@ class App extends Component {
   }
 
   handleParamsRemove(key, value) {
-    if (key == 'search') {
+    if (key == 'query') {
       this.handleSearch('')
     } else {
       this.handleFacetChange(key, value, false)

@@ -5,8 +5,12 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.search import SearchVectorField
 
+from .managers import DatasetManager
+
 
 class Dataset(models.Model):
+
+    objects = DatasetManager()
 
     id = models.UUIDField(primary_key=True)
 
@@ -19,11 +23,10 @@ class Dataset(models.Model):
     class Meta:
         db_table = 'datasets'
         managed = False
-        ordering = ('name', )
+        ordering = ('path', )
 
-    @property
-    def filelist(self):
-        return os.linesep.join([file.url for file in self.files.all()])
+    def __str__(self):
+        return self.path
 
 
 class File(models.Model):
@@ -43,7 +46,10 @@ class File(models.Model):
     class Meta:
         db_table = 'files'
         managed = False
-        ordering = ('name', )
+        ordering = ('path', )
+
+    def __str__(self):
+        return self.path
 
     @property
     def url(self):
@@ -58,3 +64,19 @@ class Word(models.Model):
         db_table = 'words'
         managed = False
         ordering = ('word', )
+
+    def __str__(self):
+        return self.word
+
+
+class Attribute(models.Model):
+
+    key = models.TextField(primary_key=True)
+
+    class Meta:
+        db_table = 'attributes'
+        managed = False
+        ordering = ('key', )
+
+    def __str__(self):
+        return self.key

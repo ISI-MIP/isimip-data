@@ -4,19 +4,19 @@ from adminsortable2.admin import SortableAdminMixin
 
 from isimip_data.metadata.models import Attribute
 
-from .models import Facet
+from .models import Layer
 
 
-class FacetModelForm(forms.ModelForm):
+class LayerModelForm(forms.ModelForm):
 
     attribute = forms.ModelChoiceField(queryset=Attribute.objects.using('metadata').all())
 
     class Meta:
-        model = Facet
+        model = Layer
         fields = ('title', 'attribute')
 
 
-@admin.register(Facet)
-class FacetAdmin(SortableAdminMixin, admin.ModelAdmin):
+@admin.register(Layer)
+class LayerAdmin(SortableAdminMixin, admin.ModelAdmin):
 
-    form = FacetModelForm
+    form = LayerModelForm
