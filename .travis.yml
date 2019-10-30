@@ -16,7 +16,7 @@ before_install:
 install:
 - pip install --upgrade pip setuptools wheel
 - pip install -r requirements/dev.txt
-# - pip install coveralls
+- pip install coveralls
 
 before_script:
 - cp .env.travis .env
@@ -27,5 +27,5 @@ before_script:
 script:
 - pytest --cov=isimip_data
 
-# after_success:
-# - coveralls
+after_success:
+- coveralls
