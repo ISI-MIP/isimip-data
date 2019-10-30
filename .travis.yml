@@ -1,0 +1,32 @@
+language: python
+cache: pip
+dist: bionic
+
+python:
+- 3.6
+- 3.7
+- 3.8
+
+addons:
+  postgresql: '10'
+
+before_install:
+- sudo apt-get -qq update
+
+install:
+- pip install --upgrade pip setuptools wheel
+- pip install -e .
+- pip install -r requirements/dev.txt
+# - pip install coveralls
+
+before_script:
+- cp .env.travis .env
+- createdb test_isimip_data
+- createdb test_isimip_metadata
+- psql -U postgres -f testing/sql/test_isimip_metadata.sql
+
+script:
+- pytest --cov=isimip_data
+
+# after_success:
+# - coveralls
