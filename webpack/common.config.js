@@ -9,6 +9,9 @@ module.exports = {
       './isimip_data/core/assets/scss/base.scss',
       './isimip_data/core/assets/js/base.js',
     ],
+    metadata: [
+      './isimip_data/metadata/assets/scss/metadata.scss',
+    ],
     search: [
       './isimip_data/search/assets/scss/search.scss',
       './isimip_data/search/assets/js/search.js',

@@ -1,27 +1,110 @@
 {% extends 'core/base.html' %}
 {% load i18n %}
+{% load staticfiles %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'metadata.css' %}" />
+{% endblock %}
 
 {% block main %}
 
 <div class="container">
-    <div class="card">
-        <div class="card-body">
-            <h1 class="card-title">{{ file.name }}</h1>
+    <div class="header">
+        <h1>{% trans 'File' %}</h1>
+        <h2>{{ file.path }}</h2>
 
-            <p>{% trans 'Version' %}: {{ file.version }}</p>
+        <p>
+            {{ file.attributes.description }}
+        </p>
 
-            <p>{% trans 'Checksum' %}: {{ file.checksum }} ({{ file.checksum_type }})</p>
+        <h4>{% trans 'Version' %}: {{ file.version }}</h4>
+        <h4>{% trans 'Checksum' %}: {{ file.checksum }} ({{ file.checksum_type }})</h4>
+    </div>
 
-            <table class="table table-bordered table-condensed">
-                <tbody>
+    <div class="row">
+        <div class="col-sm-8">
+            <h3>{% trans 'Attributes' %}</h3>
+            <div class="card attributes">
+                <div class="card-body">
+                    <dl class="row">
                     {% for key, value in file.attributes.items %}
-                    <tr>
-                        <td>{{ key }}</td>
-                        <td>{{ value }}</td>
-                    </tr>
+                    {% if key != 'description' %}
+                        <dt class="col-sm-3 text-right">{{ key }}</dt>
+                        <dd class="col-sm-9">{{ value }}</dd>
+                    {% endif %}
                     {% endfor %}
-                </tbody>
-            </table>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <h3>{% trans 'Preview' %}</h3>
+            <div class="card">
+                <img src="{{ file.thumbnail_url }}" class="card-img-top" alt="{{ file.path }}">
+            </div>
+
+            <h3>{% trans 'Download' %}</h3>
+            <div class="card attributes">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{{ file.url }}">{% trans 'Download NetCDF file' %}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{{ file.json_url }}">{% trans 'Download JSON metadata file' %}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{{ file.checksum_url }}">{% trans 'Download checksum file' %}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{{ file.thumbnail_url }}">{% trans 'Download thumbnail' %}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <h3>{% trans 'Part of' %}</h3>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <a href="{% url 'dataset' file.dataset.id %}">{{ file.dataset.path }}</a>
+
+                <p>
+                    <span class="badge badge-primary"
+                        data-toggle="tooltip" data-placement="bottom" title="Simulation round">
+                        {{ file.dataset.attributes.simulation_round }}
+                    </span>
+                    <span class="badge badge-secondary"
+                        data-toggle="tooltip" data-placement="bottom" title="Product">
+                        {{ file.dataset.attributes.product }}
+                    </span>
+                    <span class="badge badge-success"
+                        data-toggle="tooltip" data-placement="bottom" title="Sector">
+                        {{ file.dataset.attributes.sector }}
+                    </span>
+                    <span class="badge badge-danger"
+                        data-toggle="tooltip" data-placement="bottom" title="Impact model">
+                        {{ file.dataset.attributes.model }}
+                    </span>
+                    <span class="badge badge-warning"
+                        data-toggle="tooltip" data-placement="bottom" title="Climate forcing">
+                        {{ file.dataset.attributes.climate_forcing }}
+                    </span>
+                    <span class="badge badge-info"
+                        data-toggle="tooltip" data-placement="bottom" title="Period">
+                        {{ file.dataset.attributes.period }}
+                    </span>
+                    <span class="badge badge-light"
+                        data-toggle="tooltip" data-placement="bottom" title="Variable">
+                        {{ file.dataset.attributes.variable }}
+                    </span>
+                    <span class="badge badge-dark"
+                        data-toggle="tooltip" data-placement="bottom" title="Last version">
+                        {{ file.dataset.version }}
+                    </span>
+                </p>
+            </li>
         </div>
     </div>
 </div>

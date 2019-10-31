@@ -2,8 +2,15 @@
     border: 1px solid $color-neutral;
     border-radius: 0;
 
+    margin-bottom: 40px;
+
     .card-header:last-child {
         border-bottom: none;
+    }
+
+    p:last-child,
+    dl:last-child {
+        margin-bottom: 0;
     }
 }
 

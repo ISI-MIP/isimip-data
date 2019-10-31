@@ -45,7 +45,7 @@ class Result extends Component {
       <li className="list-group-item">
 
         <h4 className="card-title">
-          <a href={`/datasets/${dataset.name}/`}>{dataset.path}</a>
+          <a href={`/datasets/${dataset.id}/`}>{dataset.path}</a>
         </h4>
         <p className="card-text badges">
           <span className="badge badge-primary"

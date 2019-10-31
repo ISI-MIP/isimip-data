@@ -28,6 +28,14 @@ class Dataset(models.Model):
     def __str__(self):
         return self.path
 
+    @property
+    def json_url(self):
+        return os.path.join(settings.FILES_BASE_URL, '%s_v%s.json' % (self.path, self.version))
+
+    @property
+    def thumbnail_url(self):
+        return os.path.join(settings.FILES_BASE_URL, '%s_v%s.png' % (self.path, self.version))
+
 
 class File(models.Model):
 
@@ -54,6 +62,18 @@ class File(models.Model):
     @property
     def url(self):
         return os.path.join(settings.FILES_BASE_URL, '%s_v%s.nc4' % (self.path, self.version))
+
+    @property
+    def json_url(self):
+        return os.path.join(settings.FILES_BASE_URL, '%s_v%s.json' % (self.path, self.version))
+
+    @property
+    def checksum_url(self):
+        return os.path.join(settings.FILES_BASE_URL, '%s_v%s.%s' % (self.path, self.version, self.checksum_type))
+
+    @property
+    def thumbnail_url(self):
+        return os.path.join(settings.FILES_BASE_URL, '%s_v%s.png' % (self.path, self.version))
 
 
 class Word(models.Model):
