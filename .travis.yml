@@ -22,7 +22,7 @@ before_script:
 - cp .env.travis .env
 - createdb test_isimip_data
 - createdb test_isimip_metadata
-- psql -U postgres -f testing/sql/test_isimip_metadata.sql
+- psql test_isimip_metadata -U postgres -f testing/sql/test_isimip_metadata.sql
 
 script:
 - pytest --reuse-db --cov=isimip_data
