@@ -58,9 +58,9 @@
     </div>
 
     <h3>{% trans 'Files' %}</h3>
-    {% for file in dataset.files.all %}
     <div class="card files">
         <ul class="list-group list-group-flush">
+            {% for file in dataset.files.all %}
             <li class="list-group-item">
                 <a href="{% url 'file' file.id %}">{{ file.path }}</a>
 
@@ -99,10 +99,9 @@
                     </span>
                 </p>
             </li>
+            {% endfor %}
         </div>
     </div>
-    {% endfor %}
-
 </div>
 
 {% endblock %}
