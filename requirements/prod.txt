@@ -1,4 +1,4 @@
 -r common.txt
 
 # production only dependencies in aphabetical order
-gunicorn
+gunicorn==19.9.0
