@@ -30,8 +30,8 @@
     "model": "search.facet",
     "pk": 4,
     "fields": {
-      "title": "Impact model",
-      "attribute": "model",
+      "title": "Time period",
+      "attribute": "period",
       "order": 4
     }
   },
@@ -39,8 +39,8 @@
     "model": "search.facet",
     "pk": 5,
     "fields": {
-      "title": "Climate forcing",
-      "attribute": "climate_forcing",
+      "title": "Impact model",
+      "attribute": "model",
       "order": 5
     }
   },
@@ -48,8 +48,8 @@
     "model": "search.facet",
     "pk": 6,
     "fields": {
-      "title": "Bias-correction Target",
-      "attribute": "bias_correction",
+      "title": "Climate forcing",
+      "attribute": "climate_forcing",
       "order": 6
     }
   },
@@ -57,8 +57,8 @@
     "model": "search.facet",
     "pk": 7,
     "fields": {
-      "title": "Climate scenario",
-      "attribute": "climate_scenario",
+      "title": "Bias-correction Target",
+      "attribute": "bias_correction",
       "order": 7
     }
   },
@@ -66,8 +66,8 @@
     "model": "search.facet",
     "pk": 8,
     "fields": {
-      "title": "Socio-economic scenario",
-      "attribute": "soc_scenario",
+      "title": "Climate scenario",
+      "attribute": "climate_scenario",
       "order": 8
     }
   },
@@ -75,8 +75,8 @@
     "model": "search.facet",
     "pk": 9,
     "fields": {
-      "title": "CO2 sensitivity scenario",
-      "attribute": "co2sens_scenario",
+      "title": "Socio-economic scenario",
+      "attribute": "soc_scenario",
       "order": 9
     }
   },
@@ -84,8 +84,8 @@
     "model": "search.facet",
     "pk": 10,
     "fields": {
-      "title": "Variable",
-      "attribute": "variable",
+      "title": "CO2 sensitivity scenario",
+      "attribute": "co2sens_scenario",
       "order": 10
     }
   },
@@ -93,8 +93,8 @@
     "model": "search.facet",
     "pk": 11,
     "fields": {
-      "title": "Region",
-      "attribute": "region",
+      "title": "Variable",
+      "attribute": "variable",
       "order": 11
     }
   },
@@ -102,9 +102,18 @@
     "model": "search.facet",
     "pk": 12,
     "fields": {
+      "title": "Region",
+      "attribute": "region",
+      "order": 12
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 13,
+    "fields": {
       "title": "Timestep",
       "attribute": "timestep",
-      "order": 12
+      "order": 13
     }
   }
 ]
