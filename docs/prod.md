@@ -97,6 +97,7 @@ Create the local configuration file `.env`:
 ```bash
 SECRET_KEY=<a secret random string>
 DEBUG=True
+ALLOWED_HOSTS=data.isimip.org
 
 # database connection for the django database
 DATABASE=postgresql://<user>:<pass>@<host>/<db>
@@ -139,6 +140,22 @@ npm install
 npm run build:prod
 ```
 
+#### Setup logs
+
+Two directories are needed to hold the log files. These can be created with `systemd-tmpfiles`. Create a file in `/etc/tempfiles.d/isimip-data.conf` with root/sudo permissions:
+
+```
+# /etc/tempfiles.d/isimip-data.conf
+d /var/log/django/isimip-data    750 isimip isimip
+d /var/log/gunicorn/isimip-data  750 isimip isimip
+```
+
+Then run:
+
+```bash
+systemd-tmpfiles --create
+```
+
 #### Gunicorn setup
 
 Systemd will launch the Gunicorn process on startup and keep running. Create a new systemd service file (you will need root/sudo permissions for that):
@@ -154,7 +171,7 @@ User=isimip
 Group=isimip
 WorkingDirectory=/home/isimip/isimip-data
 EnvironmentFile=/home/isimip/isimip-data/.env
-ExecStart=/home/isimip/env/bin/gunicorn --bind unix:/tmp/isimip-data.sock config.wsgi:application
+ExecStart=/home/isimip/isimip-data/env/bin/gunicorn --bind 127.0.0.1:9000 config.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
@@ -187,7 +204,7 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header Host $http_host;
-        proxy_pass http://unix:/tmp/isimip-data.sock;
+        proxy_pass http://localhost:9000/;
     }
     location /static/ {
         alias /home/isimip/isimip-data/static_root/;
