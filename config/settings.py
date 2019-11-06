@@ -119,13 +119,14 @@ REST_FRAMEWORK = {
 }
 
 SETTINGS_EXPORT = [
+    'LABEL',
     'NAVIGATION',
     'FILES_BASE_URL'
 ]
 
 SEARCH_SIMILARITY = 0.4
 
-FILES_BASE_URL = os.getenv('FILES_BASE_URL')
+LABEL = os.getenv('LABEL')
 
 NAVIGATION = [
     {
@@ -141,6 +142,8 @@ NAVIGATION = [
         'href': 'https://www.isimip.org/gettingstarted/terms-of-use/#general-terms-of-use-for-all-isimip-data-on-the-esg-server'
     }
 ]
+
+FILES_BASE_URL = os.getenv('FILES_BASE_URL')
 
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
 LOG_DIR = os.getenv('LOG_DIR')

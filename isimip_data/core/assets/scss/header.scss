@@ -42,6 +42,18 @@ header {
             margin-right: 14px;
         }
 
+        span.navbar-text {
+            font-weight: 700;
+            padding: 15px 15px 15px 15px;
+            @media(min-width:992px) {
+                padding: 35px 12px 35px 12px;
+            }
+            @media(min-width:1200px) {
+                padding: 35px 15px 35px 15px;
+            }
+
+            text-transform: uppercase;
+        }
 
         ul.navbar-nav {
             .nav-item {

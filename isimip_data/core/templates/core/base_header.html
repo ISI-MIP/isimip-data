@@ -12,7 +12,12 @@
         </button>
 
         <div class="collapse navbar-collapse">
-           <ul class="navbar-nav mr-auto">
+            {% if settings.LABEL %}
+            <span class="navbar-text">
+                {{ settings.LABEL|safe }}
+            </span>
+            {% endif %}
+            <ul class="navbar-nav mr-auto">
                 <li class="nav-item {% if request.resolver_match.url_name == 'wizard' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'wizard' %}">Wizard</a>
                 </li>
@@ -20,7 +25,6 @@
                     <a class="nav-link" href="{% url 'search' %}">Search</a>
                 </li>
             </ul>
-
             <ul class="navbar-nav">
                 {% for link in settings.NAVIGATION %}
                 <li class="nav-item">
