@@ -10,20 +10,20 @@
   },
   {
     "model": "wizard.layer",
-    "pk": 4,
-    "fields": {
-      "title": "Variable",
-      "attribute": "variable",
-      "order": 5
-    }
-  },
-  {
-    "model": "wizard.layer",
-    "pk": 5,
+    "pk": 2,
     "fields": {
       "title": "Period",
       "attribute": "period",
       "order": 2
+    }
+  },
+  {
+    "model": "wizard.layer",
+    "pk": 3,
+    "fields": {
+      "title": "Variable",
+      "attribute": "variable",
+      "order": 3
     }
   }
 ]
