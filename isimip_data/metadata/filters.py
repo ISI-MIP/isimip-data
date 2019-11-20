@@ -6,7 +6,7 @@ from django.db.models import Q
 
 from rest_framework.filters import BaseFilterBackend
 
-from isimip_data.metadata.models import Word, Attribute
+from isimip_data.metadata.models import Word, Attribute, Latest
 
 
 logger = logging.getLogger(__name__)
@@ -49,6 +49,19 @@ class SearchFilterBackend(BaseFilterBackend):
             ).order_by('-search_rank', 'name')
 
         return queryset
+
+
+class VersionFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        # display all datasets or only the latest version
+        # the latest versions are stored in a materialized view called "latest"
+
+        latest = request.GET.get('latest')
+        if latest:
+            return queryset.exclude(latest=None)
+        else:
+            return queryset
 
 
 class AttributeFilterBackend(BaseFilterBackend):

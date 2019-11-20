@@ -37,6 +37,17 @@ class Dataset(models.Model):
         return os.path.join(settings.FILES_BASE_URL, '%s_v%s.png' % (self.path, self.version))
 
 
+class Latest(models.Model):
+
+    dataset = models.OneToOneField('Dataset', on_delete=models.CASCADE, primary_key=True)
+    version = models.TextField()
+
+    class Meta:
+        db_table = 'latest'
+        managed = False
+        ordering = ('version', )
+
+
 class File(models.Model):
 
     id = models.UUIDField(primary_key=True)

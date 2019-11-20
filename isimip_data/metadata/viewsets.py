@@ -9,7 +9,7 @@ from rest_framework.exceptions import NotFound
 
 from .models import Dataset, File, Attribute
 from .serializers import DatasetSerializer, FileSerializer
-from .filters import SearchFilterBackend, AttributeFilterBackend
+from .filters import SearchFilterBackend, VersionFilterBackend, AttributeFilterBackend
 
 
 class Pagination(PageNumberPagination):
@@ -25,10 +25,12 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     filter_backends = (
         DjangoFilterBackend,
         SearchFilterBackend,
+        VersionFilterBackend,
         AttributeFilterBackend
     )
     filterset_fields = (
         'name',
+        'path',
         'version'
     )
     attribute_filter_exclude = None
@@ -96,6 +98,7 @@ class FileViewSet(ReadOnlyModelViewSet):
     )
     filterset_fields = (
         'name',
+        'path',
         'version',
         'checksum'
     )
