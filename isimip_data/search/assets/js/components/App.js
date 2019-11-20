@@ -6,6 +6,7 @@ import { getLocationParams, getLocationString } from 'isimip_data/core/assets/js
 
 import FacetApi from '../api/FacetApi'
 
+import Latest from './Latest'
 import Search from './Search'
 import Results from './Results'
 import Facets from './Facets'
@@ -24,6 +25,7 @@ class App extends Component {
     this.handleParamsRemove = this.handleParamsRemove.bind(this)
     this.handlePaginationClick = this.handlePaginationClick.bind(this)
     this.handleFacetChange = this.handleFacetChange.bind(this)
+    this.handleLatestChange = this.handleLatestChange.bind(this)
   }
 
   componentDidMount() {
@@ -93,6 +95,14 @@ class App extends Component {
     }
   }
 
+  handleLatestChange(value) {
+    const params = Object.assign({}, this.state.params, { page: 1 })
+
+    params.all = value
+
+    this.setState({ params })
+  }
+
   render() {
     const { params, facets } = this.state
 
@@ -102,6 +112,7 @@ class App extends Component {
           <Search params={params} onSubmit={this.handleSearch} onReset={this.handleReset} />
         </div>
         <div className="col-lg-3">
+          <Latest params={params} onChange={this.handleLatestChange}/>
           <Facets params={params} facets={facets} onFacetChange={this.handleFacetChange}/>
         </div>
         <div className="col-lg-9">

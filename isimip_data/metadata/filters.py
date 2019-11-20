@@ -57,11 +57,10 @@ class VersionFilterBackend(BaseFilterBackend):
         # display all datasets or only the latest version
         # the latest versions are stored in a materialized view called "latest"
 
-        latest = request.GET.get('latest')
-        if latest:
-            return queryset.exclude(latest=None)
-        else:
+        if request.GET.get('all'):
             return queryset
+        else:
+            return queryset.exclude(latest=None)
 
 
 class AttributeFilterBackend(BaseFilterBackend):
