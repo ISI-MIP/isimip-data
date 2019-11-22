@@ -1,13 +1,11 @@
 import logging
 
 from django.conf import settings
-from django.contrib.postgres.search import SearchQuery, SearchRank, TrigramSimilarity
+from django.contrib.postgres.search import (SearchQuery, SearchRank,
+                                            TrigramSimilarity)
 from django.db.models import Q
-
+from isimip_data.metadata.models import Attribute, Latest, Word
 from rest_framework.filters import BaseFilterBackend
-
-from isimip_data.metadata.models import Word, Attribute, Latest
-
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +55,7 @@ class VersionFilterBackend(BaseFilterBackend):
         # display all datasets or only the latest version
         # the latest versions are stored in a materialized view called "latest"
 
-        if request.GET.get('all'):
+        if request.GET.get('all') == 'true':
             return queryset
         else:
             return queryset.exclude(latest=None)

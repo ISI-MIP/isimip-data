@@ -100,7 +100,7 @@ class App extends Component {
 
     params.all = value
 
-    this.setState({ params })
+    this.setState({ params }, this.setLocation)
   }
 
   render() {

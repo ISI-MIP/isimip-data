@@ -17,7 +17,9 @@ const getLocationParams = (path, location) => {
       const key = tokens[i-1],
             value = tokens[i]
 
-      if (key == 'query') {
+      if (key == 'all') {
+        params['all'] = true
+      } else if (key == 'query') {
         params['query'] = value
       } else if (key == 'page') {
         params['page'] = parseInt(value)
@@ -38,7 +40,11 @@ const getLocationString = (path, params) => {
   let string = path
 
   Object.keys(params).forEach(key => {
-    if (key == 'query') {
+    if (key == 'all') {
+      if (params['all'] == true) {
+        string += 'all/true/'
+      }
+    } else if (key == 'query') {
       string += 'query/' + params['query'] + '/'
     } else if (key == 'page') {
       if (params['page'] > 1) {
