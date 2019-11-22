@@ -35,7 +35,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: datasets; Type: TABLE; Schema: public; Owner: isimip_metadata
+-- Name: datasets; Type: TABLE; Schema: public; Owner: jochen
 --
 
 CREATE TABLE public.datasets (
@@ -48,10 +48,10 @@ CREATE TABLE public.datasets (
 );
 
 
-ALTER TABLE public.datasets OWNER TO isimip_metadata;
+ALTER TABLE public.datasets OWNER TO jochen;
 
 --
--- Name: attributes; Type: MATERIALIZED VIEW; Schema: public; Owner: isimip_metadata
+-- Name: attributes; Type: MATERIALIZED VIEW; Schema: public; Owner: jochen
 --
 
 CREATE MATERIALIZED VIEW public.attributes AS
@@ -60,10 +60,10 @@ CREATE MATERIALIZED VIEW public.attributes AS
   WITH NO DATA;
 
 
-ALTER TABLE public.attributes OWNER TO isimip_metadata;
+ALTER TABLE public.attributes OWNER TO jochen;
 
 --
--- Name: files; Type: TABLE; Schema: public; Owner: isimip_metadata
+-- Name: files; Type: TABLE; Schema: public; Owner: jochen
 --
 
 CREATE TABLE public.files (
@@ -79,10 +79,27 @@ CREATE TABLE public.files (
 );
 
 
-ALTER TABLE public.files OWNER TO isimip_metadata;
+ALTER TABLE public.files OWNER TO jochen;
 
 --
--- Name: words; Type: MATERIALIZED VIEW; Schema: public; Owner: isimip_metadata
+-- Name: latest; Type: MATERIALIZED VIEW; Schema: public; Owner: jochen
+--
+
+CREATE MATERIALIZED VIEW public.latest AS
+ SELECT d.id AS dataset_id,
+    d.version
+   FROM (public.datasets d
+     JOIN ( SELECT datasets.path,
+            max((datasets.version)::text) AS version
+           FROM public.datasets
+          GROUP BY datasets.path) l ON (((l.path = d.path) AND (l.version = (d.version)::text))))
+  WITH NO DATA;
+
+
+ALTER TABLE public.latest OWNER TO jochen;
+
+--
+-- Name: words; Type: MATERIALIZED VIEW; Schema: public; Owner: jochen
 --
 
 CREATE MATERIALIZED VIEW public.words AS
@@ -91,34 +108,34 @@ CREATE MATERIALIZED VIEW public.words AS
   WITH NO DATA;
 
 
-ALTER TABLE public.words OWNER TO isimip_metadata;
+ALTER TABLE public.words OWNER TO jochen;
 
 --
--- Data for Name: datasets; Type: TABLE DATA; Schema: public; Owner: isimip_metadata
+-- Data for Name: datasets; Type: TABLE DATA; Schema: public; Owner: jochen
 --
 
 COPY public.datasets (id, name, path, version, attributes, search_vector) FROM stdin;
-22ce1fcd-de0c-4bc7-a89d-b4caecf32017	test-model_ipsum_dolor_sit_amet_var_global_monthly	test-round/test-product/test-sector/test-model/test-model_ipsum_dolor_sit_amet_var_global_monthly	20191101	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'amet':7B 'dolor':5B 'global':9B 'ipsum':4B 'model':3B 'month':10B 'product':16A 'round':13A 'sector':19A 'sit':6B 'test':2B,12A,15A,18A 'test-model':1B 'test-product':14A 'test-round':11A 'test-sector':17A 'var':8B
-726c3ab1-00a3-4fc6-9456-d5ff99b91772	test-model_lorem_dolor_sit_amet_var_global_monthly	test-round/test-product/test-sector/test-model/test-model_lorem_dolor_sit_amet_var_global_monthly	20191101	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'amet':7B 'dolor':5B 'global':9B 'lorem':4B 'model':3B 'month':10B 'product':16A 'round':13A 'sector':19A 'sit':6B 'test':2B,12A,15A,18A 'test-model':1B 'test-product':14A 'test-round':11A 'test-sector':17A 'var':8B
+854435eb-516d-477a-90c8-11e2c353db30	test-model_ipsum_dolor_sit_amet_var_global_monthly	test-round/test-product/test-sector/test-model/test-model_ipsum_dolor_sit_amet_var_global_monthly	20191122	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'amet':7B 'dolor':5B 'global':9B 'ipsum':4B 'model':3B 'month':10B 'product':16A 'round':13A 'sector':19A 'sit':6B 'test':2B,12A,15A,18A 'test-model':1B 'test-product':14A 'test-round':11A 'test-sector':17A 'var':8B
+61f25bf3-18c7-4f9a-97ef-3be95a1b7d9e	test-model_lorem_dolor_sit_amet_var_global_monthly	test-round/test-product/test-sector/test-model/test-model_lorem_dolor_sit_amet_var_global_monthly	20191122	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'amet':7B 'dolor':5B 'global':9B 'lorem':4B 'model':3B 'month':10B 'product':16A 'round':13A 'sector':19A 'sit':6B 'test':2B,12A,15A,18A 'test-model':1B 'test-product':14A 'test-round':11A 'test-sector':17A 'var':8B
 \.
 
 
 --
--- Data for Name: files; Type: TABLE DATA; Schema: public; Owner: isimip_metadata
+-- Data for Name: files; Type: TABLE DATA; Schema: public; Owner: jochen
 --
 
 COPY public.files (id, dataset_id, name, path, version, checksum, checksum_type, attributes, search_vector) FROM stdin;
-64535c32-a2fd-4926-97cb-4a2c90909622	22ce1fcd-de0c-4bc7-a89d-b4caecf32017	test-model_ipsum_dolor_sit_amet_var_global_monthly_2001_2002	test-round/test-product/test-sector/test-model/test-model_ipsum_dolor_sit_amet_var_global_monthly_2001_2002	20191101	02afe49da3bdf4b8ee1d3b5d54501bcbce2981551bb932d2237a1cea7d31a267	sha256	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'2001':11B '2002':12B 'amet':7B 'dolor':5B 'global':9B 'ipsum':4B 'model':3B 'month':10B 'product':18A 'round':15A 'sector':21A 'sit':6B 'test':2B,14A,17A,20A 'test-model':1B 'test-product':16A 'test-round':13A 'test-sector':19A 'var':8B
-02af3cd5-dc2d-4572-8407-2b44d92cb34c	22ce1fcd-de0c-4bc7-a89d-b4caecf32017	test-model_ipsum_dolor_sit_amet_var_global_monthly_2002_2003	test-round/test-product/test-sector/test-model/test-model_ipsum_dolor_sit_amet_var_global_monthly_2002_2003	20191101	02afe49da3bdf4b8ee1d3b5d54501bcbce2981551bb932d2237a1cea7d31a267	sha256	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'2002':11B '2003':12B 'amet':7B 'dolor':5B 'global':9B 'ipsum':4B 'model':3B 'month':10B 'product':18A 'round':15A 'sector':21A 'sit':6B 'test':2B,14A,17A,20A 'test-model':1B 'test-product':16A 'test-round':13A 'test-sector':19A 'var':8B
-bdd57147-6f15-401d-adec-47101f0dd3bc	726c3ab1-00a3-4fc6-9456-d5ff99b91772	test-model_lorem_dolor_sit_amet_var_global_monthly_2002_2003	test-round/test-product/test-sector/test-model/test-model_lorem_dolor_sit_amet_var_global_monthly_2002_2003	20191101	02afe49da3bdf4b8ee1d3b5d54501bcbce2981551bb932d2237a1cea7d31a267	sha256	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'2002':11B '2003':12B 'amet':7B 'dolor':5B 'global':9B 'lorem':4B 'model':3B 'month':10B 'product':18A 'round':15A 'sector':21A 'sit':6B 'test':2B,14A,17A,20A 'test-model':1B 'test-product':16A 'test-round':13A 'test-sector':19A 'var':8B
-cceace39-6837-4366-bca3-59bbee01543f	726c3ab1-00a3-4fc6-9456-d5ff99b91772	test-model_lorem_dolor_sit_amet_var_global_monthly_2000_2001	test-round/test-product/test-sector/test-model/test-model_lorem_dolor_sit_amet_var_global_monthly_2000_2001	20191101	02afe49da3bdf4b8ee1d3b5d54501bcbce2981551bb932d2237a1cea7d31a267	sha256	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'2000':11B '2001':12B 'amet':7B 'dolor':5B 'global':9B 'lorem':4B 'model':3B 'month':10B 'product':18A 'round':15A 'sector':21A 'sit':6B 'test':2B,14A,17A,20A 'test-model':1B 'test-product':16A 'test-round':13A 'test-sector':19A 'var':8B
-5ea9ba3f-c72c-4065-bd2c-0a983da57bc3	22ce1fcd-de0c-4bc7-a89d-b4caecf32017	test-model_ipsum_dolor_sit_amet_var_global_monthly_2000_2001	test-round/test-product/test-sector/test-model/test-model_ipsum_dolor_sit_amet_var_global_monthly_2000_2001	20191101	02afe49da3bdf4b8ee1d3b5d54501bcbce2981551bb932d2237a1cea7d31a267	sha256	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'2000':11B '2001':12B 'amet':7B 'dolor':5B 'global':9B 'ipsum':4B 'model':3B 'month':10B 'product':18A 'round':15A 'sector':21A 'sit':6B 'test':2B,14A,17A,20A 'test-model':1B 'test-product':16A 'test-round':13A 'test-sector':19A 'var':8B
-437171c9-944d-46cf-8413-cbbe309f0888	726c3ab1-00a3-4fc6-9456-d5ff99b91772	test-model_lorem_dolor_sit_amet_var_global_monthly_2001_2002	test-round/test-product/test-sector/test-model/test-model_lorem_dolor_sit_amet_var_global_monthly_2001_2002	20191101	02afe49da3bdf4b8ee1d3b5d54501bcbce2981551bb932d2237a1cea7d31a267	sha256	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'2001':11B '2002':12B 'amet':7B 'dolor':5B 'global':9B 'lorem':4B 'model':3B 'month':10B 'product':18A 'round':15A 'sector':21A 'sit':6B 'test':2B,14A,17A,20A 'test-model':1B 'test-product':16A 'test-round':13A 'test-sector':19A 'var':8B
+f0ad94de-4fce-422a-8048-fffb0bab1890	854435eb-516d-477a-90c8-11e2c353db30	test-model_ipsum_dolor_sit_amet_var_global_monthly_2001_2002	test-round/test-product/test-sector/test-model/test-model_ipsum_dolor_sit_amet_var_global_monthly_2001_2002	20191122	2a01020db1a1860af73f18981e8e6aaf328bc47f41800463168c39eb65a4915d	sha256	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'2001':11B '2002':12B 'amet':7B 'dolor':5B 'global':9B 'ipsum':4B 'model':3B 'month':10B 'product':18A 'round':15A 'sector':21A 'sit':6B 'test':2B,14A,17A,20A 'test-model':1B 'test-product':16A 'test-round':13A 'test-sector':19A 'var':8B
+212023af-7afa-4e77-a6b9-c5ea1af37483	854435eb-516d-477a-90c8-11e2c353db30	test-model_ipsum_dolor_sit_amet_var_global_monthly_2002_2003	test-round/test-product/test-sector/test-model/test-model_ipsum_dolor_sit_amet_var_global_monthly_2002_2003	20191122	2a01020db1a1860af73f18981e8e6aaf328bc47f41800463168c39eb65a4915d	sha256	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'2002':11B '2003':12B 'amet':7B 'dolor':5B 'global':9B 'ipsum':4B 'model':3B 'month':10B 'product':18A 'round':15A 'sector':21A 'sit':6B 'test':2B,14A,17A,20A 'test-model':1B 'test-product':16A 'test-round':13A 'test-sector':19A 'var':8B
+b00597cf-d9bc-4d4c-a0bd-1f23bfef71b2	61f25bf3-18c7-4f9a-97ef-3be95a1b7d9e	test-model_lorem_dolor_sit_amet_var_global_monthly_2002_2003	test-round/test-product/test-sector/test-model/test-model_lorem_dolor_sit_amet_var_global_monthly_2002_2003	20191122	2a01020db1a1860af73f18981e8e6aaf328bc47f41800463168c39eb65a4915d	sha256	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'2002':11B '2003':12B 'amet':7B 'dolor':5B 'global':9B 'lorem':4B 'model':3B 'month':10B 'product':18A 'round':15A 'sector':21A 'sit':6B 'test':2B,14A,17A,20A 'test-model':1B 'test-product':16A 'test-round':13A 'test-sector':19A 'var':8B
+9da68da8-e83b-4317-9b04-6676f9d4337a	61f25bf3-18c7-4f9a-97ef-3be95a1b7d9e	test-model_lorem_dolor_sit_amet_var_global_monthly_2000_2001	test-round/test-product/test-sector/test-model/test-model_lorem_dolor_sit_amet_var_global_monthly_2000_2001	20191122	2a01020db1a1860af73f18981e8e6aaf328bc47f41800463168c39eb65a4915d	sha256	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'2000':11B '2001':12B 'amet':7B 'dolor':5B 'global':9B 'lorem':4B 'model':3B 'month':10B 'product':18A 'round':15A 'sector':21A 'sit':6B 'test':2B,14A,17A,20A 'test-model':1B 'test-product':16A 'test-round':13A 'test-sector':19A 'var':8B
+9fd273ed-d51d-4632-a975-0b49be4ee09f	854435eb-516d-477a-90c8-11e2c353db30	test-model_ipsum_dolor_sit_amet_var_global_monthly_2000_2001	test-round/test-product/test-sector/test-model/test-model_ipsum_dolor_sit_amet_var_global_monthly_2000_2001	20191122	2a01020db1a1860af73f18981e8e6aaf328bc47f41800463168c39eb65a4915d	sha256	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'2000':11B '2001':12B 'amet':7B 'dolor':5B 'global':9B 'ipsum':4B 'model':3B 'month':10B 'product':18A 'round':15A 'sector':21A 'sit':6B 'test':2B,14A,17A,20A 'test-model':1B 'test-product':16A 'test-round':13A 'test-sector':19A 'var':8B
+360cd1fd-f47d-4623-9425-111977c79748	61f25bf3-18c7-4f9a-97ef-3be95a1b7d9e	test-model_lorem_dolor_sit_amet_var_global_monthly_2001_2002	test-round/test-product/test-sector/test-model/test-model_lorem_dolor_sit_amet_var_global_monthly_2001_2002	20191122	2a01020db1a1860af73f18981e8e6aaf328bc47f41800463168c39eb65a4915d	sha256	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "test-model", "sector": "test-sector", "epsilon": "consetetur", "product": "test-product", "simulation_round": "test-round"}	'2001':11B '2002':12B 'amet':7B 'dolor':5B 'global':9B 'lorem':4B 'model':3B 'month':10B 'product':18A 'round':15A 'sector':21A 'sit':6B 'test':2B,14A,17A,20A 'test-model':1B 'test-product':16A 'test-round':13A 'test-sector':19A 'var':8B
 \.
 
 
 --
--- Name: datasets datasets_pkey; Type: CONSTRAINT; Schema: public; Owner: isimip_metadata
+-- Name: datasets datasets_pkey; Type: CONSTRAINT; Schema: public; Owner: jochen
 --
 
 ALTER TABLE ONLY public.datasets
@@ -126,7 +143,7 @@ ALTER TABLE ONLY public.datasets
 
 
 --
--- Name: files files_pkey; Type: CONSTRAINT; Schema: public; Owner: isimip_metadata
+-- Name: files files_pkey; Type: CONSTRAINT; Schema: public; Owner: jochen
 --
 
 ALTER TABLE ONLY public.files
@@ -134,77 +151,84 @@ ALTER TABLE ONLY public.files
 
 
 --
--- Name: attributes_key_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: attributes_key_idx; Type: INDEX; Schema: public; Owner: jochen
 --
 
 CREATE INDEX attributes_key_idx ON public.attributes USING btree (key);
 
 
 --
--- Name: datasets_search_vector_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: datasets_search_vector_idx; Type: INDEX; Schema: public; Owner: jochen
 --
 
 CREATE INDEX datasets_search_vector_idx ON public.datasets USING gin (search_vector);
 
 
 --
--- Name: files_search_vector_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: files_search_vector_idx; Type: INDEX; Schema: public; Owner: jochen
 --
 
 CREATE INDEX files_search_vector_idx ON public.files USING gin (search_vector);
 
 
 --
--- Name: ix_datasets_name; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: ix_datasets_name; Type: INDEX; Schema: public; Owner: jochen
 --
 
 CREATE INDEX ix_datasets_name ON public.datasets USING btree (name);
 
 
 --
--- Name: ix_datasets_path; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: ix_datasets_path; Type: INDEX; Schema: public; Owner: jochen
 --
 
 CREATE INDEX ix_datasets_path ON public.datasets USING btree (path);
 
 
 --
--- Name: ix_datasets_version; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: ix_datasets_version; Type: INDEX; Schema: public; Owner: jochen
 --
 
 CREATE INDEX ix_datasets_version ON public.datasets USING btree (version);
 
 
 --
--- Name: ix_files_name; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: ix_files_name; Type: INDEX; Schema: public; Owner: jochen
 --
 
 CREATE INDEX ix_files_name ON public.files USING btree (name);
 
 
 --
--- Name: ix_files_path; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: ix_files_path; Type: INDEX; Schema: public; Owner: jochen
 --
 
 CREATE INDEX ix_files_path ON public.files USING btree (path);
 
 
 --
--- Name: ix_files_version; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: ix_files_version; Type: INDEX; Schema: public; Owner: jochen
 --
 
 CREATE INDEX ix_files_version ON public.files USING btree (version);
 
 
 --
--- Name: words_word_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: latest_dataset_id_idx; Type: INDEX; Schema: public; Owner: jochen
+--
+
+CREATE INDEX latest_dataset_id_idx ON public.latest USING btree (dataset_id);
+
+
+--
+-- Name: words_word_idx; Type: INDEX; Schema: public; Owner: jochen
 --
 
 CREATE INDEX words_word_idx ON public.words USING gin (word public.gin_trgm_ops);
 
 
 --
--- Name: files files_dataset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: isimip_metadata
+-- Name: files files_dataset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: jochen
 --
 
 ALTER TABLE ONLY public.files
@@ -212,14 +236,21 @@ ALTER TABLE ONLY public.files
 
 
 --
--- Name: attributes; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: isimip_metadata
+-- Name: attributes; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: jochen
 --
 
 REFRESH MATERIALIZED VIEW public.attributes;
 
 
 --
--- Name: words; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: isimip_metadata
+-- Name: latest; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: jochen
+--
+
+REFRESH MATERIALIZED VIEW public.latest;
+
+
+--
+-- Name: words; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: jochen
 --
 
 REFRESH MATERIALIZED VIEW public.words;
