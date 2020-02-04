@@ -19,6 +19,14 @@ class LayerApi {
     });
   }
 
+  static fetchGlossary() {
+    return fetch('https://isi-mip.github.io/isimip-protocol-3/glossary.json').then(response => {
+      return response.json()
+    }).catch(error => {
+      return error
+    });
+  }
+
 }
 
 export default LayerApi

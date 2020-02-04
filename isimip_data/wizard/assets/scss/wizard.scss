@@ -39,6 +39,17 @@ p {
     .card {
         cursor: pointer;
 
+        .card-title {
+            font-size: smaller;
+            margin-bottom: 0;
+        }
+        .card-text {
+            margin-top: 0.75rem;
+
+            p, ul {
+                font-size: smaller;
+            }
+        }
         .card-body {
             :first-child {
                 margin-top: 0;
