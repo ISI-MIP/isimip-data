@@ -11,12 +11,15 @@ class Layers extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      layers: []
+      layers: [],
+      glossary: {}
     }
   }
 
   componentDidMount() {
-    this.fetch()
+    LayerApi.fetchGlossary().then(glossary => {
+      this.setState({ glossary }, this.fetch)
+    })
   }
 
   componentDidUpdate(prevProps) {
@@ -35,14 +38,14 @@ class Layers extends Component {
 
   render() {
     const { params, onChange } = this.props
-    const { layers } = this.state
+    const { layers, glossary } = this.state
 
     return (
       <div className="layers">
         {
           layers.map(layer => {
             return (
-              <Layer key={layer.attribute} params={params} layer={layer} onChange={onChange} />
+              <Layer key={layer.attribute} params={params} glossary={glossary} layer={layer} onChange={onChange} />
             )
           })
         }
