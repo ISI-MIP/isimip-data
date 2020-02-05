@@ -43,17 +43,19 @@ class Result extends Component {
 
     return (
       <li className="list-group-item">
-
-        <h4 className="card-title">
-          <a href={`/datasets/${dataset.id}/`}>{dataset.path}</a>
-        </h4>
+        <p className="card-text badges float-right">
+          <span className="badge badge-dark"
+                data-toggle="tooltip" data-placement="bottom" title="Version">
+            {dataset.version}
+          </span>
+        </p>
         <p className="card-text badges">
           <span className="badge badge-primary"
                 data-toggle="tooltip" data-placement="bottom" title="Simulation round">
             {dataset.attributes.simulation_round}
           </span>
           <span className="badge badge-secondary"
-                data-toggle="tooltip" data-placement="bottom" title="Product">
+                data-toggle="tooltip" data-placement="bottom" title="Data product">
             {dataset.attributes.product}
           </span>
           <span className="badge badge-warning"
@@ -65,14 +67,15 @@ class Result extends Component {
             {dataset.attributes.model}
           </span>
           <span className="badge badge-info"
-                data-toggle="tooltip" data-placement="bottom" title="Variable">
-            {dataset.attributes.variable}
-          </span>
-          <span className="badge badge-dark"
-                data-toggle="tooltip" data-placement="bottom" title="Version">
-            {dataset.version}
+                data-toggle="tooltip" data-placement="bottom" title="Period">
+            {dataset.attributes.period}
           </span>
         </p>
+
+        <h4 className="card-title">
+          <a href={`/datasets/${dataset.id}/`}>{dataset.name}</a>
+        </h4>
+
         <ul className="list-inline float-right">
           <li className="list-inline-item">
             <a href={`/api/v1/datasets/${dataset.id}/filelist/`}>

@@ -1,9 +1,9 @@
 import os
 
 from django.conf import settings
-from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.search import SearchVectorField
+from django.db import models
 
 from .managers import DatasetManager
 
@@ -30,11 +30,11 @@ class Dataset(models.Model):
 
     @property
     def json_url(self):
-        return os.path.join(settings.FILES_BASE_URL, '%s_v%s.json' % (self.path, self.version))
+        return os.path.join(settings.FILES_BASE_URL, self.path + '.json')
 
     @property
     def thumbnail_url(self):
-        return os.path.join(settings.FILES_BASE_URL, '%s_v%s.png' % (self.path, self.version))
+        return os.path.join(settings.FILES_BASE_URL, self.path + '.png')
 
 
 class Latest(models.Model):
@@ -72,19 +72,19 @@ class File(models.Model):
 
     @property
     def url(self):
-        return os.path.join(settings.FILES_BASE_URL, '%s_v%s.nc4' % (self.path, self.version))
+        return os.path.join(settings.FILES_BASE_URL, self.path)
 
     @property
     def json_url(self):
-        return os.path.join(settings.FILES_BASE_URL, '%s_v%s.json' % (self.path, self.version))
+        return os.path.join(settings.FILES_BASE_URL, self.path.replace('.nc4', '.json'))
 
     @property
     def checksum_url(self):
-        return os.path.join(settings.FILES_BASE_URL, '%s_v%s.%s' % (self.path, self.version, self.checksum_type))
+        return os.path.join(settings.FILES_BASE_URL, self.path.replace('.nc4', '.' + self.checksum_type))
 
     @property
     def thumbnail_url(self):
-        return os.path.join(settings.FILES_BASE_URL, '%s_v%s.png' % (self.path, self.version))
+        return os.path.join(settings.FILES_BASE_URL, self.path.replace('.nc4', '.png'))
 
 
 class Word(models.Model):
