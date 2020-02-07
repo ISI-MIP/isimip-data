@@ -1,20 +1,18 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
-
-from rest_framework import routers
-
 from isimip_data.metadata.views import dataset, file
-from isimip_data.metadata.viewsets import DatasetViewSet, FileViewSet
-
+from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
+                                           GlossaryViewSet)
 from isimip_data.search.views import search
 from isimip_data.search.viewsets import FacetViewSet
-
 from isimip_data.wizard.views import wizard
 from isimip_data.wizard.viewsets import LayerViewSet
+from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'datasets', DatasetViewSet, basename='dataset')
+router.register(r'glossary', GlossaryViewSet, basename='glossary')
 router.register(r'files', FileViewSet, basename='file')
 router.register(r'facets', FacetViewSet, basename='facet')
 router.register(r'layers', LayerViewSet, basename='layer')

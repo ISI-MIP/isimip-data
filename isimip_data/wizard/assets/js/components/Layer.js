@@ -12,22 +12,23 @@ class Layer extends Component {
   }
 
   renderCard(attribute, specifier, index) {
-    const { params, glossary } = this.props
+    const { params } = this.props
+    const { glossary } = this.props
     const active = params[attribute] && params[attribute].indexOf(specifier) > -1
 
     let properties = {}
-    if (glossary.terms[attribute] && glossary.terms[attribute][specifier]) {
-      properties = glossary.terms[attribute][specifier]
+    if (glossary[attribute] && glossary[attribute][specifier]) {
+      properties = glossary[attribute][specifier]
     }
+
     return (
       <div key={index} className={ 'card' + (active ? ' active' : '') }
            onClick={e => this.handleClick(attribute, specifier)}>
         <div className="card-body">
           <h4 className="card-title">{properties.title || specifier}</h4>
-          {(properties.title || properties.description) && <div className="card-text">
-            {properties.title && <p>{specifier}</p>}
+          <div className="card-text">
             {properties.description && <p>{properties.description}</p>}
-          </div>}
+          </div>
         </div>
       </div>
     )

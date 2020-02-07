@@ -145,6 +145,8 @@ NAVIGATION = [
 
 FILES_BASE_URL = os.getenv('FILES_BASE_URL')
 
+GLOSSARIES = os.getenv('GLOSSARIES', '').split()
+
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
 LOG_DIR = os.getenv('LOG_DIR')
 if LOG_DIR:

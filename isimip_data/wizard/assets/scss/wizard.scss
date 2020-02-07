@@ -46,6 +46,10 @@ p {
         .card-text {
             margin-top: 0.75rem;
 
+            &:empty {
+                margin: 0;
+            }
+
             p, ul {
                 font-size: smaller;
             }

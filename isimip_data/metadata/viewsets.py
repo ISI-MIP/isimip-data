@@ -1,15 +1,16 @@
 from django_filters.rest_framework import DjangoFilterBackend
-
-from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.exceptions import NotFound
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.response import Response
+from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 
-from .models import Dataset, File, Attribute
+from .filters import (AttributeFilterBackend, SearchFilterBackend,
+                      VersionFilterBackend)
+from .models import Attribute, Dataset, File
 from .serializers import DatasetSerializer, FileSerializer
-from .filters import SearchFilterBackend, VersionFilterBackend, AttributeFilterBackend
+from .utils import fetch_glossary
 
 
 class Pagination(PageNumberPagination):
@@ -102,3 +103,9 @@ class FileViewSet(ReadOnlyModelViewSet):
         'version',
         'checksum'
     )
+
+
+class GlossaryViewSet(ViewSet):
+
+    def list(self, request):
+        return Response(fetch_glossary())
