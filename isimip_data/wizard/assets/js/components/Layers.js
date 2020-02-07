@@ -29,7 +29,10 @@ class Layers extends Component {
 
     if (this.state.layers.length > prevState.layers.length) {
       // scroll to the bottom of the page if the number of layers increased
-      window.scrollTo(0,document.body.scrollHeight);
+      window.scroll({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      })
     }
   }
 
