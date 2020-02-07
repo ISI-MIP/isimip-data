@@ -22,9 +22,14 @@ class Layers extends Component {
     })
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.params !== prevProps.params) {
       this.fetch()
+    }
+
+    if (this.state.layers.length > prevState.layers.length) {
+      // scroll to the bottom of the page if the number of layers increased
+      window.scrollTo(0,document.body.scrollHeight);
     }
   }
 
