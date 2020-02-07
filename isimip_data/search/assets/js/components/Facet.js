@@ -62,21 +62,29 @@ class Facet extends Component {
     this.setState({ isOpen: !isOpen }, this.fetch)
   }
 
-  renderListGroup(items, checked) {
+  renderListGroup(attribute, items, checked) {
+    const { glossary } = this.props
+
     return (
       <ul className="list-group list-group-flush">
         {
           items.map((item, index) => {
-            const [key, count] = item
+            const [specifier, count] = item
             const id = item + '-facet-' + index
-            const isChecked = (checked.indexOf(key) > -1)
+            const isChecked = (checked.indexOf(specifier) > -1)
 
-            if (key !== null) {
+            if (specifier !== null) {
+              let properties = {}
+              if (glossary[attribute] && glossary[attribute][specifier]) {
+                properties = glossary[attribute][specifier]
+              }
+
               return (
                 <li key={index} className="list-group-item facet-item d-flex justify-content-between align-items-center">
                   <label className="form-check-label" htmlFor={id}>
-                    <input type="checkbox" className="form-check-input" id={id}
-                           checked={isChecked} onChange={e => this.handleChange(key, e)} /> {key}
+                    <input type="checkbox" className="form-check-input" id={specifier}
+                           checked={isChecked} onChange={e => this.handleChange(specifier, e)} />
+                      {properties.title || specifier}
                   </label>
                   <span className="badge badge-secondary badge-pill pull-right">
                     {count}
@@ -107,7 +115,7 @@ class Facet extends Component {
   }
 
   render() {
-    const { params, facet } = this.props
+    const { params, facet, glossary } = this.props
     const { isOpen, isLoading, items } = this.state
     const checked = params[facet.attribute] || []
     const isChecked = checked.length > 0
@@ -122,7 +130,7 @@ class Facet extends Component {
             {isOpen ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronUp} />}
           </div>
         </div>
-        {isOpen && !isEmpty && this.renderListGroup(items, checked)}
+        {isOpen && !isEmpty && this.renderListGroup(facet.attribute, items, checked)}
         {isOpen && isEmpty && !isLoading && this.renderEmpty()}
         {isOpen && isEmpty && isLoading && this.renderSpinner()}
       </div>

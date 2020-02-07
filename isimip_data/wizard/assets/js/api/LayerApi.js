@@ -19,14 +19,6 @@ class LayerApi {
     });
   }
 
-  static fetchGlossary() {
-    return fetch('/api/v1/glossary/').then(response => {
-      return response.json()
-    }).catch(error => {
-      return error
-    });
-  }
-
 }
 
 export default LayerApi

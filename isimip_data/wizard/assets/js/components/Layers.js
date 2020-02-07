@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
+
 import LayerApi from '../api/LayerApi'
+
 
 import Layer from './Layer'
 
@@ -17,7 +20,7 @@ class Layers extends Component {
   }
 
   componentDidMount() {
-    LayerApi.fetchGlossary().then(glossary => {
+    DatasetApi.fetchGlossary().then(glossary => {
       this.setState({ glossary }, this.fetch)
     })
   }
