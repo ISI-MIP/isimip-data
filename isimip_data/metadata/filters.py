@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.postgres.search import (SearchQuery, SearchRank,
                                             TrigramSimilarity)
 from django.db.models import Q
-from isimip_data.metadata.models import Attribute, Latest, Word
+from isimip_data.metadata.models import Attribute, Word
 from rest_framework.filters import BaseFilterBackend
 
 logger = logging.getLogger(__name__)
