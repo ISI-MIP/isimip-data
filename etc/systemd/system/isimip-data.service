@@ -5,9 +5,22 @@ After=network.target
 [Service]
 User=isimip
 Group=isimip
+
 WorkingDirectory=/home/isimip/isimip-data
 EnvironmentFile=/home/isimip/isimip-data/.env
-ExecStart=/home/isimip/isimip-data/env/bin/gunicorn --bind localhost:9000 config.wsgi:application
+
+ExecStart=/bin/sh -c '${GUNICORN_BIN} \
+  --workers ${GUNICORN_WORKER} \
+  --pid ${GUNICORN_PID_FILE} \
+  --bind localhost:${GUNICORN_PORT} \
+  --timeout ${GUNICORN_TIMEOUT} \
+  --access-logfile ${GUNICORN_ACCESS_LOG_FILE} \
+  --error-logfile ${GUNICORN_ERROR_LOG_FILE} \
+  config.wsgi:application'
+
+ExecReload=/bin/sh -c '/usr/bin/pkill -HUP -F ${GUNICORN_PID_FILE}'
+
+ExecStop=/bin/sh -c '/usr/bin/pkill -TERM -F ${GUNICORN_PID_FILE}'
 
 [Install]
 WantedBy=multi-user.target

@@ -1,10 +1,10 @@
 -r common.txt
 
 # development only dependencies in aphabetical order
-coverage>=4.5
-django-debug-toolbar>=1.11
-django-extensions>=2.1
-pytest-django>=3.5.0
-pytest-cov>=2.7
-pytest-dotenv>=0.4
-pytest-mock>=1.11
+coverage~=4.5
+django-debug-toolbar~=1.11
+django-extensions~=2.1
+pytest-django~=3.5.0
+pytest-cov~=2.7
+pytest-dotenv~=0.4
+pytest-mock~=1.11
