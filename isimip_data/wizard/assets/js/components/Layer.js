@@ -37,10 +37,19 @@ class Layer extends Component {
   render() {
     const { layer } = this.props
 
+    let className = 'card-columns'
+    if (layer.values.length == 1) {
+      className += ' one-column'
+    } else if (layer.values.length == 2 || layer.values.length == 4){
+      className += ' two-columns'
+    } else {
+      className += ' three-columns'
+    }
+
     return (
       <div className="layer">
         <h3>{layer.title}</h3>
-        <div className="card-columns" style={{columnCount: Math.min(3, layer.values.length)}}>
+        <div className={className}>
           {layer.values.map((value, index) => this.renderCard(layer.attribute, value, index))}
         </div>
       </div>
