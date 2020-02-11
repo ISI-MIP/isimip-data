@@ -8,4 +8,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         subprocess.call(['/bin/bash', '-i', '-c', 'npm install; npm run build:prod'])
-        call_command('collectstatic', '--noinput', '--clean')
+        call_command('collectstatic', '--noinput', '--clear')
