@@ -12,7 +12,7 @@
 <div class="container">
     <div class="header">
         <h1>{% trans 'Dataset' %}</h1>
-        <h2>{{ dataset.path }}</h2>
+        <h2>{{ dataset.name }}</h2>
 
         <p>
             {{ dataset.attributes.description }}
@@ -27,7 +27,7 @@
             <div class="card attributes">
                 <div class="card-body">
                     <dl class="row">
-                    {% for key, value in dataset.attributes.items %}
+                    {% for key, value in attributes.items %}
                     {% if key != 'description' %}
                         <dt class="col-sm-3 text-right">{{ key }}</dt>
                         <dd class="col-sm-9">{{ value }}</dd>

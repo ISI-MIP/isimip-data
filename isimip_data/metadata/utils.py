@@ -48,3 +48,18 @@ def fetch_glossary():
                 logger.error('AttributeError for {}'.format(location))
 
     return glossary
+
+
+def prettify_attributes(attributes):
+    glossary = fetch_glossary()
+
+    pretty_attributes = {}
+    for key, value in attributes.items():
+        try:
+            pretty_value = glossary[key][value]['title']
+        except (KeyError, TypeError):
+            pretty_value = value
+
+        pretty_attributes[key.replace('_', ' ').title()] = pretty_value
+
+    return pretty_attributes
