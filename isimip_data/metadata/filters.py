@@ -19,7 +19,7 @@ class SearchFilterBackend(BaseFilterBackend):
         query = request.GET.get('query')
         if query:
             # first, split the search string along _ and whitespace into words
-            search_words = query.replace('_', ' ').split()
+            search_words = query.replace('_', ' ').replace('-', ' ').replace('/', ' ').split()
 
             # second, lookup similar words in the "words" table and join them with OR
             search_strings = []
