@@ -5,18 +5,26 @@ from .utils import prettify_attributes
 
 
 def dataset(request, dataset_id):
-    dataset_instance = get_object_or_404(Dataset.objects.using('metadata'), id=dataset_id)
+    dataset_obj = get_object_or_404(Dataset.objects.using('metadata'), id=dataset_id)
+    versions = Dataset.objects.using('metadata').filter(path=dataset_obj.path) \
+                                                .exclude(id=dataset_id) \
+                                                .order_by('version')
 
     return render(request, 'metadata/dataset.html', {
-        'dataset': dataset_instance,
-        'attributes': prettify_attributes(dataset_instance.attributes)
+        'dataset': dataset_obj,
+        'versions': versions,
+        'attributes': prettify_attributes(dataset_obj.attributes)
     })
 
 
 def file(request, file_id):
-    file_instance = get_object_or_404(File.objects.using('metadata'), id=file_id)
+    file_obj = get_object_or_404(File.objects.using('metadata'), id=file_id)
+    versions = File.objects.using('metadata').filter(path=file_obj.path) \
+                                             .exclude(id=file_id) \
+                                             .order_by('version')
 
     return render(request, 'metadata/file.html', {
-        'file': file_instance,
-        'attributes': prettify_attributes(file_instance.attributes)
+        'file': file_obj,
+        'versions': versions,
+        'attributes': prettify_attributes(file_obj.attributes)
     })

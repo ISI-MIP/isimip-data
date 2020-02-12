@@ -24,7 +24,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h3>{% trans 'Attributes' %}</h3>
-            <div class="card attributes">
+            <div class="card">
                 <div class="card-body">
                     <dl class="row">
                     {% for key, value in attributes.items %}
@@ -44,7 +44,9 @@
             </div>
 
             <h3>{% trans 'Download' %}</h3>
-            <div class="card attributes">
+
+            {% if dataset.latest %}
+            <div class="card">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <a href="{{ dataset.json_url}}">{% trans 'Download JSON metadata file' %}</a>
@@ -54,53 +56,52 @@
                     </li>
                 </ul>
             </div>
+            {% else %}
+            <div class="card">
+                <div class="card-body">
+                    <p>
+                        This dataset is archived and currently not available for download. Please contact support if you need this exact version of the dataset.
+                    </p>
+
+                    {% if versions %}
+                    {% with versions.first as version %}
+                    <p>
+                        A newer version of this dateset is available <a href="{% url 'dataset' version.id %}">here</a>.
+                    </p>
+                    {% endwith %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 
-    <h3>{% trans 'Files' %}</h3>
-    <div class="card files">
+    <h3>{% trans 'Files in this dataset' %}</h3>
+    <div class="card">
         <ul class="list-group list-group-flush">
             {% for file in dataset.files.all %}
             <li class="list-group-item">
-                <a href="{% url 'file' file.id %}">{{ file.path }}</a>
-
-                <p>
-                    <span class="badge badge-primary"
-                        data-toggle="tooltip" data-placement="bottom" title="Simulation round">
-                        {{ file.attributes.simulation_round }}
-                    </span>
-                    <span class="badge badge-secondary"
-                        data-toggle="tooltip" data-placement="bottom" title="Product">
-                        {{ file.attributes.product }}
-                    </span>
-                    <span class="badge badge-success"
-                        data-toggle="tooltip" data-placement="bottom" title="Sector">
-                        {{ file.attributes.sector }}
-                    </span>
-                    <span class="badge badge-danger"
-                        data-toggle="tooltip" data-placement="bottom" title="Impact model">
-                        {{ file.attributes.model }}
-                    </span>
-                    <span class="badge badge-warning"
-                        data-toggle="tooltip" data-placement="bottom" title="Climate forcing">
-                        {{ file.attributes.climate_forcing }}
-                    </span>
-                    <span class="badge badge-info"
-                        data-toggle="tooltip" data-placement="bottom" title="Period">
-                        {{ file.attributes.period }}
-                    </span>
-                    <span class="badge badge-light"
-                        data-toggle="tooltip" data-placement="bottom" title="Variable">
-                        {{ file.attributes.variable }}
-                    </span>
-                    <span class="badge badge-dark"
-                        data-toggle="tooltip" data-placement="bottom" title="Last version">
-                        {{ file.version }}
-                    </span>
-                </p>
+                <h4>
+                    <a href="{% url 'file' file.id %}">{{ file.name }}</a>
+                </h4>
+                {% include 'metadata/_shields.html' with obj=dataset %}
             </li>
             {% endfor %}
-        </div>
+        </ul>
+    </div>
+
+    <h3>{% trans 'Other versions of this dataset' %}</h3>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            {% for version in versions %}
+            <li class="list-group-item">
+                <h4>
+                    <a href="{% url 'dataset' version.id %}">{{ version.name }}</a>
+                </h4>
+                {% include 'metadata/_shields.html' with obj=version %}
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
 
