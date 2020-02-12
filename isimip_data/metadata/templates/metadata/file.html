@@ -39,14 +39,14 @@
             </div>
         </div>
         <div class="col-sm-4">
+            {% if file.dataset.latest %}
+
             <h3>{% trans 'Preview' %}</h3>
             <div class="card">
                 <img src="{{ file.thumbnail_url }}" class="card-img-top" alt="{{ file.path }}">
             </div>
 
             <h3>{% trans 'Download' %}</h3>
-
-            {% if file.dataset.latest %}
             <div class="card">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
@@ -63,7 +63,10 @@
                     </li>
                 </ul>
             </div>
+
             {% else %}
+
+            <h3>{% trans 'Archived' %}</h3>
             <div class="card">
                 <div class="card-body">
                     <p>
@@ -79,6 +82,7 @@
                     {% endif %}
                 </div>
             </div>
+
             {% endif %}
         </div>
     </div>
@@ -95,6 +99,7 @@
         </ul>
     </div>
 
+    {% if versions %}
     <h3>{% trans 'Other versions of this file' %}</h3>
     <div class="card">
         <ul class="list-group list-group-flush">
@@ -108,6 +113,7 @@
             {% endfor %}
         </ul>
     </div>
+    {% endif %}
 </div>
 
 {% endblock %}
