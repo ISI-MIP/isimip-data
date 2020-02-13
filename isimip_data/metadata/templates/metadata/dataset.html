@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="col-sm-4">
-            {% if dataset.latest %}
+            {% if dataset.public %}
 
             <h3>{% trans 'Preview' %}</h3>
             <div class="card">
@@ -63,16 +63,16 @@
             <div class="card">
                 <div class="card-body">
                     <p>
-                        This dataset is archived and currently not available for download. Please contact support if you need this exact version of the dataset.
+                        This dataset is archived and currently not available for download. Please contact support if you need this version of the dataset.
                     </p>
 
-                    {% if versions %}
-                    {% with versions.first as version %}
+                    {% for version in versions %}
+                    {% if version.public %}
                     <p>
-                        A newer version of this dateset is available <a href="{% url 'dataset' version.id %}">here</a>.
+                        A different version of this dateset is available <a href="{% url 'dataset' version.id %}">here</a>.
                     </p>
-                    {% endwith %}
                     {% endif %}
+                    {% endfor %}
                 </div>
             </div>
 

@@ -55,13 +55,11 @@ class SearchFilterBackend(BaseFilterBackend):
 class VersionFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
-        # display all datasets or only the latest version
-        # the latest versions are stored in a materialized view called "latest"
-
+        # display all datasets or only the public version
         if request.GET.get('all') == 'true':
             return queryset
         else:
-            return queryset.exclude(latest=None)
+            return queryset.filter(public=True)
 
 
 class AttributeFilterBackend(BaseFilterBackend):

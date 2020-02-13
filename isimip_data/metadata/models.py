@@ -19,6 +19,7 @@ class Dataset(models.Model):
     version = models.TextField()
     attributes = JSONField()
     search_vector = SearchVectorField(null=True)
+    public = models.BooleanField(null=True)
 
     class Meta:
         db_table = 'datasets'
@@ -35,17 +36,6 @@ class Dataset(models.Model):
     @property
     def thumbnail_url(self):
         return os.path.join(settings.FILES_BASE_URL, self.path + '.png')
-
-
-class Latest(models.Model):
-
-    dataset = models.OneToOneField('Dataset', on_delete=models.CASCADE, primary_key=True)
-    version = models.TextField()
-
-    class Meta:
-        db_table = 'latest'
-        managed = False
-        ordering = ('version', )
 
 
 class File(models.Model):
