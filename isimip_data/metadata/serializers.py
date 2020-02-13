@@ -32,6 +32,7 @@ class DatasetSerializer(serializers.ModelSerializer):
             'attributes',
             'files',
             'search_rank',
+            'public'
         )
 
 

@@ -14,6 +14,9 @@ logger = logging.getLogger(__name__)
 class SearchFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
         # this is the compicated part, we emply both trigram similarity and full text search here
         # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/search/
         # and http://rachbelaid.com/postgres-full-text-search-is-good-enough/
@@ -55,6 +58,9 @@ class SearchFilterBackend(BaseFilterBackend):
 class VersionFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
         # display all datasets or only the public version
         if request.GET.get('all') == 'true':
             return queryset
@@ -68,6 +74,8 @@ class AttributeFilterBackend(BaseFilterBackend):
         # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#std:fieldlookup-hstorefield.contains
         # and https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#containment-and-key-operations
         # for optimal jsonb lookups: queryset.filter(field={'foo': 'bar', 'egg': 'spam'})
+        if view.detail:
+            return queryset
 
         for attribute in Attribute.objects.using('metadata').all():
             if attribute.key != getattr(view, 'attribute_filter_exclude', None):
