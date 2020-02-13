@@ -1,3 +1,4 @@
+from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -14,7 +15,7 @@ from .utils import fetch_glossary
 
 
 class Pagination(PageNumberPagination):
-    page_size = 10
+    page_size = settings.METADATA_PAGE_SIZE
 
 
 class DatasetViewSet(ReadOnlyModelViewSet):
