@@ -4,8 +4,9 @@ from django.conf import settings
 from django.contrib.postgres.search import (SearchQuery, SearchRank,
                                             TrigramSimilarity)
 from django.db.models import Q
-from isimip_data.metadata.models import Attribute, Word
 from rest_framework.filters import BaseFilterBackend
+
+from isimip_data.metadata.models import Attribute, Word
 
 logger = logging.getLogger(__name__)
 
@@ -24,9 +25,11 @@ class SearchFilterBackend(BaseFilterBackend):
             # second, lookup similar words in the "words" table and join them with OR
             search_strings = []
             for search_word in search_words:
-                words = Word.objects.using('metadata').annotate(
-                    similarity=TrigramSimilarity('word', search_word)
-                ).filter(similarity__gt=settings.SEARCH_SIMILARITY).order_by('-similarity').values_list('word', flat=True)
+                words = Word.objects.using('metadata') \
+                                    .annotate(similarity=TrigramSimilarity('word', search_word)) \
+                                    .filter(similarity__gt=settings.SEARCH_SIMILARITY) \
+                                    .order_by('-similarity') \
+                                    .values_list('word', flat=True)[:settings.SEARCH_SIMILARITY_LIMIT]
 
                 if words:
                     search_strings.append('(%s)' % ' | '.join(words))
