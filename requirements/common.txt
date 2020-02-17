@@ -3,7 +3,7 @@ Django==3.0.3
 django-admin-sortable2~=0.7.3
 django-filter==2.2.0
 django-settings-export==1.2.1
-djangorestframework~=3.9
+djangorestframework==3.11.0
 dj-database-url~=0.5
 drf-extensions~=0.4.0
 psycopg2-binary~=2.8
