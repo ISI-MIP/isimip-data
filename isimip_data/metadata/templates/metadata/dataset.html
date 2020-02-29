@@ -42,19 +42,7 @@
 
             <h3>{% trans 'Preview' %}</h3>
             <div class="card">
-                <img src="{{ dataset.thumbnail_url }}" class="card-img-top" alt="{{ dataset.path }}">
-            </div>
-
-            <h3>{% trans 'Download' %}</h3>
-            <div class="card">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <a href="{{ dataset.json_url}}">{% trans 'Download JSON metadata file' %}</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="{{ dataset.thumbnail_url}}">{% trans 'Download thumbnail' %}</a>
-                    </li>
-                </ul>
+                <img src="{{ dataset.files.first.thumbnail_url }}" class="card-img-top" alt="{{ dataset.path }}">
             </div>
 
             {% else %}
