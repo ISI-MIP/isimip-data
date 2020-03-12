@@ -18,6 +18,8 @@ $container-max-widths: (
 
 main {
     background-image: url('../../../core/assets/images/mountain-range.jpg');
-    background-position: top;
-    background-size: cover;
+    background-position: fixed;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-color: $color-neutral-dark;
 }
