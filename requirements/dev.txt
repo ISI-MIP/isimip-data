@@ -2,7 +2,7 @@
 
 # development only dependencies in aphabetical order
 coverage==5.0.3
-django-debug-toolbar~=1.11
+django-debug-toolbar==2.2
 django-extensions~=2.1
 pytest-django~=3.5.0
 pytest-cov~=2.7
