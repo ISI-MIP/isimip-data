@@ -1,32 +1,52 @@
 <p>
+    {% if obj.attributes.simulation_round %}
     <span class="badge badge-primary"
         data-toggle="tooltip" data-placement="bottom" title="Simulation round">
         {{ obj.attributes.simulation_round }}
     </span>
+    {% endif %}
+    {% if obj.attributes.product %}
     <span class="badge badge-secondary"
         data-toggle="tooltip" data-placement="bottom" title="Product">
         {{ obj.attributes.product }}
     </span>
+    {% endif %}
+    {% if obj.attributes.category %}
+    <span class="badge badge-success"
+        data-toggle="tooltip" data-placement="bottom" title="Category">
+        {{ obj.attributes.category }}
+    </span>
+    {% endif %}
+    {% if obj.attributes.sector %}
     <span class="badge badge-success"
         data-toggle="tooltip" data-placement="bottom" title="Sector">
         {{ obj.attributes.sector }}
     </span>
+    {% endif %}
+    {% if obj.attributes.model %}
     <span class="badge badge-danger"
         data-toggle="tooltip" data-placement="bottom" title="Impact model">
         {{ obj.attributes.model }}
     </span>
+    {% endif %}
+    {% if obj.attributes.climate_forcing %}
     <span class="badge badge-warning"
         data-toggle="tooltip" data-placement="bottom" title="Climate forcing">
         {{ obj.attributes.climate_forcing }}
     </span>
+    {% endif %}
+    {% if obj.attributes.period %}
     <span class="badge badge-info"
         data-toggle="tooltip" data-placement="bottom" title="Period">
         {{ obj.attributes.period }}
     </span>
+    {% endif %}
+    {% if obj.attributes.variable %}
     <span class="badge badge-light"
         data-toggle="tooltip" data-placement="bottom" title="Variable">
         {{ obj.attributes.variable }}
     </span>
+    {% endif %}
     <span class="badge badge-dark"
         data-toggle="tooltip" data-placement="bottom" title="Last version">
         {{ obj.version }}
