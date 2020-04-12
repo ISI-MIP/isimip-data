@@ -3,6 +3,9 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from rest_framework import routers
 
+from isimip_data.core.viewsets import SettingsViewSet
+from isimip_data.download.views import download
+from isimip_data.download.viewsets import CountryViewSet
 from isimip_data.metadata.views import attributes, dataset, file, metadata
 from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
                                            GlossaryViewSet)
@@ -13,10 +16,12 @@ from isimip_data.wizard.viewsets import LayerViewSet
 
 router = routers.DefaultRouter()
 router.register(r'datasets', DatasetViewSet, basename='dataset')
+router.register(r'countries', CountryViewSet, basename='country')
 router.register(r'glossary', GlossaryViewSet, basename='glossary')
 router.register(r'files', FileViewSet, basename='file')
 router.register(r'facets', FacetViewSet, basename='facet')
 router.register(r'layers', LayerViewSet, basename='layer')
+router.register(r'settings', SettingsViewSet, basename='setting')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,6 +41,7 @@ urlpatterns = [
     path('api/v1/', include(router.urls)),
 
     re_path(r'^search/', search, name='search'),
+    re_path(r'^download/', download, name='download'),
     path('', wizard, name='wizard'),
 ]
 

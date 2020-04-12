@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # isimip_data apps
     'isimip_data.core',
+    'isimip_data.download',
     'isimip_data.metadata',
     'isimip_data.search',
     'isimip_data.wizard',
@@ -149,6 +150,7 @@ NAVIGATION = [
 ]
 
 FILES_BASE_URL = os.getenv('FILES_BASE_URL')
+FILES_API_URL = os.getenv('FILES_API_URL')
 
 GLOSSARIES = os.getenv('GLOSSARIES', '').split()
 

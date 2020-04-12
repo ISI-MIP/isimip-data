@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'download.css' %}" />
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'download.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <div id="app"></div>
+</div>
+
+{% endblock %}
