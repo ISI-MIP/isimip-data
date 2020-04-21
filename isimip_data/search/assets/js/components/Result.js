@@ -73,17 +73,17 @@ class Result extends Component {
         </p>
 
         <h4 className="card-title">
-          <a href={`/datasets/${dataset.id}/`}>{dataset.name}</a>
+          <a href={`/datasets/${dataset.checksum}/`}>{dataset.name}</a>
         </h4>
 
         <ul className="list-inline float-right">
           <li className="list-inline-item">
-            <a href={`/api/v1/datasets/${dataset.id}/filelist/`}>
+            <a href={`/api/v1/datasets/${dataset.checksum}/filelist/`}>
               Download file list
             </a>
           </li>
           <li className="list-inline-item">
-            <a href={`/api/v1/datasets/${dataset.id}/wget/`}>
+            <a href={`/api/v1/datasets/${dataset.checksum}/wget/`}>
               Download wget script
             </a>
           </li>
