@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
@@ -29,14 +29,6 @@ class Dataset(models.Model):
     def __str__(self):
         return self.path
 
-    @property
-    def json_url(self):
-        return os.path.join(settings.FILES_BASE_URL, self.path + '.json')
-
-    @property
-    def thumbnail_url(self):
-        return os.path.join(settings.FILES_BASE_URL, self.path + '.png')
-
 
 class File(models.Model):
 
@@ -62,19 +54,19 @@ class File(models.Model):
 
     @property
     def url(self):
-        return os.path.join(settings.FILES_BASE_URL, self.path)
+        return settings.FILES_BASE_URL + str(Path(self.path))
 
     @property
     def json_url(self):
-        return os.path.join(settings.FILES_BASE_URL, self.path.replace('.nc4', '.json'))
+        return settings.FILES_BASE_URL + str(Path(self.path).with_suffix('.json'))
 
     @property
     def checksum_url(self):
-        return os.path.join(settings.FILES_BASE_URL, self.path.replace('.nc4', '.' + self.checksum_type))
+        return settings.FILES_BASE_URL + str(Path(self.path).with_suffix('.' + self.checksum_type))
 
     @property
     def thumbnail_url(self):
-        return os.path.join(settings.FILES_BASE_URL, self.path.replace('.nc4', '.png'))
+        return settings.FILES_BASE_URL + str(Path(self.path).with_suffix('.png'))
 
 
 class Word(models.Model):
