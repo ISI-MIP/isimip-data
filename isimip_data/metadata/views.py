@@ -1,6 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 
-from .models import Dataset, File
+from .models import Attribute, Dataset, File
 from .utils import prettify_attributes
 
 
@@ -27,4 +28,15 @@ def file(request, file_id):
         'file': file_obj,
         'versions': versions,
         'attributes': prettify_attributes(file_obj.attributes)
+    })
+
+
+@login_required
+def attributes(request):
+    attributes_list = []
+    for attribute in Attribute.objects.using('metadata').all():
+        attributes_list.append((attribute, Dataset.objects.using('metadata').histogram(attribute)))
+
+    return render(request, 'metadata/attributes.html', {
+        'attributes': attributes_list
     })

@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'metadata.css' %}" />
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <div class="header">
+        <h1>{% trans 'Stats' %}</h1>
+    </div>
+
+    <div class="card-columns">
+        {% for attribute, rows in attributes %}
+        <div class="card" style="width: 18rem;">
+            <div class="card-header">
+                {{ attribute }}
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for specifier, count in rows %}
+                <li class="list-group-item">
+                    <span>{{ specifier }}</span>
+                    <div class="badge badge-secondary badge-pill float-right">
+                        {{ count }}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

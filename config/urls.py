@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
-from isimip_data.metadata.views import dataset, file
+from isimip_data.metadata.views import attributes, dataset, file
 from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
                                            GlossaryViewSet)
 from isimip_data.search.views import search
@@ -21,6 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('datasets/<uuid:dataset_id>/', dataset, name='dataset'),
     path('files/<uuid:file_id>/', file, name='file'),
+    path('attributes/', attributes, name='attributes'),
 
     path('api/v1/', include(router.urls)),
 
