@@ -5,10 +5,16 @@ from .models import Attribute, Dataset, File
 from .utils import prettify_attributes
 
 
-def dataset(request, dataset_id):
-    dataset_obj = get_object_or_404(Dataset.objects.using('metadata'), id=dataset_id)
+def dataset(request, pk=None, checksum=None):
+    if pk is not None:
+        dataset_obj = get_object_or_404(Dataset.objects.using('metadata'), id=pk)
+    elif checksum is not None:
+        dataset_obj = get_object_or_404(Dataset.objects.using('metadata'), checksum=checksum)
+    else:
+        raise RuntimeError('Either pk or checksum need to be provided')
+
     versions = Dataset.objects.using('metadata').filter(path=dataset_obj.path) \
-                                                .exclude(id=dataset_id) \
+                                                .exclude(id=pk) \
                                                 .order_by('version')
 
     return render(request, 'metadata/dataset.html', {
@@ -18,10 +24,16 @@ def dataset(request, dataset_id):
     })
 
 
-def file(request, file_id):
-    file_obj = get_object_or_404(File.objects.using('metadata'), id=file_id)
+def file(request, pk=None, checksum=None):
+    if pk is not None:
+        file_obj = get_object_or_404(File.objects.using('metadata'), id=pk)
+    elif checksum is not None:
+        file_obj = get_object_or_404(File.objects.using('metadata'), checksum=checksum)
+    else:
+        raise RuntimeError('Either pk or checksum need to be provided')
+
     versions = File.objects.using('metadata').filter(path=file_obj.path) \
-                                             .exclude(id=file_id) \
+                                             .exclude(id=file_obj.id) \
                                              .order_by('version')
 
     return render(request, 'metadata/file.html', {

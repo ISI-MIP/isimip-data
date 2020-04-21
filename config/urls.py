@@ -19,8 +19,10 @@ router.register(r'layers', LayerViewSet, basename='layer')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('datasets/<uuid:dataset_id>/', dataset, name='dataset'),
-    path('files/<uuid:file_id>/', file, name='file'),
+    path('datasets/<uuid:pk>/', dataset, name='dataset'),
+    path('datasets/<str:checksum>/', dataset, name='dataset'),
+    path('files/<uuid:pk>/', file, name='file'),
+    path('files/<str:checksum>/', file, name='file'),
     path('attributes/', attributes, name='attributes'),
 
     path('api/v1/', include(router.urls)),
