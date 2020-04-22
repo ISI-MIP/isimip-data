@@ -11,6 +11,7 @@ module.exports = {
     ],
     metadata: [
       './isimip_data/metadata/assets/scss/metadata.scss',
+      './isimip_data/metadata/assets/js/metadata.js',
     ],
     search: [
       './isimip_data/search/assets/scss/search.scss',

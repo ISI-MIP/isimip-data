@@ -1,45 +1,56 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Attribute, Dataset, File
 from .utils import prettify_attributes
 
 
-def dataset(request, pk=None, checksum=None):
-    if pk is not None:
-        dataset_obj = get_object_or_404(Dataset.objects.using('metadata'), id=pk)
-    elif checksum is not None:
-        dataset_obj = get_object_or_404(Dataset.objects.using('metadata'), checksum=checksum)
+def metadata(request):
+    if 'input' in request.GET:
+        return redirect('file', request.GET['input'])
     else:
-        raise RuntimeError('Either pk or checksum need to be provided')
+        return render(request, 'metadata/metadata.html')
 
-    versions = Dataset.objects.using('metadata').filter(path=dataset_obj.path) \
+
+def dataset(request, pk=None, path=None, checksum=None):
+    if pk is not None:
+        obj = get_object_or_404(Dataset.objects.using('metadata'), id=pk)
+    elif path is not None:
+        obj = get_object_or_404(Dataset.objects.using('metadata'), path=path)
+    elif checksum is not None:
+        obj = get_object_or_404(Dataset.objects.using('metadata'), checksum=checksum)
+    else:
+        raise RuntimeError('Either pk, path or checksum need to be provided')
+
+    versions = Dataset.objects.using('metadata').filter(path=obj.path) \
                                                 .exclude(id=pk) \
                                                 .order_by('version')
 
     return render(request, 'metadata/dataset.html', {
-        'dataset': dataset_obj,
+        'dataset': obj,
         'versions': versions,
-        'attributes': prettify_attributes(dataset_obj.attributes)
+        'attributes': prettify_attributes(obj.attributes)
     })
 
 
-def file(request, pk=None, checksum=None):
+def file(request, pk=None, path=None, checksum=None):
     if pk is not None:
-        file_obj = get_object_or_404(File.objects.using('metadata'), id=pk)
+        obj = get_object_or_404(File.objects.using('metadata'), id=pk)
+    elif path is not None:
+        obj = get_object_or_404(File.objects.using('metadata'), path=path)
     elif checksum is not None:
-        file_obj = get_object_or_404(File.objects.using('metadata'), checksum=checksum)
+        obj = get_object_or_404(File.objects.using('metadata'), checksum=checksum)
     else:
-        raise RuntimeError('Either pk or checksum need to be provided')
+        raise RuntimeError('Either pk, path or checksum need to be provided')
 
-    versions = File.objects.using('metadata').filter(path=file_obj.path) \
-                                             .exclude(id=file_obj.id) \
+    versions = File.objects.using('metadata').filter(path=obj.path) \
+                                             .exclude(id=obj.id) \
                                              .order_by('version')
 
     return render(request, 'metadata/file.html', {
-        'file': file_obj,
+        'file': obj,
         'versions': versions,
-        'attributes': prettify_attributes(file_obj.attributes)
+        'attributes': prettify_attributes(obj.attributes)
     })
 
 

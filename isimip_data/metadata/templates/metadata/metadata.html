@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'metadata.css' %}" />
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'metadata.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <div class="header">
+        <h1>{% trans 'Metadata' %}</h1>
+
+        <p>
+            Please give the SHA1 checksum, the internal ID, or the path of a file to be redirected to its information page.
+        </p>
+        <p class="small">
+            e.g. <code>9076e428c7807e28098313216564932820dc58b6</code>,
+            <code>fc5581d6-f0e7-418b-8a52-080a0516a67e</code>,<br />
+            <code>ISIMIP3a/InputData/climate/atmosphere/obsclim/GSWP3/gswp3_obsclim_tas_global_daily_1901_1910.nc</code>.
+        </p>
+    </div>
+
+    <div class="row justify-content-sm-center">
+        <div class="col-sm-8">
+            <form class="text-center" method="GET">
+                <div class="form-group" >
+                    <label for="input">Checksum or ID or path</label>
+                    <textarea id="input" class="form-control text-center" rows=6
+                        name="input" aria-describedby="input-help" autofocus></textarea>
+                    <small id="input-help" class="form-text text-muted">
+                         You can drag into the area to compute its checksum automatically.
+                    </small>
+                </div>
+
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
