@@ -18,7 +18,7 @@ $container-max-widths: (
 
 main {
     background-image: url('../../../core/assets/images/mountain-range.jpg');
-    background-position: fixed;
+    background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: 100%;
     background-color: $color-neutral-dark;
