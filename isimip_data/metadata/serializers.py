@@ -1,9 +1,12 @@
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from .models import Dataset, File
 
 
 class DatasetFileSerializer(serializers.ModelSerializer):
+
+    metadata_url = serializers.SerializerMethodField()
 
     class Meta:
         model = File
@@ -11,16 +14,24 @@ class DatasetFileSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'version',
-            'url',
             'checksum',
-            'checksum_type'
+            'checksum_type',
+            'url',
+            'metadata_url',
+            'file_url',
         )
+
+    def get_metadata_url(self, obj):
+        return reverse('file', args=[obj.checksum], request=self.context['request'])
 
 
 class DatasetSerializer(serializers.ModelSerializer):
 
     files = DatasetFileSerializer(many=True)
     search_rank = serializers.FloatField(required=False, default=0.0)
+    metadata_url = serializers.SerializerMethodField()
+    filelist_url = serializers.SerializerMethodField()
+    wget_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Dataset
@@ -30,15 +41,29 @@ class DatasetSerializer(serializers.ModelSerializer):
             'path',
             'version',
             'attributes',
-            'files',
             'search_rank',
-            'public'
+            'public',
+            'url',
+            'metadata_url',
+            'filelist_url',
+            'wget_url',
+            'files',
         )
+
+    def get_metadata_url(self, obj):
+        return reverse('dataset', args=[obj.checksum], request=self.context['request'])
+
+    def get_filelist_url(self, obj):
+        return reverse('dataset-detail-filelist', args=[obj.id], request=self.context['request'])
+
+    def get_wget_url(self, obj):
+        return reverse('dataset-detail-wget', args=[obj.id], request=self.context['request'])
 
 
 class FileSerializer(serializers.ModelSerializer):
 
     search_rank = serializers.FloatField(required=False, default=0.0)
+    metadata_url = serializers.SerializerMethodField()
 
     class Meta:
         model = File
@@ -46,9 +71,14 @@ class FileSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'version',
-            'url',
             'checksum',
             'checksum_type',
             'attributes',
             'search_rank',
+            'url',
+            'metadata_url',
+            'file_url'
         )
+
+    def get_metadata_url(self, obj):
+        return reverse('dataset', args=[obj.checksum], request=self.context['request'])

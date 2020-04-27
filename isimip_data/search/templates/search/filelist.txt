@@ -1,2 +1,0 @@
-{% for file in files %}{{ file.url }}
-{% endfor %}

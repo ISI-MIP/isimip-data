@@ -73,17 +73,17 @@ class Result extends Component {
         </p>
 
         <h4 className="card-title">
-          <a href={`/datasets/${dataset.checksum}/`}>{dataset.name}</a>
+          <a href={dataset.metadata_url} target="_blank">{dataset.name}</a>
         </h4>
 
         <ul className="list-inline float-right">
           <li className="list-inline-item">
-            <a href={`/api/v1/datasets/${dataset.checksum}/filelist/`}>
+            <a href={dataset.filelist_url}>
               Download file list
             </a>
           </li>
           <li className="list-inline-item">
-            <a href={`/api/v1/datasets/${dataset.checksum}/wget/`}>
+            <a href={dataset.wget_url}>
               Download wget script
             </a>
           </li>
@@ -130,19 +130,27 @@ class Result extends Component {
     return (
       <li className="list-group-item result-files">
         <h4 className="card-title">Files</h4>
-        <ul className="list-unstyled">
-        {
-          dataset.files.map(file => {
-            return (
-              <li key={file.id}>
-                <a href={file.url}>{file.name}</a><br />
-                Checksum: {file.checksum}<br />
-                Checksum type: {file.checksum_type}
-              </li>
-            )
-          })
-        }
-        </ul>
+
+        <table className="table">
+          <thead>
+            <tr>
+              <th className="border-top-0">File name</th>
+              <th className="border-top-0">Checksum</th>
+              <th className="border-top-0"></th>
+            </tr>
+          </thead>
+          <tbody>
+          {
+            dataset.files.map(file => (
+              <tr key={file.id}>
+                <td><a href={dataset.metadata_url} target="_blank">{file.name}</a></td>
+                <td>{file.checksum}</td>
+                <td><a href={file.file_url}>Download</a></td>
+              </tr>
+            ))
+          }
+          </tbody>
+        </table>
       </li>
     )
   }

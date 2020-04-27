@@ -54,7 +54,7 @@ class File(models.Model):
         return self.path
 
     @property
-    def url(self):
+    def file_url(self):
         return settings.FILES_BASE_URL + str(Path(self.path))
 
     @property
