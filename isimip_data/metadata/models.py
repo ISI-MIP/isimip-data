@@ -62,10 +62,6 @@ class File(models.Model):
         return settings.FILES_BASE_URL + str(Path(self.path).with_suffix('.json'))
 
     @property
-    def checksum_url(self):
-        return settings.FILES_BASE_URL + str(Path(self.path).with_suffix('.' + self.checksum_type))
-
-    @property
     def thumbnail_url(self):
         return settings.FILES_BASE_URL + str(Path(self.path).with_suffix('.png'))
 
