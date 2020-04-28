@@ -6,10 +6,15 @@ from .utils import prettify_attributes
 
 
 def metadata(request):
-    if 'input' in request.GET:
-        return redirect('file', request.GET['input'])
-    else:
-        return render(request, 'metadata/metadata.html')
+    dataset = request.GET.get('dataset')
+    if dataset:
+        return redirect('dataset', dataset.strip())
+
+    file = request.GET.get('file')
+    if file:
+        return redirect('file', file.strip())
+
+    return render(request, 'metadata/metadata.html')
 
 
 def dataset(request, pk=None, path=None, checksum=None):

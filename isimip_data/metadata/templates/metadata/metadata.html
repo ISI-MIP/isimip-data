@@ -18,7 +18,7 @@
         <h1>{% trans 'Metadata' %}</h1>
 
         <p>
-            Please give the SHA1 checksum, the internal ID, or the path of a file to be redirected to its information page.
+            Please give the SHA1 checksum, the internal ID, or the path of a dataset or file to be redirected to the corresponding information page.
         </p>
         <p class="small">
             e.g. <code>9076e428c7807e28098313216564932820dc58b6</code>,
@@ -31,14 +31,18 @@
         <div class="col-sm-8">
             <form class="text-center" method="GET">
                 <div class="form-group" >
-                    <label for="input">Checksum or ID or path</label>
-                    <textarea id="input" class="form-control text-center" rows=6
-                        name="input" aria-describedby="input-help" autofocus></textarea>
-                    <small id="input-help" class="form-text text-muted">
-                         You can drag into the area to compute its checksum automatically.
+                    <label for="dataset-input">Dataset id, checksum or path</label>
+                    <textarea id="dataset-input" class="form-control text-center" rows=2
+                        name="dataset"></textarea>
+                </div>
+                <div class="form-group" >
+                    <label for="file-input">File id, checksum or path</label>
+                    <textarea id="file-input" class="form-control text-center sha1-drop" rows=4
+                        name="file" aria-describedby="file-input-help"></textarea>
+                    <small id="file-input-help" class="form-text text-muted">
+                         You can drag into the area to compute its checksum automatically (for files < 300M).
                     </small>
                 </div>
-
                 <button type="submit" class="btn btn-success">Submit</button>
             </form>
         </div>
