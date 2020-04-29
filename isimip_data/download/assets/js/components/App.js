@@ -1,7 +1,10 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+
+import { getLocationParams, getLocationString } from 'isimip_data/core/assets/js/utils/location'
 
 import CoreApi from 'isimip_data/core/assets/js/api/CoreApi'
 import DownloadApi from '../api/DownloadApi'
@@ -33,8 +36,11 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // remove /download/ and trailing slash from path
+    const path = this.props.location.pathname.replace('/download/', '').replace(/\/$/, '')
+
     CoreApi.fetchSettings().then(settings => {
-      this.setState({ settings })
+      this.setState({ path, settings })
     })
   }
 
@@ -136,4 +142,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default withRouter(App)

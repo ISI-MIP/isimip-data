@@ -47,6 +47,15 @@
                 <img src="{{ dataset.files.first.thumbnail_url }}" class="card-img-top" alt="{{ dataset.path }}">
             </div>
 
+            <h3>{% trans 'Download' %}</h3>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{% url 'download' dataset.path %}">{% trans 'Configure download' %}</a>
+                    </li>
+                </ul>
+            </div>
+
             {% else %}
 
             <h3>{% trans 'Archived' %}</h3>

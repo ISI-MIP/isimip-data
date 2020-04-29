@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFile } from '@fortawesome/free-solid-svg-icons'
+import { faFile, faChevronDown, faChevronUp  } from '@fortawesome/free-solid-svg-icons'
 import { faFile as faFileRegular } from '@fortawesome/free-regular-svg-icons'
 import jQuery from 'jquery'
 
@@ -78,6 +78,11 @@ class Result extends Component {
 
         <ul className="list-inline float-right">
           <li className="list-inline-item">
+            <a href={dataset.download_url}>
+              Configure download
+            </a>
+          </li>
+          <li className="list-inline-item">
             <a href={dataset.filelist_url}>
               Download file list
             </a>
@@ -91,12 +96,22 @@ class Result extends Component {
         <ul className="list-inline">
           <li className="list-inline-item">
             <a href="" onClick={this.toggleAttributes}>
-              {showAttributes ? 'Hide attributes' : 'Show attributes'}
+              {showAttributes && <span>
+                Hide attributes <FontAwesomeIcon icon={faChevronUp} />
+              </span>}
+              {!showAttributes && <span>
+                Show attributes <FontAwesomeIcon icon={faChevronDown} />
+              </span>}
             </a>
           </li>
           <li className="list-inline-item">
             <a href="" onClick={this.toggleFiles}>
-              {showFiles ? 'Hide files' : 'Show files'}
+              {showFiles && <span>
+                Hide files <FontAwesomeIcon icon={faChevronUp} />
+              </span>}
+              {!showFiles && <span>
+                Show files <FontAwesomeIcon icon={faChevronDown} />
+              </span>}
             </a>
           </li>
         </ul>

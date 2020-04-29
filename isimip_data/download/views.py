@@ -1,5 +1,5 @@
 from django.shortcuts import render
 
 
-def download(request):
+def download(request, path=None):
     return render(request, 'download/download.html')

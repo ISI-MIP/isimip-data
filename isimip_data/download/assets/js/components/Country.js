@@ -30,22 +30,24 @@ class Country extends Component {
     const { error, countries } = this.state
 
     return (
-      <div className="download-form-row form-check form-check-inline">
-        <input className="form-check-input" type="radio" name="country" id="check-country"
-            onChange={() => onSelect('country')} checked={selected == 'country'} />
+      <div>
+        <div className="download-form-row form-check form-check-inline">
+          <input className="form-check-input" type="radio" name="country" id="check-country"
+              onChange={() => onSelect('country')} checked={selected == 'country'} />
 
-        <label className="form-check-label" htmlFor="check-country">Mask by country</label>
+          <label className="form-check-label" htmlFor="check-country">Mask by country</label>
 
-        <select className="form-control download-form-input-country"
-            value={country} onChange={this.handleChange}>
+          <select className="form-control download-form-input-country"
+              value={country} onChange={this.handleChange}>
 
-          <option disabled value="">Choose...</option>
-          {
-            countries.map(item => {
-              return <option key={item.key} value={item.key}>{item.long_name}</option>
-            })
-          }
-        </select>
+            <option disabled value="">Choose...</option>
+            {
+              countries.map(item => {
+                return <option key={item.key} value={item.key}>{item.long_name}</option>
+              })
+            }
+          </select>
+        </div>
       </div>
     )
   }

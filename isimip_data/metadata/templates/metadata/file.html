@@ -59,6 +59,9 @@
                     <li class="list-group-item">
                         <a href="{{ file.thumbnail_url }}">{% trans 'Download thumbnail' %}</a>
                     </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'download' file.path %}">{% trans 'Configure download' %}</a>
+                    </li>
                 </ul>
             </div>
 
