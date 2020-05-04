@@ -93,7 +93,7 @@ class FileSerializer(serializers.ModelSerializer):
         )
 
     def get_metadata_url(self, obj):
-        return reverse('dataset', args=[obj.checksum], request=self.context['request'])
+        return reverse('file', args=[obj.checksum], request=self.context['request'])
 
     def get_download_url(self, obj):
-        return reverse('download', args=[obj.path], request=self.context['request'])
+        return reverse('file', args=[obj.path], request=self.context['request'])

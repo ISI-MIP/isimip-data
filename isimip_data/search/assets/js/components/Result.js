@@ -158,7 +158,7 @@ class Result extends Component {
           {
             dataset.files.map(file => (
               <tr key={file.id}>
-                <td><a href={dataset.metadata_url} target="_blank">{file.name}</a></td>
+                <td><a href={file.metadata_url} target="_blank">{file.name}</a></td>
                 <td>{file.checksum}</td>
                 <td><a href={file.file_url}>Download</a></td>
               </tr>
