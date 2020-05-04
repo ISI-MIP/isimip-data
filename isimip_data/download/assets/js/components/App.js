@@ -24,6 +24,7 @@ class App extends Component {
       path: '',
       pathError: '',
       selected: '',
+      selectedError: '',
       country: '',
       bbox: ['', '', '', ''],
       message: ''
@@ -49,7 +50,7 @@ class App extends Component {
   }
 
   handleSelectChange(value) {
-    this.setState({ selected: value })
+    this.setState({ selected: value, selectedError: '' })
   }
 
   handleCountryChange(value) {
@@ -77,9 +78,7 @@ class App extends Component {
 
       this.fetch(settings.FILES_API_URL, data)
     } else {
-      DownloadApi.downloadFile(settings.FILES_BASE_URL + path).then(response => {
-        this.setState({pathError: response.errors.path})
-      })
+      this.setState({ selectedError: 'Please select one of the options.' })
     }
   }
 
@@ -98,7 +97,7 @@ class App extends Component {
   }
 
   render() {
-    const { path, pathError, selected, country, bbox, message } = this.state
+    const { path, pathError, selected, selectedError, country, bbox, message } = this.state
 
     return (
       <div>
@@ -132,6 +131,11 @@ class App extends Component {
               {
                 message && <p className="download-message text-success">
                   <FontAwesomeIcon icon={faSpinner} spin /> {message}
+                </p>
+              }
+              {
+                selectedError && <p className="download-message text-danger">
+                  {selectedError}
                 </p>
               }
             </form>
