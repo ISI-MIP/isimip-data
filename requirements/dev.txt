@@ -1,7 +1,7 @@
 -r common.txt
 
 # development only dependencies in aphabetical order
-coverage~=4.5
+coverage==5.1
 django-debug-toolbar~=1.11
 django-extensions~=2.1
 pytest-django~=3.5.0
