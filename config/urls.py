@@ -24,25 +24,23 @@ router.register(r'settings', SettingsViewSet, basename='setting')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/', include(router.urls)),
 
     path('metadata/', metadata, name='metadata'),
-
-    re_path(r'datasets/(?P<checksum>\w+)/$', dataset, name='dataset'),
+    re_path(r'^datasets/(?P<checksum>\w+)/$', dataset, name='dataset'),
     path('datasets/<uuid:pk>/', dataset, name='dataset'),
     path('datasets/<path:path>/', dataset, name='dataset'),
-
-    re_path(r'files/(?P<checksum>\w+)/$', file, name='file'),
+    re_path(r'^files/(?P<checksum>\w+)/$', file, name='file'),
     path('files/<uuid:pk>/', file, name='file'),
     path('files/<path:path>/', file, name='file'),
-
     path('attributes/', attributes, name='attributes'),
-
-    path('api/v1/', include(router.urls)),
 
     path('search/', search, name='search'),
     path('search/<path:path>/', search, name='search'),
+
     path('download/', download, name='download'),
     path('download/<path:path>/', download, name='download'),
+
     path('', wizard, name='wizard'),
 ]
 
