@@ -28,7 +28,7 @@ def dataset(request, pk=None, path=None, checksum=None):
         raise RuntimeError('Either pk, path or checksum need to be provided')
 
     versions = Dataset.objects.using('metadata').filter(path=obj.path) \
-                                                .exclude(id=pk) \
+                                                .exclude(id=obj.id) \
                                                 .order_by('version')
 
     return render(request, 'metadata/dataset.html', {
