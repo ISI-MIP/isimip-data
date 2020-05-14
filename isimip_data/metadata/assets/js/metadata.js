@@ -12,7 +12,6 @@ function dropHandler(e) {
       // If dropped items aren't files, reject them
       if (e.dataTransfer.items[i].kind === 'file') {
         var file = e.dataTransfer.items[i].getAsFile()
-        console.log(file);
         processFile(e.target, file)
       }
     }
@@ -27,6 +26,10 @@ function dropHandler(e) {
 function processFile(target, file) {
   file.arrayBuffer().then(buffer => {
     target.value = sha1(buffer)
+
+    var form = document.getElementById('metadata-form'),
+        submit = document.getElementById('metadata-form-submit')
+    form.requestSubmit(submit)
   })
 }
 
