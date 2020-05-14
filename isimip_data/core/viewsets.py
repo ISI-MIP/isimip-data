@@ -12,5 +12,5 @@ class SettingsViewSet(ListModelMixin, GenericViewSet):
         {
             'key': key,
             'value': getattr(settings, key)
-        } for key in ['FILES_BASE_URL', 'FILES_API_URL']
+        } for key in ['FILES_BASE_URL', 'FILES_API_URL', 'METADATA_PAGE_SIZE']
     ]

@@ -52,7 +52,7 @@ class Results extends Component {
   }
 
   render() {
-    const { params, onParamsRemove, onPaginationClick } = this.props
+    const { params, pageSize, onParamsRemove, onPaginationClick } = this.props
     const { page } = params
     const { isLoading, results, count } = this.state
 
@@ -63,7 +63,7 @@ class Results extends Component {
             <Count count={count} isLoading={isLoading} />
           </div>
           <div className="col-lg-8">
-            {page && <Pagination count={count} page={page} pageSize={10}
+            {page && <Pagination count={count} page={page} pageSize={pageSize}
                                  onClick={this.handlePaginationClick} />}
           </div>
         </div>
@@ -80,6 +80,7 @@ class Results extends Component {
 
 Results.propTypes = {
   params: PropTypes.object.isRequired,
+  pageSize: PropTypes.number.isRequired,
   onParamsRemove: PropTypes.func.isRequired,
   onPaginationClick: PropTypes.func.isRequired
 }
