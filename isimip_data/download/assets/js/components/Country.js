@@ -26,18 +26,19 @@ class Country extends Component {
   }
 
   render() {
-    const { selected, country, onSelect } = this.props
+    const { selected, country, countryError, onSelect } = this.props
     const { error, countries } = this.state
 
     return (
       <div>
         <div className="download-form-row form-check form-check-inline">
-          <input className="form-check-input" type="radio" name="country" id="check-country"
+          <input className="form-check-input" className="form-check-input"
+              type="radio" name="country" id="check-country"
               onChange={() => onSelect('country')} checked={selected == 'country'} />
 
           <label className="form-check-label" htmlFor="check-country">Mask by country</label>
 
-          <select className="form-control download-form-input-country"
+          <select className={'form-control download-form-input-country ' + (countryError && 'is-invalid')}
               value={country} onChange={this.handleChange}>
 
             <option disabled value="">Choose...</option>
@@ -56,6 +57,7 @@ class Country extends Component {
 Country.propTypes = {
   selected: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
+  countryError: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
 }

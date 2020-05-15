@@ -26,7 +26,9 @@ class App extends Component {
       selected: '',
       selectedError: '',
       country: '',
+      countryError: '',
       bbox: ['', '', '', ''],
+      bboxError: '',
       message: ''
     }
     this.handlePathChange = this.handlePathChange.bind(this)
@@ -65,21 +67,31 @@ class App extends Component {
     e.preventDefault()
 
     const { settings, path, selected, country, bbox } = this.state
-    const data = { path }
+    let selectedError = '',
+        countryError = '',
+        bboxError = ''
 
     if (selected) {
       if (selected == 'country') {
-        data.country = country
+        if (country) {
+          this.fetch(settings.FILES_API_URL, { path, country })
+        } else {
+          countryError = 'Please select one of the options.'
+        }
       } else if (selected == 'bbox') {
-        data.bbox = bbox
+        if (bbox) {
+          this.fetch(settings.FILES_API_URL, { path, bbox })
+        } else {
+          bboxError = 'Please select one of the options.'
+        }
       } else if (selected == 'landonly') {
-        data.landonly = true
+          this.fetch(settings.FILES_API_URL, { path, landonly: true })
       }
-
-      this.fetch(settings.FILES_API_URL, data)
     } else {
-      this.setState({ selectedError: 'Please select one of the options.' })
+      selectedError = 'Please select one of the options.'
     }
+
+    this.setState({ selectedError, countryError, bboxError })
   }
 
   fetch(url, data) {
@@ -88,7 +100,10 @@ class App extends Component {
         DownloadApi.downloadFile(response.file_url)
         this.setState({ message: '' })
       } else if (response.status == 'error') {
-        this.setState({ message: '', pathError: response.errors.path })
+        const pathError = response.errors.path || ''
+        const countryError = response.errors.country || '';
+        const bboxError = response.errors.bbox || '';
+        this.setState({ message: '', pathError, countryError, bboxError })
       } else {
         setTimeout(() => this.fetch(url, data), 1000)
         this.setState({ message: 'The file is created on the server, the download will start soon.' })
@@ -97,13 +112,13 @@ class App extends Component {
   }
 
   render() {
-    const { path, pathError, selected, selectedError, country, bbox, message } = this.state
+    const { path, pathError, selected, selectedError, country, countryError, bbox, bboxError, message } = this.state
 
     return (
       <div>
         <div className="row justify-content-md-center">
           <div className="col col-md-8 text-center">
-            <h1>Download file</h1>
+            <h1>Configure download</h1>
 
             <form className="download-form" onSubmit={this.handleSubmit} noValidate>
               <Path path={path} pathError={pathError} onChange={this.handlePathChange} />
@@ -114,10 +129,10 @@ class App extends Component {
                 Download file sizes can be reduced by restricting the geographical extend of the dataset. This is done by masking all data outside of a certain country, bounding box or by applying a land-sea-mask.
               </p>
 
-              <Country selected={selected} country={country}
+              <Country selected={selected} country={country} countryError={countryError}
                   onChange={this.handleCountryChange} onSelect={this.handleSelectChange} />
 
-              <BBox selected={selected} bbox={bbox}
+              <BBox selected={selected} bbox={bbox} bboxError={bboxError} 
                   onChange={this.handleBBoxChange} onSelect={this.handleSelectChange} />
 
               <Landonly selected={selected} onSelect={this.handleSelectChange} />

@@ -26,7 +26,7 @@ class BBox extends Component {
   }
 
   render() {
-    const { selected, bbox, onSelect } = this.props
+    const { selected, bbox, bboxError, onSelect } = this.props
     const [ south, north, west, east ] = bbox
 
     return (
@@ -37,13 +37,17 @@ class BBox extends Component {
 
           <label className="form-check-label" htmlFor="check-bbox">Mask by bounding box</label>
 
-          <input className="form-control download-form-input-bbox" type="number" placeholder="South" min="-90" max="90"
+          <input className={'form-control download-form-input-bbox ' + (bboxError && 'is-invalid')}
+              type="number" placeholder="South" min="-90" max="90"
               value={south} onChange={e => this.handleChange(e, 0)} />
-          <input className="form-control download-form-input-bbox" type="number" placeholder="North" min="-90" max="90"
+          <input className={'form-control download-form-input-bbox ' + (bboxError && 'is-invalid')}
+              type="number" placeholder="North" min="-90" max="90"
               value={north} onChange={e => this.handleChange(e, 1)} />
-          <input className="form-control download-form-input-bbox" type="number" placeholder="West" min="-180" max="180"
+          <input className={'form-control download-form-input-bbox ' + (bboxError && 'is-invalid')}
+              type="number" placeholder="West" min="-180" max="180"
               value={west} onChange={e => this.handleChange(e, 2)} />
-          <input className="form-control download-form-input-bbox" type="number" placeholder="East" min="-180" max="180"
+          <input className={'form-control download-form-input-bbox ' + (bboxError && 'is-invalid')}
+              type="number" placeholder="East" min="-180" max="180"
               value={east} onChange={e => this.handleChange(e, 3)} />
         </div>
       </div>
@@ -54,6 +58,7 @@ class BBox extends Component {
 BBox.propTypes = {
   selected: PropTypes.string.isRequired,
   bbox: PropTypes.array.isRequired,
+  bboxError: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired
 }
