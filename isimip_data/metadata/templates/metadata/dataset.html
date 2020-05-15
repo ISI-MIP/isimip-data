@@ -20,6 +20,7 @@
 
         <h4>{% trans 'Version' %}: {{ dataset.version }}</h4>
         <h4>{% trans 'Checksum' %}: {{ dataset.checksum }} ({{ dataset.checksum_type }})</h4>
+        <h4>{% trans 'Internal ID' %}: {{ dataset.id }}</h4>
         <h4>{% trans 'Path' %}: {{ dataset.path }}</h4>
     </div>
 
@@ -45,6 +46,15 @@
             <h3>{% trans 'Preview' %}</h3>
             <div class="card">
                 <img src="{{ dataset.files.first.thumbnail_url }}" class="card-img-top" alt="{{ dataset.path }}">
+            </div>
+
+            <h3>{% trans 'Download' %}</h3>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{% url 'download' dataset.path %}">{% trans 'Configure download' %}</a>
+                    </li>
+                </ul>
             </div>
 
             {% else %}

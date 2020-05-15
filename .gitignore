@@ -13,6 +13,7 @@ __pycache__/
 /node_modules
 /env
 /.env
+/.pytest_cache
 /.coverage
 /htmlcov
 /log

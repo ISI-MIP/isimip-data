@@ -1,9 +1,10 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from "react-router";
+import { withRouter } from 'react-router'
 
 import { getLocationParams, getLocationString } from 'isimip_data/core/assets/js/utils/location'
 
+import CoreApi from 'isimip_data/core/assets/js/api/CoreApi'
 import FacetApi from '../api/FacetApi'
 
 import Version from './Version'
@@ -18,7 +19,8 @@ class App extends Component {
     super(props);
     this.state = {
       params: {},
-      facets: []
+      facets: [],
+      settings: {}
     }
     this.handleReset = this.handleReset.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
@@ -31,6 +33,10 @@ class App extends Component {
   componentDidMount() {
     const { location } = this.props
     const { params } = this.state
+
+    CoreApi.fetchSettings().then(settings => {
+      this.setState({ settings })
+    })
 
     FacetApi.fetchFacets().then(facets => {
       const attributes = facets.map(facet => { return facet.attribute })
@@ -104,7 +110,8 @@ class App extends Component {
   }
 
   render() {
-    const { params, facets } = this.state
+    const { params, facets, settings } = this.state
+    const pageSize = parseInt(settings.METADATA_PAGE_SIZE)
 
     return (
       <div className="row">
@@ -117,6 +124,7 @@ class App extends Component {
         </div>
         <div className="col-lg-9">
           <Results params={params}
+                   pageSize={pageSize}
                    onParamsRemove={this.handleParamsRemove}
                    onPaginationClick={this.handlePaginationClick} />
         </div>

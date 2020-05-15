@@ -6,10 +6,15 @@ from .utils import prettify_attributes
 
 
 def metadata(request):
-    if 'input' in request.GET:
-        return redirect('file', request.GET['input'])
-    else:
-        return render(request, 'metadata/metadata.html')
+    dataset = request.GET.get('dataset')
+    if dataset:
+        return redirect('dataset', dataset.strip())
+
+    file = request.GET.get('file')
+    if file:
+        return redirect('file', file.strip())
+
+    return render(request, 'metadata/metadata.html')
 
 
 def dataset(request, pk=None, path=None, checksum=None):
@@ -23,7 +28,7 @@ def dataset(request, pk=None, path=None, checksum=None):
         raise RuntimeError('Either pk, path or checksum need to be provided')
 
     versions = Dataset.objects.using('metadata').filter(path=obj.path) \
-                                                .exclude(id=pk) \
+                                                .exclude(id=obj.id) \
                                                 .order_by('version')
 
     return render(request, 'metadata/dataset.html', {

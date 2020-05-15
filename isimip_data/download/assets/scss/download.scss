@@ -1,0 +1,62 @@
+@import 'isimip_data/core/assets/scss/colors';
+@import 'isimip_data/core/assets/scss/base';
+
+h1, h2, h4 {
+    color: $color-black;
+}
+
+h1 {
+    font-size: 34px;
+    margin-top: 37px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+h4 {
+    font-size: smaller;
+    font-weight: normal;
+}
+
+.download-form {
+    margin-top: 40px;
+    text-align: center;
+
+    label {
+        margin-left: 5px;
+    }
+
+    .download-path {
+        margin-bottom: 40px;
+    }
+
+    .download-form-row {
+        line-height: 38px;
+        margin-bottom: 20px;
+    }
+
+    .download-form-input-country {
+        width: 200px;
+        margin-left: 10px;
+    }
+
+    .download-form-input-bbox {
+        width: 100px;
+        margin-left: 10px;
+    }
+
+    .download-form-submit {
+        margin-top: 20px;
+    }
+
+    .download-message {
+        margin-top: 20px;
+
+        .fa-spinner {
+            margin-right: 10px;
+        }
+    }
+}

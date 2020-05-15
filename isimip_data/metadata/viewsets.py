@@ -53,7 +53,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         response = Response({
             'files': File.objects.using('metadata').filter(dataset__in=queryset)
-        }, template_name='search/filelist.txt', content_type='text/plain; charset=utf-8')
+        }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
         response['Content-Disposition'] = 'attachment; filename=filelist.txt'
         return response
 
@@ -62,7 +62,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         response = Response({
             'files': File.objects.using('metadata').filter(dataset__in=queryset)
-        }, template_name='search/wget.sh', content_type='text/x-shellscript; charset=utf-8')
+        }, template_name='metadata/wget.sh', content_type='text/x-shellscript; charset=utf-8')
         response['Content-Disposition'] = 'attachment; filename=wget.sh'
         return response
 
@@ -72,7 +72,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
 
         response = Response({
             'files': File.objects.using('metadata').filter(dataset=dataset)
-        }, template_name='search/filelist.txt', content_type='text/plain; charset=utf-8')
+        }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
         response['Content-Disposition'] = 'attachment; filename=%s_v%s.txt' % (dataset.name, dataset.version)
         return response
 
@@ -82,7 +82,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
 
         response = Response({
             'files': File.objects.using('metadata').filter(dataset=dataset)
-        }, template_name='search/wget.sh', content_type='text/x-shellscript; charset=utf-8')
+        }, template_name='metadata/wget.sh', content_type='text/x-shellscript; charset=utf-8')
         response['Content-Disposition'] = 'attachment; filename=wget_%s_v%s.sh' % (dataset.name, dataset.version)
         return response
 

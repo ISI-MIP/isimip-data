@@ -15,32 +15,29 @@
 
 <div class="container">
     <div class="header">
-        <h1>{% trans 'Metadata' %}</h1>
+        <div class="row justify-content-sm-center">
+            <div class="col-sm-8">
+                <h1>{% trans 'Metadata' %}</h1>
 
-        <p>
-            Please give the SHA1 checksum, the internal ID, or the path of a file to be redirected to its information page.
-        </p>
-        <p class="small">
-            e.g. <code>9076e428c7807e28098313216564932820dc58b6</code>,
-            <code>fc5581d6-f0e7-418b-8a52-080a0516a67e</code>,<br />
-            <code>ISIMIP3a/InputData/climate/atmosphere/obsclim/GSWP3/gswp3_obsclim_tas_global_daily_1901_1910.nc</code>.
-        </p>
-    </div>
+                <p>
+                    Please give the SHA1 checksum of a file to be redirected to the corresponding information page. The checksum of a file can be computed with tools like <code>sha1sum</code>. You can also drag the file to the area below to compute its checksum automatically.
+                </p>
+                <p class="small">
+                    e.g. <code>9076e428c7807e28098313216564932820dc58b6</code>
+                </p>
 
-    <div class="row justify-content-sm-center">
-        <div class="col-sm-8">
-            <form class="text-center" method="GET">
-                <div class="form-group" >
-                    <label for="input">Checksum or ID or path</label>
-                    <textarea id="input" class="form-control text-center" rows=6
-                        name="input" aria-describedby="input-help" autofocus></textarea>
-                    <small id="input-help" class="form-text text-muted">
-                         You can drag into the area to compute its checksum automatically.
-                    </small>
-                </div>
-
-                <button type="submit" class="btn btn-success">Submit</button>
-            </form>
+                <form id="metadata-form" class="text-center" method="GET">
+                    <div class="form-group" >
+                        <label for="metadata-form-input">File checksum</label>
+                        <textarea id="metadata-form-input" class="form-control text-center sha1-drop" rows=6
+                            name="file" aria-describedby="file-input-help" autofocus></textarea>
+                        <small id="metadata-form-help" class="form-text text-muted">
+                             You can drag into the area to compute its checksum automatically (for files < 300M).
+                        </small>
+                    </div>
+                    <button id="metadata-form-submit" type="submit" class="btn btn-success">Go to metadata page</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
