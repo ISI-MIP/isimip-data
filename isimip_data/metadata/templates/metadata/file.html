@@ -10,7 +10,7 @@
 {% block main %}
 
 <div class="container">
-    <div class="header">
+    <header>
         <h1>{% trans 'File' %}</h1>
         <h2>{{ file.name }}</h2>
 
@@ -22,7 +22,7 @@
         <h4>{% trans 'Checksum' %}: {{ file.checksum }} ({{ file.checksum_type }})</h4>
         <h4>{% trans 'Internal ID' %}: {{ file.id }}</h4>
         <h4>{% trans 'Path' %}: {{ file.path }}</h4>
-    </div>
+    </header>
 
     <div class="row">
         <div class="col-sm-8">

@@ -1,105 +1,24 @@
 header {
+    text-align: center;
     font-size: 14px;
 
-    .navbar {
-        padding: 0;
-        border-bottom: 1px solid $color-neutral;
+    h1, h2, h3, h4 {
+        color: $color-black;
+    }
 
-        .navbar-brand {
-            display: block;
-            padding: 14px 0 12px 15px;
+    h1 {
+        font-size: 34px;
+        margin-top: 37px;
+        margin-bottom: 20px;
+    }
 
-            @media(min-width:992px) {
-                padding: 20px 0 20px 0;
-                margin-right: 20px;
-            }
-            @media(min-width:1200px) {
-                margin-right: 60px;
-            }
-            -webkit-transition: opacity 0.5s;
-            transition: opacity 0.5s;
+    h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
 
-            &:hover, &:focus {
-                opacity: 0.7;
-            }
-
-            img {
-                width: 120px;
-                @media(min-width:992px) {
-                    width: 140px;
-                }
-                display: inline-block;
-                height: auto;
-            }
-
-            h1 {
-                display: inline-block;
-                line-height: 50px;
-            }
-        }
-
-        .navbar-toggler {
-            margin-right: 14px;
-        }
-
-        span.navbar-text {
-            font-weight: 700;
-            padding: 15px 15px 15px 15px;
-            @media(min-width:992px) {
-                padding: 35px 12px 35px 12px;
-            }
-            @media(min-width:1200px) {
-                padding: 35px 15px 35px 15px;
-            }
-
-            text-transform: uppercase;
-        }
-
-        ul.navbar-nav {
-            .nav-item {
-                .nav-link {
-                    font-weight: 700;
-                    padding: 15px 15px 15px 15px;
-                    @media(min-width:992px) {
-                        padding: 35px 12px 35px 12px;
-                    }
-                    @media(min-width:1200px) {
-                        padding: 35px 15px 35px 15px;
-                    }
-
-                    text-align: center;
-
-                    text-transform: uppercase;
-                    color: $color-black;
-
-                    -webkit-transition: color 0.5s;
-                    transition: color 0.5s;
-
-                    &:focus, &:hover {
-                        color: $color-primary;
-                    }
-                }
-
-                &.active {
-                    .nav-link {
-                        color: $color-primary;
-                        position: relative;
-
-                        @media(min-width:992px) {
-                            &::after {
-                                display: block;
-                                content: " ";
-                                position: absolute;
-                                bottom: 25px;
-                                left: 12px;
-                                right: 12px;
-                                height: 3px;
-                                background-color: $color-neutral;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    h4 {
+        font-size: 13px;
+        font-weight: normal;
     }
 }

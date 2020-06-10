@@ -1,26 +1,6 @@
 @import 'isimip_data/core/assets/scss/colors';
 @import 'isimip_data/core/assets/scss/base';
 
-h1, h2, h4 {
-    color: $color-black;
-}
-
-h1 {
-    font-size: 34px;
-    margin-top: 37px;
-    margin-bottom: 20px;
-}
-
-h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
-}
-
-h4 {
-    font-size: smaller;
-    font-weight: normal;
-}
-
 .download-form {
     margin-top: 40px;
     text-align: center;

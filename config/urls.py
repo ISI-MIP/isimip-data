@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
+from django.views.generic.base import TemplateView
 from isimip_data.core.viewsets import SettingsViewSet
 from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
@@ -41,7 +42,9 @@ urlpatterns = [
     path('download/', download, name='download'),
     path('download/<path:path>/', download, name='download'),
 
-    path('', wizard, name='wizard'),
+    path('wizard/', wizard, name='wizard'),
+
+    path('', TemplateView.as_view(template_name='core/home.html'), name='home'),
 ]
 
 if settings.DEBUG:

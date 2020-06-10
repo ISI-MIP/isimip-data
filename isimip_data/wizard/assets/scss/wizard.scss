@@ -1,89 +1,62 @@
 @import 'isimip_data/core/assets/scss/colors';
 @import 'isimip_data/core/assets/scss/base';
 
-h1, h2, h3, h4 {
-    text-align: center;
-    color: $color-black;
-}
-
-h1 {
-    font-size: 34px;
-    margin-top: 37px;
-    margin-bottom: 20px;
-}
-
-h2 {
-    margin-top: 60px;
-    margin-bottom: 20px;
-}
-
-h4 {
-    font-size: 1rem;
-    margin: 1rem 0;
-}
-
-p {
-    margin: 0 auto;
-    max-width: 640px;
-
+.wizard {
     text-align: center;
 
-    font-size: 14px;
-    line-height: 1.42857143;
-}
+    .layer {
+        margin-top: 40px;
+        margin-bottom: 40px;
 
-.layer {
-    margin-top: 40px;
-    margin-bottom: 40px;
+        justify-content: center;
 
-    justify-content: center;
-
-    .one-column {
-        column-count: 1;
-        width: 60%;
-        margin: 0 auto;
-    }
-    .two-columns {
-        column-count: 2;
-        width: 80%;
-        margin: 0 auto;
-    }
-    .three-columns {
-        column-count: 3;
-    }
-
-    .card {
-        cursor: pointer;
-
-        .card-title {
-            font-size: smaller;
-            margin-bottom: 0;
+        .one-column {
+            column-count: 1;
+            width: 60%;
+            margin: 0 auto;
         }
-        .card-text {
-            margin-top: 0.75rem;
+        .two-columns {
+            column-count: 2;
+            width: 80%;
+            margin: 0 auto;
+        }
+        .three-columns {
+            column-count: 3;
+        }
 
-            &:empty {
-                margin: 0;
-            }
+        .card {
+            cursor: pointer;
 
-            p, ul {
+            .card-title {
                 font-size: smaller;
+                margin-bottom: 0;
             }
-        }
-        .card-body {
-            :first-child {
-                margin-top: 0;
+            .card-text {
+                margin-top: 0.75rem;
+
+                &:empty {
+                    margin: 0;
+                }
+
+                p, ul {
+                    font-size: smaller;
+                }
             }
-        }
-        &.active {
-            background-color: $color-secondary;
-        }
-        &:hover {
-            background-color: $color-neutral;
+            .card-body {
+                :first-child {
+                    margin-top: 0;
+                }
+            }
+            &.active {
+                background-color: $color-secondary;
+            }
+            &:hover {
+                background-color: $color-neutral;
+            }
         }
     }
-}
 
-.submit {
-    text-align: center;
+    .submit {
+        text-align: center;
+    }
 }

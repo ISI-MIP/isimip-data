@@ -19,21 +19,17 @@
         {% endblock %}
     </head>
     <body>
-        <header>
-            {% include 'core/base_header.html' %}
-        </header>
+        {% include 'core/base_nav.html' %}
 
         <main>
             {% block main %}{% endblock %}
         </main>
 
-        <footer>
-            {% include 'core/base_footer.html' %}
+        {% include 'core/base_footer.html' %}
 
-            {% if not debug %}
-            {% include 'core/base_analytics.html' %}
-            {% endif %}
-        </footer>
+        {% if not debug %}
+        {% include 'core/base_analytics.html' %}
+        {% endif %}
 
         {% block script %}
         <script src="{% static 'base.js' %}"></script>

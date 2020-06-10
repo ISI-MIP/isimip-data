@@ -1,29 +1,8 @@
 @import 'isimip_data/core/assets/scss/colors';
 @import 'isimip_data/core/assets/scss/base';
 
-h1, h2, h4 {
-    color: $color-black;
-}
-
-h1 {
-    font-size: 34px;
-    margin-top: 37px;
-    margin-bottom: 20px;
-}
-
-h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
-}
-
-h4 {
-    font-size: smaller;
-    font-weight: normal;
-}
-
-.header {
+header {
     margin-bottom: 40px;
-    text-align: center;
 }
 
 .card {
@@ -31,6 +10,7 @@ h4 {
 
     h4 {
         font-size: 20px;
+        font-weight: normal;
         margin-bottom: 10px;
     }
 }

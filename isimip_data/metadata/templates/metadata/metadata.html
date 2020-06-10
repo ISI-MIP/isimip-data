@@ -14,16 +14,13 @@
 {% block main %}
 
 <div class="container">
-    <div class="header">
-        <div class="row justify-content-sm-center">
-            <div class="col-sm-8">
+    <div class="row justify-content-sm-center">
+        <div class="col-sm-8">
+            <header>
                 <h1>{% trans 'Metadata' %}</h1>
 
                 <p>
-                    Please give the SHA1 checksum of a file to be redirected to the corresponding information page. The checksum of a file can be computed with tools like <code>sha1sum</code>. You can also drag the file to the area below to compute its checksum automatically.
-                </p>
-                <p class="small">
-                    e.g. <code>9076e428c7807e28098313216564932820dc58b6</code>
+                    Please give the SHA1 checksum of a file (e.g. <code>9076e428c7807e28098313216564932820dc58b6</code>) to be redirected to the corresponding information page. The checksum of a file can be computed with tools like <code>sha1sum</code>. You can also drag the file to the area below to compute its checksum automatically.
                 </p>
 
                 <form id="metadata-form" class="text-center" method="GET">
@@ -37,7 +34,7 @@
                     </div>
                     <button id="metadata-form-submit" type="submit" class="btn btn-success">Go to metadata page</button>
                 </form>
-            </div>
+            </header>
         </div>
     </div>
 </div>

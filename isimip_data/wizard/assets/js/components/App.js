@@ -49,21 +49,9 @@ class App extends Component {
     const { params } = this.state
 
     return (
-      <div className="row">
-        <div className="col-lg-8 offset-lg-2">
-          <h1>Welcome to the ISIMIP Data Portal</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-          </p>
-
-          <h2>What data are you interested in?</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-          </p>
-
-          <Layers params={params} onChange={this.handleLayerChange}/>
-          <Submit params={params} onSubmit={this.handleSubmit}/>
-        </div>
+      <div className="wizard">
+        <Layers params={params} onChange={this.handleLayerChange}/>
+        <Submit params={params} onSubmit={this.handleSubmit}/>
       </div>
     )
   }
