@@ -27,7 +27,7 @@
                 <li class="nav-item {% if request.resolver_match.url_name == 'search' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'search' %}">Search</a>
                 </li>
-                <li class="nav-item {% if request.resolver_match.url_name == 'metadata' %}active{% endif %}">
+                <li class="nav-item {% if request.resolver_match.url_name in 'metadata,dataset,file' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'metadata' %}">Metadata</a>
                 </li>
             </ul>
