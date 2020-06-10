@@ -12,6 +12,12 @@ def test_dataset_histogram(client, db, attributes):
         assert response.status_code == 200
 
 
+def test_dataset_histogram_not_found(client, db, attributes):
+    for attribute in attributes:
+        response = client.get(reverse('dataset-histogram', args=['wrong']))
+        assert response.status_code == 404
+
+
 def test_dataset_filelist(client, db):
     response = client.get(reverse('dataset-filelist'))
     assert response.status_code == 200
@@ -49,3 +55,8 @@ def test_file_detail(client, db, files):
     for file in files:
         response = client.get(reverse('file-detail', args=[file.id]))
         assert response.status_code == 200
+
+
+def test_glossary_list(client, db):
+    response = client.get(reverse('glossary-list'))
+    assert response.status_code == 200

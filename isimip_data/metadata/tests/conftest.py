@@ -1,6 +1,5 @@
 import pytest
-
-from isimip_data.metadata.models import Dataset, File, Attribute
+from isimip_data.metadata.models import Attribute, Dataset, File, Word
 
 
 @pytest.fixture
@@ -11,6 +10,11 @@ def datasets(db):
 @pytest.fixture
 def files(db):
     return File.objects.using('metadata').all()
+
+
+@pytest.fixture
+def words(db):
+    return Word.objects.using('metadata').all()
 
 
 @pytest.fixture
