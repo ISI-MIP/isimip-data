@@ -52,7 +52,7 @@
             <div class="card">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <a href="{{ file.url }}">{% trans 'Download file' %}</a>
+                        <a href="{{ file.file_url }}">{% trans 'Download file' %}</a>
                     </li>
                     <li class="list-group-item">
                         <a href="{{ file.json_url }}">{% trans 'Download metadata file' %}</a>
@@ -60,9 +60,11 @@
                     <li class="list-group-item">
                         <a href="{{ file.thumbnail_url }}">{% trans 'Download thumbnail' %}</a>
                     </li>
+                    {% if file.is_global and file.is_netcdf %}
                     <li class="list-group-item">
                         <a href="{% url 'download' file.path %}">{% trans 'Configure download' %}</a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
 

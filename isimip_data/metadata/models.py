@@ -31,6 +31,14 @@ class Dataset(models.Model):
     def __str__(self):
         return self.path
 
+    @property
+    def is_global(self):
+        return '_global_' in self.name
+
+    @property
+    def is_netcdf(self):
+        return all([Path(file.path).suffix.startswith('.nc') for file in self.files.all()])
+
 
 class File(models.Model):
 
@@ -64,6 +72,14 @@ class File(models.Model):
     @property
     def thumbnail_url(self):
         return settings.FILES_BASE_URL + str(Path(self.path).with_suffix('.png'))
+
+    @property
+    def is_global(self):
+        return '_global_' in self.name
+
+    @property
+    def is_netcdf(self):
+        return Path(self.path).suffix.startswith('.nc')
 
 
 class Word(models.Model):

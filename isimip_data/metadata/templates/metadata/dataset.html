@@ -48,6 +48,7 @@
                 <img src="{{ dataset.files.first.thumbnail_url }}" class="card-img-top" alt="{{ dataset.path }}">
             </div>
 
+            {% if dataset.is_global and dataset.is_netcdf %}
             <h3>{% trans 'Download' %}</h3>
             <div class="card">
                 <ul class="list-group list-group-flush">
@@ -56,6 +57,7 @@
                     </li>
                 </ul>
             </div>
+            {% endif %}
 
             {% else %}
 
