@@ -80,7 +80,7 @@
                     {% for version in versions %}
                     {% if version.dataset.public %}
                     <p>
-                        A different version of this file is available <a href="{% url 'file' version.checksum %}">here</a>.
+                        A different version of this file is available <a href="{% url 'file' version.id %}">here</a>.
                     </p>
                     {% endif %}
                     {% endfor %}
@@ -96,7 +96,7 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
                 <h4>
-                    <a href="{% url 'dataset' file.dataset.checksum %}">{{ file.dataset.name }}</a>
+                    <a href="{% url 'dataset' file.dataset.id %}">{{ file.dataset.name }}</a>
                 </h4>
                 {% include 'metadata/_shields.html' with obj=file %}
             </li>
@@ -110,7 +110,7 @@
             {% for version in versions %}
             <li class="list-group-item">
                 <h4>
-                    <a href="{% url 'file' version.checksum %}">{{ version.name }}</a>
+                    <a href="{% url 'file' version.id %}">{{ version.name }}</a>
                 </h4>
                 {% include 'metadata/_shields.html' with obj=version %}
             </li>

@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Attribute, Dataset, File
@@ -23,13 +24,15 @@ def dataset(request, pk=None, path=None, checksum=None):
     elif path is not None:
         obj = get_object_or_404(Dataset.objects.using('metadata'), path=path)
     elif checksum is not None:
-        obj = get_object_or_404(Dataset.objects.using('metadata'), checksum=checksum)
+        obj = Dataset.objects.using('metadata').filter(checksum=checksum).order_by('-version').first()
+        if not obj:
+            raise Http404()
     else:
         raise RuntimeError('Either pk, path or checksum need to be provided')
 
     versions = Dataset.objects.using('metadata').filter(path=obj.path) \
                                                 .exclude(id=obj.id) \
-                                                .order_by('version')
+                                                .order_by('-version')
 
     return render(request, 'metadata/dataset.html', {
         'dataset': obj,
@@ -44,13 +47,15 @@ def file(request, pk=None, path=None, checksum=None):
     elif path is not None:
         obj = get_object_or_404(File.objects.using('metadata'), path=path)
     elif checksum is not None:
-        obj = get_object_or_404(File.objects.using('metadata'), checksum=checksum)
+        obj = File.objects.using('metadata').filter(checksum=checksum).order_by('-version').first()
+        if not obj:
+            raise Http404()
     else:
         raise RuntimeError('Either pk, path or checksum need to be provided')
 
     versions = File.objects.using('metadata').filter(path=obj.path) \
                                              .exclude(id=obj.id) \
-                                             .order_by('version')
+                                             .order_by('-version')
 
     return render(request, 'metadata/file.html', {
         'file': obj,
