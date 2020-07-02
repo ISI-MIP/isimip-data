@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import Attribute, Dataset, File
+from .models import Attribute, Dataset, File, Resource
 from .utils import prettify_attributes
 
 
@@ -61,6 +61,23 @@ def file(request, pk=None, path=None, checksum=None):
         'file': obj,
         'versions': versions,
         'attributes': prettify_attributes(obj.attributes)
+    })
+
+
+def resource(request, resource_type=None, pk=None, path=None, doi=None):
+    queryset = Resource.objects.using('metadata').filter(type=resource_type)
+
+    if pk is not None:
+        obj = get_object_or_404(queryset, id=pk)
+    elif path is not None:
+        obj = get_object_or_404(queryset, path=path)
+    elif doi is not None:
+        obj = get_object_or_404(queryset, doi=doi)
+    else:
+        raise RuntimeError('Either pk, path or checksum need to be provided')
+
+    return render(request, 'metadata/resource.html', {
+        'resource': obj
     })
 
 

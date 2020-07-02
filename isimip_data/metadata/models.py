@@ -82,6 +82,28 @@ class File(models.Model):
         return Path(self.path).suffix.startswith('.nc')
 
 
+class Resource(models.Model):
+
+    id = models.UUIDField(primary_key=True)
+    path = models.TextField()
+    version = models.TextField()
+
+    title = models.TextField()
+    doi = models.TextField()
+    type = models.TextField()
+    datacite = JSONField()
+
+    datasets = models.ManyToManyField(Dataset)
+
+    class Meta:
+        db_table = 'resources'
+        managed = False
+        ordering = ('path', )
+
+    def __str__(self):
+        return self.path
+
+
 class Word(models.Model):
 
     word = models.TextField(primary_key=True)

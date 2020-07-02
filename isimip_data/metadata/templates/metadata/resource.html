@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'metadata.css' %}" />
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <header>
+        <h1>{% trans 'Category' %}</h1>
+        <h2>{{ resource.title }}</h2>
+
+        <h4>
+            {% blocktrans trimmed with resource_type=resource.type doi=resource.doi %}
+            You can use the following DOI to cite this {{ resource_type }} in a publication:
+            <a href="https://dx.doi.org/{{ doi }}">https://dx.doi.org/{{ doi }}</a>.
+            {% endblocktrans %}
+        </h4>
+
+        <h4>{% trans 'Version' %}: {{ resource.version }}</h4>
+        <h4>{% trans 'Path' %}: {{ resource.path }}</h4>
+    </header>
+
+    {% if resource.datasets.all %}
+    <h3>{% trans 'Datasets in this category' %}</h3>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            {% for dataset in resource.datasets.all %}
+            <li class="list-group-item">
+                <h4>
+                    <a href="{% url 'dataset' dataset.id %}">{{ dataset.name }}</a>
+                </h4>
+                {% include 'metadata/_shields.html' with obj=dataset %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

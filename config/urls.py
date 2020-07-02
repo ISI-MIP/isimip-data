@@ -2,17 +2,19 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic.base import TemplateView
+from rest_framework import routers
+
 from isimip_data.core.viewsets import SettingsViewSet
 from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
-from isimip_data.metadata.views import attributes, dataset, file, metadata
+from isimip_data.metadata.views import (attributes, dataset, file, metadata,
+                                        resource)
 from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
                                            GlossaryViewSet)
 from isimip_data.search.views import search
 from isimip_data.search.viewsets import FacetViewSet
 from isimip_data.wizard.views import wizard
 from isimip_data.wizard.viewsets import LayerViewSet
-from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'datasets', DatasetViewSet, basename='dataset')
@@ -28,12 +30,18 @@ urlpatterns = [
     path('api/v1/', include(router.urls)),
 
     path('metadata/', metadata, name='metadata'),
+
     re_path(r'^datasets/(?P<checksum>\w+)/$', dataset, name='dataset'),
     path('datasets/<uuid:pk>/', dataset, name='dataset'),
     path('datasets/<path:path>/', dataset, name='dataset'),
+
     re_path(r'^files/(?P<checksum>\w+)/$', file, name='file'),
     path('files/<uuid:pk>/', file, name='file'),
     path('files/<path:path>/', file, name='file'),
+
+    path('categories/<path:doi>/', resource, name='categories', kwargs={'resource_type': 'category'}),
+    path('sectors/<path:doi>/', resource, name='sectors', kwargs={'resource_type': 'sector'}),
+
     path('attributes/', attributes, name='attributes'),
 
     path('search/', search, name='search'),
