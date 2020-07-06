@@ -103,6 +103,14 @@ class Resource(models.Model):
     def __str__(self):
         return self.path
 
+    @property
+    def doi_url(self):
+        return 'https://doi.org/{}'.format(self.doi)
+
+    @property
+    def creators(self):
+        return ', '.join([creator.get('creatorName') for creator in self.datacite.get('creators', [])])
+
 
 class Word(models.Model):
 

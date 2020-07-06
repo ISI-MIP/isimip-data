@@ -30,3 +30,23 @@
         border-radius: 0 !important;
     }
 }
+
+.doi-link:before {
+    display: inline-block;
+    content: ' ';
+    background-image: url('../../../core/assets/images/DOI.svg');
+    background-size: 16px 16px;
+    height: 16px;
+    width: 16px;
+    margin-right: 1px;
+}
+
+.orcid-link:before {
+    display: inline-block;
+    content: ' ';
+    background-image: url('../../../core/assets/images/ORCIDiD.svg');
+    background-size: 16px 16px;
+    height: 16px;
+    width: 16px;
+    margin-right: 1px;
+}

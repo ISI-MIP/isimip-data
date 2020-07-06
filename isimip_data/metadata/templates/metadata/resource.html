@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load i18n %}
 {% load static %}
+{% load core_tags %}
 
 {% block style %}
     {{ block.super }}
@@ -11,19 +12,99 @@
 
 <div class="container">
     <header>
-        <h1>{% trans 'Category' %}</h1>
-        <h2>{{ resource.title }}</h2>
+        <h1>{{ resource.title }}</h1>
 
         <h4>
-            {% blocktrans trimmed with resource_type=resource.type doi=resource.doi %}
+            {% blocktrans trimmed with resource_type=resource.type doi_url=resource.doi_url %}
             You can use the following DOI to cite this {{ resource_type }} in a publication:
-            <a href="https://dx.doi.org/{{ doi }}">https://dx.doi.org/{{ doi }}</a>.
+            <a href="{{ doi_url }}">{{ doi_url }}</a>.
             {% endblocktrans %}
         </h4>
 
         <h4>{% trans 'Version' %}: {{ resource.version }}</h4>
         <h4>{% trans 'Path' %}: {{ resource.path }}</h4>
     </header>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>{% trans 'Cite as' %}</h3>
+            <div class="card">
+                <div class="card-body">
+                    <p class="cite-as">
+                        <b>{{ resource.creators }} ({{ resource.datacite.publicationYear }}):</b>
+                        {{ resource.title }}. <i>{{ resource.datacite.publisher }},</i>
+                        <a class="doi-link" href="{{ resource.doi_url }}">{{ resource.doi_url }}</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-8">
+            <h3>{% trans 'Metadata' %}</h3>
+            <div class="card">
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3 text-right">Publication date:</dt>
+                        <dd class="col-sm-9">{{ resource.datacite.dates.issued|to_datetime|date:"DATE_FORMAT" }}</dd>
+                    </dl>
+                    {% for description in resource.datacite.descriptions %}
+                    <dl class="row">
+                        <dt class="col-sm-3 text-right">{{ description.descriptionType }}:</dt>
+                        <dd class="col-sm-9">{{ description.description }}</dd>
+                    </dl>
+                    {% endfor %}
+                    <dl class="row">
+                        <dt class="col-sm-3 text-right">Creators:</dt>
+                        <dd class="col-sm-9">
+                            <ul class="list-unstyled">
+                                {% for creator in resource.datacite.creators %}
+                                <li>{{ creator.givenName }} {{ creator.familyName }}
+                                    {% if creator.nameIdentifier %}
+                                    <a class="orcid-link" href="https://orcid.org/{{ creator.nameIdentifier }}">
+                                        {{ creator.nameIdentifier }}
+                                    </a>
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-sm-3 text-right">Contributors:</dt>
+                        <dd class="col-sm-9">
+                            <ul class="list-unstyled">
+                                {% for contributor in resource.datacite.contributors %}
+                                <li>{{ contributor.givenName }} {{ contributor.familyName }}
+                                    {% if contributor.nameIdentifier %}
+                                    <a class="orcid-link" href="https://orcid.org/{{ contributor.nameIdentifier }}">
+                                        {{ contributor.nameIdentifier }}
+                                    </a>
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <h3>{% trans 'Export' %}</h3>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="">{% trans 'BibTeX' %}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="">{% trans 'CSL' %}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="">{% trans 'DataCite' %}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
     {% if resource.datasets.all %}
     <h3>{% trans 'Datasets in this category' %}</h3>
