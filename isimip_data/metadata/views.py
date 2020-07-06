@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Attribute, Dataset, File, Resource
+from .renderers import BibTexRenderer, DataCiteRenderer
 from .utils import prettify_attributes
 
 
@@ -64,21 +65,26 @@ def file(request, pk=None, path=None, checksum=None):
     })
 
 
-def resource(request, resource_type=None, pk=None, path=None, doi=None):
-    queryset = Resource.objects.using('metadata').filter(type=resource_type)
-
-    if pk is not None:
-        obj = get_object_or_404(queryset, id=pk)
-    elif path is not None:
-        obj = get_object_or_404(queryset, path=path)
-    elif doi is not None:
-        obj = get_object_or_404(queryset, doi=doi)
-    else:
-        raise RuntimeError('Either pk, path or checksum need to be provided')
+def resource(request, resource_type=None, doi=None):
+    obj = get_object_or_404(Resource.objects.using('metadata').filter(type=resource_type), doi=doi)
 
     return render(request, 'metadata/resource.html', {
         'resource': obj
     })
+
+
+def resource_bibtex(request, resource_type=None, doi=None):
+    obj = get_object_or_404(Resource.objects.using('metadata').filter(type=resource_type), doi=doi)
+    bibtex = BibTexRenderer().render(obj.datacite)
+    response = HttpResponse(bibtex, content_type="text/plain")
+    return response
+
+
+def resource_datacite(request, resource_type=None, doi=None):
+    obj = get_object_or_404(Resource.objects.using('metadata').filter(type=resource_type), doi=doi)
+    xml = DataCiteRenderer().render(obj.datacite)
+    response = HttpResponse(xml, content_type="application/xml")
+    return response
 
 
 @login_required

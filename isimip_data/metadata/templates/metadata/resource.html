@@ -46,6 +46,10 @@
                         <dt class="col-sm-3 text-right">Publication date:</dt>
                         <dd class="col-sm-9">{{ resource.datacite.dates.issued|to_datetime|date:"DATE_FORMAT" }}</dd>
                     </dl>
+                    <dl class="row">
+                        <dt class="col-sm-3 text-right">Publisher:</dt>
+                        <dd class="col-sm-9">{{ resource.datacite.publisher }}</dd>
+                    </dl>
                     {% for description in resource.datacite.descriptions %}
                     <dl class="row">
                         <dt class="col-sm-3 text-right">{{ description.descriptionType }}:</dt>
@@ -84,6 +88,14 @@
                             </ul>
                         </dd>
                     </dl>
+                    <dl class="row">
+                        <dt class="col-sm-3 text-right">Rights:</dt>
+                        <dd class="col-sm-9">
+                            {% for rights in resource.datacite.rightsList %}
+                            <a href="{{ rights.rightsURI }}">{{ rights.rights }}</a>
+                            {% endfor %}
+                        </dd>
+                    </dl>
                 </div>
             </div>
         </div>
@@ -93,13 +105,10 @@
             <div class="card">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <a href="">{% trans 'BibTeX' %}</a>
+                        <a href="{{ resource.bibtex_url }}">{% trans 'BibTeX' %}</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="">{% trans 'CSL' %}</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="">{% trans 'DataCite' %}</a>
+                        <a href="{{ resource.datacite_url }}">{% trans 'DataCite' %}</a>
                     </li>
                 </ul>
             </div>

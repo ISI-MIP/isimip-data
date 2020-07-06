@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.search import SearchVectorField
 from django.db import models
+from django.urls import reverse
 
 from .managers import DatasetManager
 
@@ -110,6 +111,21 @@ class Resource(models.Model):
     @property
     def creators(self):
         return ', '.join([creator.get('creatorName') for creator in self.datacite.get('creators', [])])
+
+    @property
+    def bibtex_url(self):
+        urlname = '{}_bibtex'.format(self.type)
+        return reverse(urlname, args=[self.doi])
+
+    @property
+    def csl_url(self):
+        urlname = '{}_bibtex'.format(self.type)
+        return reverse(urlname, args=[self.doi])
+
+    @property
+    def xml_url(self):
+        urlname = '{}_datacite'.format(self.type)
+        return reverse(urlname, args=[self.doi])
 
 
 class Word(models.Model):
