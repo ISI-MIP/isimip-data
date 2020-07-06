@@ -20,9 +20,6 @@
             <a href="{{ doi_url }}">{{ doi_url }}</a>.
             {% endblocktrans %}
         </h4>
-
-        <h4>{% trans 'Version' %}: {{ resource.version }}</h4>
-        <h4>{% trans 'Path' %}: {{ resource.path }}</h4>
     </header>
 
     <div class="row">
@@ -32,7 +29,7 @@
                 <div class="card-body">
                     <p class="cite-as">
                         <b>{{ resource.creators }} ({{ resource.datacite.publicationYear }}):</b>
-                        {{ resource.title }}. <i>{{ resource.datacite.publisher }},</i>
+                        {{ resource.title }} ({{ resource.datacite.version }}). <i>{{ resource.datacite.publisher }},</i>
                         <a class="doi-link" href="{{ resource.doi_url }}">{{ resource.doi_url }}</a>
                 </div>
             </div>
