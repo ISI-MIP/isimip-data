@@ -118,12 +118,7 @@ class Resource(models.Model):
         return reverse(urlname, args=[self.doi])
 
     @property
-    def csl_url(self):
-        urlname = '{}_bibtex'.format(self.type)
-        return reverse(urlname, args=[self.doi])
-
-    @property
-    def xml_url(self):
+    def datacite_url(self):
         urlname = '{}_datacite'.format(self.type)
         return reverse(urlname, args=[self.doi])
 
