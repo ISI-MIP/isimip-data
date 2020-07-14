@@ -7,7 +7,7 @@ from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
 from isimip_data.metadata.views import (attributes, dataset, file, metadata,
                                         resource, resource_bibtex,
-                                        resource_datacite)
+                                        resource_datacite, resources)
 from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
                                            GlossaryViewSet)
 from isimip_data.search.views import search
@@ -39,13 +39,10 @@ urlpatterns = [
     path('files/<uuid:pk>/', file, name='file'),
     path('files/<path:path>/', file, name='file'),
 
-    path('categories/<path:doi>.bib/', resource_bibtex, name='category_bibtex', kwargs={'resource_type': 'category'}),
-    path('categories/<path:doi>.xml/', resource_datacite, name='category_datacite', kwargs={'resource_type': 'category'}),
-    path('categories/<path:doi>/', resource, name='category', kwargs={'resource_type': 'category'}),
-
-    path('sectors/<path:doi>.bib/', resource_bibtex, name='sector_bibtex', kwargs={'resource_type': 'sector'}),
-    path('sectors/<path:doi>.xml/', resource_datacite, name='sector_datacite', kwargs={'resource_type': 'sector'}),
-    path('sectors/<path:doi>/', resource, name='sector', kwargs={'resource_type': 'sector'}),
+    path('resources/<path:doi>.bib/', resource_bibtex, name='resource_bibtex'),
+    path('resources/<path:doi>.xml/', resource_datacite, name='resource_datacite'),
+    path('resources/<path:doi>/', resource, name='resource'),
+    path('resources/', resources, name='resources'),
 
     path('attributes/', attributes, name='attributes'),
 

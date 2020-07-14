@@ -65,23 +65,27 @@ def file(request, pk=None, path=None, checksum=None):
     })
 
 
-def resource(request, resource_type=None, doi=None):
-    obj = get_object_or_404(Resource.objects.using('metadata').filter(type=resource_type), doi=doi)
-
-    return render(request, 'metadata/resource.html', {
-        'resource': obj
+def resources(request):
+    return render(request, 'metadata/resources.html', {
+        'resources': Resource.objects.using('metadata')
     })
 
 
-def resource_bibtex(request, resource_type=None, doi=None):
-    obj = get_object_or_404(Resource.objects.using('metadata').filter(type=resource_type), doi=doi)
+def resource(request, doi=None):
+    return render(request, 'metadata/resource.html', {
+        'resource': get_object_or_404(Resource.objects.using('metadata'), doi=doi)
+    })
+
+
+def resource_bibtex(request, doi=None):
+    obj = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
     bibtex = BibTexRenderer().render(obj.datacite)
     response = HttpResponse(bibtex, content_type="text/plain")
     return response
 
 
-def resource_datacite(request, resource_type=None, doi=None):
-    obj = get_object_or_404(Resource.objects.using('metadata').filter(type=resource_type), doi=doi)
+def resource_datacite(request, doi=None):
+    obj = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
     xml = DataCiteRenderer().render(obj.datacite)
     response = HttpResponse(xml, content_type="application/xml")
     return response

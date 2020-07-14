@@ -8,9 +8,12 @@
         border-bottom: none;
     }
 
-    p:last-child,
-    dl:last-child {
-        margin-bottom: 0;
+    h4,
+    p,
+    dl {
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 }
 

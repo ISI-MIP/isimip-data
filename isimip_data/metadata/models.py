@@ -112,16 +112,6 @@ class Resource(models.Model):
     def creators(self):
         return ', '.join([creator.get('creatorName') for creator in self.datacite.get('creators', [])])
 
-    @property
-    def bibtex_url(self):
-        urlname = '{}_bibtex'.format(self.type)
-        return reverse(urlname, args=[self.doi])
-
-    @property
-    def datacite_url(self):
-        urlname = '{}_datacite'.format(self.type)
-        return reverse(urlname, args=[self.doi])
-
 
 class Word(models.Model):
 
