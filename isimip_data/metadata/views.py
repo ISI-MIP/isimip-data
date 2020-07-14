@@ -16,7 +16,9 @@ def metadata(request):
     if file:
         return redirect('file', file.strip())
 
-    return render(request, 'metadata/metadata.html')
+    return render(request, 'metadata/metadata.html', {
+        'example_file': File.objects.using('metadata').first()
+    })
 
 
 def dataset(request, pk=None, path=None, checksum=None):
