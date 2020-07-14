@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block main %}
 
@@ -8,7 +9,58 @@
         <div class="col-md-8">
             <header>
                 <h1>Welcome to the ISIMIP Repository</h1>
+
+                <p>
+                    The ISIMIP Repository is currently under development.
+                </p>
+
+                <p>
+                    In order to refine the portal and to improve user convenience we would appreciate your feedback on the portal. So, please use the portal for searching and downloading input data and collect feedback from your sector about experiences, pitfalls and things that should be improved.
+                </p>
             </header>
+
+            <div class="mt-5">
+                <form id="metadata-form" class="text-center" method="GET" action="{% url 'search' %}">
+                    <div class="form-row">
+                        <div class="col-lg">
+                            <input class="form-control" name="query" placeholder="{% trans 'Search the repository' %}" />
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-light" type="button" onClick={this.handleSubmit}>
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="mt-3">
+                <p class="text-center">
+                    {% trans 'or' %}
+                </p>
+            </div>
+
+            <div class="mt-3 text-center">
+                <p>
+                    <a class="btn btn-light w-100" href="{% url 'wizard' %}">
+                        {% trans 'Use the wizard (experimental)' %}
+                    </a>
+                </p>
+            </div>
+
+            <div class="mt-3">
+                <p class="text-center">
+                    {% trans 'or' %}
+                </p>
+            </div>
+
+            <div class="mt-3 text-center">
+                <p>
+                    <a class="btn btn-light w-100" href="{% url 'search' %}">
+                        {% trans 'Use the advanced search interface' %}
+                    </a>
+                </p>
+            </div>
         </div>
     </div>
 </div>
