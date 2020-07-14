@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+{% load static %}
+{% load core_tags %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'metadata.css' %}" />
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <header>
+        <h1>{{ resource.title }}</h1>
+
+        <h4>
+            {% blocktrans trimmed with resource_type=resource.type doi_url=resource.doi_url %}
+            You can use the following DOI to cite this {{ resource_type }} in a publication:
+            <a href="{{ doi_url }}">{{ doi_url }}</a>.
+            {% endblocktrans %}
+        </h4>
+    </header>
+
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            {% for resource in resources %}
+            <li class="list-group-item">
+                <h4>
+                    <a href="{% url 'resource' resource.doi %}">{{ resource.title }}</a>
+                    <a class="float-right doi-link" href="{{ resource.doi_url }}">{{ resource.doi_url }}</a>
+                </h4>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
