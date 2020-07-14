@@ -65,6 +65,7 @@ def file(request, pk=None, path=None, checksum=None):
     })
 
 
+@login_required
 def resources(request):
     return render(request, 'metadata/resources.html', {
         'resources': Resource.objects.using('metadata')

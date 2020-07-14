@@ -1,6 +1,5 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% load i18n %}
 
 {% block main %}
 
@@ -8,14 +7,20 @@
     <div class="row justify-content-sm-center">
         <div class="col-md-8">
             <header>
-                <h1>Welcome to the ISIMIP Repository</h1>
+                <h1>
+                    Welcome to the ISIMIP Repository
+                </h1>
 
                 <p>
-                    The ISIMIP Repository is currently under development.
+                    Here you will find data relating to the <a href="http://www.isimip.org">Inter-Sectoral Impact Model Intercomparison Project</a> (ISIMIP). Use of these data are subject to the <strong><a href="http://www.isimip.org/protocol/terms-of-use">ISIMIP terms of use</a></strong>. Changes to the data published on this archive are document in the <a href="https://www.isimip.org/outputdata/output-data-changelog/">ISIMIP output data changelog</a> and <a href="https://www.isimip.org/gettingstarted/#input-data-changelog">input data changelog</a>.
                 </p>
 
                 <p>
-                    In order to refine the portal and to improve user convenience we would appreciate your feedback on the portal. So, please use the portal for searching and downloading input data and collect feedback from your sector about experiences, pitfalls and things that should be improved.
+                    Documentation of the impact models that provided impact simulations for this archive can be found in the <a href="https://www.isimip.org/impactmodels/">ISIMIP Impact Model Database</a>.
+                </p>
+
+                <p>
+                    This version of the ISIMIP Repository is currently under development. The current ISIMIP data archive is located at <a href="https://esg.pik-potsdam.de/projects/isimip">https://esg.pik-potsdam.de/projects/isimip</a>.
                 </p>
             </header>
 
@@ -23,7 +28,7 @@
                 <form id="metadata-form" class="text-center" method="GET" action="{% url 'search' %}">
                     <div class="form-row">
                         <div class="col-lg">
-                            <input class="form-control" name="query" placeholder="{% trans 'Search the repository' %}" />
+                            <input class="form-control" name="query" placeholder="Search the repository" />
                         </div>
                         <div class="col-auto">
                             <button type="submit" class="btn btn-light" type="button" onClick={this.handleSubmit}>
@@ -36,29 +41,39 @@
 
             <div class="mt-3">
                 <p class="text-center">
-                    {% trans 'or' %}
+                    or
                 </p>
             </div>
 
             <div class="mt-3 text-center">
                 <p>
                     <a class="btn btn-light w-100" href="{% url 'wizard' %}">
-                        {% trans 'Use the wizard (experimental)' %}
+                        Use the wizard (experimental)
                     </a>
                 </p>
             </div>
 
             <div class="mt-3">
                 <p class="text-center">
-                    {% trans 'or' %}
+                    or
                 </p>
             </div>
 
             <div class="mt-3 text-center">
                 <p>
                     <a class="btn btn-light w-100" href="{% url 'search' %}">
-                        {% trans 'Use the advanced search interface' %}
+                        Use the advanced search interface
                     </a>
+                </p>
+            </div>
+
+            <div class="mt-5 text-center">
+                <p>
+                    In order to refine the portal and to improve user convenience we would appreciate your feedback on the portal. So, please use the portal for searching and downloading input data and collect feedback from your sector about experiences, pitfalls and things that should be improved.
+                </p>
+
+                <p>
+                    Your feedback as well as any questions related to ISIMIP can be directed to <a href="mailto:info@isimip.org?subject=ISIMIP%20inquiry">info@isimip.org</a>.
                 </p>
             </div>
         </div>
