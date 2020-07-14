@@ -29,7 +29,8 @@ class App extends Component {
       countryError: '',
       bbox: ['', '', '', ''],
       bboxError: '',
-      message: ''
+      message: '',
+      error: ''
     }
     this.handlePathChange = this.handlePathChange.bind(this)
     this.handleSelectChange = this.handleSelectChange.bind(this)
@@ -69,7 +70,8 @@ class App extends Component {
     const { settings, path, selected, country, bbox } = this.state
     let selectedError = '',
         countryError = '',
-        bboxError = ''
+        bboxError = '',
+        error = ''
 
     if (selected) {
       if (selected == 'country') {
@@ -105,14 +107,16 @@ class App extends Component {
         const bboxError = response.errors.bbox || '';
         this.setState({ message: '', pathError, countryError, bboxError })
       } else {
-        setTimeout(() => this.fetch(url, data), 1000)
+        setTimeout(() => this.fetch(url, data), 10000)
         this.setState({ message: 'The file is created on the server, the download will start soon.' })
       }
+    }).catch(error => {
+      this.setState({ error: 'There has been a problem connecting to the server. If this problem persists, please contact support.' })
     })
   }
 
   render() {
-    const { path, pathError, selected, selectedError, country, countryError, bbox, bboxError, message } = this.state
+    const { path, pathError, selected, selectedError, country, countryError, bbox, bboxError, message, error } = this.state
 
     return (
       <div>
@@ -159,6 +163,11 @@ class App extends Component {
           {
             message && <p className="download-message text-success mt-4">
               <FontAwesomeIcon icon={faSpinner} spin /> {message}
+            </p>
+          }
+          {
+            error && <p className="download-message text-danger mt-4">
+              {error}
             </p>
           }
           {

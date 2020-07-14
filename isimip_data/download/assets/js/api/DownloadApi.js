@@ -14,7 +14,6 @@ class DownloadApi {
       },
       body: JSON.stringify(data)
     }).then(response => response.json())
-      .catch(error => error)
   }
 
   static downloadFile(fileUrl) {
