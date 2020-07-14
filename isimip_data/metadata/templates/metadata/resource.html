@@ -85,19 +85,22 @@
                             </ul>
                         </dd>
                     </dl>
-                    <dl class="row">
-                        <dt class="col-sm-3 text-right">Rights:</dt>
-                        <dd class="col-sm-9">
-                            {% for rights in resource.datacite.rightsList %}
-                            <a href="{{ rights.rightsURI }}">{{ rights.rights }}</a>
-                            {% endfor %}
-                        </dd>
-                    </dl>
                 </div>
             </div>
         </div>
 
         <div class="col-sm-4">
+            <h3>{% trans 'Rights' %}</h3>
+            <div class="card">
+                <div class="card-body">
+                    <p>
+                        {% for rights in resource.datacite.rightsList %}
+                        <a href="{{ rights.rightsURI }}">{{ rights.rights }}</a>
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+
             <h3>{% trans 'Export' %}</h3>
             <div class="card">
                 <ul class="list-group list-group-flush">
