@@ -15,7 +15,7 @@ env:
   - SECRET_KEY=thisisnotaverysecretkey
   - DATABASE=postgresql://@/isimip_data
   - DATABASE_METADATA=postgresql://@/isimip_metadata
-  - FILES_BASE_URL=http://isimip-files/
+  - FILES_BASE_URL=http://isimip/
   - GLOSSARIES=testing/glossary.json
 
 before_install:

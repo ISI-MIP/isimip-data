@@ -10,12 +10,12 @@ def test_file_str(client, files):
 
 def test_file_json_url(client, files):
     for instance in files:
-        assert instance.json_url == 'http://isimip-files/' + instance.path.replace('.nc', '.json')
+        assert instance.json_url == 'http://isimip/' + instance.path.replace('.nc', '.json')
 
 
 def test_file_thumbnail_url(client, files):
     for instance in files:
-        assert instance.thumbnail_url == 'http://isimip-files/' + instance.path.replace('.nc', '.png')
+        assert instance.thumbnail_url == 'http://isimip/' + instance.path.replace('.nc', '.png')
 
 
 def test_word_str(client, words):

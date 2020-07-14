@@ -1,4 +1,5 @@
 import pytest
+
 from django.core.management import call_command
 from django.urls import reverse
 
@@ -9,7 +10,7 @@ def django_db_setup(django_db_setup, django_db_blocker):
         call_command('loaddata', 'testing/fixtures/auth.json')
 
 
-def test_metadata(client):
+def test_metadata(client, datasets):
     response = client.get(reverse('metadata'))
     assert response.status_code == 200
 
