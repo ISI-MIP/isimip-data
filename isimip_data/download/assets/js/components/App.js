@@ -93,7 +93,7 @@ class App extends Component {
       selectedError = 'Please select one of the options.'
     }
 
-    this.setState({ selectedError, countryError, bboxError })
+    this.setState({ selectedError, countryError, bboxError, error })
   }
 
   fetch(url, data) {
