@@ -31,6 +31,14 @@ class DatasetApi {
     });
   }
 
+  static fetchHierarchy() {
+    return fetch('/api/v1/hierarchy/').then(response => {
+      return response.json()
+    }).catch(error => {
+      return error
+    });
+  }
+
 }
 
 export default DatasetApi

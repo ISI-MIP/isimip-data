@@ -1,5 +1,6 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
+import ls from 'local-storage'
 import { withRouter } from 'react-router'
 
 import { getLocationParams, getLocationString } from 'isimip_data/core/assets/js/utils/location'
@@ -11,7 +12,7 @@ import Version from './Version'
 import Search from './Search'
 import Results from './Results'
 import Facets from './Facets'
-
+import Tree from './Tree'
 
 class App extends Component {
 
@@ -20,13 +21,15 @@ class App extends Component {
     this.state = {
       params: {},
       facets: [],
-      settings: {}
+      settings: {},
+      sidebar: 'tree'
     }
     this.handleReset = this.handleReset.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
+    this.handleSidebarChange = this.handleSidebarChange.bind(this)
     this.handleParamsRemove = this.handleParamsRemove.bind(this)
     this.handlePaginationClick = this.handlePaginationClick.bind(this)
-    this.handleFacetChange = this.handleFacetChange.bind(this)
+    this.handleAttributeChange = this.handleAttributeChange.bind(this)
     this.handleVersionChange = this.handleVersionChange.bind(this)
   }
 
@@ -46,6 +49,11 @@ class App extends Component {
         facets: facets
       })
     })
+
+    const sidebar = ls.get('sidebar')
+    if (sidebar) {
+      this.handleSidebarChange(sidebar)
+    }
   }
 
   setLocation() {
@@ -57,8 +65,8 @@ class App extends Component {
   }
 
   handleReset() {
-    const { history } = this.props
-    this.setState({ params: {} }, this.setLocation)
+    const params = { page: 1 }
+    this.setState({ params }, this.setLocation)
   }
 
   handleSearch(query) {
@@ -66,12 +74,17 @@ class App extends Component {
     this.setState({ params }, this.setLocation)
   }
 
+  handleSidebarChange(sidebar) {
+    ls.set('sidebar', sidebar)
+    this.setState({ sidebar })
+  }
+
   handlePaginationClick(page) {
     const params = Object.assign({}, this.state.params, { page: page })
     this.setState({ params }, this.setLocation)
   }
 
-  handleFacetChange(attribute, key, value) {
+  handleAttributeChange(attribute, key, value) {
     const params = Object.assign({}, this.state.params, { page: 1 })
 
     // create the array in params if it not already exists
@@ -110,7 +123,7 @@ class App extends Component {
   }
 
   render() {
-    const { params, facets, settings } = this.state
+    const { params, facets, settings, sidebar } = this.state
     const pageSize = parseInt(settings.METADATA_PAGE_SIZE)
 
     return (
@@ -119,10 +132,30 @@ class App extends Component {
           <Search params={params} onSubmit={this.handleSearch} onReset={this.handleReset} />
         </div>
         <div className="col-lg-3">
-          <Version params={params} onChange={this.handleVersionChange}/>
-          <Facets params={params} facets={facets} onFacetChange={this.handleFacetChange}/>
+          <div className="card sidebar-header">
+            <div className="card-header d-flex justify-content-between align-items-center">
+              Sidebar view:
+              <div className="form-check">
+                <input className="form-check-input" type="radio" id="tree-radio"
+                       onChange={e => this.handleSidebarChange('tree')} checked={sidebar == 'tree'} />
+                <label className="form-check-label" htmlFor="tree-radio">Tree</label>
+              </div>
+              <div className="form-check">
+                <input className="form-check-input" type="radio" id="facets-radio"
+                       onChange={e => this.handleSidebarChange('facets')} checked={sidebar == 'facets'} />
+                <label className="form-check-label" htmlFor="facets-radio">Facets</label>
+              </div>
+            </div>
+          </div>
+          <div className={sidebar == 'tree' ? '' : 'd-none'}>
+            <Tree params={params} onTreeChange={this.handleAttributeChange}/>
+          </div>
+          <div className={sidebar == 'facets' ? '' : 'd-none'}>
+            <Facets params={params} facets={facets} onFacetChange={this.handleAttributeChange}/>
+          </div>
         </div>
         <div className="col-lg-9">
+          <Version params={params} onChange={this.handleVersionChange}/>
           <Results params={params}
                    pageSize={pageSize}
                    onParamsRemove={this.handleParamsRemove}

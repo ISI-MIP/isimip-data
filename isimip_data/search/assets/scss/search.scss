@@ -1,6 +1,16 @@
 @import 'isimip_data/core/assets/scss/colors';
 @import 'isimip_data/core/assets/scss/base';
 
+main {
+    font-size: 10pt;
+    min-height: 1400px;
+}
+
+.card-header {
+    background-color: white;
+    padding: 0.5rem 0.75rem;
+}
+
 .search {
     margin-bottom: 0.75rem;
 
@@ -15,30 +25,62 @@
 }
 
 .version {
-    font-size: 10pt;
     margin-bottom: 10px;
 
     .card-header {
         cursor: pointer;
-        background-color: white;
-
         padding: 0.5rem 0.75rem 0.5rem 2rem;
     }
 }
 
-.facets {
-    font-size: 10pt;
+.sidebar-header {
+    margin-bottom: 10px;
+}
 
+.tree {
+    ul {
+        padding: 0;
+        margin: 0;
+    }
+    li {
+        padding: 0;
+        list-style: none;
+    }
+    .tree-item {
+        cursor: pointer;
+        padding: 0.5rem 0.75rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.125);
+
+        &.active {
+            color: white;
+            background-color: $color-primary;
+        }
+    }
+
+    // create ul > li > ... > ul > li > .tree-item rules using sass magic
+    @for $i from 1 through 10 {
+        $selector: if($i == 1, 'ul > li', selector-nest($selector, '> ul > li'));
+
+        #{$selector} > .tree-item {
+            padding-left: 0.75rem * $i;
+        }
+    }
+
+    // remove border from the very first tree-item
+    > ul > li:first-child > .tree-item {
+        border-top: none;
+    }
+}
+
+.facets {
     .facet {
         margin-bottom: 10px;
 
         .card-header {
-            padding: 0.5rem 0.75rem;
             cursor: pointer;
-            background-color: white;
         }
 
-        .facet-item {
+        .list-group-item {
             padding: 0.5rem 0.75rem 0.5rem 2rem;
 
             input {
@@ -58,7 +100,6 @@
 }
 
 .count {
-    font-size: 10pt;
     line-height: 16px;
     margin-bottom: 10px;
 
@@ -66,7 +107,6 @@
 }
 
 .pagination {
-    font-size: 10pt;
     margin-bottom: 10px;
 
     .page-item {
@@ -85,7 +125,6 @@
 }
 
 .params {
-    font-size: 10pt;
     margin-bottom: 10px;
 
     .card-body {
@@ -114,7 +153,6 @@
 
 .results {
     .result {
-        font-size: 10pt;
         margin-bottom: 0.75rem;
 
         h4 {

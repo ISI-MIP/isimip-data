@@ -11,7 +11,7 @@ from .filters import (AttributeFilterBackend, SearchFilterBackend,
                       VersionFilterBackend)
 from .models import Attribute, Dataset, File
 from .serializers import DatasetSerializer, FileSerializer
-from .utils import fetch_glossary
+from .utils import fetch_glossary, fetch_hierarchy
 
 
 class Pagination(PageNumberPagination):
@@ -110,3 +110,9 @@ class GlossaryViewSet(ViewSet):
 
     def list(self, request):
         return Response(fetch_glossary())
+
+
+class HierarchyViewSet(ViewSet):
+
+    def list(self, request):
+        return Response(fetch_hierarchy())
