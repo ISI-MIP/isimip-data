@@ -110,7 +110,7 @@ class App extends Component {
     if (key == 'query') {
       this.handleSearch('')
     } else {
-      this.handleFacetChange(key, value, false)
+      this.handleAttributeChange(key, value, false)
     }
   }
 
