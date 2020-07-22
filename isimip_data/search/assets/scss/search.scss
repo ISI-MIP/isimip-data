@@ -86,6 +86,10 @@ main {
             input {
                 margin-top: 0.15rem;
             }
+
+            label {
+                cursor: pointer;
+            }
         }
 
         .list-group {

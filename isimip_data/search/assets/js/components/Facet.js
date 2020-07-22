@@ -88,7 +88,7 @@ class Facet extends Component {
 
               return (
                 <li key={index} className="list-group-item facet-item d-flex justify-content-between align-items-center">
-                  <label className="form-check-label" htmlFor={id}>
+                  <label className="form-check-label" htmlFor={specifier}>
                     <input type="checkbox" className="form-check-input" id={specifier}
                            checked={isChecked} onChange={e => this.handleChange(specifier, e)} />
                       {properties.title || specifier}
