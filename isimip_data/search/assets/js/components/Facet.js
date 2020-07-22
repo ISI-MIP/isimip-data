@@ -18,6 +18,7 @@ class Facet extends Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.toggleFacet = this.toggleFacet.bind(this)
+    this.abortController = new AbortController()
   }
 
   componentDidMount() {
@@ -27,6 +28,10 @@ class Facet extends Component {
     if (isOpen) {
       this.toggleFacet()
     }
+  }
+
+  componentWillUnmount(){
+    this.abortController.abort();
   }
 
   componentDidUpdate(prevProps) {
@@ -41,7 +46,9 @@ class Facet extends Component {
 
     if (isOpen) {
       this.setState({ isLoading: true })
-      DatasetApi.fetchDatasetsHistogram(facet.attribute, params).then(items => {
+      DatasetApi.fetchDatasetsHistogram(facet.attribute, params, {
+        signal: this.abortController.signal
+      }).then(items => {
         this.setState({
           isLoading: false,
           items: items

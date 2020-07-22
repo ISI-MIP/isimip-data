@@ -22,7 +22,7 @@ class App extends Component {
       params: {},
       facets: [],
       settings: {},
-      sidebar: 'tree'
+      sidebar: null
     }
     this.handleReset = this.handleReset.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
@@ -50,28 +50,35 @@ class App extends Component {
       })
     })
 
-    const sidebar = ls.get('sidebar')
-    if (sidebar) {
-      this.handleSidebarChange(sidebar)
+    let sidebar = ls.get('sidebar')
+    if (sidebar === null) {
+      sidebar = 'tree'
+    }
+    this.handleSidebarChange(sidebar)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.params != this.state.params) {
+      // update the browser location
+      this.setLocation()
     }
   }
 
   setLocation() {
     const { history } = this.props
-    const { params, facets } = this.state
-    const attributes = facets.map(facet => { return facet.attribute })
+    const { params } = this.state
 
     history.push(getLocationString('/search/', params))
   }
 
   handleReset() {
     const params = { page: 1 }
-    this.setState({ params }, this.setLocation)
+    this.setState({ params })
   }
 
   handleSearch(query) {
     const params = Object.assign({}, this.state.params, { query: query, page: 1 })
-    this.setState({ params }, this.setLocation)
+    this.setState({ params })
   }
 
   handleSidebarChange(sidebar) {
@@ -81,7 +88,7 @@ class App extends Component {
 
   handlePaginationClick(page) {
     const params = Object.assign({}, this.state.params, { page: page })
-    this.setState({ params }, this.setLocation)
+    this.setState({ params })
   }
 
   handleAttributeChange(attribute, key, value) {
@@ -103,7 +110,7 @@ class App extends Component {
       params[attribute].splice(index, 1)
     }
 
-    this.setState({ params }, this.setLocation)
+    this.setState({ params })
   }
 
   handleParamsRemove(key, value) {
@@ -119,7 +126,7 @@ class App extends Component {
 
     params.all = value
 
-    this.setState({ params }, this.setLocation)
+    this.setState({ params })
   }
 
   render() {
@@ -147,12 +154,8 @@ class App extends Component {
               </div>
             </div>
           </div>
-          <div className={sidebar == 'tree' ? '' : 'd-none'}>
-            <Tree params={params} onTreeChange={this.handleAttributeChange}/>
-          </div>
-          <div className={sidebar == 'facets' ? '' : 'd-none'}>
-            <Facets params={params} facets={facets} onFacetChange={this.handleAttributeChange}/>
-          </div>
+          {sidebar == 'tree' && <Tree params={params} onTreeChange={this.handleAttributeChange}/>}
+          {sidebar == 'facets' && <Facets params={params} facets={facets} onFacetChange={this.handleAttributeChange}/>}
         </div>
         <div className="col-lg-9">
           <Version params={params} onChange={this.handleVersionChange}/>

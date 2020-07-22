@@ -13,12 +13,19 @@ class Facets extends Component {
     this.state = {
       glossary: {}
     }
+    this.abortController = new AbortController()
   }
 
   componentDidMount() {
-    DatasetApi.fetchGlossary().then(glossary => {
+    DatasetApi.fetchGlossary({
+      signal: this.abortController.signal
+    }).then(glossary => {
       this.setState({ glossary })
     })
+  }
+
+  componentWillUnmount(){
+    this.abortController.abort();
   }
 
   render() {

@@ -15,16 +15,38 @@ class Tree extends Component {
     }
     this.handleClose = this.handleClose.bind(this)
     this.handleOpen = this.handleOpen.bind(this)
+    this.abortController = new AbortController()
   }
 
   componentDidMount() {
-    DatasetApi.fetchHierarchy().then(hierarchy => {
+    DatasetApi.fetchHierarchy({
+      signal: this.abortController.signal
+    }).then(hierarchy => {
+      hierarchy.map(item => {
+        this.addParentToItem(item)
+      })
       this.setState({ hierarchy })
+    })
+  }
+
+  componentWillUnmount(){
+    this.abortController.abort();
+  }
+
+  addParentToItem(parent) {
+    parent.items.map(item => {
+      this.addParentToItem(item)
+      item.parent = parent
     })
   }
 
   handleOpen(item) {
     const { params, onTreeChange } = this.props
+
+    // open parent
+    if (item.parent) {
+      this.handleOpen(item.parent)
+    }
 
     // close all siblings
     if (params[item.identifier]) {
@@ -40,11 +62,12 @@ class Tree extends Component {
       )
     }
 
+    // add this item to the params
     onTreeChange(item.identifier, item.specifier, true)
   }
 
   handleClose(item) {
-    const { onTreeChange } = this.props
+    const { params, onTreeChange } = this.props
 
     // recursively close all childs
     if (item.items) {
@@ -53,7 +76,25 @@ class Tree extends Component {
       )
     }
 
-    onTreeChange(item.identifier, item.specifier, false)
+    // remove this item from the params (and all siblings)
+    if (params[item.identifier]) {
+      params[item.identifier].map(specifier => {
+        onTreeChange(item.identifier, specifier, false)
+      })
+    }
+  }
+
+  getActiveItem(items) {
+    const { params } = this.props
+
+    return items.reduce((accumulator, current) => {
+      const isActive = (current.identifier in params) && (params[current.identifier].indexOf(current.specifier) > -1)
+      if (accumulator === null && isActive) {
+        return current
+      } else {
+        return accumulator
+      }
+    }, null)
   }
 
   renderItem(item, index) {
@@ -61,7 +102,7 @@ class Tree extends Component {
       <li key={index}>
         <div className="tree-item d-flex justify-content-between align-items-center"
              onClick={e => this.handleOpen(item)}>
-          <span className="d-flex align-items-center">
+          <span className="d-flex align-items-center" title={item.description}>
             <input className="mr-2" type="radio" checked={false} readOnly /> {item.title || item.specifier}
           </span>
           {item.items && (item.items.length > 0) && <FontAwesomeIcon icon={faChevronDown} />}
@@ -76,7 +117,7 @@ class Tree extends Component {
       <li key={index}>
         <div className="tree-item d-flex justify-content-between align-items-center"
              onClick={e => this.handleClose(item)}>
-          <span className="d-flex align-items-center">
+          <span className="d-flex align-items-center" title={item.description}>
             <input className="mr-2" type="radio" checked={true} readOnly /> {item.title || item.specifier}
           </span>
           {hasItems && <FontAwesomeIcon icon={faChevronUp} />}
@@ -87,29 +128,16 @@ class Tree extends Component {
   }
 
   renderItems(items) {
-    const { params } = this.props
-
-    let active = items.reduce((accumulator, current) => {
-      const isActive = (current.identifier in params) && (params[current.identifier].indexOf(current.specifier) > -1)
-      if (accumulator === null && isActive) {
-        return current
-      } else {
-        return accumulator
-      }
-    }, null)
+    const active = this.getActiveItem(items)
 
     return (
       <ul>
         {
           items.map((item, index) => {
-            if (active == null || active.items == null) {
-              if (active == item) {
-                return this.renderActiveItem(item, index)
-              } else {
-                return this.renderItem(item, index)
-              }
-            } else if (active == item) {
+            if (active == item) {
               return this.renderActiveItem(item, index)
+            } else {
+              return this.renderItem(item, index)
             }
           })
         }
