@@ -83,7 +83,8 @@ def resource(request, doi=None):
 def resource_bibtex(request, doi=None):
     obj = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
     bibtex = BibTexRenderer().render(obj)
-    response = HttpResponse(bibtex, content_type="text/plain")
+    response = HttpResponse(bibtex, content_type="application/x-bibtex")
+    response['Content-Disposition'] = 'filename="{}.bib"'.format(doi)
     return response
 
 
@@ -91,6 +92,7 @@ def resource_datacite(request, doi=None):
     obj = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
     xml = DataCiteRenderer().render(obj)
     response = HttpResponse(xml, content_type="application/xml")
+    response['Content-Disposition'] = 'filename="{}.xml"'.format(doi)
     return response
 
 

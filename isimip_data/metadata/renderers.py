@@ -101,7 +101,9 @@ class DataCiteRenderer(object):
                     'contributorType': contributor.get('contributorType')
                 })
 
-                self.render_node('creatorName', {'nameType': 'Personal'}, contributor.get('creatorName'))
+                self.render_node('contributorName', {
+                    'nameType': contributor.get('nameType', 'Personal')
+                }, contributor.get('contributorName'))
 
                 if contributor.get('givenName'):
                     self.render_node('givenName', {}, contributor.get('givenName'))
@@ -129,7 +131,9 @@ class DataCiteRenderer(object):
         if 'dates' in self.data:
             self.xml.startElement('dates', {})
             for date_type, date_string in self.data.get('dates', {}).items():
-                self.render_node(date_type.title(), {}, date_string)
+                self.render_node('date', {
+                    'dateType': date_type.title()
+                }, date_string)
             self.xml.endElement('dates')
 
         # language
