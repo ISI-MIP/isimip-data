@@ -68,9 +68,9 @@ def file(request, pk=None, path=None, checksum=None):
 
 
 @login_required
-def resources(request):
+def resources(request, prefix):
     return render(request, 'metadata/resources.html', {
-        'resources': Resource.objects.using('metadata')
+        'resources': Resource.objects.using('metadata').filter(doi__startswith=prefix)
     })
 
 

@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.search import SearchVectorField
 from django.db import models
-from django.urls import reverse
 
 from .managers import DatasetManager
 
@@ -89,9 +88,7 @@ class Resource(models.Model):
     path = models.TextField()
     version = models.TextField()
 
-    title = models.TextField()
     doi = models.TextField()
-    type = models.TextField()
     datacite = JSONField()
 
     datasets = models.ManyToManyField(Dataset)
@@ -102,6 +99,14 @@ class Resource(models.Model):
         ordering = ('path', )
 
     def __str__(self):
+        return self.path
+
+    @property
+    def title(self):
+        for datacite_title in self.datacite.get('titles'):
+            if ('title' in datacite_title) and ('titleType' not in datacite_title):
+                return datacite_title['title']
+
         return self.path
 
     @property
