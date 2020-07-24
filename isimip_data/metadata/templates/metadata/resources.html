@@ -12,13 +12,10 @@
 
 <div class="container">
     <header>
-        <h1>{{ resource.title }}</h1>
+        <h1>Resources</h1>
 
         <h4>
-            {% blocktrans trimmed with resource_type=resource.type doi_url=resource.doi_url %}
-            You can use the following DOI to cite this {{ resource_type }} in a publication:
-            <a href="{{ doi_url }}">{{ doi_url }}</a>.
-            {% endblocktrans %}
+            The following resources have been registered.
         </h4>
     </header>
 

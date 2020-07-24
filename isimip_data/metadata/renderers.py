@@ -10,7 +10,7 @@ class DataCiteRenderer(object):
         self.xml = XMLGenerator(self.stream, 'utf-8')
 
     def render(self, data):
-        self.data = data
+        self.data = data.datacite
         self.render_document()
 
         dom = parseString(self.stream.getvalue())
@@ -211,23 +211,24 @@ class DataCiteRenderer(object):
 class BibTexRenderer(object):
 
     def render(self, data):
-        authors = ' and '.join([creator.get('creatorName') for creator in data.get('creators', [])])
-        title = data.get('titles')[0].get('title') if data.get('titles') else ''
+        authors = ' and '.join([creator.get('creatorName') for creator in data.datacite.get('creators', [])])
 
         return '''
 @misc{{{doi}}}
     authors = {{{authors}}},
     year = {{{year}}},
     title = {{{title}}},
+    version = {{{version}}},
     publisher = {{{publisher}}},
     doi = {{{doi}}},
     url = {{{doi_url}}}
 }}
 '''.format(
             authors=authors,
-            year=data.get('publicationYear'),
-            title=title,
-            publisher=data.get('publisher'),
-            doi=data.get('identifier'),
-            doi_url='https://doi.org/{}'.format(data.get('identifier'))
+            year=data.datacite.get('publicationYear'),
+            title=data.title,
+            version=data.major_version,
+            publisher=data.datacite.get('publisher'),
+            doi=data.doi,
+            doi_url=data.doi_url
         ).strip()

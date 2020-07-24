@@ -110,6 +110,12 @@ class Resource(models.Model):
         return self.path
 
     @property
+    def major_version(self):
+        version = self.datacite.get('version')
+        if version:
+            return '.'.join(version.split('.')[:2])
+
+    @property
     def doi_url(self):
         return 'https://doi.org/{}'.format(self.doi)
 
