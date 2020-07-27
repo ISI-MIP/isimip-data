@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -88,7 +90,15 @@ def resource_bibtex(request, doi=None):
     return response
 
 
-def resource_datacite(request, doi=None):
+def resource_datacite_json(request, doi=None):
+    obj = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
+    json_string = json.dumps(obj.datacite, indent=2)
+    response = HttpResponse(json_string, content_type="application/json")
+    response['Content-Disposition'] = 'filename="{}.json"'.format(doi)
+    return response
+
+
+def resource_datacite_xml(request, doi=None):
     obj = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
     xml = DataCiteRenderer().render(obj)
     response = HttpResponse(xml, content_type="application/xml")

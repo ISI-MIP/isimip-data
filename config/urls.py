@@ -9,7 +9,8 @@ from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
 from isimip_data.metadata.views import (attributes, dataset, file, metadata,
                                         resource, resource_bibtex,
-                                        resource_datacite, resources)
+                                        resource_datacite_json,
+                                        resource_datacite_xml, resources)
 from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
                                            GlossaryViewSet, HierarchyViewSet)
 from isimip_data.search.views import search
@@ -41,8 +42,9 @@ urlpatterns = [
     path('files/<uuid:pk>/', file, name='file'),
     path('files/<path:path>/', file, name='file'),
 
-    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9.]+)/bib', resource_bibtex, name='resource_bibtex'),
-    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9.]+)/xml', resource_datacite, name='resource_datacite'),
+    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9.]+).bib', resource_bibtex, name='resource_bibtex'),
+    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9.]+).datacite.xml', resource_datacite_xml, name='resource_datacite_xml'),
+    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9.]+).datacite.json', resource_datacite_json, name='resource_datacite_json'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9.]+)', resource, name='resource'),
     re_path(r'^resources/', resources, name='resources'),
 
