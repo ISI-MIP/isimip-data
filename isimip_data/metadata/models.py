@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 
 from django.conf import settings
@@ -121,7 +122,16 @@ class Resource(models.Model):
 
     @property
     def creators(self):
-        return ', '.join([creator.get('creatorName') for creator in self.datacite.get('creators', [])])
+        return ', '.join([creator.get('name') for creator in self.datacite.get('creators', [])])
+
+    @property
+    def publication_date(self):
+        date_string = next(item.get('date') for item in self.datacite.get('dates', []) if item.get('dateType') == 'Issued')
+        if date_string is not None:
+            try:
+                return datetime.strptime(date_string, '%Y-%m-%d')
+            except ValueError:
+                return datetime.strptime(date_string, '%Y')
 
 
 class Word(models.Model):

@@ -38,14 +38,17 @@ class DataCiteRenderer(object):
         })
 
         # identifier
-        self.render_node('identifier', {'identifierType': 'DOI'}, self.data.get('identifier'))
+        identifier = next(item for item in self.data.get('identifiers', []) if item.get('identifierType') == 'DOI')
+        self.render_node('identifier', {
+            'identifierType': identifier.get('identifierType')
+        }, identifier.get('identifier'))
 
         # creators
         self.xml.startElement('creators', {})
         for creator in self.data.get('creators', []):
             self.xml.startElement('creator', {})
 
-            self.render_node('creatorName', {'nameType': 'Personal'}, creator.get('creatorName'))
+            self.render_node('creatorName', {'nameType': 'Personal'}, creator.get('name'))
 
             if creator.get('givenName'):
                 self.render_node('givenName', {}, creator.get('givenName'))
@@ -103,7 +106,7 @@ class DataCiteRenderer(object):
 
                 self.render_node('contributorName', {
                     'nameType': contributor.get('nameType', 'Personal')
-                }, contributor.get('contributorName'))
+                }, contributor.get('name'))
 
                 if contributor.get('givenName'):
                     self.render_node('givenName', {}, contributor.get('givenName'))
@@ -130,10 +133,10 @@ class DataCiteRenderer(object):
         # dates
         if 'dates' in self.data:
             self.xml.startElement('dates', {})
-            for date_type, date_string in self.data.get('dates', {}).items():
+            for date in self.data.get('dates', {}):
                 self.render_node('date', {
-                    'dateType': date_type.title()
-                }, date_string)
+                    'dateType': date.get('dateType')
+                }, date.get('date'))
             self.xml.endElement('dates')
 
         # language
@@ -141,8 +144,8 @@ class DataCiteRenderer(object):
 
         # resourceType
         self.render_node('resourceType', {
-            'resourceTypeGeneral': self.data.get('resourceTypeGeneral', 'Dataset')
-        }, self.data.get('resourceType'))
+            'resourceTypeGeneral': self.data.get('types', {}).get('resourceTypeGeneral', 'Dataset')
+        }, self.data.get('types', {}).get('resourceType'))
 
         # alternateIdentifiers
         if 'alternateIdentifiers' in self.data:
