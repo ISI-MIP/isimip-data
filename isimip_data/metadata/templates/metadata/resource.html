@@ -74,7 +74,7 @@
                             <ul class="list-unstyled">
                                 {% for contributor in resource.datacite.contributors %}
                                 {% if contributor.nameType == 'Organizational' %}
-                                <li>{{ contributor.contributorName }} <i>({{ contributor.contributorType }})</i>
+                                <li>{{ contributor.name }} <i>({{ contributor.contributorType }})</i>
                                     {% if contributor.nameIdentifier %}
                                     <a class="ror-link" href="https://ror.org/{{ contributor.nameIdentifier }}">
                                         {{ contributor.nameIdentifier }}
