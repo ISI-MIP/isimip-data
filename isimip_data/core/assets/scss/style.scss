@@ -36,20 +36,38 @@
 
 .doi-link:before {
     display: inline-block;
+    vertical-align: middle;
     content: ' ';
     background-image: url('../../../core/assets/images/DOI.svg');
     background-size: 16px 16px;
     height: 16px;
     width: 16px;
-    margin-right: 1px;
+    margin-bottom: 2px;
+    margin-right: 2px;
+    margin-left: 1px;
 }
 
 .orcid-link:before {
     display: inline-block;
+    vertical-align: middle;
     content: ' ';
     background-image: url('../../../core/assets/images/ORCIDiD.svg');
     background-size: 16px 16px;
     height: 16px;
     width: 16px;
-    margin-right: 1px;
+    margin-bottom: 3px;
+    margin-left: 3px;
+}
+
+.ror-link:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: ' ';
+    background-image: url('../../../core/assets/images/ROR.png');
+    background-size: 16px 16px;
+    height: 16px;
+    width: 16px;
+    margin-bottom: 1px;
+    margin-right: -3px;
+    margin-left: 1px;
 }
