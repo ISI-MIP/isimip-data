@@ -153,7 +153,7 @@ FILES_BASE_URL = os.getenv('FILES_BASE_URL')
 FILES_API_URL = os.getenv('FILES_API_URL')
 
 GLOSSARIES = os.getenv('GLOSSARIES', '').split()
-HIERARCHY = os.getenv('HIERARCHY', '').split()
+HIERARCHIES = os.getenv('HIERARCHIES', '').split()
 
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
 LOG_DIR = os.getenv('LOG_DIR')

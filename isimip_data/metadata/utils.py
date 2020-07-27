@@ -52,7 +52,7 @@ def fetch_glossary():
 
 def fetch_hierarchy():
     hierarchy = []
-    locations = settings.HIERARCHY
+    locations = settings.HIERARCHIES
     for location in locations:
         hierarchy_json = fetch_json(location)
 
