@@ -50,25 +50,6 @@ def fetch_glossary():
     return glossary
 
 
-def fetch_hierarchy():
-    hierarchy = []
-    locations = settings.HIERARCHIES
-    for location in locations:
-        hierarchy_json = fetch_json(location)
-
-        if hierarchy_json is not None:
-            try:
-                for item in hierarchy_json['items']:
-                    hierarchy.append(item)
-
-            except TypeError:
-                logger.error('TypeError for {}'.format(location))
-            except AttributeError:
-                logger.error('AttributeError for {}'.format(location))
-
-    return hierarchy
-
-
 def prettify_attributes(attributes):
     glossary = fetch_glossary()
 

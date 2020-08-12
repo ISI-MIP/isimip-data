@@ -32,14 +32,13 @@ class DatasetApi {
     });
   }
 
-  static fetchHierarchy(fetchParams = {}) {
-    return fetch('/api/v1/hierarchy/', fetchParams).then(response => {
+  static fetchTree(fetchParams = {}) {
+    return fetch('/api/v1/tree/', fetchParams).then(response => {
       return response.json()
     }).catch(error => {
       return error
     });
   }
-
 }
 
 export default DatasetApi

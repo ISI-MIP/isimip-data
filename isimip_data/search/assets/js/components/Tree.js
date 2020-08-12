@@ -11,7 +11,7 @@ class Tree extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hierarchy: []
+      tree: []
     }
     this.handleClose = this.handleClose.bind(this)
     this.handleOpen = this.handleOpen.bind(this)
@@ -19,13 +19,13 @@ class Tree extends Component {
   }
 
   componentDidMount() {
-    DatasetApi.fetchHierarchy({
+    DatasetApi.fetchTree({
       signal: this.abortController.signal
-    }).then(hierarchy => {
-      hierarchy.map(item => {
+    }).then(tree => {
+      tree.map(item => {
         this.addParentToItem(item)
       })
-      this.setState({ hierarchy })
+      this.setState({ tree })
     })
   }
 
@@ -146,11 +146,11 @@ class Tree extends Component {
   }
 
   render() {
-    const { hierarchy } = this.state
+    const { tree } = this.state
 
     return (
       <div className="card tree">
-        {this.renderItems(hierarchy)}
+        {this.renderItems(tree)}
       </div>
     )
   }

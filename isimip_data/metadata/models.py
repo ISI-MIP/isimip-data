@@ -21,6 +21,7 @@ class Dataset(models.Model):
     checksum = models.TextField()
     checksum_type = models.TextField()
     attributes = JSONField()
+    specifiers = JSONField()
     search_vector = SearchVectorField(null=True)
     public = models.BooleanField(null=True)
 
@@ -52,6 +53,7 @@ class File(models.Model):
     checksum = models.TextField()
     checksum_type = models.TextField()
     attributes = JSONField()
+    specifiers = JSONField()
     search_vector = SearchVectorField(null=True)
 
     class Meta:
@@ -132,6 +134,21 @@ class Resource(models.Model):
                 return datetime.strptime(date_string, '%Y-%m-%d')
             except ValueError:
                 return datetime.strptime(date_string, '%Y')
+
+
+class Tree(models.Model):
+
+    id = models.UUIDField(primary_key=True)
+    tree_dict = JSONField()
+    tree_list = JSONField()
+
+    class Meta:
+        db_table = 'trees'
+        managed = False
+        ordering = ('id', )
+
+    def __str__(self):
+        return self.id
 
 
 class Word(models.Model):

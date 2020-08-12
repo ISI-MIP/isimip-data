@@ -2,8 +2,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic.base import TemplateView
-from rest_framework import routers
-
 from isimip_data.core.viewsets import SettingsViewSet
 from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
@@ -12,17 +10,18 @@ from isimip_data.metadata.views import (attributes, dataset, file, metadata,
                                         resource_datacite_json,
                                         resource_datacite_xml, resources)
 from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
-                                           GlossaryViewSet, HierarchyViewSet)
+                                           GlossaryViewSet, TreeViewSet)
 from isimip_data.search.views import search
 from isimip_data.search.viewsets import FacetViewSet
 from isimip_data.wizard.views import wizard
 from isimip_data.wizard.viewsets import LayerViewSet
+from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'datasets', DatasetViewSet, basename='dataset')
 router.register(r'countries', CountryViewSet, basename='country')
 router.register(r'glossary', GlossaryViewSet, basename='glossary')
-router.register(r'hierarchy', HierarchyViewSet, basename='hierarchy')
+router.register(r'tree', TreeViewSet, basename='tree')
 router.register(r'files', FileViewSet, basename='file')
 router.register(r'facets', FacetViewSet, basename='facet')
 router.register(r'layers', LayerViewSet, basename='layer')

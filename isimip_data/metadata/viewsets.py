@@ -9,9 +9,9 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 
 from .filters import (AttributeFilterBackend, SearchFilterBackend,
                       VersionFilterBackend)
-from .models import Attribute, Dataset, File
+from .models import Attribute, Dataset, File, Tree
 from .serializers import DatasetSerializer, FileSerializer
-from .utils import fetch_glossary, fetch_hierarchy
+from .utils import fetch_glossary
 
 
 class Pagination(PageNumberPagination):
@@ -106,13 +106,17 @@ class FileViewSet(ReadOnlyModelViewSet):
     )
 
 
+class TreeViewSet(ViewSet):
+
+    def list(self, request):
+        tree = Tree.objects.using('metadata').first()
+        if tree:
+            return Response(tree.tree_list)
+        else:
+            raise NotFound
+
+
 class GlossaryViewSet(ViewSet):
 
     def list(self, request):
         return Response(fetch_glossary())
-
-
-class HierarchyViewSet(ViewSet):
-
-    def list(self, request):
-        return Response(fetch_hierarchy())

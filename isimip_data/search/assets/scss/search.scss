@@ -58,7 +58,7 @@ main {
     }
 
     // create ul > li > ... > ul > li > .tree-item rules using sass magic
-    @for $i from 1 through 10 {
+    @for $i from 1 through 20 {
         $selector: if($i == 1, 'ul > li', selector-nest($selector, '> ul > li'));
 
         #{$selector} > .tree-item {
