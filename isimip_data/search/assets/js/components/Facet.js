@@ -134,7 +134,7 @@ class Facet extends Component {
           {facet.title}
           <div>
             {isChecked && <FontAwesomeIcon className="facet-check text-secondary" icon={faCheckSquare} />}
-            {isOpen ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faChevronUp} />}
+            {isOpen ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
           </div>
         </div>
         {isOpen && !isEmpty && this.renderListGroup(facet.attribute, items, checked)}
