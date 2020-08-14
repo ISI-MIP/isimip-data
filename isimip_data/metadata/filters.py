@@ -82,7 +82,7 @@ class AttributeFilterBackend(BaseFilterBackend):
                 q = Q()
                 for value in request.GET.getlist(attribute.key):
                     if value:
-                        q |= Q(attributes__contains={attribute.key: value})
+                        q |= Q(specifiers__contains={attribute.key: value})
                 queryset = queryset.filter(q)
 
         return queryset
