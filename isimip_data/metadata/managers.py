@@ -7,15 +7,12 @@ class JSONKeysFunc(models.Func):
 
 class DatasetQuerySet(models.QuerySet):
 
-    def attributes(self):
-        return self.annotate(keys=JSONKeysFunc('attributes')).order_by().values_list('keys', flat=True).distinct()
-
-    def histogram(self, attribute):
-        field = 'attributes__%s' % attribute
+    def histogram(self, identifier):
+        field = 'specifiers__%s' % identifier
         return self.values_list(field).annotate(count=models.Count(field)).order_by(field)
 
-    def attribute_values(self, attribute):
-        field = 'attributes__%s' % attribute
+    def attribute_values(self, identifier):
+        field = 'specifiers__%s' % identifier
         return self.values_list(field).annotate(count=models.Count(field)).values_list(field, flat=True).order_by(field)
 
 

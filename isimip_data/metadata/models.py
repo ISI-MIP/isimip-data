@@ -2,7 +2,7 @@ from datetime import datetime
 from pathlib import Path
 
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import ArrayField, JSONField
 from django.contrib.postgres.search import SearchVectorField
 from django.db import models
 
@@ -20,8 +20,8 @@ class Dataset(models.Model):
     version = models.TextField()
     checksum = models.TextField()
     checksum_type = models.TextField()
-    attributes = JSONField()
     specifiers = JSONField()
+    identifiers = ArrayField(models.TextField())
     search_vector = SearchVectorField(null=True)
     public = models.BooleanField(null=True)
 
@@ -41,6 +41,10 @@ class Dataset(models.Model):
     def is_netcdf(self):
         return all([Path(file.path).suffix.startswith('.nc') for file in self.files.all()])
 
+    @property
+    def specifier_list(self):
+        return [(identifier, self.specifiers.get(identifier)) for identifier in self.identifiers]
+
 
 class File(models.Model):
 
@@ -52,8 +56,8 @@ class File(models.Model):
     version = models.TextField()
     checksum = models.TextField()
     checksum_type = models.TextField()
-    attributes = JSONField()
     specifiers = JSONField()
+    identifiers = ArrayField(models.TextField())
     search_vector = SearchVectorField(null=True)
 
     class Meta:
@@ -83,6 +87,10 @@ class File(models.Model):
     @property
     def is_netcdf(self):
         return Path(self.path).suffix.startswith('.nc')
+
+    @property
+    def specifier_list(self):
+        return [(identifier, self.specifiers.get(identifier)) for identifier in self.identifiers]
 
 
 class Resource(models.Model):

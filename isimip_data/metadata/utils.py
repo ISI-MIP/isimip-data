@@ -1,5 +1,6 @@
 import json
 import logging
+from collections import OrderedDict
 from urllib.parse import urlparse
 from urllib.request import HTTPError, urlopen
 
@@ -50,16 +51,16 @@ def fetch_glossary():
     return glossary
 
 
-def prettify_attributes(attributes):
+def prettify_attributes(attribute_list):
     glossary = fetch_glossary()
 
-    pretty_attributes = {}
-    for key, value in attributes.items():
+    attributes = OrderedDict()
+    for key, value in attribute_list:
         try:
             pretty_value = glossary[key][value]['title']
         except (KeyError, TypeError):
             pretty_value = value
 
-        pretty_attributes[key.replace('_', ' ').title()] = pretty_value
+        attributes[key.replace('_', ' ').title()] = pretty_value
 
-    return pretty_attributes
+    return attributes

@@ -52,23 +52,23 @@ class Result extends Component {
         <p className="card-text badges">
           <span className="badge badge-primary"
                 data-toggle="tooltip" data-placement="bottom" title="Simulation round">
-            {dataset.attributes.simulation_round}
+            {dataset.specifiers.simulation_round}
           </span>
           <span className="badge badge-secondary"
                 data-toggle="tooltip" data-placement="bottom" title="Data product">
-            {dataset.attributes.product}
+            {dataset.specifiers.product}
           </span>
           <span className="badge badge-warning"
                 data-toggle="tooltip" data-placement="bottom" title="Sector">
-            {dataset.attributes.sector}
+            {dataset.specifiers.sector}
           </span>
           <span className="badge badge-success"
                 data-toggle="tooltip" data-placement="bottom" title="Impact model">
-            {dataset.attributes.model}
+            {dataset.specifiers.model}
           </span>
           <span className="badge badge-info"
                 data-toggle="tooltip" data-placement="bottom" title="Period">
-            {dataset.attributes.period}
+            {dataset.specifiers.period}
           </span>
         </p>
 
@@ -122,16 +122,17 @@ class Result extends Component {
   renderAttributes(dataset) {
     return (
       <li className="list-group-item">
-        <h4 className="card-title">Attributes</h4>
+        <h4 className="card-title">Specifiers</h4>
         {
-          Object.entries(dataset.attributes).map(([key, value], index) => {
+          dataset.identifiers.map(identifier => {
+            const specifier = dataset.specifiers[identifier]
             return (
-              <div key={key} className="row">
+              <div key={identifier} className="row">
                 <div className="col-lg-3">
-                  <strong>{key}</strong>
+                  <strong>{identifier}</strong>
                 </div>
                 <div className="col-lg-9">
-                  {value}
+                  {specifier}
                 </div>
               </div>
             )

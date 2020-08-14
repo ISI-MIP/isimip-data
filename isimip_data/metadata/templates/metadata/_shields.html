@@ -1,50 +1,50 @@
 <p>
-    {% if obj.attributes.simulation_round %}
+    {% if obj.specifiers.simulation_round %}
     <span class="badge badge-primary"
         data-toggle="tooltip" data-placement="bottom" title="Simulation round">
-        {{ obj.attributes.simulation_round }}
+        {{ obj.specifiers.simulation_round }}
     </span>
     {% endif %}
-    {% if obj.attributes.product %}
+    {% if obj.specifiers.product %}
     <span class="badge badge-secondary"
         data-toggle="tooltip" data-placement="bottom" title="Product">
-        {{ obj.attributes.product }}
+        {{ obj.specifiers.product }}
     </span>
     {% endif %}
-    {% if obj.attributes.category %}
+    {% if obj.specifiers.category %}
     <span class="badge badge-success"
         data-toggle="tooltip" data-placement="bottom" title="Category">
-        {{ obj.attributes.category }}
+        {{ obj.specifiers.category }}
     </span>
     {% endif %}
-    {% if obj.attributes.sector %}
+    {% if obj.specifiers.sector %}
     <span class="badge badge-success"
         data-toggle="tooltip" data-placement="bottom" title="Sector">
-        {{ obj.attributes.sector }}
+        {{ obj.specifiers.sector }}
     </span>
     {% endif %}
-    {% if obj.attributes.model %}
+    {% if obj.specifiers.model %}
     <span class="badge badge-danger"
         data-toggle="tooltip" data-placement="bottom" title="Impact model">
-        {{ obj.attributes.model }}
+        {{ obj.specifiers.model }}
     </span>
     {% endif %}
-    {% if obj.attributes.climate_forcing %}
+    {% if obj.specifiers.climate_forcing %}
     <span class="badge badge-warning"
         data-toggle="tooltip" data-placement="bottom" title="Climate forcing">
-        {{ obj.attributes.climate_forcing }}
+        {{ obj.specifiers.climate_forcing }}
     </span>
     {% endif %}
-    {% if obj.attributes.period %}
+    {% if obj.specifiers.period %}
     <span class="badge badge-info"
         data-toggle="tooltip" data-placement="bottom" title="Period">
-        {{ obj.attributes.period }}
+        {{ obj.specifiers.period }}
     </span>
     {% endif %}
-    {% if obj.attributes.variable %}
+    {% if obj.specifiers.variable %}
     <span class="badge badge-light"
         data-toggle="tooltip" data-placement="bottom" title="Variable">
-        {{ obj.attributes.variable }}
+        {{ obj.specifiers.variable }}
     </span>
     {% endif %}
     <span class="badge badge-dark"

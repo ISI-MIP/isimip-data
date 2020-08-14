@@ -42,7 +42,7 @@ def dataset(request, pk=None, path=None, checksum=None):
     return render(request, 'metadata/dataset.html', {
         'dataset': obj,
         'versions': versions,
-        'attributes': prettify_attributes(obj.attributes)
+        'specifiers': prettify_attributes(obj.specifier_list)
     })
 
 
@@ -65,7 +65,7 @@ def file(request, pk=None, path=None, checksum=None):
     return render(request, 'metadata/file.html', {
         'file': obj,
         'versions': versions,
-        'attributes': prettify_attributes(obj.attributes)
+        'specifiers': prettify_attributes(obj.specifier_list)
     })
 
 
