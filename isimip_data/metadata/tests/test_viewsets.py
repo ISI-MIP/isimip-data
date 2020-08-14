@@ -6,6 +6,11 @@ def test_dataset_list(client, db):
     assert response.status_code == 200
 
 
+def test_dataset_list_version_filter(client, db):
+    response = client.get(reverse('dataset-list') + '?version=20200101')
+    assert response.status_code == 200
+
+
 def test_dataset_list_attribute_filter(client, db):
     response = client.get(reverse('dataset-list') + '?round=round')
     assert response.status_code == 200
