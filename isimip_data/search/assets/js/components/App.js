@@ -6,6 +6,7 @@ import { withRouter } from 'react-router'
 import { getLocationParams, getLocationString } from 'isimip_data/core/assets/js/utils/location'
 
 import CoreApi from 'isimip_data/core/assets/js/api/CoreApi'
+import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 import FacetApi from '../api/FacetApi'
 
 import Version from './Version'
@@ -21,6 +22,7 @@ class App extends Component {
     this.state = {
       params: {},
       facets: [],
+      glossary: {},
       settings: {},
       sidebar: null
     }
@@ -48,6 +50,10 @@ class App extends Component {
         params: params,
         facets: facets
       })
+    })
+
+    DatasetApi.fetchGlossary().then(glossary => {
+      this.setState({ glossary })
     })
 
     let sidebar = ls.get('sidebar')
@@ -130,7 +136,7 @@ class App extends Component {
   }
 
   render() {
-    const { params, facets, settings, sidebar } = this.state
+    const { params, facets, glossary, settings, sidebar } = this.state
     const pageSize = parseInt(settings.METADATA_PAGE_SIZE)
 
     return (
@@ -154,8 +160,8 @@ class App extends Component {
               </div>
             </div>
           </div>
-          {sidebar == 'tree' && <Tree params={params} onTreeChange={this.handleAttributeChange}/>}
-          {sidebar == 'facets' && <Facets params={params} facets={facets} onFacetChange={this.handleAttributeChange}/>}
+          {sidebar == 'tree' && <Tree params={params} glossary={glossary} onTreeChange={this.handleAttributeChange}/>}
+          {sidebar == 'facets' && <Facets params={params} facets={facets} glossary={glossary} onFacetChange={this.handleAttributeChange}/>}
         </div>
         <div className="col-lg-9">
           <Version params={params} onChange={this.handleVersionChange}/>

@@ -8,29 +8,8 @@ import Facet from './Facet'
 
 class Facets extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      glossary: {}
-    }
-    this.abortController = new AbortController()
-  }
-
-  componentDidMount() {
-    DatasetApi.fetchGlossary({
-      signal: this.abortController.signal
-    }).then(glossary => {
-      this.setState({ glossary })
-    })
-  }
-
-  componentWillUnmount(){
-    this.abortController.abort();
-  }
-
   render() {
-    const { params, facets, onFacetChange } = this.props
-    const { glossary } = this.state
+    const { params, facets, glossary, onFacetChange } = this.props
 
     return (
       <div className="facets">
@@ -50,6 +29,7 @@ class Facets extends Component {
 Facets.propTypes = {
   params: PropTypes.object.isRequired,
   facets: PropTypes.array.isRequired,
+  glossary: PropTypes.object.isRequired,
   onFacetChange: PropTypes.func.isRequired
 }
 

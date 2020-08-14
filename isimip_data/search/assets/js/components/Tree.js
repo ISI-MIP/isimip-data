@@ -102,7 +102,7 @@ class Tree extends Component {
       <li key={index}>
         <div className="tree-item d-flex justify-content-between align-items-center"
              onClick={e => this.handleOpen(item)}>
-          <span className="d-flex align-items-center" title={item.description}>
+          <span className="d-flex align-items-center" title={item.description || null}>
             <input className="mr-2" type="radio" checked={false} readOnly /> {item.title || item.specifier}
           </span>
           {item.items && (item.items.length > 0) && <FontAwesomeIcon icon={faChevronDown} />}
@@ -128,12 +128,18 @@ class Tree extends Component {
   }
 
   renderItems(items) {
+    const { glossary } = this.props
     const active = this.getActiveItem(items)
 
     return (
       <ul>
         {
           items.map((item, index) => {
+            if (glossary[item.identifier] && glossary[item.identifier][item.specifier]) {
+              item.title = glossary[item.identifier][item.specifier].title
+              item.description = glossary[item.identifier][item.specifier].description
+            }
+
             if (active == item) {
               return this.renderActiveItem(item, index)
             } else {
@@ -158,6 +164,7 @@ class Tree extends Component {
 
 Tree.propTypes = {
   params: PropTypes.object.isRequired,
+  glossary: PropTypes.object.isRequired,
   onTreeChange: PropTypes.func.isRequired
 }
 
