@@ -45,7 +45,8 @@ CREATE TABLE public.datasets (
     version character varying(8) NOT NULL,
     checksum text NOT NULL,
     checksum_type text NOT NULL,
-    attributes jsonb NOT NULL,
+    specifiers jsonb NOT NULL,
+    identifiers text[] NOT NULL,
     search_vector tsvector NOT NULL,
     public boolean NOT NULL
 );
@@ -58,7 +59,7 @@ ALTER TABLE public.datasets OWNER TO isimip_metadata;
 --
 
 CREATE MATERIALIZED VIEW public.attributes AS
- SELECT DISTINCT jsonb_object_keys(datasets.attributes) AS key
+ SELECT DISTINCT jsonb_object_keys(datasets.specifiers) AS key
    FROM public.datasets
   WITH NO DATA;
 
@@ -77,12 +78,54 @@ CREATE TABLE public.files (
     version character varying(8) NOT NULL,
     checksum text NOT NULL,
     checksum_type text NOT NULL,
-    attributes jsonb NOT NULL,
+    mime_type text NOT NULL,
+    specifiers jsonb NOT NULL,
+    identifiers text[] NOT NULL,
     search_vector tsvector NOT NULL
 );
 
 
 ALTER TABLE public.files OWNER TO isimip_metadata;
+
+--
+-- Name: resources; Type: TABLE; Schema: public; Owner: isimip_metadata
+--
+
+CREATE TABLE public.resources (
+    id uuid NOT NULL,
+    path text NOT NULL,
+    version character varying(8) NOT NULL,
+    doi text NOT NULL,
+    datacite jsonb NOT NULL
+);
+
+
+ALTER TABLE public.resources OWNER TO isimip_metadata;
+
+--
+-- Name: resources_datasets; Type: TABLE; Schema: public; Owner: isimip_metadata
+--
+
+CREATE TABLE public.resources_datasets (
+    resource_id uuid,
+    dataset_id uuid
+);
+
+
+ALTER TABLE public.resources_datasets OWNER TO isimip_metadata;
+
+--
+-- Name: trees; Type: TABLE; Schema: public; Owner: isimip_metadata
+--
+
+CREATE TABLE public.trees (
+    id uuid NOT NULL,
+    tree_dict jsonb NOT NULL,
+    tree_list jsonb NOT NULL
+);
+
+
+ALTER TABLE public.trees OWNER TO isimip_metadata;
 
 --
 -- Name: words; Type: MATERIALIZED VIEW; Schema: public; Owner: isimip_metadata
@@ -100,9 +143,9 @@ ALTER TABLE public.words OWNER TO isimip_metadata;
 -- Data for Name: datasets; Type: TABLE DATA; Schema: public; Owner: isimip_metadata
 --
 
-COPY public.datasets (id, name, path, version, checksum, checksum_type, attributes, search_vector, public) FROM stdin;
-4fda60ad-75be-42e7-b179-287e4fa321af	model_ipsum_dolor_sit_amet_var_global_monthly	round/product/sector/model/model_ipsum_dolor_sit_amet_var_global_monthly	20200513	e1010ac6d7263f19e0334e9a55d39b430e877b1e	sha1	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "version": "20200513", "end_year": 2001, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2000}	'amet':9A 'dolor':7A 'global':11A 'ipsum':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A	t
-5a0f7da0-6866-4bfe-a8d0-79194394eea6	model_lorem_dolor_sit_amet_var_global_monthly	round/product/sector/model/model_lorem_dolor_sit_amet_var_global_monthly	20200513	aff118802b8653b124e87527c98ca6ee6ddaec2c	sha1	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "version": "20200513", "end_year": 2003, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2002}	'amet':9A 'dolor':7A 'global':11A 'lorem':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A	t
+COPY public.datasets (id, name, path, version, checksum, checksum_type, specifiers, identifiers, search_vector, public) FROM stdin;
+3a8b790c-978c-4f39-8555-768f27f41b15	model_ipsum_dolor_sit_amet_var_global_monthly	round/product/sector/model/model_ipsum_dolor_sit_amet_var_global_monthly	20200814	a4036fa2eb30c524023848d3153992f5f88ebb44	sha1	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':9A 'dolor':7A 'global':11A 'ipsum':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A	t
+724848ad-c1a2-4aa8-81a9-92f94297d0c1	model_lorem_dolor_sit_amet_var_global_monthly	round/product/sector/model/model_lorem_dolor_sit_amet_var_global_monthly	20200814	a4036fa2eb30c524023848d3153992f5f88ebb44	sha1	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':9A 'dolor':7A 'global':11A 'lorem':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A	t
 \.
 
 
@@ -110,13 +153,38 @@ COPY public.datasets (id, name, path, version, checksum, checksum_type, attribut
 -- Data for Name: files; Type: TABLE DATA; Schema: public; Owner: isimip_metadata
 --
 
-COPY public.files (id, dataset_id, name, path, version, checksum, checksum_type, attributes, search_vector) FROM stdin;
-bec2d8d6-5ce4-4023-a43e-1f542e41a429	4fda60ad-75be-42e7-b179-287e4fa321af	model_ipsum_dolor_sit_amet_var_global_monthly_2000_2001.nc	round/product/sector/model/model_ipsum_dolor_sit_amet_var_global_monthly_2000_2001.nc	20200513	05ee21564c28236a149f34c9e976751ebf4b633b	sha1	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "version": "20200513", "end_year": 2001, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2000}	'2000':13A '2001.nc':14A 'amet':9A 'dolor':7A 'global':11A 'ipsum':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A
-1543eb9c-da21-4ec3-a06a-b43d25f5eaa9	4fda60ad-75be-42e7-b179-287e4fa321af	model_ipsum_dolor_sit_amet_var_global_monthly_2002_2003.nc	round/product/sector/model/model_ipsum_dolor_sit_amet_var_global_monthly_2002_2003.nc	20200513	1e03b0309f7473cd29ffcd939c1d314de72a9734	sha1	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "version": "20200513", "end_year": 2003, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2002}	'2002':13A '2003.nc':14A 'amet':9A 'dolor':7A 'global':11A 'ipsum':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A
-ce5bf0e1-a5a3-4f59-9ea1-3910d6204099	4fda60ad-75be-42e7-b179-287e4fa321af	model_ipsum_dolor_sit_amet_var_global_monthly_2001_2002.nc	round/product/sector/model/model_ipsum_dolor_sit_amet_var_global_monthly_2001_2002.nc	20200513	45a2a169ea4603cb77515925a86ca50a647e0813	sha1	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "version": "20200513", "end_year": 2002, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2001}	'2001':13A '2002.nc':14A 'amet':9A 'dolor':7A 'global':11A 'ipsum':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A
-50747198-f38f-4b14-891c-5b0cafc3dacd	5a0f7da0-6866-4bfe-a8d0-79194394eea6	model_lorem_dolor_sit_amet_var_global_monthly_2002_2003.nc	round/product/sector/model/model_lorem_dolor_sit_amet_var_global_monthly_2002_2003.nc	20200513	b54727a5894be40d2922fc3a1adb5996e4d695db	sha1	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "version": "20200513", "end_year": 2003, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2002}	'2002':13A '2003.nc':14A 'amet':9A 'dolor':7A 'global':11A 'lorem':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A
-ba5de808-9a39-45bc-bb31-745564107269	5a0f7da0-6866-4bfe-a8d0-79194394eea6	model_lorem_dolor_sit_amet_var_global_monthly_2000_2001.nc	round/product/sector/model/model_lorem_dolor_sit_amet_var_global_monthly_2000_2001.nc	20200513	1369039ab2331dc5a4d8515296e58ab722fa7c71	sha1	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "version": "20200513", "end_year": 2001, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2000}	'2000':13A '2001.nc':14A 'amet':9A 'dolor':7A 'global':11A 'lorem':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A
-c77bf2c8-0883-4c78-8665-f82e586918c3	5a0f7da0-6866-4bfe-a8d0-79194394eea6	model_lorem_dolor_sit_amet_var_global_monthly_2001_2002.nc	round/product/sector/model/model_lorem_dolor_sit_amet_var_global_monthly_2001_2002.nc	20200513	37bc963c53faf1ac0c84cdfcb0f35f9a6dce5221	sha1	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "version": "20200513", "end_year": 2002, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2001}	'2001':13A '2002.nc':14A 'amet':9A 'dolor':7A 'global':11A 'lorem':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A
+COPY public.files (id, dataset_id, name, path, version, checksum, checksum_type, mime_type, specifiers, identifiers, search_vector) FROM stdin;
+6e45f824-cf8b-4682-9b51-e7116707facc	3a8b790c-978c-4f39-8555-768f27f41b15	model_ipsum_dolor_sit_amet_var_global_monthly_2000_2001.nc	round/product/sector/model/model_ipsum_dolor_sit_amet_var_global_monthly_2000_2001.nc	20200814	26ab81fee7fe7cbd6a22f8b3bc1c4e10ffaa59c4	sha1	application/x-netcdf	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "end_year": 2001, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2000}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep,start_year,end_year}	'2000':13A '2001':14A 'amet':9A 'dolor':7A 'global':11A 'ipsum':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A
+6d359d85-049f-41f2-bd5f-eb82e8b7866a	3a8b790c-978c-4f39-8555-768f27f41b15	model_ipsum_dolor_sit_amet_var_global_monthly_2001_2002.nc	round/product/sector/model/model_ipsum_dolor_sit_amet_var_global_monthly_2001_2002.nc	20200814	26ab81fee7fe7cbd6a22f8b3bc1c4e10ffaa59c4	sha1	application/x-netcdf	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "end_year": 2002, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2001}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep,start_year,end_year}	'2001':13A '2002':14A 'amet':9A 'dolor':7A 'global':11A 'ipsum':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A
+b43166b8-972d-4c84-9be7-8a03659423ab	3a8b790c-978c-4f39-8555-768f27f41b15	model_ipsum_dolor_sit_amet_var_global_monthly_2002_2003.nc	round/product/sector/model/model_ipsum_dolor_sit_amet_var_global_monthly_2002_2003.nc	20200814	26ab81fee7fe7cbd6a22f8b3bc1c4e10ffaa59c4	sha1	application/x-netcdf	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "end_year": 2003, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2002}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep,start_year,end_year}	'2002':13A '2003':14A 'amet':9A 'dolor':7A 'global':11A 'ipsum':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A
+b102ff9c-71c9-44f8-a25a-b7bbedd0fba6	724848ad-c1a2-4aa8-81a9-92f94297d0c1	model_lorem_dolor_sit_amet_var_global_monthly_2000_2001.nc	round/product/sector/model/model_lorem_dolor_sit_amet_var_global_monthly_2000_2001.nc	20200814	26ab81fee7fe7cbd6a22f8b3bc1c4e10ffaa59c4	sha1	application/x-netcdf	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "end_year": 2001, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2000}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep,start_year,end_year}	'2000':13A '2001':14A 'amet':9A 'dolor':7A 'global':11A 'lorem':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A
+64611734-58c9-419a-89d3-b7d92c022eb9	724848ad-c1a2-4aa8-81a9-92f94297d0c1	model_lorem_dolor_sit_amet_var_global_monthly_2001_2002.nc	round/product/sector/model/model_lorem_dolor_sit_amet_var_global_monthly_2001_2002.nc	20200814	26ab81fee7fe7cbd6a22f8b3bc1c4e10ffaa59c4	sha1	application/x-netcdf	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "end_year": 2002, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2001}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep,start_year,end_year}	'2001':13A '2002':14A 'amet':9A 'dolor':7A 'global':11A 'lorem':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A
+027d06c4-99dd-40f1-8697-af60862d77a5	724848ad-c1a2-4aa8-81a9-92f94297d0c1	model_lorem_dolor_sit_amet_var_global_monthly_2002_2003.nc	round/product/sector/model/model_lorem_dolor_sit_amet_var_global_monthly_2002_2003.nc	20200814	26ab81fee7fe7cbd6a22f8b3bc1c4e10ffaa59c4	sha1	application/x-netcdf	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "end_year": 2003, "timestep": "monthly", "variable": "var", "modelname": "model", "start_year": 2002}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep,start_year,end_year}	'2002':13A '2003':14A 'amet':9A 'dolor':7A 'global':11A 'lorem':6A 'model':4A,5A 'month':12A 'product':2A 'round':1A 'sector':3A 'sit':8A 'var':10A
+\.
+
+
+--
+-- Data for Name: resources; Type: TABLE DATA; Schema: public; Owner: isimip_metadata
+--
+
+COPY public.resources (id, path, version, doi, datacite) FROM stdin;
+\.
+
+
+--
+-- Data for Name: resources_datasets; Type: TABLE DATA; Schema: public; Owner: isimip_metadata
+--
+
+COPY public.resources_datasets (resource_id, dataset_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: trees; Type: TABLE DATA; Schema: public; Owner: isimip_metadata
+--
+
+COPY public.trees (id, tree_dict, tree_list) FROM stdin;
+5c3f9a1a-850b-44ed-8c71-d36a7403eddc	{}	[]
 \.
 
 
@@ -134,6 +202,22 @@ ALTER TABLE ONLY public.datasets
 
 ALTER TABLE ONLY public.files
     ADD CONSTRAINT files_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: resources resources_pkey; Type: CONSTRAINT; Schema: public; Owner: isimip_metadata
+--
+
+ALTER TABLE ONLY public.resources
+    ADD CONSTRAINT resources_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: trees trees_pkey; Type: CONSTRAINT; Schema: public; Owner: isimip_metadata
+--
+
+ALTER TABLE ONLY public.trees
+    ADD CONSTRAINT trees_pkey PRIMARY KEY (id);
 
 
 --
@@ -200,6 +284,27 @@ CREATE INDEX ix_files_version ON public.files USING btree (version);
 
 
 --
+-- Name: ix_resources_doi; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX ix_resources_doi ON public.resources USING btree (doi);
+
+
+--
+-- Name: ix_resources_path; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX ix_resources_path ON public.resources USING btree (path);
+
+
+--
+-- Name: ix_resources_version; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX ix_resources_version ON public.resources USING btree (version);
+
+
+--
 -- Name: words_word_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
 --
 
@@ -212,6 +317,22 @@ CREATE INDEX words_word_idx ON public.words USING gin (word public.gin_trgm_ops)
 
 ALTER TABLE ONLY public.files
     ADD CONSTRAINT files_dataset_id_fkey FOREIGN KEY (dataset_id) REFERENCES public.datasets(id);
+
+
+--
+-- Name: resources_datasets resources_datasets_dataset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: isimip_metadata
+--
+
+ALTER TABLE ONLY public.resources_datasets
+    ADD CONSTRAINT resources_datasets_dataset_id_fkey FOREIGN KEY (dataset_id) REFERENCES public.datasets(id);
+
+
+--
+-- Name: resources_datasets resources_datasets_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: isimip_metadata
+--
+
+ALTER TABLE ONLY public.resources_datasets
+    ADD CONSTRAINT resources_datasets_resource_id_fkey FOREIGN KEY (resource_id) REFERENCES public.resources(id);
 
 
 --
