@@ -19,7 +19,7 @@
     "@fortawesome/react-fontawesome": "^0.1.11",
     "bootstrap": "^4.5.2",
     "jquery": "^3.5.1",
-    "js-sha1": "^0.6.0",
+    "js-sha512": "^0.8.0",
     "local-storage": "^2.0.0",
     "npm-font-open-sans": "^1.1.0",
     "popper.js": "^1.16.1",

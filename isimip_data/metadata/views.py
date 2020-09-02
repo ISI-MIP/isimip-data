@@ -1,6 +1,8 @@
 import json
+from uuid import UUID
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -10,30 +12,35 @@ from .utils import prettify_attributes
 
 
 def metadata(request):
-    dataset = request.GET.get('dataset')
-    if dataset:
-        return redirect('dataset', dataset.strip())
+    query = request.GET.get('query', '').strip()
 
-    file = request.GET.get('file')
-    if file:
-        return redirect('file', file.strip())
+    if query:
+        # try to get a uuid from the query
+        try:
+            uuid = UUID(query)
+        except ValueError:
+            uuid = None
+
+        dataset = Dataset.objects.using('metadata').filter(Q(id=uuid) | Q(path=query) | Q(checksum=query)).first()
+        if dataset:
+            return redirect('dataset', dataset.id)
+
+        file = File.objects.using('metadata').filter(Q(id=uuid) | Q(path=query) | Q(checksum=query)).first()
+        if file:
+            return redirect('file', file.id)
 
     return render(request, 'metadata/metadata.html', {
         'example_file': File.objects.using('metadata').first()
     })
 
 
-def dataset(request, pk=None, path=None, checksum=None):
+def dataset(request, pk=None, path=None):
     if pk is not None:
         obj = get_object_or_404(Dataset.objects.using('metadata'), id=pk)
     elif path is not None:
         obj = get_object_or_404(Dataset.objects.using('metadata'), path=path)
-    elif checksum is not None:
-        obj = Dataset.objects.using('metadata').filter(checksum=checksum).order_by('-version').first()
-        if not obj:
-            raise Http404()
     else:
-        raise RuntimeError('Either pk, path or checksum need to be provided')
+        raise RuntimeError('Either pk or path need to be provided')
 
     versions = Dataset.objects.using('metadata').filter(path=obj.path) \
                                                 .exclude(id=obj.id) \
@@ -46,17 +53,13 @@ def dataset(request, pk=None, path=None, checksum=None):
     })
 
 
-def file(request, pk=None, path=None, checksum=None):
+def file(request, pk=None, path=None):
     if pk is not None:
         obj = get_object_or_404(File.objects.using('metadata'), id=pk)
     elif path is not None:
         obj = get_object_or_404(File.objects.using('metadata'), path=path)
-    elif checksum is not None:
-        obj = File.objects.using('metadata').filter(checksum=checksum).order_by('-version').first()
-        if not obj:
-            raise Http404()
     else:
-        raise RuntimeError('Either pk, path or checksum need to be provided')
+        raise RuntimeError('Either pk or path need to be provided')
 
     versions = File.objects.using('metadata').filter(path=obj.path) \
                                              .exclude(id=obj.id) \

@@ -151,7 +151,6 @@ class Result extends Component {
           <thead>
             <tr>
               <th className="border-top-0">File name</th>
-              <th className="border-top-0">Checksum</th>
               <th className="border-top-0"></th>
             </tr>
           </thead>
@@ -160,8 +159,7 @@ class Result extends Component {
             dataset.files.map(file => (
               <tr key={file.id}>
                 <td><a href={file.metadata_url} target="_blank">{file.name}</a></td>
-                <td>{file.checksum}</td>
-                <td><a href={file.file_url}>Download</a></td>
+                <td><a href={file.file_url}>Download file</a></td>
               </tr>
             ))
           }

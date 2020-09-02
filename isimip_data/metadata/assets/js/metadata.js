@@ -1,4 +1,4 @@
-import sha1 from 'js-sha1'
+import sha1 from 'js-sha512'
 
 function dropHandler(e) {
   // from https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop
@@ -25,7 +25,7 @@ function dropHandler(e) {
 
 function processFile(target, file) {
   file.arrayBuffer().then(buffer => {
-    target.value = sha1(buffer)
+    target.value = sha512(buffer)
 
     var form = document.getElementById('metadata-form'),
         submit = document.getElementById('metadata-form-submit')
