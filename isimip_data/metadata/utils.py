@@ -9,31 +9,31 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 
-def fetch_json(location):
+def fetch_json(glossary_location):
     glossary_json = None
     try:
-        if urlparse(location).scheme:
-            with urlopen(location) as response:
+        if urlparse(glossary_location).scheme:
+            with urlopen(glossary_location) as response:
                 glossary_json = json.loads(response.read())
         else:
-            with open(location) as f:
+            with open(glossary_location) as f:
                 glossary_json = json.loads(f.read())
 
     except HTTPError as e:
-        logger.error('Could not open {} ({})'.format(location, e))
+        logger.error('Could not open {} ({})'.format(glossary_location, e))
     except IOError as e:
-        logger.error('Could not open {} ({})'.format(location, e))
+        logger.error('Could not open {} ({})'.format(glossary_location, e))
     except json.decoder.JSONDecodeError:
-        logger.error('Could not decode {}'.format(location))
+        logger.error('Could not decode {}'.format(glossary_location))
     finally:
         return glossary_json
 
 
 def fetch_glossary():
     glossary = {}
-    locations = settings.GLOSSARIES
-    for location in locations:
-        glossary_json = fetch_json(location)
+    for location in settings.PROTOCOL_LOCATIONS:
+        glossary_location = location.rstrip('/') + '/glossary.json'
+        glossary_json = fetch_json(glossary_location)
 
         if glossary_json is not None:
             try:
