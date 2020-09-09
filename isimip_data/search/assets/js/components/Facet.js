@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import ls from 'local-storage'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronUp, faChevronDown, faSpinner, faCheckSquare, faBan } from '@fortawesome/free-solid-svg-icons'
+import OverlayTrigger from "react-bootstrap/OverlayTrigger"
+import Tooltip from "react-bootstrap/Tooltip"
 
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
@@ -69,35 +71,62 @@ class Facet extends Component {
     this.setState({ isOpen: !isOpen }, this.fetch)
   }
 
-  renderListGroup(attribute, items, checked) {
+  renderTooltip(attribute, specifier) {
     const { glossary } = this.props
 
+    let properties = {}
+    if (glossary[attribute] && glossary[attribute][specifier]) {
+      properties = glossary[attribute][specifier]
+    }
+
+    if (properties.title || properties.description) {
+      return (
+        <Tooltip>
+          {properties.title && <strong>{properties.title}</strong>}
+          {properties.description && <div>{properties.description}</div>}
+        </Tooltip>
+      )
+    } else {
+      return null
+    }
+  }
+
+  renderListItem(attribute, specifier, isChecked, count) {
+    const id = 'facet-' + attribute + '-' + specifier
+
+    return (
+      <li key={specifier} className="list-group-item facet-item d-flex justify-content-between align-items-center">
+        <label className="form-check-label" htmlFor={id}>
+          <input type="checkbox" className="form-check-input" id={id}
+                 checked={isChecked} onChange={e => this.handleChange(specifier, e)} />
+            {specifier}
+        </label>
+        <span className="badge badge-secondary badge-pill pull-right">
+          {count}
+        </span>
+      </li>
+    )
+  }
+
+  renderListGroup(attribute, items, checked) {
     return (
       <ul className="list-group list-group-flush">
         {
           items.map((item, index) => {
             const [specifier, count] = item
-            const id = item + '-facet-' + index
-            const isChecked = (checked.indexOf(specifier) > -1)
-
             if (specifier !== null) {
-              let properties = {}
-              if (glossary[attribute] && glossary[attribute][specifier]) {
-                properties = glossary[attribute][specifier]
-              }
+              const isChecked = (checked.indexOf(specifier) > -1)
+              const tooltip = this.renderTooltip(attribute, specifier)
 
-              return (
-                <li key={index} className="list-group-item facet-item d-flex justify-content-between align-items-center">
-                  <label className="form-check-label" htmlFor={specifier}>
-                    <input type="checkbox" className="form-check-input" id={specifier}
-                           checked={isChecked} onChange={e => this.handleChange(specifier, e)} />
-                      {properties.title || specifier}
-                  </label>
-                  <span className="badge badge-secondary badge-pill pull-right">
-                    {count}
-                  </span>
-                </li>
-              )
+              if (tooltip) {
+                return (
+                  <OverlayTrigger key={specifier} placement="right" overlay={tooltip}>
+                    {this.renderListItem(attribute, specifier, isChecked, count)}
+                  </OverlayTrigger>
+                )
+              } else {
+                return this.renderListItem(attribute, specifier, isChecked, count)
+              }
             }
           })
         }

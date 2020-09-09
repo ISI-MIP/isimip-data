@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import OverlayTrigger from "react-bootstrap/OverlayTrigger"
+import Tooltip from "react-bootstrap/Tooltip"
 
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
@@ -97,53 +99,104 @@ class Tree extends Component {
     }, null)
   }
 
-  renderItem(item, index) {
+  renderTooltip(identifier, specifier) {
+    const { glossary } = this.props
+
+    let properties = {}
+    if (glossary[identifier] && glossary[identifier][specifier]) {
+      properties = glossary[identifier][specifier]
+    }
+
+    if (properties.title || properties.description) {
+      return (
+        <Tooltip>
+          {properties.title && <strong>{properties.title}</strong>}
+          {properties.description && <div>{properties.description}</div>}
+        </Tooltip>
+      )
+    } else {
+      return null
+    }
+  }
+
+  renderItem(item) {
     return (
-      <li key={index}>
-        <div className="tree-item d-flex justify-content-between align-items-center"
-             onClick={e => this.handleOpen(item)}>
-          <span className="d-flex align-items-center" title={item.description || null}>
-            <input className="mr-2" type="radio" checked={false} readOnly /> {item.title || item.specifier}
-          </span>
-          {item.items && (item.items.length > 0) && <FontAwesomeIcon icon={faChevronDown} />}
-        </div>
-      </li>
+      <div className="tree-item d-flex justify-content-between align-items-center"
+           onClick={e => this.handleOpen(item)}>
+        <span className="d-flex align-items-center">
+          <input className="mr-2" type="radio" checked={false} readOnly /> {item.specifier}
+        </span>
+        {item.items && (item.items.length > 0) && <FontAwesomeIcon icon={faChevronDown} />}
+      </div>
     )
   }
 
-  renderActiveItem(item, index) {
-    const hasItems = item.items && (item.items.length > 0)
+  renderItemWrapper(item, index) {
+    const tooltip = this.renderTooltip(item.identifier, item.specifier)
+
+    if (tooltip) {
+      return (
+        <li key={index}>
+          <OverlayTrigger placement="right" overlay={tooltip}>
+            {this.renderItem(item)}
+          </OverlayTrigger>
+        </li>
+      )
+    } else {
+      return (
+        <li key={index}>
+          {this.renderItem(item)}
+        </li>
+      )
+    }
+  }
+
+  renderActiveItem(item, hasItems) {
     return (
-      <li key={index}>
-        <div className="tree-item d-flex justify-content-between align-items-center"
-             onClick={e => this.handleClose(item)}>
-          <span className="d-flex align-items-center" title={item.description}>
-            <input className="mr-2" type="radio" checked={true} readOnly /> {item.title || item.specifier}
-          </span>
-          {hasItems && <FontAwesomeIcon icon={faChevronUp} />}
-        </div>
-        {hasItems && this.renderItems(item.items)}
-      </li>
+      <div className="tree-item d-flex justify-content-between align-items-center"
+           onClick={e => this.handleClose(item)}>
+        <span className="d-flex align-items-center">
+          <input className="mr-2" type="radio" checked={true} readOnly /> {item.specifier}
+        </span>
+        {hasItems && <FontAwesomeIcon icon={faChevronUp} />}
+      </div>
     )
+  }
+
+  renderActiveItemWrapper(item, index) {
+    const hasItems = item.items && (item.items.length > 0)
+    const tooltip = this.renderTooltip(item.identifier, item.specifier)
+
+    if (tooltip) {
+      return (
+        <li key={index}>
+          <OverlayTrigger placement="right" overlay={tooltip}>
+            {this.renderActiveItem(item, hasItems)}
+          </OverlayTrigger>
+          {hasItems && this.renderItems(item.items)}
+        </li>
+      )
+    } else {
+      return (
+        <li key={index}>
+          {this.renderActiveItem(item, hasItems)}
+          {hasItems && this.renderItems(item.items)}
+        </li>
+      )
+    }
   }
 
   renderItems(items) {
-    const { glossary } = this.props
     const active = this.getActiveItem(items)
 
     return (
       <ul>
         {
           items.map((item, index) => {
-            if (glossary[item.identifier] && glossary[item.identifier][item.specifier]) {
-              item.title = glossary[item.identifier][item.specifier].title
-              item.description = glossary[item.identifier][item.specifier].description
-            }
-
             if (active == item) {
-              return this.renderActiveItem(item, index)
+              return this.renderActiveItemWrapper(item, index)
             } else {
-              return this.renderItem(item, index)
+              return this.renderItemWrapper(item, index)
             }
           })
         }
