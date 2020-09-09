@@ -58,6 +58,9 @@
                         <a href="{{ file.json_url }}">{% trans 'Download metadata file' %}</a>
                     </li>
                     <li class="list-group-item">
+                        <a href="{{ file.checksum_url }}">{% trans 'Download checksum file' %}</a>
+                    </li>
+                    <li class="list-group-item">
                         <a href="{{ file.thumbnail_url }}">{% trans 'Download thumbnail' %}</a>
                     </li>
                     {% if file.is_global and file.is_netcdf %}
