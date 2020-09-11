@@ -22,6 +22,7 @@ class Result extends Component {
     }
     this.toggleAttributes = this.toggleAttributes.bind(this)
     this.toggleFiles = this.toggleFiles.bind(this)
+    this.handleDownload = this.handleDownload.bind(this)
   }
 
   componentDidMount() {
@@ -40,6 +41,11 @@ class Result extends Component {
   toggleFiles(e) {
     e.preventDefault()
     this.setState({ showFiles: !this.state.showFiles})
+  }
+
+  handleDownload(e, files) {
+    e.preventDefault()
+    DatasetApi.downloadFiles(files)
   }
 
   renderDataset(dataset) {
@@ -68,6 +74,11 @@ class Result extends Component {
           <li className="list-inline-item">
             <a href={dataset.wget_url}>
               Download wget script
+            </a>
+          </li>
+          <li className="list-inline-item">
+            <a href="" onClick={e => this.handleDownload(e, dataset.files)}>
+              Download all files
             </a>
           </li>
         </ul>
@@ -140,7 +151,6 @@ class Result extends Component {
 
             let label
             if (glossary['identifier'] && glossary['identifier'][identifier]) {
-              console.log(glossary['identifier'][identifier]);
               label = glossary['identifier'][identifier].title
             }
 
@@ -177,7 +187,11 @@ class Result extends Component {
               <tr key={file.id}>
                 <td><a href={file.metadata_url} target="_blank">{file.name}</a></td>
                 <td>{get_size(file.size)}</td>
-                <td className="text-right"><a href={file.file_url}>Download file</a></td>
+                <td className="text-right">
+                  <a href="" onClick={e => this.handleDownload(e, [file])}>
+                    Download file
+                  </a>
+                </td>
               </tr>
             ))
           }

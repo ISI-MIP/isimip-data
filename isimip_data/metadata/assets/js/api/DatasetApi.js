@@ -39,6 +39,23 @@ class DatasetApi {
       return error
     });
   }
+
+  static downloadFiles(files, fetchParams = {}) {
+    return files.map(file => {
+      return fetch(file.file_url, fetchParams)
+        .then(response => response.blob())
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob)
+          const a = document.createElement('a')
+          a.href = url
+          a.download = file.name
+
+          document.body.appendChild(a)
+          a.click()
+          a.remove()
+        })
+    })
+  }
 }
 
 export default DatasetApi
