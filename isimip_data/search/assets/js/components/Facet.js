@@ -8,6 +8,8 @@ import Tooltip from "react-bootstrap/Tooltip"
 
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
+import { getValueOrNull } from 'isimip_data/core/assets/js/utils/object'
+
 
 class Facet extends Component {
 
@@ -73,11 +75,7 @@ class Facet extends Component {
 
   renderTooltip(attribute, specifier) {
     const { glossary } = this.props
-
-    let properties = {}
-    if (glossary[attribute] && glossary[attribute][specifier]) {
-      properties = glossary[attribute][specifier]
-    }
+    const properties = getValueOrNull(glossary, identifier, specifier)
 
     if (properties.title || properties.description) {
       return (
@@ -86,8 +84,6 @@ class Facet extends Component {
           {properties.description && <div>{properties.description}</div>}
         </Tooltip>
       )
-    } else {
-      return null
     }
   }
 

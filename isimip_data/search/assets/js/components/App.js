@@ -167,6 +167,7 @@ class App extends Component {
           <Version params={params} onChange={this.handleVersionChange}/>
           <Results params={params}
                    pageSize={pageSize}
+                   glossary={glossary}
                    onParamsRemove={this.handleParamsRemove}
                    onPaginationClick={this.handlePaginationClick} />
         </div>

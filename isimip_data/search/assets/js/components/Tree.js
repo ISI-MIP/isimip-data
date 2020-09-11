@@ -7,6 +7,8 @@ import Tooltip from "react-bootstrap/Tooltip"
 
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
+import { getValueOrNull } from 'isimip_data/core/assets/js/utils/object'
+
 
 class Tree extends Component {
 
@@ -101,11 +103,7 @@ class Tree extends Component {
 
   renderTooltip(identifier, specifier) {
     const { glossary } = this.props
-
-    let properties = {}
-    if (glossary[identifier] && glossary[identifier][specifier]) {
-      properties = glossary[identifier][specifier]
-    }
+    const properties = getValueOrNull(glossary, identifier, specifier)
 
     if (properties.title || properties.description) {
       return (
@@ -114,8 +112,6 @@ class Tree extends Component {
           {properties.description && <div>{properties.description}</div>}
         </Tooltip>
       )
-    } else {
-      return null
     }
   }
 

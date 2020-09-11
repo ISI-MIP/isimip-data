@@ -52,7 +52,7 @@ class Results extends Component {
   }
 
   render() {
-    const { params, pageSize, onParamsRemove, onPaginationClick } = this.props
+    const { params, pageSize, glossary, onParamsRemove, onPaginationClick } = this.props
     const { page } = params
     const { isLoading, results, count } = this.state
 
@@ -70,7 +70,7 @@ class Results extends Component {
         <Params params={params} onRemove={onParamsRemove} />
         {
           results.map(dataset => {
-            return <Result key={dataset.id} dataset={dataset} />
+            return <Result key={dataset.id} dataset={dataset} glossary={glossary} />
           })
         }
       </div>
@@ -81,6 +81,7 @@ class Results extends Component {
 Results.propTypes = {
   params: PropTypes.object.isRequired,
   pageSize: PropTypes.number.isRequired,
+  glossary: PropTypes.object.isRequired,
   onParamsRemove: PropTypes.func.isRequired,
   onPaginationClick: PropTypes.func.isRequired
 }

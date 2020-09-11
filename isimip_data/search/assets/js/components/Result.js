@@ -4,8 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile, faChevronDown, faChevronUp  } from '@fortawesome/free-solid-svg-icons'
 import { faFile as faFileRegular } from '@fortawesome/free-regular-svg-icons'
 import jQuery from 'jquery'
-
+import bytes from 'bytes'
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
+
+import Badges from './Badges'
+
+const get_size = size => bytes(size, {unitSeparator: ' '})
 
 
 class Result extends Component {
@@ -39,38 +43,12 @@ class Result extends Component {
   }
 
   renderDataset(dataset) {
+    const { glossary } = this.props
     const { showAttributes, showFiles } = this.state
 
     return (
       <li className="list-group-item">
-        <p className="card-text badges float-right">
-          <span className="badge badge-dark"
-                data-toggle="tooltip" data-placement="bottom" title="Version">
-            {dataset.version}
-          </span>
-        </p>
-        <p className="card-text badges">
-          <span className="badge badge-primary"
-                data-toggle="tooltip" data-placement="bottom" title="Simulation round">
-            {dataset.specifiers.simulation_round}
-          </span>
-          <span className="badge badge-secondary"
-                data-toggle="tooltip" data-placement="bottom" title="Data product">
-            {dataset.specifiers.product}
-          </span>
-          <span className="badge badge-warning"
-                data-toggle="tooltip" data-placement="bottom" title="Sector">
-            {dataset.specifiers.sector}
-          </span>
-          <span className="badge badge-success"
-                data-toggle="tooltip" data-placement="bottom" title="Impact model">
-            {dataset.specifiers.model}
-          </span>
-          <span className="badge badge-info"
-                data-toggle="tooltip" data-placement="bottom" title="Period">
-            {dataset.specifiers.period}
-          </span>
-        </p>
+        <Badges glossary={glossary} specifiers={dataset.specifiers} version={dataset.version} />
 
         <h4 className="card-title">
           <a href={dataset.metadata_url} target="_blank">{dataset.name}</a>
@@ -120,16 +98,56 @@ class Result extends Component {
   }
 
   renderAttributes(dataset) {
+    const { glossary } = this.props
+
     return (
       <li className="list-group-item">
-        <h4 className="card-title">Specifiers</h4>
+        <div className="row">
+          <div className="col-lg-3">
+            <strong>ISIMIP id</strong>
+          </div>
+          <div className="col-lg-9">
+            {dataset.id}
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-3">
+            <strong>ISIMIP path</strong>
+          </div>
+          <div className="col-lg-9">
+            {dataset.path}
+          </div>
+        </div>
+          <div className="row">
+          <div className="col-lg-3">
+            <strong>Version</strong>
+          </div>
+          <div className="col-lg-9">
+            {dataset.version}
+          </div>
+        </div>
+        <div className="row mb-2">
+          <div className="col-lg-3">
+            <strong>Size</strong>
+          </div>
+          <div className="col-lg-9">
+            {get_size(dataset.size)}
+          </div>
+        </div>
         {
           dataset.identifiers.map(identifier => {
             const specifier = dataset.specifiers[identifier]
+
+            let label
+            if (glossary['identifier'] && glossary['identifier'][identifier]) {
+              console.log(glossary['identifier'][identifier]);
+              label = glossary['identifier'][identifier].title
+            }
+
             return (
               <div key={identifier} className="row">
                 <div className="col-lg-3">
-                  <strong>{identifier}</strong>
+                  <strong>{label || identifier}</strong>
                 </div>
                 <div className="col-lg-9">
                   {specifier}
@@ -145,13 +163,12 @@ class Result extends Component {
   renderFiles(dataset) {
     return (
       <li className="list-group-item result-files">
-        <h4 className="card-title">Files</h4>
-
-        <table className="table">
+        <table className="table table-sm">
           <thead>
             <tr>
               <th className="border-top-0">File name</th>
-              <th className="border-top-0"></th>
+              <th className="border-top-0" style={{width: '15%'}}>Size</th>
+              <th className="border-top-0" style={{width: '15%'}}></th>
             </tr>
           </thead>
           <tbody>
@@ -159,7 +176,8 @@ class Result extends Component {
             dataset.files.map(file => (
               <tr key={file.id}>
                 <td><a href={file.metadata_url} target="_blank">{file.name}</a></td>
-                <td><a href={file.file_url}>Download file</a></td>
+                <td>{get_size(file.size)}</td>
+                <td className="text-right"><a href={file.file_url}>Download file</a></td>
               </tr>
             ))
           }
@@ -186,7 +204,8 @@ class Result extends Component {
 }
 
 Result.propTypes = {
-  dataset: PropTypes.object.isRequired
+  dataset: PropTypes.object.isRequired,
+  glossary: PropTypes.object.isRequired
 }
 
 export default Result
