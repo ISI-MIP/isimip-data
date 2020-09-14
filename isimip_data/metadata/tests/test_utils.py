@@ -45,7 +45,7 @@ def test_fetch_glossary_type_update(mocker):
 
 
 def test_fetch_glossary_type_error(mocker):
-    mocker.patch('isimip_data.metadata.utils.settings', GLOSSARIES=['glossary1.json', 'glossary2.json'])
+    mocker.patch('isimip_data.metadata.utils.settings', PROTOCOL_LOCATIONS=['protocol1', 'protocol2'])
 
     mocked_fetch_json = mocker.patch('isimip_data.metadata.utils.fetch_json')
     mocked_fetch_json.side_effect = [

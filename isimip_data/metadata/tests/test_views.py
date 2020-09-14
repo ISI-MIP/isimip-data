@@ -17,20 +17,20 @@ def test_metadata(client, datasets):
 
 def test_metadata_dataset(client, datasets):
     for dataset in datasets:
-        url = reverse('metadata') + '?dataset=' + dataset.checksum
+        url = reverse('metadata') + '?query=' + dataset.checksum
 
         response = client.get(url)
         assert response.status_code == 302
-        assert response.url == '/datasets/{}/'.format(dataset.checksum)
+        assert response.url == '/datasets/{}/'.format(dataset.id)
 
 
 def test_metadata_file(client, files):
     for file in files:
-        url = reverse('metadata') + '?file=' + file.checksum
+        url = reverse('metadata') + '?query=' + file.checksum
 
         response = client.get(url)
         assert response.status_code == 302
-        assert response.url == '/files/{}/'.format(file.checksum)
+        assert response.url == '/files/{}/'.format(file.id)
 
 
 def test_dataset_id(client, datasets):
@@ -45,12 +45,6 @@ def test_dataset_path(client, datasets):
         assert response.status_code == 200
 
 
-def test_dataset_checksum(client, datasets):
-    for dataset in datasets:
-        response = client.get(reverse('dataset', args=[dataset.checksum]))
-        assert response.status_code == 200
-
-
 def test_file_id(client, files):
     for file in files:
         response = client.get(reverse('file', args=[file.id]))
@@ -60,12 +54,6 @@ def test_file_id(client, files):
 def test_file_path(client, files):
     for file in files:
         response = client.get(reverse('file', args=[file.path]))
-        assert response.status_code == 200
-
-
-def test_file_checksum(client, files):
-    for file in files:
-        response = client.get(reverse('file', args=[file.checksum]))
         assert response.status_code == 200
 
 

@@ -16,7 +16,7 @@ env:
   - DATABASE=postgresql://@/isimip_data
   - DATABASE_METADATA=postgresql://@/isimip_metadata
   - FILES_BASE_URL=http://isimip/
-  - GLOSSARIES=testing/glossary.json
+  - PROTOCOL_LOCATION=testing/protocol
 
 before_install:
 - sudo apt-get -qq update
