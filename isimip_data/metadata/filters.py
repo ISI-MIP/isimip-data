@@ -4,9 +4,8 @@ from django.conf import settings
 from django.contrib.postgres.search import (SearchQuery, SearchRank,
                                             TrigramSimilarity)
 from django.db.models import Q
-from rest_framework.filters import BaseFilterBackend
-
 from isimip_data.metadata.models import Attribute, Word
+from rest_framework.filters import BaseFilterBackend
 
 logger = logging.getLogger(__name__)
 
@@ -84,5 +83,18 @@ class AttributeFilterBackend(BaseFilterBackend):
                     if value:
                         q |= Q(specifiers__contains={attribute.key: value})
                 queryset = queryset.filter(q)
+
+        return queryset
+
+
+class PathFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        path_list = request.GET.getlist('path')
+        if path_list:
+            q = Q()
+            for path in path_list:
+                q |= Q(path__startswith=path)
+            queryset = queryset.filter(q)
 
         return queryset

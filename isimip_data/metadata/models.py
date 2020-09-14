@@ -163,7 +163,7 @@ class Tree(models.Model):
         ordering = ('id', )
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class Word(models.Model):

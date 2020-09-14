@@ -15,7 +15,7 @@ const getLocationParams = (path, location) => {
     // look at every odd token, thats a value!
     if (i % 2 == 1) {
       const key = tokens[i-1],
-            value = tokens[i]
+            value = decodeURIComponent(tokens[i])
 
       if (key == 'all') {
         params['all'] = true
@@ -52,7 +52,7 @@ const getLocationString = (path, params) => {
       }
     } else {
       params[key].forEach(value => {
-        string += key + '/' + value + '/'
+        string += key + '/' + encodeURIComponent(value) + '/'
       })
     }
   })

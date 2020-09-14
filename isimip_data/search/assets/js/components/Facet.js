@@ -73,11 +73,11 @@ class Facet extends Component {
     this.setState({ isOpen: !isOpen }, this.fetch)
   }
 
-  renderTooltip(attribute, specifier) {
+  renderTooltip(attribute, identifier, specifier) {
     const { glossary } = this.props
     const properties = getValueOrNull(glossary, identifier, specifier)
 
-    if (properties.title || properties.description) {
+    if (properties && (properties.title || properties.description)) {
       return (
         <Tooltip>
           {properties.title && <strong>{properties.title}</strong>}

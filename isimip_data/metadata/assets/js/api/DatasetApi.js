@@ -32,8 +32,8 @@ class DatasetApi {
     });
   }
 
-  static fetchTree(fetchParams = {}) {
-    return fetch('/api/v1/tree/', fetchParams).then(response => {
+  static fetchTree(urlParams, fetchParams = {}) {
+    return fetch('/api/v1/tree/?' + encodeParams(urlParams), fetchParams).then(response => {
       return response.json()
     }).catch(error => {
       return error

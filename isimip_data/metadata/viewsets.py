@@ -1,4 +1,7 @@
+from pathlib import PurePath
+
 from django.conf import settings
+from django.core.cache import cache
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -7,8 +10,8 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 
-from .filters import (AttributeFilterBackend, SearchFilterBackend,
-                      VersionFilterBackend)
+from .filters import (AttributeFilterBackend, PathFilterBackend,
+                      SearchFilterBackend, VersionFilterBackend)
 from .models import Attribute, Dataset, File, Tree
 from .serializers import DatasetSerializer, FileSerializer
 from .utils import fetch_glossary
@@ -28,12 +31,11 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         DjangoFilterBackend,
         SearchFilterBackend,
         VersionFilterBackend,
-        AttributeFilterBackend
+        AttributeFilterBackend,
+        PathFilterBackend
     )
     filterset_fields = (
         'name',
-        'path',
-        'version'
     )
     attribute_filter_exclude = None
 
@@ -109,11 +111,50 @@ class FileViewSet(ReadOnlyModelViewSet):
 class TreeViewSet(ViewSet):
 
     def list(self, request):
-        tree = Tree.objects.using('metadata').first()
-        if tree:
-            return Response(tree.tree_list)
-        else:
+        try:
+            tree = cache.get_or_set('tree', Tree.objects.using('metadata').first(), 60)
+        except Tree.DoesNotExist:
             raise NotFound
+
+        # loop over top level of tree
+        response_list = []
+        for item in tree.tree_dict.values():
+            response_list.append({
+                'path': item.get('specifier'),
+                'specifier': item.get('specifier'),
+                'identifier': item.get('identifier'),
+                'hasItems': bool(item.get('items'))
+            })
+
+        # loop over path list arguments
+        path_list = [PurePath(path) for path in request.GET.getlist('path', [])]
+        for path in path_list:
+            current_path = PurePath()
+            current_tree_nodes = tree.tree_dict
+            current_response_nodes = response_list
+            for specifier in path.parts:
+                current_path /= specifier
+
+                try:
+                    response_node = next(node for node in current_response_nodes if node.get('specifier') == specifier)
+                except StopIteration:
+                    raise NotFound
+
+                if 'items' not in response_node:
+                    try:
+                        response_node['items'] = [{
+                            'path': (current_path / item.get('specifier')).as_posix(),
+                            'specifier': item.get('specifier'),
+                            'identifier': item.get('identifier'),
+                            'hasItems': bool(item.get('items'))
+                        } for item in current_tree_nodes[specifier]['items'].values()]
+                    except KeyError:
+                        raise NotFound
+
+                current_tree_nodes = current_tree_nodes[specifier]['items']
+                current_response_nodes = response_node['items']
+
+        return Response(response_list)
 
 
 class GlossaryViewSet(ViewSet):

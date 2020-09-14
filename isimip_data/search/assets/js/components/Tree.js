@@ -23,89 +23,81 @@ class Tree extends Component {
   }
 
   componentDidMount() {
-    DatasetApi.fetchTree({
-      signal: this.abortController.signal
-    }).then(tree => {
-      tree.map(item => {
-        this.addParentToItem(item)
-      })
-      this.setState({ tree })
-    })
+    this.fetchTree()
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.params !== prevProps.params) {
+      this.fetchTree()
+    }
   }
 
   componentWillUnmount(){
     this.abortController.abort();
   }
 
-  addParentToItem(parent) {
-    parent.items.map(item => {
-      this.addParentToItem(item)
-      item.parent = parent
+  fetchTree() {
+    const { params } = this.props
+
+    return DatasetApi.fetchTree({
+      path: params.path || ''
+    }, {
+      signal: this.abortController.signal
+    }).then(items => {
+      this.setState({ tree: items })
     })
   }
 
   handleOpen(item) {
     const { params, onTreeChange } = this.props
 
-    // open parent
-    if (item.parent) {
-      this.handleOpen(item.parent)
-    }
-
-    // close all siblings
-    if (params[item.identifier]) {
-      params[item.identifier].map(specifier => {
-        onTreeChange(item.identifier, specifier, false)
+    // close all parents
+    if (params.path) {
+      params.path.map(path_param => {
+        if (item.path.indexOf(path_param) == 0) {
+          onTreeChange('path', path_param, false)
+        }
       })
     }
 
-    // recursively close all childs for consistency
-    if (item.items) {
-      item.items.map(item =>
-        this.handleClose(item)
-      )
-    }
-
-    // add this item to the params
-    onTreeChange(item.identifier, item.specifier, true)
+    // open item
+    onTreeChange('path', item.path, true)
   }
 
   handleClose(item) {
     const { params, onTreeChange } = this.props
+    const parentPath = item.path.substring(0, item.path.lastIndexOf('/'))
 
-    // recursively close all childs
-    if (item.items) {
-      item.items.map(item =>
-        this.handleClose(item)
-      )
-    }
+    // close item
+    onTreeChange('path', item.path, false)
 
-    // remove this item from the params (and all siblings)
-    if (params[item.identifier]) {
-      params[item.identifier].map(specifier => {
-        onTreeChange(item.identifier, specifier, false)
-      })
-    }
-  }
-
-  getActiveItem(items) {
-    const { params } = this.props
-
-    return items.reduce((accumulator, current) => {
-      const isActive = (current.identifier in params) && (params[current.identifier].indexOf(current.specifier) > -1)
-      if (accumulator === null && isActive) {
-        return current
-      } else {
-        return accumulator
+    // close all children
+    params.path.reduce((accumulator, path) => {
+      if (path.indexOf(item.path) == 0) {
+        accumulator.push(path)
       }
-    }, null)
+      return accumulator
+    }, []).map(path => {
+      onTreeChange('path', path, false)
+    })
+
+    // open parent if no other child is open
+    const openParent = params.path.reduce((accumulator, path) => {
+      if (item.path.indexOf(parentPath) == 0) {
+        accumulator = false
+      }
+      return accumulator
+    }, true)
+    if (openParent) {
+      onTreeChange('path', parentPath, true)
+    }
   }
 
   renderTooltip(identifier, specifier) {
     const { glossary } = this.props
     const properties = getValueOrNull(glossary, identifier, specifier)
 
-    if (properties.title || properties.description) {
+    if (properties && (properties.title || properties.description)) {
       return (
         <Tooltip>
           {properties.title && <strong>{properties.title}</strong>}
@@ -120,9 +112,9 @@ class Tree extends Component {
       <div className="tree-item d-flex justify-content-between align-items-center"
            onClick={e => this.handleOpen(item)}>
         <span className="d-flex align-items-center">
-          <input className="mr-2" type="radio" checked={false} readOnly /> {item.specifier}
+          <input className="mr-2" type="checkbox" checked={false} readOnly /> {item.specifier}
         </span>
-        {item.items && (item.items.length > 0) && <FontAwesomeIcon icon={faChevronDown} />}
+        {item.hasItems && <FontAwesomeIcon icon={faChevronDown} />}
       </div>
     )
   }
@@ -147,50 +139,47 @@ class Tree extends Component {
     }
   }
 
-  renderActiveItem(item, hasItems) {
+  renderOpenItem(item) {
     return (
       <div className="tree-item d-flex justify-content-between align-items-center"
            onClick={e => this.handleClose(item)}>
         <span className="d-flex align-items-center">
-          <input className="mr-2" type="radio" checked={true} readOnly /> {item.specifier}
+          <input className="mr-2" type="checkbox" checked={true} readOnly /> {item.specifier}
         </span>
-        {hasItems && <FontAwesomeIcon icon={faChevronUp} />}
+        {item.hasItems && <FontAwesomeIcon icon={faChevronUp} />}
       </div>
     )
   }
 
-  renderActiveItemWrapper(item, index) {
-    const hasItems = item.items && (item.items.length > 0)
+  renderOpenItemWrapper(item, index) {
     const tooltip = this.renderTooltip(item.identifier, item.specifier)
 
     if (tooltip) {
       return (
         <li key={index}>
           <OverlayTrigger placement="right" overlay={tooltip}>
-            {this.renderActiveItem(item, hasItems)}
+            {this.renderOpenItem(item)}
           </OverlayTrigger>
-          {hasItems && this.renderItems(item.items)}
+          {item.items && this.renderItems(item.items)}
         </li>
       )
     } else {
       return (
         <li key={index}>
-          {this.renderActiveItem(item, hasItems)}
-          {hasItems && this.renderItems(item.items)}
+          {this.renderOpenItem(item)}
+          {item.items && this.renderItems(item.items)}
         </li>
       )
     }
   }
 
   renderItems(items) {
-    const active = this.getActiveItem(items)
-
     return (
       <ul>
         {
           items.map((item, index) => {
-            if (active == item) {
-              return this.renderActiveItemWrapper(item, index)
+            if (item.items) {
+              return this.renderOpenItemWrapper(item, index)
             } else {
               return this.renderItemWrapper(item, index)
             }

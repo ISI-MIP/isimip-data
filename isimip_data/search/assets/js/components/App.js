@@ -37,19 +37,9 @@ class App extends Component {
 
   componentDidMount() {
     const { location } = this.props
-    const { params } = this.state
 
     CoreApi.fetchSettings().then(settings => {
       this.setState({ settings })
-    })
-
-    FacetApi.fetchFacets().then(facets => {
-      const attributes = facets.map(facet => { return facet.attribute })
-      const params = Object.assign({ page: 1 }, getLocationParams('/search/', location))
-      this.setState({
-        params: params,
-        facets: facets
-      })
     })
 
     DatasetApi.fetchGlossary().then(glossary => {
@@ -61,6 +51,9 @@ class App extends Component {
       sidebar = 'tree'
     }
     this.handleSidebarChange(sidebar)
+
+    const params = Object.assign({ page: 1 }, getLocationParams('/search/', location))
+    this.setState({ params })
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -161,7 +154,7 @@ class App extends Component {
             </div>
           </div>
           {sidebar == 'tree' && <Tree params={params} glossary={glossary} onTreeChange={this.handleAttributeChange}/>}
-          {sidebar == 'facets' && <Facets params={params} facets={facets} glossary={glossary} onFacetChange={this.handleAttributeChange}/>}
+          {sidebar == 'facets' && <Facets params={params} glossary={glossary} onFacetChange={this.handleAttributeChange}/>}
         </div>
         <div className="col-lg-9">
           <Version params={params} onChange={this.handleVersionChange}/>
