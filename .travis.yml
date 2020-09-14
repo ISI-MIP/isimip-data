@@ -27,6 +27,7 @@ before_install:
 install:
 - pip install --upgrade pip setuptools wheel
 - pip install -r requirements/dev.txt
+- pip install -r requirements/prod.txt
 - pip install coveralls
 
 before_script:
