@@ -40,6 +40,7 @@ class DatasetSerializer(serializers.ModelSerializer):
     download_url = serializers.SerializerMethodField()
     filelist_url = serializers.SerializerMethodField()
     wget_url = serializers.SerializerMethodField()
+    trace = serializers.CharField()
 
     class Meta:
         model = Dataset
@@ -61,6 +62,7 @@ class DatasetSerializer(serializers.ModelSerializer):
             'filelist_url',
             'wget_url',
             'files',
+            'trace'
         )
 
     def get_metadata_url(self, obj):

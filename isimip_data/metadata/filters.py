@@ -1,11 +1,14 @@
 import logging
+from pathlib import PurePath
 
 from django.conf import settings
 from django.contrib.postgres.search import (SearchQuery, SearchRank,
                                             TrigramSimilarity)
 from django.db.models import Q
-from isimip_data.metadata.models import Attribute, Word
+from django.db.models.expressions import RawSQL
 from rest_framework.filters import BaseFilterBackend
+
+from isimip_data.metadata.models import Attribute, Word
 
 logger = logging.getLogger(__name__)
 
@@ -96,5 +99,21 @@ class PathFilterBackend(BaseFilterBackend):
             for path in path_list:
                 q |= Q(path__startswith=path)
             queryset = queryset.filter(q)
+
+        return queryset
+
+
+class TreeFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        trace_list = request.GET.getlist('trace')
+        if trace_list:
+            q = Q()
+            for trace in trace_list:
+                q |= Q(trace__startswith=trace)
+
+            queryset = queryset.annotate(trace=RawSQL('''
+                array_to_string(ARRAY(select specifiers->>identifier from unnest(identifiers) as identifier), '/')
+            ''', ())).filter(q)
 
         return queryset

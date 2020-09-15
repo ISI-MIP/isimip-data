@@ -40,7 +40,7 @@ class Tree extends Component {
     const { params } = this.props
 
     return DatasetApi.fetchTree({
-      path: params.path || ''
+      trace: params.trace || ''
     }, {
       signal: this.abortController.signal
     }).then(items => {
@@ -52,44 +52,45 @@ class Tree extends Component {
     const { params, onTreeChange } = this.props
 
     // close all parents
-    if (params.path) {
-      params.path.map(path_param => {
-        if (item.path.indexOf(path_param) == 0) {
-          onTreeChange('path', path_param, false)
+    if (params.trace) {
+      params.trace.map(traceParam => {
+        if (item.trace.indexOf(traceParam) == 0) {
+          onTreeChange('trace', traceParam, false)
         }
       })
     }
 
     // open item
-    onTreeChange('path', item.path, true)
+    onTreeChange('trace', item.trace, true)
   }
 
   handleClose(item) {
     const { params, onTreeChange } = this.props
-    const parentPath = item.path.substring(0, item.path.lastIndexOf('/'))
+    const parentTrail = item.trace.substring(0, item.trace.lastIndexOf('/'))
 
     // close item
-    onTreeChange('path', item.path, false)
+    onTreeChange('trace', item.trace, false)
 
     // close all children
-    params.path.reduce((accumulator, path) => {
-      if (path.indexOf(item.path) == 0) {
-        accumulator.push(path)
+    params.trace.reduce((accumulator, trace) => {
+      if (trace.indexOf(item.trace) == 0) {
+        accumulator.push(trace)
       }
       return accumulator
-    }, []).map(path => {
-      onTreeChange('path', path, false)
+    }, []).map(trace => {
+      console.log(trace);
+      onTreeChange('trace', trace, false)
     })
 
     // open parent if no other child is open
-    const openParent = params.path.reduce((accumulator, path) => {
-      if (item.path.indexOf(parentPath) == 0) {
+    const openParent = params.trace.reduce((accumulator, trace) => {
+      if (trace.indexOf(parentTrail) == 0) {
         accumulator = false
       }
       return accumulator
     }, true)
     if (openParent) {
-      onTreeChange('path', parentPath, true)
+      onTreeChange('trace', parentTrail, true)
     }
   }
 

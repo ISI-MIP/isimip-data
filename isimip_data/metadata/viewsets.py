@@ -1,7 +1,6 @@
 from pathlib import PurePath
 
 from django.conf import settings
-from django.core.cache import cache
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -11,7 +10,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 
 from .filters import (AttributeFilterBackend, PathFilterBackend,
-                      SearchFilterBackend, VersionFilterBackend)
+                      SearchFilterBackend, TreeFilterBackend,
+                      VersionFilterBackend)
 from .models import Attribute, Dataset, File, Tree
 from .serializers import DatasetSerializer, FileSerializer
 from .utils import fetch_glossary
@@ -32,7 +32,8 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         SearchFilterBackend,
         VersionFilterBackend,
         AttributeFilterBackend,
-        PathFilterBackend
+        PathFilterBackend,
+        TreeFilterBackend
     )
     filterset_fields = (
         'name',
@@ -111,48 +112,55 @@ class FileViewSet(ReadOnlyModelViewSet):
 class TreeViewSet(ViewSet):
 
     def list(self, request):
-        try:
-            tree = cache.get_or_set('tree', Tree.objects.using('metadata').first(), 60)
-        except Tree.DoesNotExist:
-            raise NotFound
+        raw_queryset = Tree.objects.using('metadata').raw('''
+            SELECT
+              id, obj.value->'identifier' as identifier, obj.value->'specifier' as specifier
+            FROM
+              trees,
+              jsonb_each(tree_dict) as obj;
+        ''')
 
-        # loop over top level of tree
-        response_list = []
-        for item in tree.tree_dict.values():
-            response_list.append({
-                'path': item.get('specifier'),
-                'specifier': item.get('specifier'),
-                'identifier': item.get('identifier'),
-                'hasItems': bool(item.get('items'))
-            })
+        response_list = [{
+                'identifier': row.identifier,
+                'specifier': row.specifier,
+                'trace': row.specifier
+        } for row in raw_queryset]
 
         # loop over path list arguments
-        path_list = [PurePath(path) for path in request.GET.getlist('path', [])]
-        for path in path_list:
-            current_path = PurePath()
-            current_tree_nodes = tree.tree_dict
-            current_response_nodes = response_list
-            for specifier in path.parts:
-                current_path /= specifier
+        trace_list = [PurePath(trace) for trace in request.GET.getlist('trace', [])]
+        for trace in trace_list:
+            current_trace = PurePath()
+            current_trace_elements = []
+            current_response_list = response_list
+
+            for specifier in trace.parts:
+                current_trace /= specifier
+                current_trace_elements.append(specifier)
 
                 try:
-                    response_node = next(node for node in current_response_nodes if node.get('specifier') == specifier)
+                    response_node = next(item for item in current_response_list if item.get('specifier') == specifier)
                 except StopIteration:
                     raise NotFound
 
                 if 'items' not in response_node:
-                    try:
-                        response_node['items'] = [{
-                            'path': (current_path / item.get('specifier')).as_posix(),
-                            'specifier': item.get('specifier'),
-                            'identifier': item.get('identifier'),
-                            'hasItems': bool(item.get('items'))
-                        } for item in current_tree_nodes[specifier]['items'].values()]
-                    except KeyError:
-                        raise NotFound
+                    placeholder = ', '.join(['%s' for element in current_trace_elements])
+                    raw_queryset = Tree.objects.using('metadata').raw('''
+                        SELECT
+                          id, obj.value->'identifier' as identifier, obj.value->'specifier' as specifier
+                        FROM
+                          trees,
+                          jsonb_extract_path(tree_dict, {}) as parent,
+                          jsonb_each(parent->'items')  as obj;
+                    '''.format(placeholder), current_trace_elements)
 
-                current_tree_nodes = current_tree_nodes[specifier]['items']
-                current_response_nodes = response_node['items']
+                    response_node['items'] = [{
+                        'identifier': row.identifier,
+                        'specifier': row.specifier,
+                        'trace': (current_trace / row.specifier).as_posix()
+                    } for row in raw_queryset]
+
+                current_trace_elements.append('items')
+                current_response_list = response_node['items']
 
         return Response(response_list)
 
