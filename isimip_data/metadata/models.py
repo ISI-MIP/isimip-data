@@ -58,7 +58,6 @@ class File(models.Model):
     size = models.BigIntegerField()
     checksum = models.TextField()
     checksum_type = models.TextField()
-    mime_type = models.TextField()
     specifiers = JSONField()
     identifiers = ArrayField(models.TextField())
     search_vector = SearchVectorField(null=True)
