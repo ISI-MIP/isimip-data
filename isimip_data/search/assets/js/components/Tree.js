@@ -40,7 +40,7 @@ class Tree extends Component {
     const { params } = this.props
 
     return DatasetApi.fetchTree({
-      trace: params.trace || ''
+      tree: params.tree || ''
     }, {
       signal: this.abortController.signal
     }).then(items => {
@@ -52,46 +52,45 @@ class Tree extends Component {
     const { params, onTreeChange } = this.props
 
     // close all parents
-    if (params.trace) {
-      params.trace.map(traceParam => {
-        if (item.trace.indexOf(traceParam) == 0) {
-          onTreeChange('trace', traceParam, false)
+    if (params.tree) {
+      params.tree.map(treeParam => {
+        if (item.tree.indexOf(treeParam) == 0) {
+          onTreeChange('tree', treeParam, false)
         }
       })
     }
 
     // open item
-    onTreeChange('trace', item.trace, true)
+    onTreeChange('tree', item.tree, true)
   }
 
   handleClose(item) {
     const { params, onTreeChange } = this.props
-    const parentTrail = item.trace.substring(0, item.trace.lastIndexOf('/'))
+    const parentTrail = item.tree.substring(0, item.tree.lastIndexOf('/'))
 
     // close item
-    onTreeChange('trace', item.trace, false)
+    onTreeChange('tree', item.tree, false)
 
     // close all children
-    params.trace.reduce((accumulator, trace) => {
-      if (trace.indexOf(item.trace) == 0) {
-        accumulator.push(trace)
+    params.tree.reduce((accumulator, tree) => {
+      if (tree.indexOf(item.tree) == 0) {
+        accumulator.push(tree)
       }
       return accumulator
-    }, []).map(trace => {
-      console.log(trace);
-      onTreeChange('trace', trace, false)
+    }, []).map(tree => {
+      onTreeChange('tree', tree, false)
     })
 
     // open parent if no other child is open
     if (parentTrail) {
-      const openParent = params.trace.reduce((accumulator, trace) => {
-        if (trace.indexOf(parentTrail) == 0) {
+      const openParent = params.tree.reduce((accumulator, tree) => {
+        if (tree.indexOf(parentTrail) == 0) {
           accumulator = false
         }
         return accumulator
       }, true)
       if (openParent) {
-        onTreeChange('trace', parentTrail, true)
+        onTreeChange('tree', parentTrail, true)
       }
     }
   }

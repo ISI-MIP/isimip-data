@@ -123,19 +123,19 @@ class TreeViewSet(ViewSet):
         response_list = [{
                 'identifier': row.identifier,
                 'specifier': row.specifier,
-                'trace': row.specifier
+                'tree': row.specifier
         } for row in raw_queryset]
 
         # loop over path list arguments
-        trace_list = [PurePath(trace) for trace in request.GET.getlist('trace', [])]
-        for trace in trace_list:
-            current_trace = PurePath()
-            current_trace_elements = []
+        tree_list = [PurePath(tree) for tree in request.GET.getlist('tree', [])]
+        for tree in tree_list:
+            current_tree = PurePath()
+            current_tree_elements = []
             current_response_list = response_list
 
-            for specifier in trace.parts:
-                current_trace /= specifier
-                current_trace_elements.append(specifier)
+            for specifier in tree.parts:
+                current_tree /= specifier
+                current_tree_elements.append(specifier)
 
                 try:
                     response_node = next(item for item in current_response_list if item.get('specifier') == specifier)
@@ -143,7 +143,7 @@ class TreeViewSet(ViewSet):
                     raise NotFound
 
                 if 'items' not in response_node:
-                    placeholder = ', '.join(['%s' for element in current_trace_elements])
+                    placeholder = ', '.join(['%s' for element in current_tree_elements])
                     raw_queryset = Tree.objects.using('metadata').raw('''
                         SELECT
                           id, obj.value->'identifier' as identifier, obj.value->'specifier' as specifier
@@ -151,15 +151,15 @@ class TreeViewSet(ViewSet):
                           trees,
                           jsonb_extract_path(tree_dict, {}) as parent,
                           jsonb_each(parent->'items')  as obj;
-                    '''.format(placeholder), current_trace_elements)
+                    '''.format(placeholder), current_tree_elements)
 
                     response_node['items'] = [{
                         'identifier': row.identifier,
                         'specifier': row.specifier,
-                        'trace': (current_trace / row.specifier).as_posix()
+                        'tree': (current_tree / row.specifier).as_posix()
                     } for row in raw_queryset]
 
-                current_trace_elements.append('items')
+                current_tree_elements.append('items')
                 current_response_list = response_node['items']
 
         return Response(response_list)
