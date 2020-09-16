@@ -73,21 +73,18 @@ class Facet extends Component {
     this.setState({ isOpen: !isOpen }, this.fetch)
   }
 
-  renderTooltip(attribute, identifier, specifier) {
-    const { glossary } = this.props
-    const properties = getValueOrNull(glossary, identifier, specifier)
-
-    if (properties && (properties.title || properties.description)) {
+  renderTooltip(properties) {
+    if (properties && (properties.long_name || properties.description)) {
       return (
         <Tooltip>
-          {properties.title && <strong>{properties.title}</strong>}
-          {properties.description && <div>{properties.description}</div>}
+          {properties.long_name}
+          {properties.description}
         </Tooltip>
       )
     }
   }
 
-  renderListItem(attribute, specifier, isChecked, count) {
+  renderListItem(attribute, specifier, title, isChecked, count) {
     const id = 'facet-' + attribute + '-' + specifier
 
     return (
@@ -95,7 +92,7 @@ class Facet extends Component {
         <label className="form-check-label" htmlFor={id}>
           <input type="checkbox" className="form-check-input" id={id}
                  checked={isChecked} onChange={e => this.handleChange(specifier, e)} />
-            {specifier}
+            {title || specifier}
         </label>
         <span className="badge badge-secondary badge-pill pull-right">
           {count}
@@ -105,23 +102,28 @@ class Facet extends Component {
   }
 
   renderListGroup(attribute, items, checked) {
+    const { glossary } = this.props
+
     return (
       <ul className="list-group list-group-flush">
         {
           items.map((item, index) => {
             const [specifier, count] = item
+            const properties = getValueOrNull(glossary, attribute, specifier)
+            const title = properties ? properties.title : null
+
             if (specifier !== null) {
               const isChecked = (checked.indexOf(specifier) > -1)
-              const tooltip = this.renderTooltip(attribute, specifier)
+              const tooltip = this.renderTooltip(properties)
 
               if (tooltip) {
                 return (
                   <OverlayTrigger key={specifier} placement="right" overlay={tooltip}>
-                    {this.renderListItem(attribute, specifier, isChecked, count)}
+                    {this.renderListItem(attribute, specifier, title, isChecked, count)}
                   </OverlayTrigger>
                 )
               } else {
-                return this.renderListItem(attribute, specifier, isChecked, count)
+                return this.renderListItem(attribute, specifier, title, isChecked, count)
               }
             }
           })

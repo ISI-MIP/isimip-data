@@ -96,15 +96,25 @@ class Tree extends Component {
     }
   }
 
-  renderTooltip(identifier, specifier) {
+  updateItem(item) {
     const { glossary } = this.props
-    const properties = getValueOrNull(glossary, identifier, specifier)
+    const properties = getValueOrNull(glossary, item.identifier, item.specifier)
 
-    if (properties && (properties.title || properties.description)) {
+    if (properties) {
+      item.title = properties.title
+      item.long_name = properties.long_name
+      item.description = properties.description
+    }
+
+    return item
+  }
+
+  renderTooltip(item) {
+    if (item.long_name || item.description) {
       return (
         <Tooltip>
-          {properties.title && <strong>{properties.title}</strong>}
-          {properties.description && <div>{properties.description}</div>}
+          {item.long_name}
+          {item.description}
         </Tooltip>
       )
     }
@@ -115,7 +125,7 @@ class Tree extends Component {
       <div className="tree-item d-flex justify-content-between align-items-center"
            onClick={e => this.handleOpen(item)}>
         <span className="d-flex align-items-center">
-          <input className="mr-2" type="checkbox" checked={false} readOnly /> {item.specifier}
+          <input className="mr-2" type="checkbox" checked={false} readOnly /> {item.title || item.specifier}
         </span>
         {item.hasItems && <FontAwesomeIcon icon={faChevronDown} />}
       </div>
@@ -123,7 +133,7 @@ class Tree extends Component {
   }
 
   renderItemWrapper(item, index) {
-    const tooltip = this.renderTooltip(item.identifier, item.specifier)
+    const tooltip = this.renderTooltip(item)
 
     if (tooltip) {
       return (
@@ -147,7 +157,7 @@ class Tree extends Component {
       <div className="tree-item d-flex justify-content-between align-items-center"
            onClick={e => this.handleClose(item)}>
         <span className="d-flex align-items-center">
-          <input className="mr-2" type="checkbox" checked={true} readOnly /> {item.specifier}
+          <input className="mr-2" type="checkbox" checked={true} readOnly /> {item.title || item.specifier}
         </span>
         {item.hasItems && <FontAwesomeIcon icon={faChevronUp} />}
       </div>
@@ -155,7 +165,7 @@ class Tree extends Component {
   }
 
   renderOpenItemWrapper(item, index) {
-    const tooltip = this.renderTooltip(item.identifier, item.specifier)
+    const tooltip = this.renderTooltip(item)
 
     if (tooltip) {
       return (
@@ -181,6 +191,8 @@ class Tree extends Component {
       <ul>
         {
           items.map((item, index) => {
+            item = this.updateItem(item)
+
             if (item.items) {
               return this.renderOpenItemWrapper(item, index)
             } else {
