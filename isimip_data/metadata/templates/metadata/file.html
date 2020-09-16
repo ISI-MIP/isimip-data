@@ -18,6 +18,7 @@
             {{ file.attributes.description }}
         </p>
 
+        <h4>{% trans 'Size' %}: {{ file.size|filesizeformat }}</h4>
         <h4>{% trans 'Version' %}: {{ file.version }}</h4>
         <h4>{% trans 'ISIMIP ID' %}: {{ file.id }}</h4>
         <h4>{% trans 'Path' %}: {{ file.path }}</h4>

@@ -113,36 +113,38 @@ class Result extends Component {
 
     return (
       <li className="list-group-item">
-        <div className="row">
-          <div className="col-lg-3">
-            <strong>ISIMIP id</strong>
-          </div>
-          <div className="col-lg-9">
-            {dataset.id}
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-lg-3">
-            <strong>ISIMIP path</strong>
-          </div>
-          <div className="col-lg-9">
-            {dataset.path}
-          </div>
-        </div>
+        <div className="mb-2">
           <div className="row">
-          <div className="col-lg-3">
-            <strong>Version</strong>
+            <div className="col-lg-3">
+              <strong>Size</strong>
+            </div>
+            <div className="col-lg-9">
+              {get_size(dataset.size)}
+            </div>
           </div>
-          <div className="col-lg-9">
-            {dataset.version}
+          <div className="row">
+            <div className="col-lg-3">
+              <strong>Version</strong>
+            </div>
+            <div className="col-lg-9">
+              {dataset.version}
+            </div>
           </div>
-        </div>
-        <div className="row mb-2">
-          <div className="col-lg-3">
-            <strong>Size</strong>
+          <div className="row">
+            <div className="col-lg-3">
+              <strong>ISIMIP id</strong>
+            </div>
+            <div className="col-lg-9">
+              {dataset.id}
+            </div>
           </div>
-          <div className="col-lg-9">
-            {get_size(dataset.size)}
+          <div className="row">
+            <div className="col-lg-3">
+              <strong>ISIMIP path</strong>
+            </div>
+            <div className="col-lg-9">
+              {dataset.path}
+            </div>
           </div>
         </div>
         {

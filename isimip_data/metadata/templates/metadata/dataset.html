@@ -18,6 +18,7 @@
             {{ dataset.attributes.description }}
         </p>
 
+        <h4>{% trans 'Size' %}: {{ dataset.size|filesizeformat }}</h4>
         <h4>{% trans 'Version' %}: {{ dataset.version }}</h4>
         <h4>{% trans 'Internal ID' %}: {{ dataset.id }}</h4>
         <h4>{% trans 'Path' %}: {{ dataset.path }}</h4>
