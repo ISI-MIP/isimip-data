@@ -83,14 +83,16 @@ class Tree extends Component {
     })
 
     // open parent if no other child is open
-    const openParent = params.trace.reduce((accumulator, trace) => {
-      if (trace.indexOf(parentTrail) == 0) {
-        accumulator = false
+    if (parentTrail) {
+      const openParent = params.trace.reduce((accumulator, trace) => {
+        if (trace.indexOf(parentTrail) == 0) {
+          accumulator = false
+        }
+        return accumulator
+      }, true)
+      if (openParent) {
+        onTreeChange('trace', parentTrail, true)
       }
-      return accumulator
-    }, true)
-    if (openParent) {
-      onTreeChange('trace', parentTrail, true)
     }
   }
 
