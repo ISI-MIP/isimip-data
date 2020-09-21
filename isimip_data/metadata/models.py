@@ -19,8 +19,6 @@ class Dataset(models.Model):
     path = models.TextField()
     version = models.TextField()
     size = models.BigIntegerField()
-    checksum = models.TextField()
-    checksum_type = models.TextField()
     specifiers = JSONField()
     identifiers = ArrayField(models.TextField())
     search_vector = SearchVectorField(null=True)

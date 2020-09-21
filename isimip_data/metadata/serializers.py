@@ -48,8 +48,6 @@ class DatasetSerializer(serializers.ModelSerializer):
             'path',
             'version',
             'size',
-            'checksum',
-            'checksum_type',
             'specifiers',
             'identifiers',
             'search_rank',

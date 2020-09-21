@@ -21,7 +21,7 @@ def metadata(request):
         except ValueError:
             uuid = None
 
-        dataset = Dataset.objects.using('metadata').filter(Q(id=uuid) | Q(path=query) | Q(checksum=query)).first()
+        dataset = Dataset.objects.using('metadata').filter(Q(id=uuid) | Q(path=query)).first()
         if dataset:
             return redirect('dataset', dataset.id)
 

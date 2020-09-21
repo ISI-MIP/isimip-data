@@ -1,5 +1,4 @@
 import pytest
-
 from django.core.management import call_command
 from django.urls import reverse
 
@@ -17,7 +16,7 @@ def test_metadata(client, datasets):
 
 def test_metadata_dataset(client, datasets):
     for dataset in datasets:
-        url = reverse('metadata') + '?query=' + dataset.checksum
+        url = reverse('metadata') + '?query=' + dataset.id
 
         response = client.get(url)
         assert response.status_code == 302
@@ -26,7 +25,7 @@ def test_metadata_dataset(client, datasets):
 
 def test_metadata_file(client, files):
     for file in files:
-        url = reverse('metadata') + '?query=' + file.checksum
+        url = reverse('metadata') + '?query=' + file.id
 
         response = client.get(url)
         assert response.status_code == 302
