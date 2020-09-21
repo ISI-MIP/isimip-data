@@ -107,6 +107,7 @@
         </ul>
     </div>
 
+    {% if file.dataset.files.count > 1 %}
     <h3>{% trans 'Other files in the dataset' %}</h3>
     <div class="card">
         <ul class="list-group list-group-flush">
@@ -122,6 +123,7 @@
             {% endfor %}
         </ul>
     </div>
+    {% endif %}
 
     {% if versions %}
     <h3>{% trans 'Other versions of this file' %}</h3>
