@@ -1,1 +1,119 @@
-[{"model": "search.facet", "pk": 1, "fields": {"title": "ISIMIP simulation round", "attribute": "simulation_round", "order": 1}}, {"model": "search.facet", "pk": 2, "fields": {"title": "Data product", "attribute": "product", "order": 2}}, {"model": "search.facet", "pk": 3, "fields": {"title": "Category", "attribute": "category", "order": 3}}, {"model": "search.facet", "pk": 4, "fields": {"title": "Sector", "attribute": "sector", "order": 4}}, {"model": "search.facet", "pk": 5, "fields": {"title": "Climate scenario", "attribute": "climate_scenario", "order": 6}}, {"model": "search.facet", "pk": 6, "fields": {"title": "Socio-economic scenario", "attribute": "soc_scenario", "order": 7}}, {"model": "search.facet", "pk": 7, "fields": {"title": "Sensitivity scenario", "attribute": "sens_scenario", "order": 8}}, {"model": "search.facet", "pk": 8, "fields": {"title": "Climate forcing", "attribute": "climate_forcing", "order": 5}}, {"model": "search.facet", "pk": 9, "fields": {"title": "Variable", "attribute": "variable", "order": 10}}, {"model": "search.facet", "pk": 10, "fields": {"title": "Crop", "attribute": "crop", "order": 11}}, {"model": "search.facet", "pk": 11, "fields": {"title": "Forest stand", "attribute": "forest_stand", "order": 17}}, {"model": "search.facet", "pk": 12, "fields": {"title": "Irrigation", "attribute": "irrigation", "order": 12}}, {"model": "search.facet", "pk": 13, "fields": {"title": "PFT", "attribute": "pft", "order": 13}}, {"model": "search.facet", "pk": 14, "fields": {"title": "Species", "attribute": "species", "order": 14}}, {"model": "search.facet", "pk": 15, "fields": {"title": "Ocean region", "attribute": "ocean_region", "order": 15}}, {"model": "search.facet", "pk": 16, "fields": {"title": "River basin", "attribute": "river_basin", "order": 16}}, {"model": "search.facet", "pk": 17, "fields": {"title": "Impact model", "attribute": "model", "order": 9}}]
+[
+  {
+    "model": "search.facet",
+    "pk": 1,
+    "fields": {
+      "title": "ISIMIP simulation round",
+      "attribute": "simulation_round",
+      "order": 1
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 2,
+    "fields": {
+      "title": "Data product",
+      "attribute": "product",
+      "order": 2
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 3,
+    "fields": {
+      "title": "Input category",
+      "attribute": "category",
+      "order": 3
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 5,
+    "fields": {
+      "title": "Climate scenario",
+      "attribute": "climate_scenario",
+      "order": 8
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 8,
+    "fields": {
+      "title": "Climate forcing",
+      "attribute": "climate_forcing",
+      "order": 7
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 18,
+    "fields": {
+      "title": "Climate variable",
+      "attribute": "climate_variable",
+      "order": 9
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 19,
+    "fields": {
+      "title": "Input subcategory",
+      "attribute": "subcategory",
+      "order": 5
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 20,
+    "fields": {
+      "title": "Socio-economic scenario",
+      "attribute": "soc_scenario",
+      "order": 10
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 21,
+    "fields": {
+      "title": "Socio-economic dataset",
+      "attribute": "soc_dataset",
+      "order": 11
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 22,
+    "fields": {
+      "title": "Geographic dataset",
+      "attribute": "geo_dataset",
+      "order": 12
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 23,
+    "fields": {
+      "title": "Output variable",
+      "attribute": "variable",
+      "order": 13
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 24,
+    "fields": {
+      "title": "Temporal resolution",
+      "attribute": "timestep",
+      "order": 14
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 25,
+    "fields": {
+      "title": "Sector",
+      "attribute": "sector",
+      "order": 6
+    }
+  }
+]
