@@ -64,3 +64,9 @@ def prettify_attributes(attribute_list):
         attributes[key.replace('_', ' ').title()] = pretty_value
 
     return attributes
+
+
+def get_rights(path):
+    for rights_path, rights in settings.MODEL_RIGHTS:
+        if path.startswith(rights_path):
+            return settings.RIGHTS[rights]

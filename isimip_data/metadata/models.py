@@ -7,6 +7,7 @@ from django.contrib.postgres.search import SearchVectorField
 from django.db import models
 
 from .managers import DatasetManager
+from .utils import get_rights
 
 
 class Dataset(models.Model):
@@ -43,6 +44,10 @@ class Dataset(models.Model):
     @property
     def specifier_list(self):
         return [(identifier, self.specifiers.get(identifier)) for identifier in self.identifiers]
+
+    @property
+    def rights(self):
+        return get_rights(self.path)
 
 
 class File(models.Model):
@@ -95,6 +100,10 @@ class File(models.Model):
     @property
     def specifier_list(self):
         return [(identifier, self.specifiers.get(identifier)) for identifier in self.identifiers]
+
+    @property
+    def rights(self):
+        return get_rights(self.path)
 
 
 class Resource(models.Model):

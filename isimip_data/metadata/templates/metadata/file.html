@@ -49,6 +49,20 @@
                 <img src="{{ file.thumbnail_url }}" class="card-img-top" alt="{{ file.path }}">
             </div>
 
+            {% if file.rights %}
+            <h3>{% trans 'Rights' %}</h3>
+            <div class="card">
+                <div class="card-body text-center">
+                    <p class="card-text">
+                        <img src="{% static file.rights.image %}" alt="{{ file.rights.label }}"/>
+                    </p>
+                    <p class="card-text">
+                        <a href="{{ file.rights.url }}">{{ file.rights.label }}</a>
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+
             <h3>{% trans 'Download' %}</h3>
             <div class="card">
                 <ul class="list-group list-group-flush">

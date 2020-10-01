@@ -48,6 +48,20 @@
                 <img src="{{ dataset.files.first.thumbnail_url }}" class="card-img-top" alt="{{ dataset.path }}">
             </div>
 
+            {% if dataset.rights %}
+            <h3>{% trans 'Rights' %}</h3>
+            <div class="card">
+                <div class="card-body text-center">
+                    <p class="card-text">
+                        <img src="{% static dataset.rights.image %}" alt="{{ dataset.rights.label }}"/>
+                    </p>
+                    <p class="card-text">
+                        <a href="{{ dataset.rights.url }}">{{ dataset.rights.label }}</a>
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+
             {% if dataset.is_global and dataset.is_netcdf %}
             <h3>{% trans 'Download' %}</h3>
             <div class="card">
