@@ -21,11 +21,16 @@ class Badges extends Component {
   }
 
   render() {
-    const { glossary, version, specifiers } = this.props
+    const { glossary, version, specifiers, rights } = this.props
 
     return (
       <div>
         <p className="card-text badges float-right">
+          <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>{rights.rights}</strong></Tooltip>}>
+            <span className="badge badge-light">
+              {rights.short}
+            </span>
+          </OverlayTrigger>
           <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>Version</strong></Tooltip>}>
             <span className="badge badge-dark">
               {version}
@@ -67,7 +72,8 @@ class Badges extends Component {
 Badges.propTypes = {
   glossary: PropTypes.object.isRequired,
   specifiers: PropTypes.object.isRequired,
-  version: PropTypes.string.isRequired
+  version: PropTypes.string.isRequired,
+  rights: PropTypes.object.isRequired
 }
 
 export default Badges

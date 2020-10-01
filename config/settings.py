@@ -175,24 +175,28 @@ PROTOCOL_LOCATIONS = os.getenv('PROTOCOL_LOCATIONS', '').split()
 
 RIGHTS = {
     'CC0': {
+        'rights': 'CC0 1.0 Universal Public Domain Dedication',
+        'rightsURI': 'https://creativecommons.org/publicdomain/zero/1.0/deed.en',
+        'short': 'CC0 1.0',
         'image': 'images/cc/cc0.png',
-        'label': 'CC0 1.0 Universal (CC0 1.0) Public Domain Dedication',
-        'url': 'https://creativecommons.org/publicdomain/zero/1.0/deed.en'
     },
     'CC-BY': {
+        'rights': 'Attribution 4.0 International',
+        'rightsURI': 'https://creativecommons.org/licenses/by/4.0/',
+        'short': 'CC BY 4.0',
         'image': 'images/cc/by.png',
-        'label': 'Attribution 4.0 International (CC BY 4.0)',
-        'url': 'https://creativecommons.org/licenses/by/4.0/'
     },
     'CC-BY-NC': {
+        'rights': 'Attribution-ShareAlike 4.0 International',
+        'rightsURI': 'https://creativecommons.org/licenses/by-sa/4.0/',
+        'short': 'CC BY-SA 4.0',
         'image': 'images/cc/by_sa.png',
-        'label': 'Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)',
-        'url': 'https://creativecommons.org/licenses/by-sa/4.0/'
     },
     'CC-BY-SA': {
+        'rights': 'Attribution-NonCommercial 4.0 International',
+        'rightsURI': 'https://creativecommons.org/licenses/by-nc/4.0/',
+        'short': 'CC BY-NC 4.0',
         'image': 'images/cc/by_nc.png',
-        'label': 'Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)',
-        'url': 'https://creativecommons.org/licenses/by-nc/4.0/'
     }
 }
 

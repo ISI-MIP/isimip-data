@@ -54,10 +54,12 @@
             <div class="card">
                 <div class="card-body text-center">
                     <p class="card-text">
-                        <img src="{% static file.rights.image %}" alt="{{ file.rights.label }}"/>
+                        <img src="{% static file.rights.image %}" alt="{{ file.rights.rights }}"/>
                     </p>
                     <p class="card-text">
-                        <a href="{{ file.rights.url }}">{{ file.rights.label }}</a>
+                        <a href="{{ file.rights.rightsURI }}">
+                            {{ file.rights.rights }} <br /> ({{ file.rights.short }})
+                        </a>
                     </p>
                 </div>
             </div>

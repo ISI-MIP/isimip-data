@@ -53,10 +53,12 @@
             <div class="card">
                 <div class="card-body text-center">
                     <p class="card-text">
-                        <img src="{% static dataset.rights.image %}" alt="{{ dataset.rights.label }}"/>
+                        <img src="{% static dataset.rights.image %}" alt="{{ dataset.rights.rights }}"/>
                     </p>
                     <p class="card-text">
-                        <a href="{{ dataset.rights.url }}">{{ dataset.rights.label }}</a>
+                        <a href="{{ dataset.rights.rightsURI }}">
+                            {{ dataset.rights.rights }} <br /> ({{ dataset.rights.short }})
+                        </a>
                     </p>
                 </div>
             </div>
