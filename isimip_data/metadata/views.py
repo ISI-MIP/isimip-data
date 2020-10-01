@@ -1,7 +1,6 @@
 import json
 from uuid import UUID
 
-from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -72,7 +71,6 @@ def file(request, pk=None, path=None):
     })
 
 
-@login_required
 def resources(request):
     return render(request, 'metadata/resources.html', {
         'resources': Resource.objects.using('metadata').all()
@@ -109,7 +107,6 @@ def resource_datacite_xml(request, doi=None):
     return response
 
 
-@login_required
 def attributes(request):
     attributes_list = []
     for attribute in Attribute.objects.using('metadata').all():
