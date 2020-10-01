@@ -26,10 +26,7 @@
             <h3>{% trans 'Cite as' %}</h3>
             <div class="card">
                 <div class="card-body">
-                    <p class="cite-as">
-                        <b>{{ resource.creators }} ({{ resource.datacite.publicationYear }}):</b>
-                        <i>{{ resource.title }}</i> ({{ resource.major_version }}). {{ resource.datacite.publisher }}.
-                        <a class="doi-link" href="{{ resource.doi_url }}">{{ resource.doi_url }}</a>
+                    {% include 'metadata/_citation.html' %}
                 </div>
             </div>
         </div>

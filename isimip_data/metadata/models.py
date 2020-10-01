@@ -115,7 +115,7 @@ class Resource(models.Model):
     doi = models.TextField()
     datacite = JSONField()
 
-    datasets = models.ManyToManyField(Dataset)
+    datasets = models.ManyToManyField(Dataset, related_name='resources')
 
     class Meta:
         db_table = 'resources'
