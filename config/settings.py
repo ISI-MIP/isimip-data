@@ -186,13 +186,13 @@ RIGHTS = {
         'short': 'CC BY 4.0',
         'image': 'images/cc/by.png',
     },
-    'CC-BY-NC': {
+    'CC-BY-SA': {
         'rights': 'Attribution-ShareAlike 4.0 International',
         'rightsURI': 'https://creativecommons.org/licenses/by-sa/4.0/',
         'short': 'CC BY-SA 4.0',
         'image': 'images/cc/by_sa.png',
     },
-    'CC-BY-SA': {
+    'CC-BY-NC': {
         'rights': 'Attribution-NonCommercial 4.0 International',
         'rightsURI': 'https://creativecommons.org/licenses/by-nc/4.0/',
         'short': 'CC BY-NC 4.0',
