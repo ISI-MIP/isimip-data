@@ -145,7 +145,7 @@ class Resource(models.Model):
 
     @property
     def creators(self):
-        return ', '.join([creator.get('name') for creator in self.datacite.get('creators', [])])
+        return ', '.join([creator.get('name', '') for creator in self.datacite.get('creators', [])])
 
     @property
     def publication_date(self):
