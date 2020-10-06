@@ -56,12 +56,11 @@ def test_file_path(client, files):
         assert response.status_code == 200
 
 
-@pytest.mark.parametrize('username,password,status_code', (
-    ('admin', 'admin', 200),
-    ('anonymous', None, 302)
-))
-def test_attributes(client, db, username, password, status_code):
-    client.login(username=username, password=password)
-
+def test_attributes(client, db):
     response = client.get(reverse('attributes'))
-    assert response.status_code == status_code
+    assert response.status_code == 200
+
+
+def test_resources(client, db):
+    response = client.get(reverse('resources'))
+    assert response.status_code == 200
