@@ -26,11 +26,13 @@ class Badges extends Component {
     return (
       <div>
         <p className="card-text badges float-right">
-          <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>{rights.rights}</strong></Tooltip>}>
-            <span className="badge badge-light">
-              {rights.short}
-            </span>
-          </OverlayTrigger>
+          {rights &&
+            <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>{rights.rights}</strong></Tooltip>}>
+              <span className="badge badge-light">
+                {rights.short}
+              </span>
+            </OverlayTrigger>
+          }
           <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>Version</strong></Tooltip>}>
             <span className="badge badge-dark">
               {version}
@@ -73,7 +75,7 @@ Badges.propTypes = {
   glossary: PropTypes.object.isRequired,
   specifiers: PropTypes.object.isRequired,
   version: PropTypes.string.isRequired,
-  rights: PropTypes.object.isRequired
+  rights: PropTypes.object
 }
 
 export default Badges
