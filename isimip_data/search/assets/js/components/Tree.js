@@ -189,7 +189,7 @@ class Tree extends Component {
     return (
       <ul>
         {
-          items.map((item, index) => {
+          items.sort((a, b) => a.specifier > b.specifier ? 1 : -1).map((item, index) => {
             item = this.updateItem(item)
 
             if (item.items) {
