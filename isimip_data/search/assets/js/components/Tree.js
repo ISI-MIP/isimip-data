@@ -208,7 +208,7 @@ class Tree extends Component {
 
     return (
       <div className="card tree">
-        {this.renderItems(tree)}
+        {tree.length > 0 && this.renderItems(tree)}
       </div>
     )
   }
