@@ -67,9 +67,7 @@
                 <img src="{{ file.thumbnail_url }}" class="card-img-top" alt="{{ file.path }}">
             </div>
 
-            {% if file.rights %}
             {% include 'metadata/_rights.html' with rights=file.rights %}
-            {% endif %}
 
             <h3>{% trans 'Download' %}</h3>
             <div class="card">

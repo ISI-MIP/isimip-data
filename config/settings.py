@@ -174,27 +174,23 @@ FILES_API_URL = os.getenv('FILES_API_URL')
 PROTOCOL_LOCATIONS = os.getenv('PROTOCOL_LOCATIONS', '').split()
 
 RIGHTS = {
-    'CC0': {
+    'https://creativecommons.org/publicdomain/zero/1.0/': {
         'rights': 'CC0 1.0 Universal Public Domain Dedication',
-        'rightsURI': 'https://creativecommons.org/publicdomain/zero/1.0/deed.en',
         'short': 'CC0 1.0',
         'image': 'images/cc/cc0.png',
     },
-    'CC-BY': {
+    'https://creativecommons.org/licenses/by/4.0/': {
         'rights': 'Attribution 4.0 International',
-        'rightsURI': 'https://creativecommons.org/licenses/by/4.0/',
         'short': 'CC BY 4.0',
         'image': 'images/cc/by.png',
     },
-    'CC-BY-SA': {
+    'https://creativecommons.org/licenses/by-sa/4.0/': {
         'rights': 'Attribution-ShareAlike 4.0 International',
-        'rightsURI': 'https://creativecommons.org/licenses/by-sa/4.0/',
         'short': 'CC BY-SA 4.0',
         'image': 'images/cc/by_sa.png',
     },
-    'CC-BY-NC': {
+    'https://creativecommons.org/licenses/by-nc/4.0/': {
         'rights': 'Attribution-NonCommercial 4.0 International',
-        'rightsURI': 'https://creativecommons.org/licenses/by-nc/4.0/',
         'short': 'CC BY-NC 4.0',
         'image': 'images/cc/by_nc.png',
     }
