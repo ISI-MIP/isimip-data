@@ -156,6 +156,16 @@ class Resource(models.Model):
             except ValueError:
                 return datetime.strptime(date_string, '%Y')
 
+    @property
+    def rights(self):
+        for rights in self.datacite.get('rightsList', []):
+            rights_uri = rights.get('rightsURI')
+            if rights_uri:
+                rights = settings.RIGHTS.get(rights_uri)
+                if rights:
+                    rights['rights_uri'] = rights_uri
+                    return rights
+
 
 class Tree(models.Model):
 

@@ -68,19 +68,7 @@
             </div>
 
             {% if file.rights %}
-            <h3>{% trans 'Rights' %}</h3>
-            <div class="card">
-                <div class="card-body text-center">
-                    <p class="card-text">
-                        <img src="{% static file.rights.image %}" alt="{{ file.rights.rights }}"/>
-                    </p>
-                    <p class="card-text">
-                        <a href="{{ file.rights.rightsURI }}">
-                            {{ file.rights.rights }} <br /> ({{ file.rights.short }})
-                        </a>
-                    </p>
-                </div>
-            </div>
+            {% include 'metadata/_rights.html' with rights=file.rights %}
             {% endif %}
 
             <h3>{% trans 'Download' %}</h3>

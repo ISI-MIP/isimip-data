@@ -67,6 +67,9 @@ def prettify_attributes(attribute_list):
 
 
 def get_rights(path):
-    for rights_path, rights in settings.MODEL_RIGHTS:
+    for rights_path, rights_uri in settings.MODEL_RIGHTS:
         if path.startswith(rights_path):
-            return settings.RIGHTS[rights]
+            rights = settings.RIGHTS.get(rights_uri)
+            if rights:
+                rights['rights_uri'] = rights_uri
+                return rights

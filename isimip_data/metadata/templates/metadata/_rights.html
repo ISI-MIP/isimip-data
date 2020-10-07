@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load static %}
+
+<h3>{% trans 'Rights' %}</h3>
+<div class="card">
+    <div class="card-body text-center">
+        <p class="card-text">
+            <img src="{% static rights.image %}" alt="{{ rights.rights }}"/>
+        </p>
+        <p class="card-text">
+            <a href="{{ rights.rights_uri }}">
+                {{ rights.rights }} <br /> ({{ rights.short }})
+            </a>
+        </p>
+    </div>
+</div>

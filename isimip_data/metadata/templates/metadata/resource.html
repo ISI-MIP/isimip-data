@@ -87,16 +87,7 @@
         </div>
 
         <div class="col-sm-4">
-            <h3>{% trans 'Rights' %}</h3>
-            <div class="card">
-                <div class="card-body">
-                    <p>
-                        {% for rights in resource.datacite.rightsList %}
-                        <a href="{{ rights.rightsURI }}">{{ rights.rights }}</a>
-                        {% endfor %}
-                    </p>
-                </div>
-            </div>
+            {% include 'metadata/_rights.html' with rights=resource.rights %}
 
             <h3>{% trans 'Export' %}</h3>
             <div class="card">
