@@ -54,12 +54,9 @@
                         <dd class="col-sm-9">
                             <ul class="list-unstyled">
                                 {% for creator in resource.datacite.creators %}
-                                <li>{{ creator.givenName }} {{ creator.familyName }}
-                                    {% if creator.nameIdentifier %}
-                                    <a class="orcid-link" href="https://orcid.org/{{ creator.nameIdentifier }}">
-                                        {{ creator.nameIdentifier }}
-                                    </a>
-                                    {% endif %}
+                                <li>
+                                    {{ creator.givenName }} {{ creator.familyName }}
+                                    {% include 'metadata/_name_identifier.html' with name=creator %}
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -71,20 +68,14 @@
                             <ul class="list-unstyled">
                                 {% for contributor in resource.datacite.contributors %}
                                 {% if contributor.nameType == 'Organizational' %}
-                                <li>{{ contributor.name }} <i>({{ contributor.contributorType }})</i>
-                                    {% if contributor.nameIdentifier %}
-                                    <a class="ror-link" href="https://ror.org/{{ contributor.nameIdentifier }}">
-                                        {{ contributor.nameIdentifier }}
-                                    </a>
-                                    {% endif %}
+                                <li>
+                                    {{ contributor.name }} <i>({{ contributor.contributorType }})</i>
+                                    {% include 'metadata/_name_identifier.html' with name=contributor %}
                                 </li>
                                 {% else %}
-                                <li>{{ contributor.givenName }} {{ contributor.familyName }} <i>({{ contributor.contributorType }})</i>
-                                    {% if contributor.nameIdentifier %}
-                                    <a class="orcid-link" href="https://orcid.org/{{ contributor.nameIdentifier }}">
-                                        {{ contributor.nameIdentifier }}
-                                    </a>
-                                    {% endif %}
+                                <li>
+                                    {{ contributor.givenName }} {{ contributor.familyName }} <i>({{ contributor.contributorType }})</i>
+                                    {% include 'metadata/_name_identifier.html' with name=contributor %}
                                 </li>
                                 {% endif %}
                                 {% endfor %}

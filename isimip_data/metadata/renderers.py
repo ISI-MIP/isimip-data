@@ -5,6 +5,11 @@ from xml.sax.saxutils import XMLGenerator
 
 class DataCiteRenderer(object):
 
+    scheme_uri_choices = {
+        'ORCID': 'https:/orcid.org',
+        'ROR': 'https://ror.org'
+    }
+
     def __init__(self):
         self.stream = io.StringIO()
         self.xml = XMLGenerator(self.stream, 'utf-8')
@@ -57,16 +62,18 @@ class DataCiteRenderer(object):
                 self.render_node('familyName', {}, creator.get('familyName'))
 
             if creator.get('nameIdentifier'):
+                scheme = creator.get('nameIdentifierScheme', 'ORCID')
                 self.render_node('nameIdentifier', {
-                    'nameIdentifierScheme': creator.get('nameIdentifierScheme', 'ORCID'),
-                    'schemeURI': creator.get('schemeURI', 'https:/orcid.org')
+                    'nameIdentifierScheme': scheme,
+                    'schemeURI': self.scheme_uri_choices.get(scheme)
                 }, creator.get('nameIdentifier'))
 
             for affiliation in creator.get('affiliations', []):
+                scheme = affiliation.get('affiliationIdentifierScheme', 'ROR')
                 self.render_node('affiliation', {
                     'affiliationIdentifier': affiliation.get('affiliationIdentifier'),
-                    'affiliationIdentifierScheme': affiliation.get('affiliationIdentifierScheme', 'ROR'),
-                    'schemeURI': affiliation.get('schemeURI', 'https://ror.org')
+                    'affiliationIdentifierScheme': scheme,
+                    'schemeURI': self.scheme_uri_choices.get(scheme)
                 }, affiliation.get('affiliation'))
 
             self.xml.endElement('creator')
@@ -115,16 +122,18 @@ class DataCiteRenderer(object):
                     self.render_node('familyName', {}, contributor.get('familyName'))
 
                 if contributor.get('nameIdentifier'):
+                    scheme = creator.get('nameIdentifierScheme', 'ORCID')
                     self.render_node('nameIdentifier', {
-                        'nameIdentifierScheme': contributor.get('nameIdentifierScheme', 'ORCID'),
-                        'schemeURI': contributor.get('schemeURI', 'https:/orcid.org')
+                        'nameIdentifierScheme': scheme,
+                        'schemeURI': self.scheme_uri_choices.get(scheme)
                     }, contributor.get('nameIdentifier'))
 
                 for affiliation in contributor.get('affiliations', []):
+                    scheme = affiliation.get('affiliationIdentifierScheme', 'ROR')
                     self.render_node('affiliation', {
                         'affiliationIdentifier': affiliation.get('affiliationIdentifier'),
-                        'affiliationIdentifierScheme': affiliation.get('affiliationIdentifierScheme', 'ROR'),
-                        'schemeURI': affiliation.get('schemeURI', 'https://ror.org')
+                        'affiliationIdentifierScheme': scheme,
+                        'schemeURI': self.scheme_uri_choices.get(scheme)
                     }, affiliation.get('affiliation'))
 
                 self.xml.endElement('contributor')

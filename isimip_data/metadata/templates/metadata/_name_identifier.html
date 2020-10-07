@@ -1,0 +1,13 @@
+{% if name.nameIdentifier %}
+    {% if name.nameIdentifierScheme == 'ORCID' %}
+    <a class="orcid-link" href="https://orcid.org/{{ name.nameIdentifier }}">
+        {{ name.nameIdentifier }}
+    </a>
+    {% elif name.nameIdentifierScheme == 'ROR' %}
+    <a class="ror-link" href="https://ror.org/{{ name.nameIdentifier }}">
+        {{ name.nameIdentifier }}
+    </a>
+    {% else %}
+    <i>({{ name.nameIdentifierScheme }}: {{ name.nameIdentifier }})</i>
+    {% endif %}
+{% endif %}
