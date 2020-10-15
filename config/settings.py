@@ -197,13 +197,13 @@ RIGHTS = {
 }
 
 MODEL_RIGHTS = [
-    ('ISIMIP2a/OutputData', 'CC-BY'),
-    ('ISIMIP2b/OutputData/water_global/MPI-HM', 'CC-BY-SA'),
-    ('ISIMIP2b/OutputData/water_global/WaterGAP2', 'CC-BY-NC'),
-    ('ISIMIP2b/SecondaryOutputData/water_global/WaterGAP2', 'CC-BY-NC'),
-    ('ISIMIP2a/OutputData', 'CC-BY'),
-    ('ISIMIP3a', 'CC0'),
-    ('ISIMIP3b', 'CC0'),
+    ('ISIMIP2a/OutputData', 'https://creativecommons.org/licenses/by/4.0/'),
+    ('ISIMIP2b/OutputData/water_global/MPI-HM', 'https://creativecommons.org/licenses/by-sa/4.0/'),
+    ('ISIMIP2b/OutputData/water_global/WaterGAP2', 'https://creativecommons.org/licenses/by-nc/4.0/'),
+    ('ISIMIP2b/SecondaryOutputData/water_global/WaterGAP2', 'https://creativecommons.org/licenses/by-nc/4.0/'),
+    ('ISIMIP2a/OutputData', 'https://creativecommons.org/licenses/by/4.0/'),
+    ('ISIMIP3a', 'https://creativecommons.org/publicdomain/zero/1.0/'),
+    ('ISIMIP3b', 'https://creativecommons.org/publicdomain/zero/1.0/'),
 ]
 
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')

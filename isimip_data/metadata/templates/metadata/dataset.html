@@ -61,10 +61,7 @@
         <div class="col-sm-4">
             {% if dataset.public %}
 
-            <h3>{% trans 'Preview' %}</h3>
-            <div class="card">
-                <img src="{{ dataset.files.first.thumbnail_url }}" class="card-img-top" alt="{{ dataset.path }}">
-            </div>
+            {% include 'metadata/_preview.html' with src=dataset.files.first.thumbnail_url alt=dataset.name %}
 
             {% include 'metadata/_rights.html' with rights=dataset.rights %}
 
