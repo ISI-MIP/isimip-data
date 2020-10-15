@@ -101,14 +101,24 @@ class App extends Component {
       if (response.status == 'finished') {
         DownloadApi.downloadFile(response.file_url)
         this.setState({ message: '' })
+      } else if (response.status == 'queued') {
+        setTimeout(() => this.fetch(url, data), 2000)
+        this.setState({ message: 'The download request was queued on the server.' })
       } else if (response.status == 'error') {
         const pathError = response.errors.path || ''
         const countryError = response.errors.country || '';
         const bboxError = response.errors.bbox || '';
         this.setState({ message: '', pathError, countryError, bboxError })
       } else {
+        let message
+        if (response.meta.total_files > 0) {
+          message = `The files are created on the server (${response.meta.created_files} of ${response.meta.total_files} created). The download will start once all files are created.`
+        } else {
+          message = 'The file is created on the server. The download will start soon.'
+        }
+
         setTimeout(() => this.fetch(url, data), 10000)
-        this.setState({ message: 'The file is created on the server, the download will start soon.' })
+        this.setState({ message })
       }
     }).catch(error => {
       this.setState({ error: 'There has been a problem connecting to the server. If this problem persists, please contact support.' })
