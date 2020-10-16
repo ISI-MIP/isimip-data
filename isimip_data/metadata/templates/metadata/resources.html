@@ -18,18 +18,28 @@
         </h4>
     </header>
 
+    {% for resource in resources %}
     <div class="card">
-        <ul class="list-group list-group-flush">
-            {% for resource in resources %}
-            <li class="list-group-item">
-                <h4>
-                    <a href="{% url 'resource' resource.doi %}">{{ resource.title }}</a>
-                    <a class="float-right doi-link" href="{{ resource.doi_url }}">{{ resource.doi_url }}</a>
-                </h4>
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="card-body">
+            {% include 'metadata/_citation.html' %}
+
+            <ul class="list-inline mb-0">
+                <li class="list-inline-item">
+                    <a href="{% url 'resource' resource.doi %}">{% trans 'Landing page' %}</a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="{% url 'resource_bibtex' resource.doi %}">{% trans 'BibTeX' %}</a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="{% url 'resource_datacite_xml' resource.doi %}">{% trans 'DataCite XML' %}</a>
+                </li>
+                <li class="list-inline-item">
+                    <a href="{% url 'resource_datacite_json' resource.doi %}">{% trans 'DataCite JSON' %}</a>
+                </li>
+            </p>
+        </div>
     </div>
+    {% endfor %}
 </div>
 
 {% endblock %}
