@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from .models import Dataset, File
+from .models import Dataset, File, Resource
 
 
 class DatasetFileSerializer(serializers.ModelSerializer):
@@ -105,3 +105,20 @@ class FileSerializer(serializers.ModelSerializer):
 
     def get_download_url(self, obj):
         return reverse('file', args=[obj.path], request=self.context['request'])
+
+
+class ResourceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Resource
+        fields = (
+            'id',
+            'path',
+            'version',
+            'doi',
+            'datacite',
+            'title',
+            'major_version',
+            'doi_url',
+            'creators'
+        )

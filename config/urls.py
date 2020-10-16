@@ -12,7 +12,8 @@ from isimip_data.metadata.views import (attributes, dataset, file, metadata,
                                         resource_datacite_json,
                                         resource_datacite_xml, resources)
 from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
-                                           GlossaryViewSet, TreeViewSet)
+                                           GlossaryViewSet, ResourceViewSet,
+                                           TreeViewSet)
 from isimip_data.search.views import search
 from isimip_data.search.viewsets import FacetViewSet
 # from isimip_data.wizard.views import wizard
@@ -24,6 +25,7 @@ router.register(r'countries', CountryViewSet, basename='country')
 router.register(r'glossary', GlossaryViewSet, basename='glossary')
 router.register(r'tree', TreeViewSet, basename='tree')
 router.register(r'files', FileViewSet, basename='file')
+router.register(r'resources', ResourceViewSet, basename='resource')
 router.register(r'facets', FacetViewSet, basename='facet')
 router.register(r'layers', LayerViewSet, basename='layer')
 router.register(r'settings', SettingsViewSet, basename='setting')
@@ -44,7 +46,9 @@ urlpatterns = [
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9.]+).datacite.xml', resource_datacite_xml, name='resource_datacite_xml'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9.]+).datacite.json', resource_datacite_json, name='resource_datacite_json'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9.]+)', resource, name='resource'),
-    re_path(r'^resources/', resources, name='resources'),
+
+    path('resources/', resources, name='resources'),
+    path('resources/<uuid:pk>/', resource, name='resource'),
 
     path('attributes/', attributes, name='attributes'),
 

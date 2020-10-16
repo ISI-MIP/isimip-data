@@ -1,0 +1,20 @@
+{% load i18n %}
+
+<div class="card-footer">
+    <ul class="list-inline mb-0 float-right">
+        <li class="list-inline-item">
+            <a href="{% url 'resource_bibtex' resource.doi %}">{% trans 'BibTeX' %}</a>
+        </li>
+        <li class="list-inline-item">
+            <a href="{% url 'resource_datacite_xml' resource.doi %}">{% trans 'DataCite XML' %}</a>
+        </li>
+        <li class="list-inline-item">
+            <a href="{% url 'resource_datacite_json' resource.doi %}">{% trans 'DataCite JSON' %}</a>
+        </li>
+    </ul>
+    <ul class="list-inline mb-0">
+        <li class="list-inline-item">
+            <a href="{% url 'resource' resource.doi %}">{% trans 'More information about the DOI' %}</a>
+        </li>
+    </ul>
+</div>

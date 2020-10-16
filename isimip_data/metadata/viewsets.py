@@ -12,8 +12,8 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 from .filters import (AttributeFilterBackend, PathFilterBackend,
                       SearchFilterBackend, TreeFilterBackend,
                       VersionFilterBackend)
-from .models import Attribute, Dataset, File, Tree
-from .serializers import DatasetSerializer, FileSerializer
+from .models import Attribute, Dataset, File, Resource, Tree
+from .serializers import DatasetSerializer, FileSerializer, ResourceSerializer
 from .utils import fetch_glossary
 
 
@@ -107,6 +107,42 @@ class FileViewSet(ReadOnlyModelViewSet):
         'version',
         'checksum'
     )
+
+
+class ResourceViewSet(ReadOnlyModelViewSet):
+
+    serializer_class = ResourceSerializer
+    queryset = Resource.objects.using('metadata')
+    pagination_class = Pagination
+
+    filter_backends = (
+        DjangoFilterBackend,
+        SearchFilterBackend,
+        AttributeFilterBackend
+    )
+    filterset_fields = (
+        'path',
+    )
+
+    @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])
+    def detail_filelist(self, request, pk):
+        resource = self.get_object()
+
+        response = Response({
+            'files': File.objects.using('metadata').filter(dataset__resources=resource)
+        }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
+        response['Content-Disposition'] = 'attachment; filename=%s.txt' % resource.doi
+        return response
+
+    @action(detail=True, url_path='wget', renderer_classes=[TemplateHTMLRenderer])
+    def detail_wget(self, request, pk):
+        resource = self.get_object()
+
+        response = Response({
+            'files': File.objects.using('metadata').filter(dataset__resources=resource)
+        }, template_name='metadata/wget.sh', content_type='text/x-shellscript; charset=utf-8')
+        response['Content-Disposition'] = 'attachment; filename=wget_%s.sh' % resource.doi
+        return response
 
 
 class TreeViewSet(ViewSet):

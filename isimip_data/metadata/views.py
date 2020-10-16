@@ -77,10 +77,15 @@ def resources(request):
     })
 
 
-def resource(request, doi=None):
-    return render(request, 'metadata/resource.html', {
-        'resource': get_object_or_404(Resource.objects.using('metadata'), doi=doi)
-    })
+def resource(request, pk=None, doi=None):
+    if doi is not None:
+        return render(request, 'metadata/resource.html', {
+            'resource': get_object_or_404(Resource.objects.using('metadata'), doi=doi)
+        })
+    else:
+        return render(request, 'metadata/resource.html', {
+            'resource': get_object_or_404(Resource.objects.using('metadata'), pk=pk)
+        })
 
 
 def resource_bibtex(request, doi=None):

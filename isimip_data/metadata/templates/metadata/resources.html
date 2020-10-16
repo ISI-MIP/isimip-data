@@ -20,24 +20,8 @@
 
     {% for resource in resources %}
     <div class="card">
-        <div class="card-body">
-            {% include 'metadata/_citation.html' %}
-
-            <ul class="list-inline mb-0">
-                <li class="list-inline-item">
-                    <a href="{% url 'resource' resource.doi %}">{% trans 'Landing page' %}</a>
-                </li>
-                <li class="list-inline-item">
-                    <a href="{% url 'resource_bibtex' resource.doi %}">{% trans 'BibTeX' %}</a>
-                </li>
-                <li class="list-inline-item">
-                    <a href="{% url 'resource_datacite_xml' resource.doi %}">{% trans 'DataCite XML' %}</a>
-                </li>
-                <li class="list-inline-item">
-                    <a href="{% url 'resource_datacite_json' resource.doi %}">{% trans 'DataCite JSON' %}</a>
-                </li>
-            </p>
-        </div>
+        {% include 'metadata/_citation.html' %}
+        {% include 'metadata/_citation_links.html' %}
     </div>
     {% endfor %}
 </div>

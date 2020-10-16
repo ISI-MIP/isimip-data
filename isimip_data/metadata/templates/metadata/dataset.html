@@ -28,20 +28,18 @@
         <div class="col-sm-8">
             <h3>{% trans 'Cite as' %}</h3>
             <div class="card">
-                <div class="card-body">
-                    {% if dataset.resources.first %}
+                {% if dataset.resources.first %}
                     {% with resource=dataset.resources.first %}
                     {% include 'metadata/_citation.html' %}
-                    <p class="card-text">
-                        <a href="{% url 'resource' resource.doi %}">More information about the DOI</a>
-                    </p>
+                    {% include 'metadata/_citation_links.html' %}
                     {% endwith %}
-                    {% else %}
+                {% else %}
+                <div class="card-body">
                     <p class="card-text">
                         No DOI was registered for this dataset yet. Please follow our general <a href="https://www.isimip.org/gettingstarted/terms-of-use/">terms of use</a>.
                     </p>
-                    {% endif %}
                 </div>
+                {% endif %}
             </div>
 
             <h3>{% trans 'Specifiers' %}</h3>
@@ -65,13 +63,14 @@
 
             {% include 'metadata/_rights.html' with rights=dataset.rights %}
 
-            {% if dataset.is_global and dataset.is_netcdf %}
             <h3>{% trans 'Download' %}</h3>
             <div class="card">
                 <ul class="list-group list-group-flush">
+                    {% if dataset.is_global and dataset.is_netcdf %}
                     <li class="list-group-item">
                         <a href="{% url 'download' dataset.path %}">{% trans 'Configure download' %}</a>
                     </li>
+                    {% endif %}
                     <li class="list-group-item">
                         <a href="{% url 'dataset-detail-filelist' dataset.id %}">{% trans 'Download file list' %}</a>
                     </li>
@@ -80,7 +79,6 @@
                     </li>
                 </ul>
             </div>
-            {% endif %}
 
             {% else %}
 

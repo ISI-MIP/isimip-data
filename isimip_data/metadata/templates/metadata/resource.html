@@ -15,7 +15,7 @@
 
         <h4>
             {% blocktrans trimmed with resource_type=resource.type doi_url=resource.doi_url %}
-            You can use the following DOI to cite this data in a publication:
+            You can use the following DOI to cite this resource in a publication:
             <a href="{{ doi_url }}">{{ doi_url }}</a>.
             {% endblocktrans %}
         </h4>
@@ -25,9 +25,7 @@
         <div class="col-sm-12">
             <h3>{% trans 'Cite as' %}</h3>
             <div class="card">
-                <div class="card-body">
-                    {% include 'metadata/_citation.html' %}
-                </div>
+                {% include 'metadata/_citation.html' %}
             </div>
         </div>
 
@@ -103,11 +101,23 @@
                     </li>
                 </ul>
             </div>
+
+            <h3>{% trans 'Download' %}</h3>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{% url 'resource-detail-filelist' resource.id %}">{% trans 'Download file list' %}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'resource-detail-wget' resource.id %}">{% trans 'Download wget script' %}</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
     {% if resource.datasets.all %}
-    <h3>{% trans 'Datasets in this category' %}</h3>
+    <h3>{% trans 'Datasets in this resource' %}</h3>
     <div class="card">
         <ul class="list-group list-group-flush">
             {% for dataset in resource.datasets.all %}
