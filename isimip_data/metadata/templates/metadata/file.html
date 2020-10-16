@@ -29,20 +29,18 @@
         <div class="col-sm-8">
             <h3>{% trans 'Cite as' %}</h3>
             <div class="card">
-                <div class="card-body">
-                    {% if file.dataset.resources.first %}
+                {% if file.dataset.resources.first %}
                     {% with resource=file.dataset.resources.first %}
                     {% include 'metadata/_citation.html' %}
-                    <p class="card-text">
-                        <a href="{% url 'resource' resource.doi %}">More information about the DOI</a>
-                    </p>
+                    {% include 'metadata/_citation_links.html' %}
                     {% endwith %}
-                    {% else %}
+                {% else %}
+                <div class="card-body">
                     <p class="card-text">
                         No DOI was registered for file yet. Please follow our general <a href="https://www.isimip.org/gettingstarted/terms-of-use/">terms of use</a>.
                     </p>
-                    {% endif %}
                 </div>
+                {% endif %}
             </div>
 
             <h3>{% trans 'Specifiers' %}</h3>

@@ -33,11 +33,6 @@ def test_dataset_filelist(client, db):
     assert response.status_code == 200
 
 
-def test_dataset_wget(client, db):
-    response = client.get(reverse('dataset-wget'))
-    assert response.status_code == 200
-
-
 def test_dataset_detail(client, db, datasets):
     for dataset in datasets:
         response = client.get(reverse('dataset-detail', args=[dataset.id]))
@@ -47,12 +42,6 @@ def test_dataset_detail(client, db, datasets):
 def test_dataset_detail_filelist(client, db, datasets):
     for dataset in datasets:
         response = client.get(reverse('dataset-detail-filelist', args=[dataset.id]))
-        assert response.status_code == 200
-
-
-def test_dataset_detail_wget(client, db, datasets):
-    for dataset in datasets:
-        response = client.get(reverse('dataset-detail-wget', args=[dataset.id]))
         assert response.status_code == 200
 
 

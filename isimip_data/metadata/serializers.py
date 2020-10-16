@@ -39,7 +39,6 @@ class DatasetSerializer(serializers.ModelSerializer):
     metadata_url = serializers.SerializerMethodField()
     download_url = serializers.SerializerMethodField()
     filelist_url = serializers.SerializerMethodField()
-    wget_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Dataset
@@ -57,7 +56,6 @@ class DatasetSerializer(serializers.ModelSerializer):
             'metadata_url',
             'download_url',
             'filelist_url',
-            'wget_url',
             'rights',
             'files'
         )
@@ -70,9 +68,6 @@ class DatasetSerializer(serializers.ModelSerializer):
 
     def get_filelist_url(self, obj):
         return reverse('dataset-detail-filelist', args=[obj.id], request=self.context['request'])
-
-    def get_wget_url(self, obj):
-        return reverse('dataset-detail-wget', args=[obj.id], request=self.context['request'])
 
 
 class FileSerializer(serializers.ModelSerializer):

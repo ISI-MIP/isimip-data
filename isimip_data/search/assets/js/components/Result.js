@@ -72,11 +72,6 @@ class Result extends Component {
             </a>
           </li>
           <li className="list-inline-item">
-            <a href={dataset.wget_url}>
-              Download wget script
-            </a>
-          </li>
-          <li className="list-inline-item">
             <a href="" onClick={e => this.handleDownload(e, dataset.files)}>
               Download all files
             </a>
