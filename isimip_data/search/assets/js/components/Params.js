@@ -65,11 +65,6 @@ class Params extends Component {
                 Download file list
               </a>
             </li>
-            <li className="list-inline-item">
-              <a href={`/api/v1/datasets/wget/?${encodeParams(params)}`}>
-                Download wget script
-              </a>
-            </li>
           </ul>
         </div>
       </div>
