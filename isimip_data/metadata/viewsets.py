@@ -67,7 +67,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         response = Response({
             'files': File.objects.using('metadata').filter(dataset=dataset)
         }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
-        response['Content-Disposition'] = 'attachment; filename=%s_v%s.txt' % (dataset.name, dataset.version)
+        response['Content-Disposition'] = 'attachment; filename=%s.txt' % dataset.name
         return response
 
 
