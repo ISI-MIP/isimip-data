@@ -55,7 +55,7 @@ class Result extends Component {
 
     return (
       <li className="list-group-item">
-        <Badges glossary={glossary} specifiers={dataset.specifiers} version={dataset.version} rights={dataset.rights} />
+        <Badges glossary={glossary} dataset={dataset} />
 
         <h4 className="card-title">
           <a className="result-title" href={dataset.metadata_url} target="_blank">{dataset.name}</a>

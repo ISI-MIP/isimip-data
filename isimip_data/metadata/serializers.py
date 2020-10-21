@@ -32,9 +32,21 @@ class DatasetFileSerializer(serializers.ModelSerializer):
         return reverse('download', args=[obj.path], request=self.context['request'])
 
 
+class DatasetResourceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Resource
+        fields = (
+            'id',
+            'doi',
+            'version'
+        )
+
+
 class DatasetSerializer(serializers.ModelSerializer):
 
     files = DatasetFileSerializer(many=True)
+    resources = DatasetResourceSerializer(many=True)
     search_rank = serializers.FloatField(required=False, default=0.0)
     metadata_url = serializers.SerializerMethodField()
     download_url = serializers.SerializerMethodField()
@@ -57,7 +69,8 @@ class DatasetSerializer(serializers.ModelSerializer):
             'download_url',
             'filelist_url',
             'rights',
-            'files'
+            'files',
+            'resources'
         )
 
     def get_metadata_url(self, obj):

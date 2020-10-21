@@ -21,48 +21,55 @@ class Badges extends Component {
   }
 
   render() {
-    const { glossary, version, specifiers, rights } = this.props
+    const { dataset } = this.props
 
     return (
       <div>
         <p className="card-text badges float-right">
-          {rights &&
-            <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>{rights.rights}</strong></Tooltip>}>
+          {dataset.resources &&
+            <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>Digital object identifier (DOI)</strong></Tooltip>}>
               <span className="badge badge-light">
-                {rights.short}
+                {dataset.resources[0].doi}
+              </span>
+            </OverlayTrigger>
+          }
+          {dataset.rights &&
+            <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>{dataset.rights.rights}</strong></Tooltip>}>
+              <span className="badge badge-light">
+                {dataset.rights.short}
               </span>
             </OverlayTrigger>
           }
           <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>Version</strong></Tooltip>}>
             <span className="badge badge-dark">
-              {version}
+              {dataset.version}
             </span>
           </OverlayTrigger>
         </p>
         <p className="card-text badges">
-          <OverlayTrigger placement="bottom" overlay={this.renderTooltip('simulation_round', specifiers.simulation_round)}>
+          <OverlayTrigger placement="bottom" overlay={this.renderTooltip('simulation_round', dataset.specifiers.simulation_round)}>
             <span className="badge" style={{ backgroundColor: '#FABA53' }}>
-              {specifiers.simulation_round}
+              {dataset.specifiers.simulation_round}
             </span>
           </OverlayTrigger>
-          <OverlayTrigger placement="bottom" overlay={this.renderTooltip('product', specifiers.product)}>
+          <OverlayTrigger placement="bottom" overlay={this.renderTooltip('product', dataset.specifiers.product)}>
             <span className="badge badge-secondary">
-              {specifiers.product}
+              {dataset.specifiers.product}
             </span>
           </OverlayTrigger>
-          <OverlayTrigger placement="bottom" overlay={this.renderTooltip('sector', specifiers.sector)}>
+          <OverlayTrigger placement="bottom" overlay={this.renderTooltip('sector', dataset.specifiers.sector)}>
             <span className="badge badge-success">
-              {specifiers.sector}
+              {dataset.specifiers.sector}
             </span>
           </OverlayTrigger>
-          <OverlayTrigger placement="bottom" overlay={this.renderTooltip('climate_forcing', specifiers.climate_forcing)}>
+          <OverlayTrigger placement="bottom" overlay={this.renderTooltip('climate_forcing', dataset.specifiers.climate_forcing)}>
             <span className="badge badge-info">
-              {specifiers.climate_forcing}
+              {dataset.specifiers.climate_forcing}
             </span>
           </OverlayTrigger>
           <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>Model</strong></Tooltip>}>
             <span className="badge badge-primary">
-              {specifiers.model}
+              {dataset.specifiers.model}
             </span>
           </OverlayTrigger>
         </p>
@@ -73,9 +80,7 @@ class Badges extends Component {
 
 Badges.propTypes = {
   glossary: PropTypes.object.isRequired,
-  specifiers: PropTypes.object.isRequired,
-  version: PropTypes.string.isRequired,
-  rights: PropTypes.object
+  dataset: PropTypes.object.isRequired
 }
 
 export default Badges
