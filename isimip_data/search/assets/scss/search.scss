@@ -150,24 +150,16 @@ main {
         }
 
         .result-select {
-            display: inline-block;
-            margin-bottom: 0;
-
-            font-weight: 600;
             color: $color-primary;
-            cursor: pointer;
-            user-select: none;
 
-            position: relative;
-
-            input {
-                position: absolute;
-                display: block;
-                top: 2px;
+            .form-check-input {
+                margin-top: 0.2rem;
             }
-            span {
-                display: inline-block;
-                margin-left: 1.1rem;
+            .form-check-label {
+                font-weight: 600;
+                font-size: small;
+                cursor: pointer;
+                user-select: none;
             }
         }
 

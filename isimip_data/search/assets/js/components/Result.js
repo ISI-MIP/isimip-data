@@ -80,10 +80,13 @@ class Result extends Component {
         </ul>
         <ul className="list-inline">
           <li className="list-inline-item">
-            <label className="result-select align-baseline" htmlFor={inputId}>
-              <input id={inputId} type="checkbox" checked={isSelected(dataset)} onChange={e => onSelect(e, dataset)} />
-              <span>Select dataset</span>
-            </label>
+            <div className="form-check result-select">
+              <input className="form-check-input" id={inputId} type="checkbox"
+                     checked={isSelected(dataset)} onChange={e => onSelect(e, dataset)} />
+              <label className="form-check-label" htmlFor={inputId}>
+                Select dataset
+              </label>
+            </div>
           </li>
           <li className="list-inline-item">
             <button className="btn btn-link" onClick={this.toggleAttributes}>

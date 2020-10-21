@@ -139,14 +139,14 @@ class App extends Component {
         </div>
         <div className="col-lg-3">
           <div className="card sidebar-header">
-            <div className="card-header d-flex justify-content-between align-items-center">
+            <div className="card-header d-flex justify-content-between">
               Sidebar view:
-              <div className="form-check">
+              <div className="form-check form-check-inline">
                 <input className="form-check-input" type="radio" id="tree-radio"
                        onChange={e => this.handleSidebarChange('tree')} checked={sidebar == 'tree'} />
                 <label className="form-check-label" htmlFor="tree-radio">Tree</label>
               </div>
-              <div className="form-check">
+              <div className="form-check form-check-inline mr-0">
                 <input className="form-check-input" type="radio" id="facets-radio"
                        onChange={e => this.handleSidebarChange('facets')} checked={sidebar == 'facets'} />
                 <label className="form-check-label" htmlFor="facets-radio">Facets</label>
