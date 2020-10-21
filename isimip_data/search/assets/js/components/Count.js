@@ -11,7 +11,7 @@ class Count extends Component {
 
     return (
       <div className="card count">
-        <div className="card-body d-flex flex-row justify-content-between">
+        <div className="card-header d-flex justify-content-between align-items-center">
           <div>{ count } datasets found.</div>
           <div>
             {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}

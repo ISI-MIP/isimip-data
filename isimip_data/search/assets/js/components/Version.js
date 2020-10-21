@@ -74,29 +74,29 @@ class Version extends Component {
 
     return (
       <div className="card version">
-        <ul className="list-group list-group-flush">
-          <li className="list-group-item d-flex">
-            <div className="form-check form-check-inline">
-              <input className="form-check-input" type="radio" id="latest-version-radio"
-                     checked={!showVersions} onChange={e => this.handleshowVersionsChange(false)} />
-              <label className="form-check-label" htmlFor="latest-version-radio">
-                Show only the latest version
-              </label>
-            </div>
-            <div className="form-check form-check-inline">
-              <input className="form-check-input" type="radio" id="specific-versions-radio"
-                     checked={showVersions} onChange={e => this.handleshowVersionsChange(true)} />
-              <label className="form-check-label" htmlFor="specific-versions-radio">
-                Show specific versions with date constraints
-              </label>
-            </div>
-            <div className="form-check form-check-inline ml-auto mr-0">
-              <input className="form-check-input" type="checkbox" id="archived-versions-checkbox"
-                     checked={allChecked} onChange={e => onChange({ all: !allChecked})} />
-              <label className="form-check-label" htmlFor="archived-versions-checkbox">Show archived files</label>
-            </div>
-          </li>
-          {showVersions &&
+        <div className="card-header d-flex">
+          <div className="form-check form-check-inline">
+            <input className="form-check-input" type="radio" id="latest-version-radio"
+                   checked={!showVersions} onChange={e => this.handleshowVersionsChange(false)} />
+            <label className="form-check-label" htmlFor="latest-version-radio">
+              Show only the latest version
+            </label>
+          </div>
+          <div className="form-check form-check-inline">
+            <input className="form-check-input" type="radio" id="specific-versions-radio"
+                   checked={showVersions} onChange={e => this.handleshowVersionsChange(true)} />
+            <label className="form-check-label" htmlFor="specific-versions-radio">
+              Show specific versions with date constraints
+            </label>
+          </div>
+          <div className="form-check form-check-inline ml-auto mr-0">
+            <input className="form-check-input" type="checkbox" id="archived-versions-checkbox"
+                   checked={allChecked} onChange={e => onChange({ all: !allChecked})} />
+            <label className="form-check-label" htmlFor="archived-versions-checkbox">Show archived files</label>
+          </div>
+        </div>
+        {showVersions &&
+          <ul className="list-group list-group-flush">
             <li className="list-group-item">
               <div className="form-inline">
                 <label className="form-check-label">Version range:</label>
@@ -108,8 +108,8 @@ class Version extends Component {
                 <button className="btn btn-default btn-sm ml-auto mr-0" onClick={this.handleApply}>Apply range</button>
               </div>
             </li>
-          }
-        </ul>
+          </ul>
+        }
       </div>
     )
   }
