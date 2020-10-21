@@ -17,12 +17,10 @@ const getLocationParams = (path, location) => {
       const key = tokens[i-1],
             value = decodeURIComponent(tokens[i])
 
-      if (key == 'all') {
-        params['all'] = true
-      } else if (key == 'query') {
-        params['query'] = value
-      } else if (key == 'page') {
+      if (key == 'page') {
         params['page'] = parseInt(value)
+      } else if (['all', 'after', 'before', 'query'].indexOf(key) > -1) {
+        params[key] = value
       } else {
         if (params[key] == undefined) {
           params[key] = [value]
@@ -40,16 +38,12 @@ const getLocationString = (path, params) => {
   let string = path
 
   Object.keys(params).forEach(key => {
-    if (key == 'all') {
-      if (params['all'] == true) {
-        string += 'all/true/'
-      }
-    } else if (key == 'query') {
-      string += 'query/' + params['query'] + '/'
-    } else if (key == 'page') {
+    if (key == 'page') {
       if (params['page'] > 1) {
         string += 'page/' + params['page'] + '/'
       }
+    } else if (['all', 'after', 'before', 'query'].indexOf(key) > -1) {
+      string += key + '/' + params[key] + '/'
     } else {
       params[key].forEach(value => {
         string += key + '/' + encodeURIComponent(value) + '/'

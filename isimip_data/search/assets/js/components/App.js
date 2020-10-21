@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ls from 'local-storage'
 import { withRouter } from 'react-router'
 
-import { getLocationParams, getLocationString } from 'isimip_data/core/assets/js/utils/location'
+import { getLocationParams, getLocationString } from 'isimip_data/metadata/assets/js/utils/location'
 
 import CoreApi from 'isimip_data/core/assets/js/api/CoreApi'
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
@@ -13,6 +13,7 @@ import Search from './Search'
 import Results from './Results'
 import Facets from './Facets'
 import Tree from './Tree'
+import Version from './Version'
 
 
 class App extends Component {
@@ -80,6 +81,23 @@ class App extends Component {
     this.setState({ params })
   }
 
+  handleVersionChange(values) {
+    const params = Object.assign({}, this.state.params, { page: 1 })
+
+    Object.entries(values).map(item => {
+      const [key, value] = item
+      if (value === false) {
+        delete params[key]
+      } else if (value === true) {
+        params[key] = 'true'
+      } else {
+        params[key] = value
+      }
+    })
+
+    this.setState({ params })
+  }
+
   handleSidebarChange(sidebar) {
     ls.set('sidebar', sidebar)
     this.setState({ sidebar })
@@ -115,17 +133,13 @@ class App extends Component {
   handleParamsRemove(key, value) {
     if (key == 'query') {
       this.handleSearch('')
+    } else if (['all', 'after', 'before'].indexOf(key) > -1) {
+      this.handleVersionChange({
+        [key]: false
+      })
     } else {
       this.handleAttributeChange(key, value, false)
     }
-  }
-
-  handleVersionChange(value) {
-    const params = Object.assign({}, this.state.params, { page: 1 })
-
-    params.all = value
-
-    this.setState({ params })
   }
 
   render() {
@@ -157,10 +171,10 @@ class App extends Component {
           {sidebar == 'facets' && <Facets params={params} glossary={glossary} onFacetChange={this.handleAttributeChange}/>}
         </div>
         <div className="col-lg-9">
+          <Version params={params} onChange={this.handleVersionChange}/>
           <Results params={params}
                    pageSize={pageSize}
                    glossary={glossary}
-                   onVersionChange={this.handleVersionChange}
                    onParamsRemove={this.handleParamsRemove}
                    onPaginationClick={this.handlePaginationClick} />
         </div>

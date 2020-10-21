@@ -11,7 +11,6 @@ import Pagination from './Pagination'
 import Params from './Params'
 import Result from './Result'
 import Selection from './Selection'
-import Version from './Version'
 
 
 class Results extends Component {
@@ -116,7 +115,6 @@ class Results extends Component {
 
     return (
       <div className="results">
-        <Version params={params} onChange={onVersionChange}/>
         <div className="row">
           <div className="col-lg-4">
             <Count count={count} isLoading={isLoading} />
@@ -143,7 +141,6 @@ Results.propTypes = {
   params: PropTypes.object.isRequired,
   pageSize: PropTypes.number.isRequired,
   glossary: PropTypes.object.isRequired,
-  onVersionChange: PropTypes.func.isRequired,
   onParamsRemove: PropTypes.func.isRequired,
   onPaginationClick: PropTypes.func.isRequired
 }

@@ -15,8 +15,11 @@ logger = logging.getLogger(__name__)
 class IdFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
         ids = request.GET.getlist('id')
-        if not view.detail and ids:
+        if ids:
             queryset = queryset.filter(id__in=ids)
 
         return queryset
@@ -25,8 +28,11 @@ class IdFilterBackend(BaseFilterBackend):
 class NameFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
         name = request.GET.getlist('name')
-        if not view.detail and name:
+        if name:
             queryset = queryset.filter(name__in=name)
 
         return queryset
@@ -35,6 +41,9 @@ class NameFilterBackend(BaseFilterBackend):
 class PathFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
         path_list = request.GET.getlist('path')
         if path_list:
             q = Q()
@@ -48,11 +57,14 @@ class PathFilterBackend(BaseFilterBackend):
 class SearchFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
         # this is the compicated part, we emply both trigram similarity and full text search here
         # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/search/
         # and http://rachbelaid.com/postgres-full-text-search-is-good-enough/
         query = request.GET.get('query')
-        if not view.detail and query:
+        if query:
             # first, split the search string along _ and whitespace into words
             search_words = query.replace('_', ' ').replace('-', ' ').replace('/', ' ').split()
 
@@ -92,22 +104,29 @@ class VersionFilterBackend(BaseFilterBackend):
         if view.detail:
             return queryset
 
-        # display all datasets or only the public version
-        if not view.detail and request.GET.get('all') == 'true':
-            return queryset
-        else:
-            return queryset.filter(public=True)
+        if request.GET.get('all') != 'true':
+            queryset = queryset.filter(public=True)
+
+        after = request.GET.get('after')
+        if after:
+            queryset = queryset.filter(version__gte=after)
+
+        before = request.GET.get('before')
+        if before:
+            queryset = queryset.filter(version__lte=before)
+
+        return queryset
 
 
 class AttributeFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
-        # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#std:fieldlookup-hstorefield.contains
-        # and https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#containment-and-key-operations
-        # for optimal jsonb lookups: queryset.filter(field={'foo': 'bar', 'egg': 'spam'})
         if view.detail:
             return queryset
 
+        # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#std:fieldlookup-hstorefield.contains
+        # and https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#containment-and-key-operations
+        # for optimal jsonb lookups: queryset.filter(field={'foo': 'bar', 'egg': 'spam'})
         for attribute in Attribute.objects.using('metadata').all():
             if attribute.key != getattr(view, 'attribute_filter_exclude', None):
                 q = Q()
@@ -122,6 +141,9 @@ class AttributeFilterBackend(BaseFilterBackend):
 class TreeFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
         tree_list = request.GET.getlist('tree')
         if tree_list:
             q = Q()

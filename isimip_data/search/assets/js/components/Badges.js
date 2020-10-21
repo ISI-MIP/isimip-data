@@ -22,14 +22,15 @@ class Badges extends Component {
 
   render() {
     const { dataset } = this.props
+    const resource = dataset.resources[0]
 
     return (
       <div>
         <p className="card-text badges float-right">
-          {dataset.resources &&
+          {resource &&
             <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>Digital object identifier (DOI)</strong></Tooltip>}>
               <span className="badge badge-light">
-                {dataset.resources[0].doi}
+                {resource.doi}
               </span>
             </OverlayTrigger>
           }

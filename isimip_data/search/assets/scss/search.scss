@@ -31,9 +31,18 @@ main {
 }
 
 .version {
-    .card-header {
-        cursor: pointer;
-        padding: 0.5rem 0.75rem 0.5rem 2rem;
+    // .card-header {
+    //     cursor: pointer;
+    //     padding: 0.5rem 0.75rem 0.5rem 2rem;
+    // }
+
+    .list-group-item {
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+
+    .form-control {
+        margin: 0.5rem;
     }
 }
 
