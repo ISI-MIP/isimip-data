@@ -29,9 +29,9 @@ class Facets extends Component {
     return (
       <div className="facets">
         {
-          facets.map(facet => {
+          facets.map((facet, index) => {
             return (
-              <Facet key={facet.attribute} params={params} facet={facet} glossary={glossary}
+              <Facet key={index} params={params} facet={facet} glossary={glossary}
                      onChange={onFacetChange} />
             )
           })

@@ -41,7 +41,7 @@ class Params extends Component {
     return (
       <div className="card params">
         <div className="card-body">
-          <ul className="list-inline params-list">
+          <ul className="list-inline params-list mb-0">
             <li className="list-inline-item">
               <strong>Search constraints</strong>
             </li>
@@ -50,19 +50,18 @@ class Params extends Component {
                 const [key, value] = item
                 return (
                   <li key={index} className="list-inline-item">
-                    {key} = {value}
                     <button className="btn btn-link" onClick={() => onRemove(key, value)}>
-                      <FontAwesomeIcon icon={faTimes} />
+                      {key} = {value} <FontAwesomeIcon icon={faTimes} />
                     </button>
                   </li>
                 )
               })
             }
           </ul>
-          <ul className="list-inline float-right">
+          <ul className="list-inline float-right mb-0">
             <li className="list-inline-item">
               <a href={`/api/v1/datasets/filelist/?${encodeParams(params)}`}>
-                Download file list
+                Download file list for this search
               </a>
             </li>
           </ul>

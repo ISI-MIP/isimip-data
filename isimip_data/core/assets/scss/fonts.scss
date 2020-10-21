@@ -42,12 +42,22 @@ h4 {
 
 // links
 
-a {
+a,
+.btn-link {
     color: $color-primary;
     font-weight: 600;
 
-    &:hover, &:focus {
+    &:hover {
         color: $color-primary-dark;
+    }
+}
+.btn-link {
+    padding: 0;
+
+    &:hover, &:focus, &:active {
+        outline: none !important;
+        text-decoration: none;
+        box-shadow: none;
     }
 }
 

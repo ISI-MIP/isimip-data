@@ -9,8 +9,8 @@ import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 import Badges from './Badges'
 
-const get_size = size => bytes(size, {unitSeparator: ' '})
 
+const get_size = size => bytes(size, {unitSeparator: ' '})
 
 class Result extends Component {
 
@@ -49,15 +49,16 @@ class Result extends Component {
   }
 
   renderDataset(dataset) {
-    const { glossary } = this.props
+    const { glossary, onSelect, isSelected } = this.props
     const { showAttributes, showFiles } = this.state
+    const inputId = `${dataset.id}-input`
 
     return (
       <li className="list-group-item">
         <Badges glossary={glossary} specifiers={dataset.specifiers} version={dataset.version} rights={dataset.rights} />
 
         <h4 className="card-title">
-          <a href={dataset.metadata_url} target="_blank">{dataset.name}</a>
+          <a className="result-title" href={dataset.metadata_url} target="_blank">{dataset.name}</a>
         </h4>
 
         <ul className="list-inline float-right">
@@ -72,31 +73,37 @@ class Result extends Component {
             </a>
           </li>
           <li className="list-inline-item">
-            <a href="" onClick={e => this.handleDownload(e, dataset.files)}>
+            <button className="btn btn-link" onClick={e => this.handleDownload(e, dataset.files)}>
               Download all files
-            </a>
+            </button>
           </li>
         </ul>
         <ul className="list-inline">
           <li className="list-inline-item">
-            <a href="" onClick={this.toggleAttributes}>
+            <label className="result-select align-baseline" htmlFor={inputId}>
+              <input id={inputId} type="checkbox" checked={isSelected(dataset)} onChange={e => onSelect(e, dataset)} />
+              <span>Select dataset</span>
+            </label>
+          </li>
+          <li className="list-inline-item">
+            <button className="btn btn-link" onClick={this.toggleAttributes}>
               {showAttributes && <span>
                 Hide attributes <FontAwesomeIcon icon={faChevronUp} />
               </span>}
               {!showAttributes && <span>
                 Show attributes <FontAwesomeIcon icon={faChevronDown} />
               </span>}
-            </a>
+            </button>
           </li>
           <li className="list-inline-item">
-            <a href="" onClick={this.toggleFiles}>
+            <button className="btn btn-link" onClick={this.toggleFiles}>
               {showFiles && <span>
                 Hide files <FontAwesomeIcon icon={faChevronUp} />
               </span>}
               {!showFiles && <span>
                 Show files <FontAwesomeIcon icon={faChevronDown} />
               </span>}
-            </a>
+            </button>
           </li>
         </ul>
       </li>
@@ -185,9 +192,9 @@ class Result extends Component {
                 <td><a href={file.metadata_url} target="_blank">{file.name}</a></td>
                 <td>{get_size(file.size)}</td>
                 <td className="text-right">
-                  <a href="" onClick={e => this.handleDownload(e, [file])}>
+                  <button className="btn btn-link" onClick={e => this.handleDownload(e, [file])}>
                     Download file
-                  </a>
+                  </button>
                 </td>
               </tr>
             ))
@@ -216,7 +223,9 @@ class Result extends Component {
 
 Result.propTypes = {
   dataset: PropTypes.object.isRequired,
-  glossary: PropTypes.object.isRequired
+  glossary: PropTypes.object.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  isSelected: PropTypes.func.isRequired
 }
 
 export default Result

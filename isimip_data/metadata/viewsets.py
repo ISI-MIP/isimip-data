@@ -1,7 +1,6 @@
 from pathlib import PurePath
 
 from django.conf import settings
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
@@ -9,7 +8,8 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 
-from .filters import (AttributeFilterBackend, PathFilterBackend,
+from .filters import (AttributeFilterBackend, IdFilterBackend,
+                      NameFilterBackend, PathFilterBackend,
                       SearchFilterBackend, TreeFilterBackend,
                       VersionFilterBackend)
 from .models import Attribute, Dataset, File, Resource, Tree
@@ -28,15 +28,13 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     pagination_class = Pagination
 
     filter_backends = (
-        DjangoFilterBackend,
+        IdFilterBackend,
+        NameFilterBackend,
         SearchFilterBackend,
         VersionFilterBackend,
         AttributeFilterBackend,
         PathFilterBackend,
         TreeFilterBackend
-    )
-    filterset_fields = (
-        'name',
     )
     attribute_filter_exclude = None
 
@@ -78,7 +76,9 @@ class FileViewSet(ReadOnlyModelViewSet):
     pagination_class = Pagination
 
     filter_backends = (
-        DjangoFilterBackend,
+        IdFilterBackend,
+        NameFilterBackend,
+        PathFilterBackend,
         SearchFilterBackend,
         AttributeFilterBackend
     )
@@ -97,12 +97,9 @@ class ResourceViewSet(ReadOnlyModelViewSet):
     pagination_class = Pagination
 
     filter_backends = (
-        DjangoFilterBackend,
-        SearchFilterBackend,
-        AttributeFilterBackend
-    )
-    filterset_fields = (
-        'path',
+        IdFilterBackend,
+        PathFilterBackend,
+        SearchFilterBackend
     )
 
     @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])

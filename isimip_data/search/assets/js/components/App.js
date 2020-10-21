@@ -9,11 +9,11 @@ import CoreApi from 'isimip_data/core/assets/js/api/CoreApi'
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 import FacetApi from '../api/FacetApi'
 
-import Version from './Version'
 import Search from './Search'
 import Results from './Results'
 import Facets from './Facets'
 import Tree from './Tree'
+
 
 class App extends Component {
 
@@ -157,10 +157,10 @@ class App extends Component {
           {sidebar == 'facets' && <Facets params={params} glossary={glossary} onFacetChange={this.handleAttributeChange}/>}
         </div>
         <div className="col-lg-9">
-          <Version params={params} onChange={this.handleVersionChange}/>
           <Results params={params}
                    pageSize={pageSize}
                    glossary={glossary}
+                   onVersionChange={this.handleVersionChange}
                    onParamsRemove={this.handleParamsRemove}
                    onPaginationClick={this.handlePaginationClick} />
         </div>

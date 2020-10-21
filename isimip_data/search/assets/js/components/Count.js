@@ -3,16 +3,19 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
+
 class Count extends Component {
 
   render() {
     const { count, isLoading } = this.props
 
     return (
-      <div className="card count d-flex flex-row justify-content-between">
-        <div>{ count } datasets found.</div>
-        <div>
-          {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}
+      <div className="card count">
+        <div className="card-body d-flex flex-row justify-content-between">
+          <div>{ count } datasets found.</div>
+          <div>
+            {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}
+          </div>
         </div>
       </div>
     )

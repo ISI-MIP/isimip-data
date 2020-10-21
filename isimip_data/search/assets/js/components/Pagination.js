@@ -45,7 +45,7 @@ class Pagination extends Component {
 
     return (
       <nav>
-        <ul className="pagination justify-content-end">
+        <ul className="pagination justify-content-end mb-0">
           <li className={'page-item' + ((page == startPage) ? ' disabled' : '')}>
             <a className="page-link" href="" onClick={e => this.handleClick(e, page - 1)}>
               Previous

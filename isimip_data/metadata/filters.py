@@ -5,23 +5,54 @@ from django.contrib.postgres.search import (SearchQuery, SearchRank,
                                             TrigramSimilarity)
 from django.db.models import Q
 from django.db.models.expressions import RawSQL
-from isimip_data.metadata.models import Attribute, Word
 from rest_framework.filters import BaseFilterBackend
 
+from isimip_data.metadata.models import Attribute, Word
+
 logger = logging.getLogger(__name__)
+
+
+class IdFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        ids = request.GET.getlist('id')
+        if not view.detail and ids:
+            queryset = queryset.filter(id__in=ids)
+
+        return queryset
+
+
+class NameFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        name = request.GET.getlist('name')
+        if not view.detail and name:
+            queryset = queryset.filter(name__in=name)
+
+        return queryset
+
+
+class PathFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        path_list = request.GET.getlist('path')
+        if path_list:
+            q = Q()
+            for path in path_list:
+                q |= Q(path__startswith=path)
+            queryset = queryset.filter(q)
+
+        return queryset
 
 
 class SearchFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
-        if view.detail:
-            return queryset
-
         # this is the compicated part, we emply both trigram similarity and full text search here
         # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/search/
         # and http://rachbelaid.com/postgres-full-text-search-is-good-enough/
         query = request.GET.get('query')
-        if query:
+        if not view.detail and query:
             # first, split the search string along _ and whitespace into words
             search_words = query.replace('_', ' ').replace('-', ' ').replace('/', ' ').split()
 
@@ -62,7 +93,7 @@ class VersionFilterBackend(BaseFilterBackend):
             return queryset
 
         # display all datasets or only the public version
-        if request.GET.get('all') == 'true':
+        if not view.detail and request.GET.get('all') == 'true':
             return queryset
         else:
             return queryset.filter(public=True)
@@ -84,19 +115,6 @@ class AttributeFilterBackend(BaseFilterBackend):
                     if value:
                         q |= Q(specifiers__contains={attribute.key: value})
                 queryset = queryset.filter(q)
-
-        return queryset
-
-
-class PathFilterBackend(BaseFilterBackend):
-
-    def filter_queryset(self, request, queryset, view):
-        path_list = request.GET.getlist('path')
-        if path_list:
-            q = Q()
-            for path in path_list:
-                q |= Q(path__startswith=path)
-            queryset = queryset.filter(q)
 
         return queryset
 
