@@ -1,6 +1,6 @@
 import React, { Component} from 'react'
 
-import { getLocationString } from 'isimip_data/core/assets/js/utils/location'
+import { getLocationString } from 'isimip_data/metadata/assets/js/utils/location'
 
 import Layers from './Layers'
 import Submit from './Submit'

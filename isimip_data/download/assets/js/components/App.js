@@ -4,7 +4,7 @@ import { withRouter } from 'react-router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-import { getLocationParams, getLocationString } from 'isimip_data/core/assets/js/utils/location'
+import { getLocationParams, getLocationString } from 'isimip_data/metadata/assets/js/utils/location'
 
 import CoreApi from 'isimip_data/core/assets/js/api/CoreApi'
 import DownloadApi from '../api/DownloadApi'
