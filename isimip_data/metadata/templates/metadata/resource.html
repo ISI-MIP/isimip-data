@@ -54,6 +54,7 @@
                                 {% for creator in resource.datacite.creators %}
                                 <li>
                                     {{ creator.givenName }} {{ creator.familyName }}
+                                    {% include 'metadata/_name_credit.html' with name=creator %}
                                     {% include 'metadata/_name_identifier.html' with name=creator %}
                                 </li>
                                 {% endfor %}
@@ -73,6 +74,7 @@
                                 {% else %}
                                 <li>
                                     {{ contributor.givenName }} {{ contributor.familyName }} <i>({{ contributor.contributorType }})</i>
+                                    {% include 'metadata/_name_credit.html' with name=contributor %}
                                     {% include 'metadata/_name_identifier.html' with name=contributor %}
                                 </li>
                                 {% endif %}

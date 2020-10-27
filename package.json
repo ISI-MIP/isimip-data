@@ -13,6 +13,7 @@
     "url": "https://github.com/ISI-MIP/isimip-data"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-regular-svg-icons": "^5.14.0",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
