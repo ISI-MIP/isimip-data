@@ -128,5 +128,5 @@ class ResourceSerializer(serializers.ModelSerializer):
             'title',
             'major_version',
             'doi_url',
-            'creators'
+            'creators_str'
         )

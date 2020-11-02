@@ -61,6 +61,21 @@
                             </ul>
                         </dd>
                     </dl>
+                    {% if resource.contact_persons %}
+                    <dl class="row">
+                        <dt class="col-sm-3 text-right">Contact person:</dt>
+                        <dd class="col-sm-9">
+                            <ul class="list-unstyled">
+                                {% for contact_persion in resource.contact_persons %}
+                                <li>
+                                    {{ contact_persion.name }}
+                                    {% include 'metadata/_name_identifier.html' with name=contact_persion %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </dd>
+                    </dl>
+                    {% endif %}
                     <dl class="row">
                         <dt class="col-sm-3 text-right">Contributors:</dt>
                         <dd class="col-sm-9">
@@ -68,12 +83,12 @@
                                 {% for contributor in resource.datacite.contributors %}
                                 {% if contributor.nameType == 'Organizational' %}
                                 <li>
-                                    {{ contributor.name }} <i>({{ contributor.contributorType }})</i>
+                                    {{ contributor.name }}
                                     {% include 'metadata/_name_identifier.html' with name=contributor %}
                                 </li>
                                 {% else %}
                                 <li>
-                                    {{ contributor.givenName }} {{ contributor.familyName }} <i>({{ contributor.contributorType }})</i>
+                                    {{ contributor.givenName }} {{ contributor.familyName }}
                                     {% include 'metadata/_name_credit.html' with name=contributor %}
                                     {% include 'metadata/_name_identifier.html' with name=contributor %}
                                 </li>
@@ -82,6 +97,9 @@
                             </ul>
                         </dd>
                     </dl>
+                    <p class="text-muted">
+                        The icons indicate the different roles of the Data Authorship Contributor Roles Taxonomy <a href="https://www.wsl.ch/datacredit/">DataCRediT</a>, which was initially developed for <a href="https://www.envidat.ch">EnviDat</a>.
+                    </p>
                 </div>
             </div>
         </div>

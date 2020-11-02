@@ -144,8 +144,15 @@ class Resource(models.Model):
         return 'https://doi.org/{}'.format(self.doi)
 
     @property
-    def creators(self):
+    def creators_str(self):
         return ', '.join([creator.get('name', '') for creator in self.datacite.get('creators', [])])
+
+    @property
+    def contact_persons(self):
+        return [
+            contributor for contributor in self.datacite.get('contributors', [])
+            if contributor.get('contributorType') == 'ContactPerson'
+        ]
 
     @property
     def publication_date(self):
