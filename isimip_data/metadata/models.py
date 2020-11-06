@@ -24,6 +24,7 @@ class Dataset(models.Model):
     identifiers = ArrayField(models.TextField())
     search_vector = SearchVectorField(null=True)
     public = models.BooleanField(null=True)
+    tree_path = models.TextField()
 
     class Meta:
         db_table = 'datasets'
@@ -178,7 +179,6 @@ class Tree(models.Model):
 
     id = models.UUIDField(primary_key=True)
     tree_dict = JSONField()
-    tree_list = JSONField()
 
     class Meta:
         db_table = 'trees'
