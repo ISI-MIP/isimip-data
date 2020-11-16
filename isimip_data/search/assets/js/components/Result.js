@@ -61,7 +61,8 @@ class Result extends Component {
           <a className="result-title" href={dataset.metadata_url} target="_blank">{dataset.name}</a>
         </h4>
 
-        <ul className="list-inline float-right">
+
+        {dataset.download_url && <ul className="list-inline float-right">
           <li className="list-inline-item">
             <a href={dataset.download_url}>
               Configure download
@@ -74,12 +75,12 @@ class Result extends Component {
           </li>
           <li className="list-inline-item">
             <button className="btn btn-link" onClick={e => this.handleDownload(e, dataset.files)}>
-              Download all files
+              Download file list
             </button>
           </li>
-        </ul>
+        </ul>}
         <ul className="list-inline">
-          <li className="list-inline-item">
+          {dataset.public && <li className="list-inline-item">
             <div className="form-check result-select">
               <input className="form-check-input" id={inputId} type="checkbox"
                      checked={isSelected(dataset)} onChange={e => onSelect(e, dataset)} />
@@ -87,7 +88,7 @@ class Result extends Component {
                 Select dataset
               </label>
             </div>
-          </li>
+          </li>}
           <li className="list-inline-item">
             <button className="btn btn-link" onClick={this.toggleAttributes}>
               {showAttributes && <span>
@@ -195,9 +196,9 @@ class Result extends Component {
                 <td><a href={file.metadata_url} target="_blank">{file.name}</a></td>
                 <td>{get_size(file.size)}</td>
                 <td className="text-right">
-                  <button className="btn btn-link" onClick={e => this.handleDownload(e, [file])}>
+                  {file.file_url && <button className="btn btn-link" onClick={e => this.handleDownload(e, [file])}>
                     Download file
-                  </button>
+                  </button>}
                 </td>
               </tr>
             ))

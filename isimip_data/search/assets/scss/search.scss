@@ -6,8 +6,9 @@ main {
     min-height: 1400px;
 }
 
-.btn-link {
-    font-size: small;
+.btn.btn-link {
+    vertical-align: baseline;
+    font-size: 10pt;
 }
 
 .card {
@@ -189,6 +190,10 @@ main {
                     margin-bottom: 0;
                 }
             }
+        }
+
+        .table {
+            margin-bottom: 0;
         }
     }
 }

@@ -28,20 +28,27 @@ class Badges extends Component {
       <div>
         <p className="card-text badges float-right">
           {resource &&
-            <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>Digital object identifier (DOI)</strong></Tooltip>}>
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>Tis dataset can be cited using the DOI <i>{resource.doi}</i>.</Tooltip>}>
               <span className="badge badge-light">
                 {resource.doi}
               </span>
             </OverlayTrigger>
           }
           {dataset.rights &&
-            <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>{dataset.rights.rights}</strong></Tooltip>}>
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>This dataset is published under the <i>{dataset.rights.rights}.</i></Tooltip>}>
               <span className="badge badge-light">
                 {dataset.rights.short}
               </span>
             </OverlayTrigger>
           }
-          <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>Version</strong></Tooltip>}>
+          {!dataset.public &&
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>This dataset is archived and currently not available for download. Please contact support if you need this version of the dataset.</Tooltip>}>
+              <span className="badge badge-danger">
+                Archived
+              </span>
+            </OverlayTrigger>
+          }
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>The version for this dataset (YYYYMMDD).</Tooltip>}>
             <span className="badge badge-dark">
               {dataset.version}
             </span>

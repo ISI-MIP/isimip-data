@@ -29,7 +29,8 @@ class DatasetFileSerializer(serializers.ModelSerializer):
         return reverse('file', args=[obj.id], request=self.context['request'])
 
     def get_download_url(self, obj):
-        return reverse('download', args=[obj.path], request=self.context['request'])
+        if obj.dataset.public:
+            return reverse('download', args=[obj.path], request=self.context['request'])
 
 
 class DatasetResourceSerializer(serializers.ModelSerializer):
@@ -77,10 +78,12 @@ class DatasetSerializer(serializers.ModelSerializer):
         return reverse('dataset', args=[obj.id], request=self.context['request'])
 
     def get_download_url(self, obj):
-        return reverse('download', args=[obj.path], request=self.context['request'])
+        if obj.public:
+            return reverse('download', args=[obj.path], request=self.context['request'])
 
     def get_filelist_url(self, obj):
-        return reverse('dataset-detail-filelist', args=[obj.id], request=self.context['request'])
+        if obj.public:
+            return reverse('dataset-detail-filelist', args=[obj.id], request=self.context['request'])
 
 
 class FileSerializer(serializers.ModelSerializer):
@@ -112,7 +115,8 @@ class FileSerializer(serializers.ModelSerializer):
         return reverse('file', args=[obj.id], request=self.context['request'])
 
     def get_download_url(self, obj):
-        return reverse('file', args=[obj.path], request=self.context['request'])
+        if obj.dataset.public:
+            return reverse('file', args=[obj.path], request=self.context['request'])
 
 
 class ResourceSerializer(serializers.ModelSerializer):

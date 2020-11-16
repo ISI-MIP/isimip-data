@@ -42,18 +42,20 @@ class DatasetApi {
 
   static downloadFiles(files, fetchParams = {}) {
     return files.map(file => {
-      return fetch(file.file_url, fetchParams)
-        .then(response => response.blob())
-        .then(blob => {
-          const url = window.URL.createObjectURL(blob)
-          const a = document.createElement('a')
-          a.href = url
-          a.download = file.name
+      if (file.file_url) {
+        return fetch(file.file_url, fetchParams)
+          .then(response => response.blob())
+          .then(blob => {
+            const url = window.URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = file.name
 
-          document.body.appendChild(a)
-          a.click()
-          a.remove()
-        })
+            document.body.appendChild(a)
+            a.click()
+            a.remove()
+          })
+      }
     })
   }
 }
