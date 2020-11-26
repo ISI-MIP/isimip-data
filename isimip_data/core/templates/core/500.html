@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+
+{% block main %}
+
+<div class="container">
+    <div class="row justify-content-sm-center">
+        <div class="col-md-8">
+            <header>
+                <h1>{% trans 'Internal server error' %}</h1>
+                <p>{% trans 'Sorry, but there was an error with the requested URL.' %}</p>
+            </header>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -63,6 +63,11 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='core/home.html'), name='home'),
 ]
 
+handler400 = 'isimip_data.core.views.bad_request'
+handler403 = 'isimip_data.core.views.forbidden'
+handler404 = 'isimip_data.core.views.not_found'
+handler500 = 'isimip_data.core.views.internal_server_error'
+
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
