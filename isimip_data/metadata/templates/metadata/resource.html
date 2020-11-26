@@ -135,6 +135,23 @@
                     </li>
                 </ul>
             </div>
+
+            <h3>{% trans 'References' %}</h3>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    {% for identifier in resource.datacite.relatedIdentifiers %}
+                    {% if identifier.relationType != 'HasPart' %}
+                    {% if identifier.relatedIdentifierType == 'DOI' or identifier.relatedIdentifierType == 'URL' %}
+                    <li class="list-group-item">
+                        <a href="{{ identifier.relatedIdentifier }}" target="blank">
+                            {{ identifier.title }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 
