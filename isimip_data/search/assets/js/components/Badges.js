@@ -28,10 +28,10 @@ class Badges extends Component {
       <div>
         <p className="card-text badges float-right">
           {resource &&
-            <OverlayTrigger placement="bottom" overlay={<Tooltip>Tis dataset can be cited using the DOI <i>{resource.doi}</i>.</Tooltip>}>
-              <span className="badge badge-light">
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>This dataset can be cited using the Digital Object Identifier: <i>{resource.doi_url}</i>.</Tooltip>}>
+              <a className="badge badge-light" href={resource.doi_url} target="blank">
                 {resource.doi}
-              </span>
+              </a>
             </OverlayTrigger>
           }
           {dataset.rights &&

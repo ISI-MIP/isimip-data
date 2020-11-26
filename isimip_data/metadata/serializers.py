@@ -40,6 +40,7 @@ class DatasetResourceSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'doi',
+            'doi_url',
             'version'
         )
 

@@ -166,6 +166,10 @@ main {
             span {
                 margin-right: 0.25rem;
             }
+
+            a.badge {
+                cursor: pointer;
+            }
         }
 
         .result-select {
