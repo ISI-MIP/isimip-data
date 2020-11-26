@@ -4,15 +4,21 @@
 {% if rights %}
 <h3>{% trans 'Rights' %}</h3>
 <div class="card">
-    <div class="card-body text-center">
-        <p class="card-text">
-            <img src="{% static rights.image %}" alt="{{ rights.rights }}"/>
-        </p>
-        <p class="card-text">
-            <a href="{{ rights.rights_uri }}">
-                {{ rights.rights }} <br /> ({{ rights.short }})
-            </a>
-        </p>
+    <div class="card-body">
+        <div class="row align-items-center mb-3">
+            <div class="col-md-3 text-center">
+                <img src="{% static rights.image %}" alt="{{ rights.rights }}"/>
+            </div>
+            <div class="col-md-9">
+                <a href="{{ rights.rights_uri }}">
+                    {{ rights.rights }} ({{ rights.short }})
+                </a>
+            </div>
+        </div>
+
+        <div>
+            {{ settings.TERMS_OF_USE }} Further information can be found in our <a href="{{ settings.TERMS_OF_USE_URL }}">terms of use</a>.
+        </div>
     </div>
 </div>
 {% endif %}

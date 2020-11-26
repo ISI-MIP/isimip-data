@@ -34,6 +34,13 @@ class Badges extends Component {
               </a>
             </OverlayTrigger>
           }
+          {dataset.terms_of_use &&
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>{ dataset.terms_of_use.terms_of_use }</Tooltip>}>
+              <a className="badge badge-light" href={dataset.terms_of_use.terms_of_use_url} target="blank">
+                ToU
+              </a>
+            </OverlayTrigger>
+          }
           {dataset.rights &&
             <OverlayTrigger placement="bottom" overlay={<Tooltip>This dataset is published under the <i>{dataset.rights.rights}.</i></Tooltip>}>
               <span className="badge badge-light">

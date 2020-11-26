@@ -22,7 +22,8 @@ class DatasetFileSerializer(serializers.ModelSerializer):
             'metadata_url',
             'download_url',
             'file_url',
-            'rights'
+            'rights',
+            'terms_of_use'
         )
 
     def get_metadata_url(self, obj):
@@ -72,7 +73,8 @@ class DatasetSerializer(serializers.ModelSerializer):
             'filelist_url',
             'rights',
             'files',
-            'resources'
+            'resources',
+            'terms_of_use'
         )
 
     def get_metadata_url(self, obj):
@@ -109,7 +111,8 @@ class FileSerializer(serializers.ModelSerializer):
             'metadata_url',
             'download_url',
             'file_url',
-            'rights'
+            'rights',
+            'terms_of_use'
         )
 
     def get_metadata_url(self, obj):

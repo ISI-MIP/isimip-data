@@ -124,7 +124,9 @@ REST_FRAMEWORK = {
 SETTINGS_EXPORT = [
     'LABEL',
     'NAVIGATION',
-    'FILES_BASE_URL'
+    'FILES_BASE_URL',
+    'TERMS_OF_USE',
+    'TERMS_OF_USE_URL'
 ]
 
 if DEBUG:
@@ -153,6 +155,10 @@ METADATA_PAGE_SIZE = 12
 
 LABEL = os.getenv('LABEL')
 
+TERMS_OF_USE = 'When using ISIMIP data for your research, please appropriately credit the data providers, e.g. either by citing the DOI for the dataset, or by appropriate acknowledgment. We strongly encourage to offer co-authorship to at least a representative of the data providers.'
+
+TERMS_OF_USE_URL = 'https://www.isimip.org/gettingstarted/terms-of-use/#general-terms-of-use-for-all-isimip-data-on-the-esg-server'
+
 NAVIGATION = [
     {
         'title': 'About the project',
@@ -164,7 +170,7 @@ NAVIGATION = [
     },
     {
         'title': 'Terms of Use',
-        'href': 'https://www.isimip.org/gettingstarted/terms-of-use/#general-terms-of-use-for-all-isimip-data-on-the-esg-server'
+        'href': TERMS_OF_USE_URL
     }
 ]
 

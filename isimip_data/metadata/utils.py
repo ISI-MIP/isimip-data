@@ -73,3 +73,10 @@ def get_rights(path):
             if rights:
                 rights['rights_uri'] = rights_uri
                 return rights
+
+
+def get_terms_of_use():
+    return {
+        'terms_of_use': settings.TERMS_OF_USE,
+        'terms_of_use_url': settings.TERMS_OF_USE_URL
+    }

@@ -7,7 +7,7 @@ from django.contrib.postgres.search import SearchVectorField
 from django.db import models
 
 from .managers import DatasetManager
-from .utils import get_rights
+from .utils import get_rights, get_terms_of_use
 
 
 class Dataset(models.Model):
@@ -49,6 +49,10 @@ class Dataset(models.Model):
     @property
     def rights(self):
         return get_rights(self.path)
+
+    @property
+    def terms_of_use(self):
+        return get_terms_of_use()
 
 
 class File(models.Model):
@@ -109,6 +113,10 @@ class File(models.Model):
     @property
     def rights(self):
         return get_rights(self.path)
+
+    @property
+    def terms_of_use(self):
+        return get_terms_of_use()
 
 
 class Resource(models.Model):
@@ -177,6 +185,10 @@ class Resource(models.Model):
                 if rights:
                     rights['rights_uri'] = rights_uri
                     return rights
+
+    @property
+    def terms_of_use(self):
+        return get_terms_of_use()
 
 
 class Tree(models.Model):
