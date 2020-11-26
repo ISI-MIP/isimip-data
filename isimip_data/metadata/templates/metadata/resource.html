@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load i18n %}
 {% load static %}
+{% load core_tags %}
 
 {% block style %}
     {{ block.super }}
@@ -44,7 +45,11 @@
                     {% for description in resource.datacite.descriptions %}
                     <dl class="row">
                         <dt class="col-sm-3 text-right">{{ description.descriptionType }}:</dt>
-                        <dd class="col-sm-9">{{ description.description }}</dd>
+                        <dd class="col-sm-9">
+                        {% for paragraph in description.description|split_br %}
+                            <p>{{ paragraph }}</p>
+                        {% endfor %}
+                        </dd>
                     </dl>
                     {% endfor %}
                     <dl class="row">
