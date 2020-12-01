@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import ls from 'local-storage'
 
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
-import Count from './Count'
-import Pagination from './Pagination'
 import Params from './Params'
 import Result from './Result'
 import Selection from './Selection'
+import LoadMore from './LoadMore'
 
 
 class Results extends Component {
@@ -23,7 +20,7 @@ class Results extends Component {
       count: 0,
       selected: []
     }
-    this.handlePaginationClick = this.handlePaginationClick.bind(this)
+    this.handleLoadMore = this.handleLoadMore.bind(this)
     this.handleSelection = this.handleSelection.bind(this)
     this.handleSelectionReset = this.handleSelectionReset.bind(this)
     this.getIndex = this.getIndex.bind(this)
@@ -35,30 +32,44 @@ class Results extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.params !== prevProps.params) {
-      this.fetch()
+    if (this.props.params !== prevProps.params || this.props.pageSize !== prevProps.pageSize) {
+      if (!Number.isNaN(this.props.pageSize)) {
+        this.fetch()
+      }
     }
   }
 
   fetch() {
-    const { params } = this.props
+    const params = Object.assign({}, this.props.params)
 
-    this.setState({ isLoading: true, results: [] })
+    // reset results the results for the first page
+    if (params.page == 1) {
+      this.setState({ isLoading: true, results: [] })
+    } else {
+      this.setState({ isLoading: true })
+    }
+
+    // increase the page_size, if page is set, but no results are present
+    if (params.page > 1 && this.state.results.length == 0) {
+      params.page_size = this.props.pageSize * params.page
+      params.page = 1
+    }
+
     DatasetApi.fetchDatasets(params).then(data => {
       this.setState({
         isLoading: false,
         count: data.count,
-        results: data.results
+        results: this.state.results.concat(data.results)
       })
     })
   }
 
-  handlePaginationClick(page) {
-    const { onPaginationClick } = this.props
+  handleLoadMore() {
+    const { onLoadMore } = this.props
     const { isLoading } = this.state
 
     if (!isLoading) {
-      onPaginationClick(page)
+      onLoadMore()
     }
   }
 
@@ -109,22 +120,12 @@ class Results extends Component {
   }
 
   render() {
-    const { params, pageSize, glossary, onVersionChange, onParamsRemove, onPaginationClick } = this.props
-    const { page } = params
+    const { params, glossary, onVersionChange, onParamsRemove } = this.props
     const { isLoading, results, count, selected } = this.state
 
     return (
       <div className="results">
-        <div className="row">
-          <div className="col-lg-4">
-            <Count count={count} isLoading={isLoading} />
-          </div>
-          <div className="col-lg-8">
-            {page && <Pagination count={count} page={page} pageSize={pageSize}
-                                 onClick={this.handlePaginationClick} />}
-          </div>
-        </div>
-        <Selection selected={selected} onReset={this.handleSelectionReset} />
+        <Selection selected={selected} count={count} isLoading={isLoading} onReset={this.handleSelectionReset} />
         <Params params={params} onRemove={onParamsRemove} />
         {
           results.map(dataset => {
@@ -132,6 +133,7 @@ class Results extends Component {
                            onSelect={this.handleSelection} isSelected={this.isSelected} />
           })
         }
+        {results.length > 0 && <LoadMore onLoadMore={this.handleLoadMore} isLoading={isLoading} />}
       </div>
     )
   }
@@ -142,7 +144,7 @@ Results.propTypes = {
   pageSize: PropTypes.number.isRequired,
   glossary: PropTypes.object.isRequired,
   onParamsRemove: PropTypes.func.isRequired,
-  onPaginationClick: PropTypes.func.isRequired
+  onLoadMore: PropTypes.func.isRequired
 }
 
 export default Results

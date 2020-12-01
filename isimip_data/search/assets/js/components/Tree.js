@@ -177,11 +177,15 @@ class Tree extends Component {
   render() {
     const { tree } = this.state
 
-    return (
-      <div className="card tree">
-        {tree.length > 0 && this.renderItems(tree)}
-      </div>
-    )
+    if (tree.length > 0) {
+      return (
+        <div className="card tree">
+          {this.renderItems(tree)}
+        </div>
+      )
+    } else {
+      return null
+    }
   }
 }
 

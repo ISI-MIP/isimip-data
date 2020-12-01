@@ -31,7 +31,7 @@ class App extends Component {
     this.handleSearch = this.handleSearch.bind(this)
     this.handleSidebarChange = this.handleSidebarChange.bind(this)
     this.handleParamsRemove = this.handleParamsRemove.bind(this)
-    this.handlePaginationClick = this.handlePaginationClick.bind(this)
+    this.handleLoadMore = this.handleLoadMore.bind(this)
     this.handleAttributeChange = this.handleAttributeChange.bind(this)
     this.handleVersionChange = this.handleVersionChange.bind(this)
   }
@@ -103,8 +103,9 @@ class App extends Component {
     this.setState({ sidebar })
   }
 
-  handlePaginationClick(page) {
-    const params = Object.assign({}, this.state.params, { page: page })
+  handleLoadMore() {
+    const params = Object.assign({}, this.state.params)
+    params.page += 1
     this.setState({ params })
   }
 
@@ -176,7 +177,7 @@ class App extends Component {
                    pageSize={pageSize}
                    glossary={glossary}
                    onParamsRemove={this.handleParamsRemove}
-                   onPaginationClick={this.handlePaginationClick} />
+                   onLoadMore={this.handleLoadMore} />
         </div>
       </div>
     )

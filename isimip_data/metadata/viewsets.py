@@ -19,6 +19,8 @@ from .utils import fetch_glossary
 
 class Pagination(PageNumberPagination):
     page_size = settings.METADATA_PAGE_SIZE
+    page_size_query_param = 'page_size'
+    max_page_size = settings.METADATA_MAX_PAGE_SIZE
 
 
 class DatasetViewSet(ReadOnlyModelViewSet):

@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronUp, faTimes  } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronUp, faTimes, faSpinner  } from '@fortawesome/free-solid-svg-icons'
+
+
 import bytes from 'bytes'
 
 import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
@@ -26,10 +28,10 @@ class Selection extends Component {
 
 
   renderSelection() {
-    const { selected, onReset } = this.props
+    const { selected, count, isLoading, onReset } = this.props
     const { showDatasets } = this.state
 
-    const count = selected.length
+    const selected_count = selected.length
     const size = get_size(selected.reduce((accumulator, dataset) => {
       accumulator += dataset.size
       return accumulator
@@ -42,12 +44,16 @@ class Selection extends Component {
 
     return (
       <li className="list-group-item">
-        <ul className="list-inline">
+        <ul className="list-inline d-flex">
           <li className="list-inline-item">
             <strong>Selection</strong>
           </li>
           <li className="list-inline-item">
-            You selected {count} {count > 1 ? 'datasets' : 'dataset'} of {size} size.
+            You selected {selected_count} {selected_count > 1 ? 'datasets' : 'dataset'} of {size} size.
+          </li>
+          <li className="list-inline-item ml-auto">
+            {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}
+            {!isLoading && <span>{ count.toLocaleString('en-US') } datasets found.</span>}
           </li>
         </ul>
         {selected.length > 0 && <div className="mt-2">
@@ -126,6 +132,8 @@ class Selection extends Component {
 
 Selection.propTypes = {
   selected: PropTypes.array.isRequired,
+  count: PropTypes.number.isRequired,
+  isLoading: PropTypes.bool.isRequired,
   onReset: PropTypes.func.isRequired
 }
 
