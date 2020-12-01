@@ -6,12 +6,12 @@
 <div class="card">
     <div class="card-body">
         <div class="row align-items-center mb-3">
-            <div class="col-md-3 text-center">
+            <div class="col-md-3 text-center rights-image">
                 <img src="{% static rights.image %}" alt="{{ rights.rights }}"/>
             </div>
             <div class="col-md-9">
                 <a href="{{ rights.rights_uri }}">
-                    {{ rights.rights }} ({{ rights.short }})
+                    {{ rights.rights }} <span class="text-nowrap">({{ rights.short }})</span>
                 </a>
             </div>
         </div>
