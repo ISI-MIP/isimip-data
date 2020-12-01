@@ -16,9 +16,10 @@ class Results extends Component {
     super(props);
     this.state = {
       isLoading: false,
+      loadMore: false,
       results: [],
+      selected: [],
       count: 0,
-      selected: []
     }
     this.handleLoadMore = this.handleLoadMore.bind(this)
     this.handleSelection = this.handleSelection.bind(this)
@@ -58,6 +59,7 @@ class Results extends Component {
     DatasetApi.fetchDatasets(params).then(data => {
       this.setState({
         isLoading: false,
+        loadMore: data.next ? true: false,
         count: data.count,
         results: this.state.results.concat(data.results)
       })
@@ -121,7 +123,7 @@ class Results extends Component {
 
   render() {
     const { params, glossary, onVersionChange, onParamsRemove } = this.props
-    const { isLoading, results, count, selected } = this.state
+    const { isLoading, loadMore, results, selected, count } = this.state
 
     return (
       <div className="results">
@@ -133,7 +135,7 @@ class Results extends Component {
                            onSelect={this.handleSelection} isSelected={this.isSelected} />
           })
         }
-        {results.length > 0 && <LoadMore onLoadMore={this.handleLoadMore} isLoading={isLoading} />}
+        {loadMore && <LoadMore onLoadMore={this.handleLoadMore} isLoading={isLoading} />}
       </div>
     )
   }
