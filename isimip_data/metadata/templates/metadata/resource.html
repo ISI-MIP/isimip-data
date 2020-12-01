@@ -152,6 +152,22 @@
                     {% endfor %}
                 </ul>
             </div>
+
+            {% if resource.datacite.subjects %}
+            <h3>{% trans 'GCMD Keywords' %}</h3>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    {% for subject in resource.datacite.subjects %}
+                    <li class="list-group-item">
+                        {{ subject.subject }}
+                    </li>
+                    {% endfor %}
+                    <li class="list-group-item text-muted">
+                        Global Change Master Directory (GCMD) Keywords are a hierarchical set of controlled vocabularies maintained by NASA (<a href="https://earthdata.nasa.gov/earth-observation-data/find-data/gcmd/gcmd-keywords" target="_blank">more information</a>).
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
         </div>
     </div>
 
