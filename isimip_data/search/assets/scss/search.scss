@@ -61,6 +61,12 @@ main {
         padding: 0.5rem 0.75rem;
         border-top: 1px solid rgba(0, 0, 0, 0.125);
 
+        span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
         &.active {
             color: white;
             background-color: $color-primary;

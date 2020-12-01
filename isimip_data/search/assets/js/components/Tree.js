@@ -17,6 +17,7 @@ class Tree extends Component {
     this.state = {
       tree: []
     }
+    this.toogleItem = this.toogleItem.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleOpen = this.handleOpen.bind(this)
     this.abortController = new AbortController()
@@ -46,6 +47,14 @@ class Tree extends Component {
     }).then(items => {
       this.setState({ tree: items })
     })
+  }
+
+  toogleItem(item) {
+    if (item.items) {
+      this.handleClose(item)
+    } else {
+      this.handleOpen(item)
+    }
   }
 
   handleOpen(item) {
@@ -121,12 +130,11 @@ class Tree extends Component {
 
   renderItem(item) {
     return (
-      <div className="tree-item d-flex justify-content-between align-items-center"
-           onClick={e => this.handleOpen(item)}>
-        <span className="d-flex align-items-center">
-          <input className="mr-2" type="checkbox" checked={false} readOnly /> {item.title || item.specifier}
-        </span>
-        {item.hasItems && <FontAwesomeIcon icon={faChevronDown} />}
+      <div className="tree-item d-flex align-items-center"
+           onClick={e => this.toogleItem(item)}>
+        <input className="mr-2" type="checkbox" checked={item.items || false} readOnly />
+        <span>{item.title || item.specifier}</span>
+        {item.hasItems && <FontAwesomeIcon icon={faChevronUp} />}
       </div>
     )
   }
@@ -140,45 +148,13 @@ class Tree extends Component {
           <OverlayTrigger placement="right" overlay={tooltip}>
             {this.renderItem(item)}
           </OverlayTrigger>
-        </li>
-      )
-    } else {
-      return (
-        <li key={index}>
-          {this.renderItem(item)}
-        </li>
-      )
-    }
-  }
-
-  renderOpenItem(item) {
-    return (
-      <div className="tree-item d-flex justify-content-between align-items-center"
-           onClick={e => this.handleClose(item)}>
-        <span className="d-flex align-items-center">
-          <input className="mr-2" type="checkbox" checked={true} readOnly /> {item.title || item.specifier}
-        </span>
-        {item.hasItems && <FontAwesomeIcon icon={faChevronUp} />}
-      </div>
-    )
-  }
-
-  renderOpenItemWrapper(item, index) {
-    const tooltip = this.renderTooltip(item)
-
-    if (tooltip) {
-      return (
-        <li key={index}>
-          <OverlayTrigger placement="right" overlay={tooltip}>
-            {this.renderOpenItem(item)}
-          </OverlayTrigger>
           {item.items && this.renderItems(item.items)}
         </li>
       )
     } else {
       return (
         <li key={index}>
-          {this.renderOpenItem(item)}
+          {this.renderItem(item)}
           {item.items && this.renderItems(item.items)}
         </li>
       )
@@ -191,12 +167,7 @@ class Tree extends Component {
         {
           items.sort((a, b) => a.specifier > b.specifier ? 1 : -1).map((item, index) => {
             item = this.updateItem(item)
-
-            if (item.items) {
-              return this.renderOpenItemWrapper(item, index)
-            } else {
-              return this.renderItemWrapper(item, index)
-            }
+            return this.renderItemWrapper(item, index)
           })
         }
       </ul>
