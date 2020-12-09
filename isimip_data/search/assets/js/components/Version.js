@@ -74,15 +74,15 @@ class Version extends Component {
 
     return (
       <div className="card version">
-        <div className="card-header d-flex">
-          <div className="form-check form-check-inline">
+        <div className="card-header d-md-flex">
+          <div className="form-check form-check-inline mb-2 mb-md-0">
             <input className="form-check-input" type="radio" id="latest-version-radio"
                    checked={!showVersions} onChange={e => this.handleshowVersionsChange(false)} />
             <label className="form-check-label" htmlFor="latest-version-radio">
               Show only the latest version
             </label>
           </div>
-          <div className="form-check form-check-inline">
+          <div className="form-check form-check-inline mb-2 mb-md-0">
             <input className="form-check-input" type="radio" id="specific-versions-radio"
                    checked={showVersions} onChange={e => this.handleshowVersionsChange(true)} />
             <label className="form-check-label" htmlFor="specific-versions-radio">

@@ -44,43 +44,40 @@ class Selection extends Component {
 
     return (
       <li className="list-group-item">
-        <ul className="list-inline d-flex">
-          <li className="list-inline-item">
+        <div className="d-md-flex">
+          <div className="d-md-inline">
             <strong>Selection</strong>
-          </li>
-          <li className="list-inline-item">
+          </div>
+          <div className="d-md-inline ml-md-2">
             You selected {selected_count} {selected_count > 1 ? 'datasets' : 'dataset'} of {size} size.
-          </li>
-          <li className="list-inline-item ml-auto">
+          </div>
+          <div className="d-md-inline-block ml-auto mt-2 mt-md-0">
             {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}
             {!isLoading && <span>{ count.toLocaleString('en-US') } datasets found.</span>}
-          </li>
-        </ul>
-        {selected.length > 0 && <div className="mt-2">
-          <ul className="list-inline float-right">
-            <li className="list-inline-item">
-              <a href={`/api/v1/datasets/filelist/?${encodeParams(ids)}`}>
-                Download file list for this selection
-              </a>
-            </li>
-          </ul>
-          <ul className="list-inline">
-            <li className="list-inline-item">
-              <button className="btn btn-link" onClick={this.toggleDatasets}>
-                {showDatasets && <span>
-                  Hide selected datasets <FontAwesomeIcon icon={faChevronUp} />
-                </span>}
-                {!showDatasets && <span>
-                  Show selected datasets <FontAwesomeIcon icon={faChevronDown} />
-                </span>}
-              </button>
-            </li>
-            <li className="list-inline-item">
-              <button className="btn btn-link" onClick={e => onReset(e)}>
-                Reset selection <FontAwesomeIcon icon={faTimes} />
-              </button>
-            </li>
-          </ul>
+          </div>
+        </div>
+        {selected.length > 0 &&
+        <div className="mt-2">
+          <div className="float-md-right mb-2 mb-md-0">
+            <a href={`/api/v1/datasets/filelist/?${encodeParams(ids)}`}>
+              Download file list for this selection
+            </a>
+          </div>
+          <div className="d-inline mr-2">
+            <button className="btn btn-link" onClick={this.toggleDatasets}>
+              {showDatasets && <span>
+                Hide selected datasets <FontAwesomeIcon icon={faChevronUp} />
+              </span>}
+              {!showDatasets && <span>
+                Show selected datasets <FontAwesomeIcon icon={faChevronDown} />
+              </span>}
+            </button>
+          </div>
+          <div className="d-inline">
+            <button className="btn btn-link" onClick={e => onReset(e)}>
+              Reset selection <FontAwesomeIcon icon={faTimes} />
+            </button>
+          </div>
         </div>}
       </li>
     )
