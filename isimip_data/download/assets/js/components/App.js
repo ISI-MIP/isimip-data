@@ -137,54 +137,54 @@ class App extends Component {
             </header>
           </div>
         </div>
-        <form className="download-form" onSubmit={this.handleSubmit} noValidate>
+        <form className="text-center" onSubmit={this.handleSubmit} noValidate>
           <Path path={path} pathError={pathError} onChange={this.handlePathChange} />
 
           <div className="row justify-content-md-center mt-5">
-            <div className="col-sm-8">
+            <div className="col-md-8">
               <h2>Restrict download area</h2>
 
               <p>
                 Download file sizes can be reduced by restricting the geographical extend of the dataset. This is done by masking all data outside of a certain country, bounding box or by applying a land-sea-mask.
               </p>
+
+              <div className="mt-2">
+                <Country selected={selected} country={country} countryError={countryError}
+                    onChange={this.handleCountryChange} onSelect={this.handleSelectChange} />
+              </div>
+
+              <div className="mt-2">
+                <BBox selected={selected} bbox={bbox} bboxError={bboxError}
+                    onChange={this.handleBBoxChange} onSelect={this.handleSelectChange} />
+              </div>
+
+              <div className="mt-2">
+                <Landonly selected={selected} onSelect={this.handleSelectChange} />
+              </div>
+
+              <div className="mt-4">
+                <button className="btn btn-success btn-lg" onClick={this.handleSubmit}>
+                  Download file
+                </button>
+              </div>
+
+              {
+                message && <p className="text-success mt-4">
+                  <FontAwesomeIcon icon={faSpinner} spin /> {message}
+                </p>
+              }
+              {
+                error && <p className="text-danger mt-4">
+                  {error}
+                </p>
+              }
+              {
+                selectedError && <p className="col-md-8 text-danger mt-4">
+                  {selectedError}
+                </p>
+              }
             </div>
           </div>
-
-          <div class="mt-3">
-            <Country selected={selected} country={country} countryError={countryError}
-                onChange={this.handleCountryChange} onSelect={this.handleSelectChange} />
-          </div>
-
-          <div class="mt-3">
-            <BBox selected={selected} bbox={bbox} bboxError={bboxError}
-                onChange={this.handleBBoxChange} onSelect={this.handleSelectChange} />
-          </div>
-
-          <div class="mt-3">
-            <Landonly selected={selected} onSelect={this.handleSelectChange} />
-          </div>
-
-          <div className="download-form-submit mt-4">
-            <button className="btn btn-success btn-lg w-25" onClick={this.handleSubmit}>
-              Download file
-            </button>
-          </div>
-
-          {
-            message && <p className="download-message text-success mt-4">
-              <FontAwesomeIcon icon={faSpinner} spin /> {message}
-            </p>
-          }
-          {
-            error && <p className="download-message text-danger mt-4">
-              {error}
-            </p>
-          }
-          {
-            selectedError && <p className="download-message text-danger mt-4">
-              {selectedError}
-            </p>
-          }
         </form>
       </div>
     )

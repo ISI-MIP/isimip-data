@@ -30,14 +30,17 @@ class Country extends Component {
     const { error, countries } = this.state
 
     return (
-      <div>
-        <div className="download-form-row form-check form-check-inline">
-          <input className="form-check-input" className="form-check-input"
-              type="radio" name="country" id="check-country"
-              onChange={() => onSelect('country')} checked={selected == 'country'} />
+      <div className="row align-items-center">
+        <div className="col-md-auto mb-2">
+          <div className="form-check">
+            <input className="form-check-input" className="form-check-input"
+                type="radio" name="country" id="check-country"
+                onChange={() => onSelect('country')} checked={selected == 'country'} />
 
-          <label className="form-check-label" htmlFor="check-country">Mask by country</label>
-
+            <label className="form-check-label" htmlFor="check-country">Mask by country</label>
+          </div>
+        </div>
+        <div className="col-md">
           <select className={'form-control download-form-input-country ' + (countryError && 'is-invalid')}
               value={country} onChange={this.handleChange}>
 

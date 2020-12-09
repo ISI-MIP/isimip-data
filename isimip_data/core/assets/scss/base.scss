@@ -27,6 +27,5 @@ main {
     background-image: url('../../../core/assets/images/mountain-range.jpg');
     background-attachment: fixed;
     background-repeat: no-repeat;
-    background-size: 100%;
-    background-color: $color-neutral-dark;
+    background-size: cover;
 }

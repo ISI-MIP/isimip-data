@@ -43,19 +43,7 @@
                 {% endif %}
             </div>
 
-            <h3>{% trans 'Specifiers' %}</h3>
-            <div class="card">
-                <div class="card-body">
-                    <dl class="row">
-                    {% for key, value in specifiers.items %}
-                    {% if key != 'description' %}
-                        <dt class="col-sm-3 text-right">{{ key }}</dt>
-                        <dd class="col-sm-9">{{ value }}</dd>
-                    {% endif %}
-                    {% endfor %}
-                    </dl>
-                </div>
-            </div>
+            {% include 'metadata/_specifiers.html' %}
         </div>
         <div class="col-sm-4">
             {% if file.dataset.public %}

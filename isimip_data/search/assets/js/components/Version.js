@@ -98,14 +98,24 @@ class Version extends Component {
         {showVersions &&
           <ul className="list-group list-group-flush">
             <li className="list-group-item">
-              <div className="form-inline">
-                <label className="form-check-label">Version range:</label>
-                <input type="text" className="form-control form-control-sm" placeholder="After YYYMMDD" value={after}
-                       onChange={this.handleAfterChange} />
-                <label className="form-check-label">≤ Dataset version ≤</label>
-                <input type="text" className="form-control form-control-sm" placeholder="Before YYYMMDD" value={before}
-                       onChange={this.handleBeforeChange} />
-                <button className="btn btn-default btn-sm ml-auto mr-0" onClick={this.handleApply}>Apply range</button>
+              <div className="row align-items-center">
+                <div className="col-12 col-md-auto mb-2 mb-md-0">
+                  <label className="form-check-label">Version range:</label>
+                </div>
+                <div className="col-12 col-md mb-2 mb-md-0">
+                  <input type="text" className="form-control form-control-sm" placeholder="After YYYMMDD" value={after}
+                         onChange={this.handleAfterChange} />
+                </div>
+                <div className="col-12 col-md-auto mb-2 mb-md-0">
+                  <label className="form-check-label">≤ Dataset version ≤</label>
+                </div>
+                <div className="col-12 col-md mb-2 mb-md-0">
+                  <input type="text" className="form-control form-control-sm" placeholder="Before YYYMMDD" value={before}
+                         onChange={this.handleBeforeChange} />
+                </div>
+                <div className="col-12 col-md-auto">
+                  <button className="btn btn-default btn-sm" onClick={this.handleApply}>Apply range</button>
+                </div>
               </div>
             </li>
           </ul>

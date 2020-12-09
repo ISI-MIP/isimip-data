@@ -2,7 +2,6 @@ footer {
     background-color: $color-neutral-dark;
     color: $color-white;
     overflow: auto;
-    padding-bottom: 30px;
 
     a {
         color: $color-white;
@@ -54,11 +53,26 @@ footer {
 
     .logos {
         font-size: 12px;
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        @include media-breakpoint-only(xs) {
+            margin-bottom: 15px;
+        }
+        @include media-breakpoint-up(sm) {
+            margin-bottom: 30px;
+        }
     }
 
     .image {
         display: block;
         width: 100%;
         height: auto;
+    }
+
+    .image-bmbf {
+        opacity: .8;
     }
 }

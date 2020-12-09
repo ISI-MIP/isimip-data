@@ -44,7 +44,7 @@ class Search extends Component {
 
           <form onSubmit={this.handleSubmit}>
             <div className="form-row">
-              <div className="col-lg">
+              <div className="col">
                 <input className="form-control form-control-lg" type="text" placeholder="Enter search query"
                     onChange={this.setValue} value={value} />
               </div>

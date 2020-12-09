@@ -25,7 +25,7 @@
     </header>
 
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-lg-8">
             <h3>{% trans 'Cite as' %}</h3>
             <div class="card">
                 {% if dataset.resources.first %}
@@ -42,21 +42,9 @@
                 {% endif %}
             </div>
 
-            <h3>{% trans 'Specifiers' %}</h3>
-            <div class="card">
-                <div class="card-body">
-                    <dl class="row">
-                    {% for key, value in specifiers.items %}
-                    {% if key != 'description' %}
-                        <dt class="col-sm-3 text-right">{{ key }}</dt>
-                        <dd class="col-sm-9">{{ value }}</dd>
-                    {% endif %}
-                    {% endfor %}
-                    </dl>
-                </div>
-            </div>
+            {% include 'metadata/_specifiers.html' %}
         </div>
-        <div class="col-sm-4">
+        <div class="col-lg-4">
             {% if dataset.public %}
 
             {% include 'metadata/_preview.html' with src=dataset.files.first.thumbnail_url alt=dataset.name %}

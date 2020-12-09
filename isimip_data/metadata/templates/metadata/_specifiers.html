@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load static %}
+
+<h3>{% trans 'Specifiers' %}</h3>
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+        {% for key, value in specifiers.items %}
+        {% if key != 'description' %}
+            <dt class="col-sm-4">{{ key }}</dt>
+            <dd class="col-sm-8">{{ value }}</dd>
+        {% endif %}
+        {% endfor %}
+        </dl>
+    </div>
+</div>

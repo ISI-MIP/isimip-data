@@ -61,35 +61,37 @@ class Result extends Component {
           <a className="result-title" href={dataset.metadata_url} target="_blank">{dataset.name}</a>
         </h4>
 
+        <div>
+          {dataset.public &&
+          <div className="form-check result-select mb-2 d-xl-inline mr-xl-2 mb-xl-0">
+            <input className="form-check-input" id={inputId} type="checkbox"
+                   checked={isSelected(dataset)} onChange={e => onSelect(e, dataset)} />
+            <label className="form-check-label" htmlFor={inputId}>
+              Select dataset
+            </label>
+          </div>}
 
-        {dataset.download_url && <ul className="list-inline float-right">
-          <li className="list-inline-item">
-            <a href={dataset.download_url}>
-              Configure download
-            </a>
-          </li>
-          <li className="list-inline-item">
-            <a href={dataset.filelist_url}>
-              Download file list
-            </a>
-          </li>
-          <li className="list-inline-item">
-            <button className="btn btn-link" onClick={e => this.handleDownload(e, dataset.files)}>
-              Download file list
-            </button>
-          </li>
-        </ul>}
-        <ul className="list-inline">
-          {dataset.public && <li className="list-inline-item">
-            <div className="form-check result-select">
-              <input className="form-check-input" id={inputId} type="checkbox"
-                     checked={isSelected(dataset)} onChange={e => onSelect(e, dataset)} />
-              <label className="form-check-label" htmlFor={inputId}>
-                Select dataset
-              </label>
+          <div className="float-md-right">
+            <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
+              <a href={dataset.download_url}>
+                Configure download
+              </a>
             </div>
-          </li>}
-          <li className="list-inline-item">
+
+            <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
+              <a href={dataset.filelist_url}>
+                Download file list
+              </a>
+            </div>
+
+            <div className="d-sm-inline-block mb-2 mb-md-0">
+              <button className="btn btn-link" onClick={e => this.handleDownload(e, dataset.files)}>
+                Download all files
+              </button>
+            </div>
+          </div>
+
+          <div className="d-inline mr-2">
             <button className="btn btn-link" onClick={this.toggleAttributes}>
               {showAttributes && <span>
                 Hide attributes <FontAwesomeIcon icon={faChevronUp} />
@@ -98,8 +100,9 @@ class Result extends Component {
                 Show attributes <FontAwesomeIcon icon={faChevronDown} />
               </span>}
             </button>
-          </li>
-          <li className="list-inline-item">
+          </div>
+
+          <div className="d-inline">
             <button className="btn btn-link" onClick={this.toggleFiles}>
               {showFiles && <span>
                 Hide files <FontAwesomeIcon icon={faChevronUp} />
@@ -108,8 +111,8 @@ class Result extends Component {
                 Show files <FontAwesomeIcon icon={faChevronDown} />
               </span>}
             </button>
-          </li>
-        </ul>
+          </div>
+        </div>
       </li>
     )
   }
@@ -119,38 +122,36 @@ class Result extends Component {
 
     return (
       <li className="list-group-item">
-        <div className="mb-2">
-          <div className="row">
-            <div className="col-lg-3">
-              <strong>Size</strong>
-            </div>
-            <div className="col-lg-9">
-              {get_size(dataset.size)}
-            </div>
+        <div className="row">
+          <div className="col-lg-3">
+            <strong>Size</strong>
           </div>
-          <div className="row">
-            <div className="col-lg-3">
-              <strong>Version</strong>
-            </div>
-            <div className="col-lg-9">
-              {dataset.version}
-            </div>
+          <div className="col-lg-9">
+            {get_size(dataset.size)}
           </div>
-          <div className="row">
-            <div className="col-lg-3">
-              <strong>ISIMIP id</strong>
-            </div>
-            <div className="col-lg-9">
-              {dataset.id}
-            </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-3">
+            <strong>Version</strong>
           </div>
-          <div className="row">
-            <div className="col-lg-3">
-              <strong>ISIMIP path</strong>
-            </div>
-            <div className="col-lg-9">
-              {dataset.path}
-            </div>
+          <div className="col-lg-9">
+            {dataset.version}
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-3">
+            <strong>ISIMIP id</strong>
+          </div>
+          <div className="col-lg-9">
+            {dataset.id}
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-3">
+            <strong>ISIMIP path</strong>
+          </div>
+          <div className="col-lg-9">
+            {dataset.path}
           </div>
         </div>
         {
@@ -181,30 +182,32 @@ class Result extends Component {
   renderFiles(dataset) {
     return (
       <li className="list-group-item result-files">
-        <table className="table table-sm">
-          <thead>
-            <tr>
-              <th className="border-top-0">File name</th>
-              <th className="border-top-0" style={{width: '15%'}}>Size</th>
-              <th className="border-top-0" style={{width: '15%'}}></th>
-            </tr>
-          </thead>
-          <tbody>
-          {
-            dataset.files.map(file => (
-              <tr key={file.id}>
-                <td><a href={file.metadata_url} target="_blank">{file.name}</a></td>
-                <td>{get_size(file.size)}</td>
-                <td className="text-right">
-                  {file.file_url && <button className="btn btn-link" onClick={e => this.handleDownload(e, [file])}>
-                    Download file
-                  </button>}
-                </td>
+        <div class="table-responsive-sm">
+          <table className="table table-sm">
+            <thead>
+              <tr>
+                <th className="border-top-0">File name</th>
+                <th className="border-top-0" style={{width: '15%'}}>Size</th>
+                <th className="border-top-0" style={{width: '15%'}}></th>
               </tr>
-            ))
-          }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+            {
+              dataset.files.map(file => (
+                <tr key={file.id}>
+                  <td><a href={file.metadata_url} target="_blank">{file.name}</a></td>
+                  <td>{get_size(file.size)}</td>
+                  <td className="text-right">
+                    {file.file_url && <button className="btn btn-link" onClick={e => this.handleDownload(e, [file])}>
+                      Download file
+                    </button>}
+                  </td>
+                </tr>
+              ))
+            }
+            </tbody>
+          </table>
+        </div>
       </li>
     )
   }

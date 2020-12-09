@@ -41,12 +41,6 @@ main {
     }
 }
 
-.version {
-    .form-control {
-        margin: 0 0.5rem;
-    }
-}
-
 .tree {
     ul {
         padding: 0;
@@ -164,6 +158,7 @@ main {
             font-weight: 600;
 
             margin-bottom: 0.75rem;
+            word-break: break-all;
         }
 
         .badges {

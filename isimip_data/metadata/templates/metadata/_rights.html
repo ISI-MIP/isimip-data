@@ -5,11 +5,11 @@
 <h3>{% trans 'Rights' %}</h3>
 <div class="card">
     <div class="card-body">
-        <div class="row align-items-center mb-3">
-            <div class="col-md-3 text-center rights-image">
+        <div class="row align-items-center mb-2">
+            <div class="col-md-3 text-center mb-2 mb-md-0 rights-image">
                 <img src="{% static rights.image %}" alt="{{ rights.rights }}"/>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-9 text-center text-md-left">
                 <a href="{{ rights.rights_uri }}">
                     {{ rights.rights }} <span class="text-nowrap">({{ rights.short }})</span>
                 </a>

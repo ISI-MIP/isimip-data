@@ -1,27 +1,2 @@
 @import 'isimip_data/core/assets/scss/colors';
 @import 'isimip_data/core/assets/scss/base';
-
-.download-form {
-    margin-top: 40px;
-    text-align: center;
-
-    label {
-        margin-left: 5px;
-    }
-
-    .download-form-input-country {
-        width: 200px;
-        margin-left: 10px;
-    }
-
-    .download-form-input-bbox {
-        width: 100px;
-        margin-left: 10px;
-    }
-
-    .download-message {
-        .fa-spinner {
-            margin-right: 10px;
-        }
-    }
-}
