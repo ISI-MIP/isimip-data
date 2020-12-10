@@ -56,6 +56,8 @@ class Badges extends Component {
           </span>
         </OverlayTrigger>
 
+        <span className="ml-auto invisible"></span>
+
         {resource &&
           <OverlayTrigger placement="bottom" overlay={<Tooltip>This dataset can be cited using the Digital Object Identifier: <i>{resource.doi_url}</i>.</Tooltip>}>
             <a className="badge badge-light" href={resource.doi_url} target="blank">
@@ -66,7 +68,7 @@ class Badges extends Component {
 
         {dataset.terms_of_use &&
           <OverlayTrigger placement="bottom" overlay={<Tooltip>{ dataset.terms_of_use.terms_of_use }</Tooltip>}>
-            <a className="ml-auto badge badge-light" href={dataset.terms_of_use.terms_of_use_url} target="blank">
+            <a className="badge badge-light" href={dataset.terms_of_use.terms_of_use_url} target="blank">
               ToU
             </a>
           </OverlayTrigger>
