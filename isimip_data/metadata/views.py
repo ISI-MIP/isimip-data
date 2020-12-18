@@ -1,4 +1,5 @@
 import json
+from collections import defaultdict
 from uuid import UUID
 
 from django.db.models import Q
@@ -77,15 +78,26 @@ def resources(request):
     })
 
 
-def resource(request, pk=None, doi=None):
-    if doi is not None:
-        return render(request, 'metadata/resource.html', {
-            'resource': get_object_or_404(Resource.objects.using('metadata'), doi=doi)
-        })
-    else:
-        return render(request, 'metadata/resource.html', {
-            'resource': get_object_or_404(Resource.objects.using('metadata'), pk=pk)
-        })
+def resource(request, doi=None):
+    resource = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
+
+    references = defaultdict(list)
+    for identifier in resource.datacite['relatedIdentifiers']:
+        if identifier.get('relationType') == 'IsDocumentedBy':
+            references['IsDocumentedBy'].append(identifier)
+        elif identifier.get('relationType') == 'Cites':
+            references['Cites'].append(identifier)
+        elif identifier.get('relationType') == 'IsDerivedFrom':
+            references['IsDerivedFrom'].append(identifier)
+        elif identifier.get('relationType') == 'HasPart':
+            references['HasPart'].append(identifier)
+        else:
+            references['Other'].append(identifier)
+
+    return render(request, 'metadata/resource.html', {
+        'resource': resource,
+        'references': references
+    })
 
 
 def resource_bibtex(request, doi=None):

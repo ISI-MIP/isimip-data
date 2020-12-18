@@ -136,23 +136,6 @@
                 </ul>
             </div>
 
-            <h3>{% trans 'References' %}</h3>
-            <div class="card">
-                <ul class="list-group list-group-flush">
-                    {% for identifier in resource.datacite.relatedIdentifiers %}
-                    {% if identifier.relationType != 'HasPart' %}
-                    {% if identifier.relatedIdentifierType == 'DOI' or identifier.relatedIdentifierType == 'URL' %}
-                    <li class="list-group-item">
-                        <a href="{{ identifier.relatedIdentifier }}" target="blank">
-                            {{ identifier.title }}
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-
             {% if resource.datacite.subjects %}
             <h3>{% trans 'GCMD Keywords' %}</h3>
             <div class="card">
@@ -171,8 +154,16 @@
         </div>
     </div>
 
+    {% include 'metadata/_related_identifiers.html' with title='Is documented by' identifiers=references.IsDocumentedBy %}
+
+    {% include 'metadata/_related_identifiers.html' with title='References' identifiers=references.Cites %}
+
+    {% include 'metadata/_related_identifiers.html' with title='Is derived from' identifiers=references.IsDerivedFrom %}
+
+    {% include 'metadata/_related_identifiers.html' with title='Other references' identifiers=references.Other %}
+
     {% if resource.datasets.all %}
-    <h3>{% trans 'Datasets in this resource' %}</h3>
+    <h3>{% trans 'Datasets for this DOI' %}</h3>
     <div class="card">
         <ul class="list-group list-group-flush">
             {% for dataset in resource.datasets.all %}

@@ -41,8 +41,7 @@ class DatasetResourceSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'doi',
-            'doi_url',
-            'version'
+            'doi_url'
         )
 
 
@@ -129,8 +128,6 @@ class ResourceSerializer(serializers.ModelSerializer):
         model = Resource
         fields = (
             'id',
-            'path',
-            'version',
             'doi',
             'datacite',
             'title',
