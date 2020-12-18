@@ -122,9 +122,6 @@ class File(models.Model):
 class Resource(models.Model):
 
     id = models.UUIDField(primary_key=True)
-    path = models.TextField()
-    version = models.TextField()
-
     doi = models.TextField()
     datacite = JSONField()
 
@@ -133,7 +130,7 @@ class Resource(models.Model):
     class Meta:
         db_table = 'resources'
         managed = False
-        ordering = ('path', )
+        ordering = ('doi', )
 
     def __str__(self):
         return self.path

@@ -13,7 +13,11 @@
         <h1>Resources</h1>
 
         <h4>
+            {% if resources %}
             The following resources have been registered.
+            {% else %}
+            No resources have been registered, yet.
+            {% endif %}
         </h4>
     </header>
 
