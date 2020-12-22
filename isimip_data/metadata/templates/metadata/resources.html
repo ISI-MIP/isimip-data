@@ -13,7 +13,7 @@
         <h1>Resources</h1>
 
         <h4>
-            {% if resources %}
+            {% if resources or resources_external %}
             The following resources have been registered.
             {% else %}
             No resources have been registered, yet.
@@ -21,12 +21,26 @@
         </h4>
     </header>
 
+    {% if resources %}
+    <h3>Resources</h3>
     {% for resource in resources %}
     <div class="card mb-3">
         {% include 'metadata/_citation.html' %}
         {% include 'metadata/_citation_links.html' %}
     </div>
     {% endfor %}
+    {% endif %}
+
+
+    {% if resources_external %}
+    <h3>External resources</h3>
+    {% for resource in resources_external %}
+    <div class="card mb-3">
+        {% include 'metadata/_citation.html' %}
+        {% include 'metadata/_citation_links.html' %}
+    </div>
+    {% endfor %}
+    {% endif %}
 </div>
 
 {% endblock %}

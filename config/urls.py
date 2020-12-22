@@ -41,10 +41,10 @@ urlpatterns = [
     path('files/<uuid:pk>/', file, name='file'),
     path('files/<path:path>/', file, name='file'),
 
-    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9.]+).bib', resource_bibtex, name='resource_bibtex'),
-    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9.]+).datacite.xml', resource_datacite_xml, name='resource_datacite_xml'),
-    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9.]+).datacite.json', resource_datacite_json, name='resource_datacite_json'),
-    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9.]+)', resource, name='resource'),
+    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).bib', resource_bibtex, name='resource_bibtex'),
+    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).datacite.xml', resource_datacite_xml, name='resource_datacite_xml'),
+    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).datacite.json', resource_datacite_json, name='resource_datacite_json'),
+    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)', resource, name='resource'),
 
     path('resources/', resources, name='resources'),
 

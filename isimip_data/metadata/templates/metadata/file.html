@@ -26,7 +26,7 @@
     </header>
 
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-12">
             <h3>{% trans 'Cite as' %}</h3>
             <div class="card">
                 {% if file.dataset.resources.first %}
@@ -42,15 +42,18 @@
                 </div>
                 {% endif %}
             </div>
+        </div>
+        <div class="col-sm-8">
+            {% if file.dataset.public %}
+            {% include 'metadata/_preview.html' with src=file.thumbnail_url alt=file.name %}
+            {% endif %}
 
             {% include 'metadata/_specifiers.html' %}
         </div>
         <div class="col-sm-4">
-            {% if file.dataset.public %}
-
-            {% include 'metadata/_preview.html' with src=file.thumbnail_url alt=file.name %}
-
             {% include 'metadata/_rights.html' with rights=file.rights %}
+
+            {% if file.dataset.public %}
 
             <h3>{% trans 'Download' %}</h3>
             <div class="card">

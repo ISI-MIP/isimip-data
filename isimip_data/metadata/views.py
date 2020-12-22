@@ -74,7 +74,8 @@ def file(request, pk=None, path=None):
 
 def resources(request):
     return render(request, 'metadata/resources.html', {
-        'resources': Resource.objects.using('metadata').all()
+        'resources': Resource.objects.using('metadata').exclude(datacite=None),
+        'resources_external': Resource.objects.using('metadata').filter(datacite=None)
     })
 
 
@@ -82,17 +83,18 @@ def resource(request, doi=None):
     resource = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
 
     references = defaultdict(list)
-    for identifier in resource.datacite['relatedIdentifiers']:
-        if identifier.get('relationType') == 'IsDocumentedBy':
-            references['IsDocumentedBy'].append(identifier)
-        elif identifier.get('relationType') == 'Cites':
-            references['Cites'].append(identifier)
-        elif identifier.get('relationType') == 'IsDerivedFrom':
-            references['IsDerivedFrom'].append(identifier)
-        elif identifier.get('relationType') == 'HasPart':
-            references['HasPart'].append(identifier)
-        else:
-            references['Other'].append(identifier)
+    if resource.datacite is not None:
+        for identifier in resource.datacite.get('relatedIdentifiers'):
+            if identifier.get('relationType') == 'IsDocumentedBy':
+                references['IsDocumentedBy'].append(identifier)
+            elif identifier.get('relationType') == 'Cites':
+                references['Cites'].append(identifier)
+            elif identifier.get('relationType') == 'IsDerivedFrom':
+                references['IsDerivedFrom'].append(identifier)
+            elif identifier.get('relationType') == 'HasPart':
+                references['HasPart'].append(identifier)
+            else:
+                references['Other'].append(identifier)
 
     return render(request, 'metadata/resource.html', {
         'resource': resource,

@@ -17,7 +17,7 @@
         <h4>
             {% blocktrans trimmed with resource_type=resource.type doi_url=resource.doi_url %}
             You can use the following DOI to cite this resource in a publication:
-            <a href="{{ doi_url }}">{{ doi_url }}</a>.
+            <a href="{{ doi_url }}" target="_blank">{{ doi_url }}</a>.
             {% endblocktrans %}
         </h4>
     </header>
@@ -29,7 +29,10 @@
                 {% include 'metadata/_citation.html' %}
             </div>
         </div>
+    </div>
 
+    {% if resource.datacite %}
+    <div class="row">
         <div class="col-sm-8">
             <h3>{% trans 'Metadata' %}</h3>
             <div class="card">
@@ -107,6 +110,7 @@
                     </p>
                 </div>
             </div>
+
         </div>
 
         <div class="col-sm-4">
@@ -161,6 +165,8 @@
     {% include 'metadata/_related_identifiers.html' with title='Is derived from' identifiers=references.IsDerivedFrom %}
 
     {% include 'metadata/_related_identifiers.html' with title='Other references' identifiers=references.Other %}
+
+    {% endif %}
 
     {% if resource.datasets.all %}
     <h3>{% trans 'Datasets for this DOI' %}</h3>
