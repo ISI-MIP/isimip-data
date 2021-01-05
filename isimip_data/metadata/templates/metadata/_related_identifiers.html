@@ -18,6 +18,10 @@
                 {{ identifier.relatedIdentifier }}
             </a>
         </li>
+        {% else %}
+        <li class="list-group-item related-identifier">
+            {{ identifier.title }}
+        </li>
         {% endif %}
 
         {% endfor %}

@@ -169,10 +169,11 @@ class DataCiteRenderer(object):
         if 'relatedIdentifiers' in self.data:
             self.xml.startElement('relatedIdentifiers', {})
             for related_identifier in self.data.get('relatedIdentifiers', []):
-                self.render_node('relatedIdentifier', {
-                    'relatedIdentifierType': related_identifier.get('relatedIdentifierType'),
-                    'relationType': related_identifier.get('relationType')
-                }, related_identifier.get('relatedIdentifier'))
+                if related_identifier.get('relatedIdentifier'):
+                    self.render_node('relatedIdentifier', {
+                        'relatedIdentifierType': related_identifier.get('relatedIdentifierType'),
+                        'relationType': related_identifier.get('relationType')
+                    }, related_identifier.get('relatedIdentifier'))
             self.xml.endElement('relatedIdentifiers')
 
         # version
