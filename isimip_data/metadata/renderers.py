@@ -99,7 +99,8 @@ class DataCiteRenderer(object):
             for subject in self.data.get('subjects', []):
                 self.render_node('subject', {
                     'subjectScheme': subject.get('subjectScheme'),
-                    'schemeURI': subject.get('schemeURI')
+                    'schemeURI': subject.get('schemeURI'),
+                    'valueURI': subject.get('valueURI')
                 }, subject.get('subject'))
             self.xml.endElement('subjects')
 
