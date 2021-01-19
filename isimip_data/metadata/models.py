@@ -123,6 +123,7 @@ class Resource(models.Model):
 
     id = models.UUIDField(primary_key=True)
     doi = models.TextField()
+    paths = ArrayField(models.TextField())
     datacite = JSONField()
 
     datasets = models.ManyToManyField(Dataset, related_name='resources')

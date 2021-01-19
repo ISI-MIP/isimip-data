@@ -74,8 +74,8 @@ def file(request, pk=None, path=None):
 
 def resources(request):
     return render(request, 'metadata/resources.html', {
-        'resources': Resource.objects.using('metadata').exclude(datacite=None),
-        'resources_external': Resource.objects.using('metadata').filter(datacite=None)
+        'resources': Resource.objects.using('metadata').exclude(datacite=None).order_by('paths'),
+        'resources_external': Resource.objects.using('metadata').filter(datacite=None).order_by('paths')
     })
 
 

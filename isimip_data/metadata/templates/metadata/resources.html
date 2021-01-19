@@ -25,6 +25,7 @@
     <h3>Resources</h3>
     {% for resource in resources %}
     <div class="card mb-3">
+        <h5 class="card-header">{{ resource.paths|join:', ' }}</h5>
         {% include 'metadata/_citation.html' %}
         {% include 'metadata/_citation_links.html' %}
     </div>
@@ -36,6 +37,7 @@
     <h3>External resources</h3>
     {% for resource in resources_external %}
     <div class="card mb-3">
+        <h5 class="card-header">{{ resource.paths|join:', ' }}</h5>
         {% include 'metadata/_citation.html' %}
         {% include 'metadata/_citation_links.html' %}
     </div>
