@@ -1,0 +1,36 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load form_tags %}
+
+{% block page %}
+
+<h1>{% trans 'Update account' %}</h1>
+
+<p>
+    {% url 'account_change_password' as password_url %}
+    {% url 'account_email' as email_url %}
+    {% blocktrans trimmed %}
+    Please enter your updated account information. You can change your password using the <a href="{{ password_url }}">password form</a> and update your e-mail using the <a href="{{ email_url }}">e-mail form</a>.
+    {% endblocktrans %}
+</p>
+
+<form method="post" action="{% url 'profile_update' %}">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}" />
+
+    {% for field in form.visible_fields %}
+        {% bootstrap_form_field field %}
+    {% endfor %}
+
+    <input type="submit" value="{% trans 'Update account' %}" class="btn btn-success" />
+</form>
+
+<p>
+    {% trans 'If you want to remove your account please proceed by clicking the button below. Beware, once completed this can not be undone.' %}
+</p>
+
+<a class="btn btn-danger" role="button" href="{% url 'profile_delete' %}">
+    {% trans 'Delete account' %}
+</a>
+
+{% endblock %}

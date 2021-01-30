@@ -1,0 +1,27 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load form_tags %}
+
+{% block page %}
+
+    <h1>{% trans "Create a new account" %}</h1>
+
+    <p>
+        {% blocktrans trimmed %}
+        Already have an account? Then please <a href="{{ login_url }}">sign in</a>.
+        {% endblocktrans %}
+    </p>
+
+    <form method="post" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+
+        {% for field in form.visible_fields %}
+            {% bootstrap_form_field field %}
+        {% endfor %}
+
+        {% bootstrap_form_errors form %}
+
+        <input type="submit" class="btn btn-success" value="{% trans 'Create account' %}" />
+    </form>
+
+{% endblock %}

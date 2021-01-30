@@ -1,0 +1,10 @@
+.messages {
+    position: fixed;
+    z-index: 3000;
+    bottom: 0;
+    left: 1rem;
+
+    .close {
+        outline: none;
+    }
+}

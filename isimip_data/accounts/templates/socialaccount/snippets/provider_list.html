@@ -1,0 +1,22 @@
+{% load socialaccount %}
+{% load static %}
+{% load i18n %}
+
+{% get_providers as socialaccount_providers %}
+
+{% for provider in socialaccount_providers %}
+
+<div>
+    <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}} btn btn-light w-100 mb-2"
+        href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+        {% if provider.id == 'orcid' %}
+        <img src="{% static 'images/' %}{{ provider.id }}-signin.png" alt="{{ provider.name }} sign in" />
+        {% else %}
+        {% blocktrans trimmed with provider_name=provider.name %}
+        Sign in with {{ provider_name }}
+        {% endblocktrans %}
+        {% endif %}
+    </a>
+</div>
+
+{% endfor %}
