@@ -13,6 +13,8 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost 127.0.0.1 ::1').split()
 
 INTERNAL_IPS = ['127.0.0.1']
 
+SITE_ID = 1
+
 INSTALLED_APPS = [
     # apps
     'django.contrib.admin',
@@ -21,8 +23,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.postgres',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
     # isimip_data apps
+    'isimip_data.accounts',
     'isimip_data.core',
     'isimip_data.download',
     'isimip_data.metadata',
@@ -33,6 +37,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'adminsortable2',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.orcid',
 ]
 
 if DEBUG:
@@ -111,7 +120,25 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-LOGIN_URL = '/admin/'
+LOGIN_URL = '/account/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_URL = '/account/logout/'
+LOGOUT_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+]
+
+ACCOUNT_SIGNUP_FORM_CLASS = 'isimip_data.accounts.forms.SignupForm'
+ACCOUNT_USER_DISPLAY = 'isimip_data.accounts.utils.get_full_name'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_ACTIVATION_DAYS = 7
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+ACCOUNT_PASSWORD_MIN_LENGTH = 4
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -131,7 +158,9 @@ SETTINGS_EXPORT = [
     'NAVIGATION',
     'FILES_BASE_URL',
     'TERMS_OF_USE',
-    'TERMS_OF_USE_URL'
+    'TERMS_OF_USE_URL',
+    'LOGIN_URL',
+    'LOGOUT_URL'
 ]
 
 if DEBUG:

@@ -1,0 +1,22 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load form_tags %}
+
+{% block page %}
+
+<h1>{% trans 'Delete account' %}</h1>
+
+<p>{% trans 'If you are willing to remove your account please proceed by entering the necessary data below. Once completed this can not be undone.' %} </p>
+
+<form method="post" action="{% url 'profile_delete'  %}" novalidate>
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}" />
+
+    {% for field in form.visible_fields %}
+        {% bootstrap_form_field field %}
+    {% endfor %}
+
+    <input type="submit" value="{% trans 'Delete profile' %}" class="btn btn-danger" />
+</form>
+
+{% endblock %}

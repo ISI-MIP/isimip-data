@@ -20,16 +20,13 @@
     </head>
     <body>
         {% include 'core/base_nav.html' %}
+        {% include 'core/base_messages.html' %}
 
         <main>
             {% block main %}{% endblock %}
         </main>
 
         {% include 'core/base_footer.html' %}
-
-        {% if not debug %}
-        {% include 'core/base_analytics.html' %}
-        {% endif %}
 
         {% block script %}
         <script src="{% static 'base.js' %}"></script>
