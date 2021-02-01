@@ -66,15 +66,6 @@ def prettify_attributes(attribute_list):
     return attributes
 
 
-def get_rights(path):
-    for rights_path, rights_uri in settings.MODEL_RIGHTS:
-        if path.startswith(rights_path):
-            rights = settings.RIGHTS.get(rights_uri)
-            if rights:
-                rights['rights_uri'] = rights_uri
-                return rights
-
-
 def get_terms_of_use():
     return {
         'terms_of_use': settings.TERMS_OF_USE,

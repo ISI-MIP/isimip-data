@@ -6,8 +6,9 @@ from django.contrib.postgres.fields import ArrayField, JSONField
 from django.contrib.postgres.search import SearchVectorField
 from django.db import models
 
+from .constants import RIGHTS
 from .managers import DatasetManager
-from .utils import get_rights, get_terms_of_use
+from .utils import get_terms_of_use
 
 
 class Dataset(models.Model):
@@ -21,6 +22,7 @@ class Dataset(models.Model):
     version = models.TextField()
     size = models.BigIntegerField()
     specifiers = JSONField()
+    rights = models.TextField()
     identifiers = ArrayField(models.TextField())
     search_vector = SearchVectorField(null=True)
     public = models.BooleanField(null=True)
@@ -47,8 +49,8 @@ class Dataset(models.Model):
         return [(identifier, self.specifiers.get(identifier)) for identifier in self.identifiers]
 
     @property
-    def rights(self):
-        return get_rights(self.path)
+    def rights_dict(self):
+        return RIGHTS.get(self.rights, {})
 
     @property
     def terms_of_use(self):
@@ -67,6 +69,7 @@ class File(models.Model):
     checksum = models.TextField()
     checksum_type = models.TextField()
     specifiers = JSONField()
+    rights = models.TextField()
     identifiers = ArrayField(models.TextField())
     search_vector = SearchVectorField(null=True)
 
@@ -111,8 +114,8 @@ class File(models.Model):
         return [(identifier, self.specifiers.get(identifier)) for identifier in self.identifiers]
 
     @property
-    def rights(self):
-        return get_rights(self.path)
+    def rights_dict(self):
+        return RIGHTS.get(self.rights, {})
 
     @property
     def terms_of_use(self):
@@ -180,10 +183,9 @@ class Resource(models.Model):
         for rights in self.datacite.get('rightsList', []):
             rights_uri = rights.get('rightsURI')
             if rights_uri:
-                rights = settings.RIGHTS.get(rights_uri)
+                rights = filter(lambda item: item.get('rights_uri') == rights_uri, RIGHTS.values())
                 if rights:
-                    rights['rights_uri'] = rights_uri
-                    return rights
+                    return next(rights)
 
     @property
     def terms_of_use(self):

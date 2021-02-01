@@ -8,6 +8,7 @@ class DatasetFileSerializer(serializers.ModelSerializer):
 
     metadata_url = serializers.SerializerMethodField()
     download_url = serializers.SerializerMethodField()
+    rights = serializers.JSONField(source='rights_dict')
 
     class Meta:
         model = File
@@ -53,6 +54,7 @@ class DatasetSerializer(serializers.ModelSerializer):
     metadata_url = serializers.SerializerMethodField()
     download_url = serializers.SerializerMethodField()
     filelist_url = serializers.SerializerMethodField()
+    rights = serializers.JSONField(source='rights_dict')
 
     class Meta:
         model = Dataset
@@ -93,6 +95,7 @@ class FileSerializer(serializers.ModelSerializer):
     search_rank = serializers.FloatField(required=False, default=0.0)
     metadata_url = serializers.SerializerMethodField()
     download_url = serializers.SerializerMethodField()
+    rights = serializers.JSONField(source='rights_dict')
 
     class Meta:
         model = File
