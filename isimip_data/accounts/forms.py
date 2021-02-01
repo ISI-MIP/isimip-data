@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
 
-class ProfileForm(forms.ModelForm):
+class UpdateProfileForm(forms.ModelForm):
 
     use_required_attribute = False
 
@@ -26,8 +26,3 @@ class DeleteProfileForm(forms.Form):
 
     consent = forms.BooleanField(required=True)
     consent.label = _('I confirm that I want my account to be completely removed.')
-
-
-class SignupForm(ProfileForm):
-
-    pass
