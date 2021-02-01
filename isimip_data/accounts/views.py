@@ -4,12 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext as _
 
-from .forms import DeleteProfileForm, ProfileForm
+from .forms import DeleteProfileForm, UpdateProfileForm
 
 
 @login_required()
 def profile_update(request):
-    form = ProfileForm(request.POST or None, instance=request.user)
+    form = UpdateProfileForm(request.POST or None, instance=request.user)
 
     if request.method == 'POST' and form.is_valid():
         form.save()

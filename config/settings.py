@@ -129,7 +129,6 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
 
-ACCOUNT_SIGNUP_FORM_CLASS = 'isimip_data.accounts.forms.SignupForm'
 ACCOUNT_USER_DISPLAY = 'isimip_data.accounts.utils.get_full_name'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_ACTIVATION_DAYS = 7
