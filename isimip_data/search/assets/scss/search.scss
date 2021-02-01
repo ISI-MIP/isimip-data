@@ -26,6 +26,17 @@ main {
 }
 
 .search {
+    h1 {
+        margin-top: 0;
+        text-align: left;
+        font-size: 28px;
+        color: $color-neutral-dark;
+    }
+
+    form {
+        margin-bottom: 0;
+    }
+
     button {
         background-color: $color-white;
         border: 1px solid $color-neutral;
