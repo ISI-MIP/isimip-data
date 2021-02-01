@@ -185,39 +185,6 @@ FILES_API_URL = os.getenv('FILES_API_URL')
 
 PROTOCOL_LOCATIONS = os.getenv('PROTOCOL_LOCATIONS', '').split()
 
-RIGHTS = {
-    'https://creativecommons.org/publicdomain/zero/1.0/': {
-        'rights': 'CC0 1.0 Universal Public Domain Dedication',
-        'short': 'CC0 1.0',
-        'image': 'images/cc/cc0.png',
-    },
-    'https://creativecommons.org/licenses/by/4.0/': {
-        'rights': 'Attribution 4.0 International',
-        'short': 'CC BY 4.0',
-        'image': 'images/cc/by.png',
-    },
-    'https://creativecommons.org/licenses/by-sa/4.0/': {
-        'rights': 'Attribution-ShareAlike 4.0 International',
-        'short': 'CC BY-SA 4.0',
-        'image': 'images/cc/by_sa.png',
-    },
-    'https://creativecommons.org/licenses/by-nc/4.0/': {
-        'rights': 'Attribution-NonCommercial 4.0 International',
-        'short': 'CC BY-NC 4.0',
-        'image': 'images/cc/by_nc.png',
-    }
-}
-
-MODEL_RIGHTS = [
-    ('ISIMIP2a/OutputData', 'https://creativecommons.org/licenses/by/4.0/'),
-    ('ISIMIP2b/OutputData/water_global/MPI-HM', 'https://creativecommons.org/licenses/by-sa/4.0/'),
-    ('ISIMIP2b/OutputData/water_global/WaterGAP2', 'https://creativecommons.org/licenses/by-nc/4.0/'),
-    ('ISIMIP2b/SecondaryOutputData/water_global/WaterGAP2', 'https://creativecommons.org/licenses/by-nc/4.0/'),
-    ('ISIMIP2a/OutputData', 'https://creativecommons.org/licenses/by/4.0/'),
-    ('ISIMIP3a', 'https://creativecommons.org/publicdomain/zero/1.0/'),
-    ('ISIMIP3b', 'https://creativecommons.org/publicdomain/zero/1.0/'),
-]
-
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
 LOG_DIR = os.getenv('LOG_DIR')
 if LOG_DIR:

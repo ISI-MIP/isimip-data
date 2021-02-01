@@ -51,7 +51,7 @@
             {% include 'metadata/_specifiers.html' %}
         </div>
         <div class="col-sm-4">
-            {% include 'metadata/_rights.html' with rights=file.rights %}
+            {% include 'metadata/_rights.html' with rights=file.rights_dict %}
 
             {% if file.dataset.public %}
 
