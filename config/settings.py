@@ -172,7 +172,7 @@ NAVIGATION = [
     },
     {
         'title': 'Documentation',
-        'href': 'https://www.isimip.org/outputdata/isimip-data-on-the-esgf-server/'
+        'href': 'https://www.isimip.org/outputdata/isimip-repository/'
     },
     {
         'title': 'Terms of Use',
