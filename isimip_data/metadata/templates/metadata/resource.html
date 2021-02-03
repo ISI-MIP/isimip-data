@@ -61,7 +61,11 @@
                             <ul class="list-unstyled">
                                 {% for creator in resource.datacite.creators %}
                                 <li>
-                                    {{ creator.givenName }} {{ creator.familyName }}
+                                    {% if creator.givenName and creator.familyName %}
+                                        {{ creator.givenName }} {{ creator.familyName }}
+                                    {% else %}
+                                        {{ creator.name }}
+                                    {% endif %}
                                     {% include 'metadata/_name_credit.html' with name=creator %}
                                     {% include 'metadata/_name_identifier.html' with name=creator %}
                                 </li>
