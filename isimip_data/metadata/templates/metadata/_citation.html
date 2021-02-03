@@ -3,7 +3,7 @@
     <p class="card-text cite-as">
         {% if resource.datacite %}
         <b>{{ resource.creators_str }} ({{ resource.datacite.publicationYear }}):</b>
-        <i>{{ resource.title }}</i> ({{ resource.major_version }}). {{ resource.datacite.publisher }}.
+        <i>{{ resource.title }}.</i> {{ resource.datacite.publisher }}.
         {% else %}
         {% trans 'Please follow the policies of the original data provider:' %}
         {% endif %}
