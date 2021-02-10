@@ -182,7 +182,7 @@ class Result extends Component {
   renderFiles(dataset) {
     return (
       <li className="list-group-item result-files">
-        <div class="table-responsive-sm">
+        <div className="table-responsive-sm">
           <table className="table table-sm">
             <thead>
               <tr>
