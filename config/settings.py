@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # isimip_data apps
     'isimip_data.accounts',
+    'isimip_data.caveats',
     'isimip_data.core',
     'isimip_data.download',
     'isimip_data.metadata',

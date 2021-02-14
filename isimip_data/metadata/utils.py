@@ -54,16 +54,34 @@ def fetch_glossary():
 def prettify_attributes(attribute_list):
     glossary = fetch_glossary()
 
-    attributes = OrderedDict()
+    pretty = OrderedDict()
     for key, value in attribute_list:
         try:
             pretty_value = glossary[key][value]['title']
         except (KeyError, TypeError):
             pretty_value = value
 
-        attributes[key.replace('_', ' ').title()] = pretty_value
+        pretty[key.replace('_', ' ').title()] = pretty_value
 
-    return attributes
+    return pretty
+
+
+def prettify_attributes_dict(attribute_dict):
+    glossary = fetch_glossary()
+
+    pretty = OrderedDict()
+    for key, values in attribute_dict.items():
+        pretty_values = []
+        for value in values:
+            try:
+                pretty_value = glossary[key][value]['title']
+            except (KeyError, TypeError):
+                pretty_value = value
+            pretty_values.append(pretty_value)
+
+        pretty[key.replace('_', ' ').title()] = pretty_values
+
+    return pretty
 
 
 def get_terms_of_use():

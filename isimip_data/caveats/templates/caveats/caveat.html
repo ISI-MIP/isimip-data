@@ -1,0 +1,71 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'caveats.css' %}" />
+{% endblock %}
+
+{% block script %}
+    {{ block.super }}
+    <script src="{% static 'caveats.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <header>
+        <h1>{{ caveat.title }} <span class="text-muted">#{{ caveat.id }}</span></h1>
+
+        <p class="text-center">
+            <span class="badge badge-pill badge-light badge-{{ caveat.severity }}">
+                {{ caveat.get_severity_display }}
+            </span>
+            <span class="badge badge-pill badge-light badge-{{ caveat.status }}">
+                {{ caveat.get_status_display }}
+            </span>
+        </p>
+
+        <p class="text-center">
+            {{ caveat.get_creator_display }} opened this caveat {{ caveat.created|timesince }} ago.
+        </p>
+    </header>
+
+    <h3>{% trans 'Details' %}</h3>
+
+    <div class="card">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-2">{% trans 'Title' %}</dt>
+                <dd class="col-sm-10">{{ caveat.title }}</dd>
+                <dt class="col-sm-2">{% trans 'Description' %}</dt>
+                <dd class="col-sm-10">{{ caveat.description }}</dd>
+                {% for identifier, specifiers in specifiers.items %}
+                <dt class="col-sm-2">{{ identifier }}</dt>
+                <dd class="col-sm-10">
+                    {{specifiers|join:', '}}
+                </dd>
+                {% endfor %}
+            </dl>
+        </div>
+    </div>
+
+    {% if datasets.count > 1 %}
+    <h3>{% trans 'Affected dataset' %}</h3>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            {% for dataset in datasets.all %}
+            <li class="list-group-item">
+                <h4>
+                    <a href="{% url 'dataset' dataset.id %}">{{ dataset.name }}</a>
+                </h4>
+                {% include 'metadata/_shields.html' with obj=dataset %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

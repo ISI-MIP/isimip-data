@@ -24,6 +24,9 @@
                 <li class="nav-item {% if request.resolver_match.url_name in 'metadata,dataset,file' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'metadata' %}">Metadata</a>
                 </li>
+                <li class="nav-item {% if request.resolver_match.url_name in 'caveats,caveat' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'caveats' %}">Caveats</a>
+                </li>
             </ul>
             <ul class="navbar-nav">
                 {% for link in settings.NAVIGATION %}

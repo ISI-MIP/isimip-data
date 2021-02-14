@@ -1,0 +1,20 @@
+<div style="margin-left: 170px;">
+{% for attribute, specifiers in widget.attributes %}
+    <div style="padding: 6px 0;">
+        <strong>{{ attribute }}:</strong>
+
+        {% for specifier in specifiers %}
+        {% if specifier is not None %}
+        {% with 'id_specifiers_'|add:attribute|add:'_'|add:specifier as id %}
+        <span class="">
+            <input type="checkbox" id="{{ id }}" {% if id in widget.value %}checked{% endif %}
+                   name="specifiers_{{ attribute }}" value="{{ specifier }}"
+                   style="margin-top: -2px; margin-left: 8px;">
+            <label class="vCheckboxLabel" style="vertical-align: 0; padding: 0;" for="{{ id }}">{{ specifier }}</label>
+        </span>
+        {% endwith %}
+        {% endif %}
+        {% endfor %}
+    </div>
+{% endfor %}
+</div>

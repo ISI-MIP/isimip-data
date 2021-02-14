@@ -6,6 +6,8 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
+from isimip_data.caveats.models import Caveat
+
 from .models import Attribute, Dataset, File, Resource
 from .renderers import BibTexRenderer, DataCiteRenderer
 from .utils import prettify_attributes
@@ -46,10 +48,13 @@ def dataset(request, pk=None, path=None):
                                                 .exclude(id=obj.id) \
                                                 .order_by('-version')
 
+    caveats = Caveat.objects.filter(datasets__contains=[obj.id])
+
     return render(request, 'metadata/dataset.html', {
         'dataset': obj,
         'versions': versions,
-        'specifiers': prettify_attributes(obj.specifier_list)
+        'specifiers': prettify_attributes(obj.specifier_list),
+        'caveats': caveats
     })
 
 
@@ -65,10 +70,13 @@ def file(request, pk=None, path=None):
                                              .exclude(id=obj.id) \
                                              .order_by('-version')
 
+    caveats = Caveat.objects.filter(datasets__contains=[obj.dataset.id])
+
     return render(request, 'metadata/file.html', {
         'file': obj,
         'versions': versions,
-        'specifiers': prettify_attributes(obj.specifier_list)
+        'specifiers': prettify_attributes(obj.specifier_list),
+        'caveats': caveats
     })
 
 

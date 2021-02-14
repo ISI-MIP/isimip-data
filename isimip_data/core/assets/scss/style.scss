@@ -1,4 +1,6 @@
 .card {
+    font-size: 10pt;
+
     border: 1px solid $color-neutral;
     border-radius: 0;
 
@@ -10,6 +12,13 @@
 
     .card-footer {
         background-color: $color-white;
+    }
+
+    h4 {
+        font-size: 20px;
+        font-weight: normal;
+        margin-bottom: 10px;
+        word-break: break-all;
     }
 
     h4,
