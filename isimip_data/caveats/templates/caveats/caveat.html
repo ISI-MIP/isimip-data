@@ -2,16 +2,6 @@
 {% load static %}
 {% load i18n %}
 
-{% block style %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{% static 'caveats.css' %}" />
-{% endblock %}
-
-{% block script %}
-    {{ block.super }}
-    <script src="{% static 'caveats.js' %}"></script>
-{% endblock %}
-
 {% block main %}
 
 <div class="container">
@@ -57,7 +47,7 @@
         </div>
     </div>
 
-    {% if datasets.count > 1 %}
+    {% if datasets %}
     <h3>{% trans 'Affected datasets' %}</h3>
     {% include 'metadata/cards/datasets.html' %}
     {% endif %}

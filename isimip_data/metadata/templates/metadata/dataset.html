@@ -22,6 +22,8 @@
         <h4>{% trans 'Version' %}: {{ dataset.version }}</h4>
         <h4>{% trans 'Internal ID' %}: {{ dataset.id }}</h4>
         <h4>{% trans 'Path' %}: {{ dataset.path }}</h4>
+
+        <a href="{% url 'caveat_create' %}">{% trans 'Submit caveat' %}</a>
     </header>
 
     <div class="row">

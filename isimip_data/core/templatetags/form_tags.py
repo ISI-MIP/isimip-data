@@ -6,11 +6,13 @@ register = template.Library()
 @register.inclusion_tag('core/tags/bootstrap_form_field.html')
 def bootstrap_form_field(field):
     field.field.widget.attrs['placeholder'] = field.label
+    field.field.widget.attrs['class'] = 'form-control'
 
-    if field.field.widget.input_type == 'checkbox':
-        field.field.widget.attrs['class'] = 'form-check-input'
-    else:
-        field.field.widget.attrs['class'] = 'form-control'
+    try:
+        if field.field.widget.input_type == 'checkbox':
+            field.field.widget.attrs['class'] = 'form-check-input'
+    except AttributeError:
+        pass
 
     return {
         'field': field
