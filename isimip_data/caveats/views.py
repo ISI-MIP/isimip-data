@@ -2,6 +2,7 @@ from urllib.parse import urlparse
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import resolve
 from django.utils.translation import gettext as _
@@ -14,7 +15,11 @@ from .models import Caveat
 
 
 def caveats(request):
-    caveats = Caveat.objects.order_by('-updated')
+    q = Q(public=True)
+    if request.user.is_authenticated:
+        q |= Q(creator=request.user)
+
+    caveats = Caveat.objects.filter(q).order_by('-updated')
 
     return render(request, 'caveats/caveats.html', {
         'caveats': caveats
@@ -22,7 +27,11 @@ def caveats(request):
 
 
 def caveat(request, pk=None):
-    caveat = get_object_or_404(Caveat.objects.all(), id=pk)
+    q = Q(public=True)
+    if request.user.is_authenticated:
+        q |= Q(creator=request.user)
+
+    caveat = get_object_or_404(Caveat.objects.filter(q), id=pk)
     datasets = Dataset.objects.using('metadata').filter(id__in=caveat.datasets)
 
     return render(request, 'caveats/caveat.html', {

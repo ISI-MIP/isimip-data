@@ -42,6 +42,7 @@ class Caveat(models.Model):
     datasets = ArrayField(models.UUIDField(), blank=True, default=list)
     version_after = models.CharField(max_length=8, blank=True)
     version_before = models.CharField(max_length=8, blank=True)
+    public = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('updated', )

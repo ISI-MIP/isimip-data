@@ -9,7 +9,9 @@
         <h1>{% trans 'Caveats' %}</h1>
     </header>
 
+    {% if caveats %}
     {% include 'caveats/cards/caveats.html' %}
+    {% endif %}
 </div>
 
 {% endblock %}

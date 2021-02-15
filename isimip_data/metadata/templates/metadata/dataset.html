@@ -23,7 +23,9 @@
         <h4>{% trans 'Internal ID' %}: {{ dataset.id }}</h4>
         <h4>{% trans 'Path' %}: {{ dataset.path }}</h4>
 
-        <a href="{% url 'caveat_create' %}">{% trans 'Submit caveat' %}</a>
+        <a href="{% url 'caveat_create' %}">
+            {% trans 'Submit new caveat for this dataset' %}
+        </a>
     </header>
 
     <div class="row">

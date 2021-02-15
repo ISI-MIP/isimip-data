@@ -27,6 +27,7 @@ class CaveatForm(forms.ModelForm):
         self.instance.creator = self.creator
         self.instance.severity = self.instance.SEVERITY_MEDIUM
         self.instance.status = self.instance.STATUS_NEW
+        self.instance.public = False
 
         dataset_id = self.cleaned_data.get('dataset_id')
         if dataset_id:

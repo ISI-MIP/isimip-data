@@ -56,7 +56,7 @@ class CaveatAdmin(admin.ModelAdmin):
     form = CaveatAdminForm
 
     search_fields = ('title', 'description')
-    list_display = ('title', 'created', 'updated', 'severity', 'status')
+    list_display = ('title', 'created', 'updated', 'severity', 'status', 'public')
     list_filter = ('severity', 'status')
     readonly_fields = ('created', 'updated', 'affected_datasets')
     exclude = ('datasets',)

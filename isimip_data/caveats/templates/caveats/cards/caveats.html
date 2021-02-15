@@ -6,6 +6,11 @@
         <li class="list-group-item">
             <h4>
                 <div class="float-right">
+                    {% if not caveat.public %}
+                    <span class="badge badge-pill badge-secondary">
+                        {% trans 'not public' %}
+                    </span>
+                    {% endif %}
                     {% include 'caveats/snippets/severity.html' %}
                     {% include 'caveats/snippets/status.html' %}
                 </div>
