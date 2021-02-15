@@ -65,8 +65,8 @@ class CaveatAdmin(admin.ModelAdmin):
         datasets = Dataset.objects.using('metadata').filter(id__in=instance.datasets)
         return format_html_join(
             mark_safe('<br>'),
-            '{}',
-            ((dataset.name, ) for dataset in datasets)
+            '{}#{}',
+            ((dataset.name, dataset.version) for dataset in datasets)
         )
 
 

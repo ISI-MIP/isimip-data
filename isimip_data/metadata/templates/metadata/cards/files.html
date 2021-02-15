@@ -1,0 +1,17 @@
+{% load i18n %}
+
+<div class="card">
+    <ul class="list-group list-group-flush">
+        {% for file in files %}
+
+        {% if file_exclude in None or file != file_exclude %}
+        <li class="list-group-item">
+            <h4>
+                <a href="{% url 'file' file.id %}">{{ file.name }}</a>
+            </h4>
+            {% include 'metadata/snippets/shields.html' with obj=file %}
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</div>

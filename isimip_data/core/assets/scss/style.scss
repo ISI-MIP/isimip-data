@@ -23,7 +23,8 @@
 
     h4,
     p,
-    dl {
+    dl,
+    dd {
         &:last-child {
             margin-bottom: 0;
         }

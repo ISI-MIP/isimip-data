@@ -40,6 +40,8 @@ class Caveat(models.Model):
     status = models.TextField(choices=STATUS_CHOICES)
     specifiers = JSONField(default=dict)
     datasets = ArrayField(models.UUIDField(), blank=True, default=list)
+    version_after = models.CharField(max_length=8, blank=True)
+    version_before = models.CharField(max_length=8, blank=True)
 
     class Meta:
         ordering = ('updated', )
@@ -56,6 +58,12 @@ class Caveat(models.Model):
                     q |= models.Q(specifiers__contains={identifier: specifier})
                 queryset = queryset.filter(q)
 
+            if self.version_after:
+                queryset = queryset.filter(version__gte=self.version_after)
+
+            if self.version_before:
+                queryset = queryset.filter(version__lte=self.version_before)
+
             self.datasets = list(queryset.values_list('id', flat=True))
         else:
             self.datasets = []
@@ -64,3 +72,21 @@ class Caveat(models.Model):
 
     def get_creator_display(self):
         return get_full_name(self.creator)
+
+    @property
+    def severity_color(self):
+        return {
+            self.SEVERITY_LOW: 'info',
+            self.SEVERITY_MEDIUM: 'warning',
+            self.SEVERITY_HIGH: 'red',
+            self.SEVERITY_CRITICAL: 'dark'
+        }.get(self.severity)
+
+    @property
+    def status_color(self):
+        return {
+            self.STATUS_NEW: 'primary',
+            self.STATUS_ON_HOLD: 'info',
+            self.STATUS_RESOLVED: 'success',
+            self.STATUS_WONT_FIX: 'secondary'
+        }.get(self.status)

@@ -17,50 +17,7 @@
         <h1>{% trans 'Caveats' %}</h1>
     </header>
 
-    <div class="card">
-        <div class="card-header">
-            <div class="form-row">
-                <div class="col-6"><strong>{% trans 'Caveat' %}</strong></div>
-                <div class="col-2"><strong>{% trans 'Creator' %}</strong></div>
-                <div class="col-1"><strong>{% trans 'Created' %}</strong></div>
-                <div class="col-1"><strong>{% trans 'Updated' %}</strong></div>
-                <div class="col-1"><strong>{% trans 'Status' %}</strong></div>
-                <div class="col-1"><strong>{% trans 'Severity' %}</strong></div>
-            </div>
-        </div>
-        <ul class="list-group list-group-flush">
-            {% for caveat in caveats %}
-            <li class="list-group-item">
-                <div class="form-row">
-                    <div class="col-6">
-                        <a href="{% url 'caveat' caveat.id %}">
-                            {{ caveat.title }}
-                        </a>&nbsp;<span class="text-muted">#{{ caveat.id }}</span>
-                    </div>
-                    <div class="col-2">
-                        {{ caveat.get_creator_display }}
-                    </div>
-                    <div class="col-1">
-                        {{ caveat.created|date }}
-                    </div>
-                    <div class="col-1">
-                        {{ caveat.updated|date }}
-                    </div>
-                    <div class="col-1">
-                        <span class="badge badge-pill badge-light badge-{{ caveat.severity }}">
-                            {{ caveat.get_severity_display }}
-                        </span>
-                    </div>
-                    <div class="col-1">
-                        <span class="badge badge-pill badge-light badge-{{ caveat.status }}">
-                            {{ caveat.get_status_display }}
-                        </span>
-                    </div>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+    {% include 'caveats/cards/caveats.html' %}
 </div>
 
 {% endblock %}

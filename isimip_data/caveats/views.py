@@ -8,7 +8,7 @@ from .models import Caveat
 
 
 def caveats(request):
-    caveats = Caveat.objects.all()
+    caveats = Caveat.objects.order_by('-updated')
 
     return render(request, 'caveats/caveats.html', {
         'caveats': caveats
@@ -18,9 +18,6 @@ def caveats(request):
 def caveat(request, pk=None):
     caveat = get_object_or_404(Caveat.objects.all(), id=pk)
     datasets = Dataset.objects.using('metadata').filter(id__in=caveat.datasets)
-
-    print(caveat.datasets)
-    print(datasets)
 
     return render(request, 'caveats/caveat.html', {
         'caveat': caveat,

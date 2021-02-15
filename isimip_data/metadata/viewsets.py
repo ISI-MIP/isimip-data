@@ -26,7 +26,7 @@ class Pagination(PageNumberPagination):
 class DatasetViewSet(ReadOnlyModelViewSet):
 
     serializer_class = DatasetSerializer
-    queryset = Dataset.objects.using('metadata')
+    queryset = Dataset.objects.using('metadata').prefetch_related('files', 'resources')
     pagination_class = Pagination
 
     filter_backends = (

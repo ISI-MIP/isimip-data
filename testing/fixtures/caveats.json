@@ -5,8 +5,11 @@
     "fields": {
       "title": "Lorem ipsum dolor sit amet",
       "description": "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+      "creator": 1,
       "created": "2021-02-11T16:57:53.702Z",
       "updated": "2021-02-11T16:57:53.702Z",
+      "version_after": "",
+      "version_before": "",
       "severity": "medium",
       "status": "wont_fix"
     }

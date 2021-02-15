@@ -1,0 +1,29 @@
+{% load i18n %}
+
+<div class="card">
+    <ul class="list-group list-group-flush">
+        {% for related_identifier in related_identifiers %}
+
+        {% if related_identifier.relatedIdentifierType == 'DOI' %}
+        <li class="list-group-item related-identifier">
+            {{ related_identifier.title }}&nbsp;
+            <a class="doi-link" href="{{ related_identifier.relatedIdentifier }}" target="blank">
+                {{ related_identifier.relatedIdentifier }}
+            </a>
+        </li>
+        {% elif related_identifier.relatedIdentifierType == 'URL' %}
+        <li class="list-group-item related-identifier">
+            {{ related_identifier.title }}&nbsp;&rarr;
+            <a href="{{ related_identifier.relatedIdentifier }}" target="blank">
+                {{ related_identifier.relatedIdentifier }}
+            </a>
+        </li>
+        {% else %}
+        <li class="list-group-item related-identifier">
+            {{ related_identifier.title }}
+        </li>
+        {% endif %}
+
+        {% endfor %}
+    </ul>
+</div>

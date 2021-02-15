@@ -1,0 +1,14 @@
+{% load i18n %}
+
+<div class="card">
+    <ul class="list-group list-group-flush">
+        {% for dataset in datasets %}
+        <li class="list-group-item">
+            <h4>
+                <a href="{% url 'dataset' dataset.id %}">{{ dataset.name }}</a>
+            </h4>
+            {% include 'metadata/snippets/shields.html' with obj=dataset %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>

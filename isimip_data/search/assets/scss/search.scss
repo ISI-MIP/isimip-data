@@ -198,13 +198,12 @@ main {
             }
         }
 
-        .result-files {
-            li {
-                margin-bottom: 0.75rem;
+        .result-file,
+        .result-caveat {
+            padding-bottom: 0.5rem;
 
-                &:last-child {
-                    margin-bottom: 0;
-                }
+            &:last-child {
+                padding-bottom: 0;
             }
         }
 

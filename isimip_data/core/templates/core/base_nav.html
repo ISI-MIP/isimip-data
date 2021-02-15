@@ -58,6 +58,9 @@
                         </a>
                         {% if user.is_staff %}
                         <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'resources' %}">
+                            {% trans 'List of registered DOIs' %}
+                        </a>
                         <a class="dropdown-item" href="{% url 'admin:index' %}">
                             {% trans 'Django administration' %}
                         </a>

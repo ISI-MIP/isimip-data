@@ -28,30 +28,22 @@
     <div class="row">
         <div class="col-sm-12">
             <h3>{% trans 'Cite as' %}</h3>
-            <div class="card">
-                {% if file.dataset.resources.first %}
-                    {% with resource=file.dataset.resources.first %}
-                    {% include 'metadata/_citation.html' %}
-                    {% include 'metadata/_citation_links.html' %}
-                    {% endwith %}
-                {% else %}
-                <div class="card-body">
-                    <p class="card-text">
-                        No DOI was registered for file yet. Please follow our general <a href="https://www.isimip.org/gettingstarted/terms-of-use/">terms of use</a>.
-                    </p>
-                </div>
-                {% endif %}
-            </div>
+            {% include 'metadata/cards/citation.html' with resource=file.dataset.resources.first citation_footer=True %}
         </div>
         <div class="col-sm-8">
-            {% if file.dataset.public %}
-            {% include 'metadata/_preview.html' with src=file.thumbnail_url alt=file.name %}
+            {% if dataset.public %}
+            <h3>{% trans 'Preview' %}</h3>
+            {% include 'metadata/cards/preview.html' with src=file.thumbnail_url alt=file.name %}
             {% endif %}
 
-            {% include 'metadata/_specifiers.html' %}
+            <h3>{% trans 'Specifiers' %}</h3>
+            {% include 'metadata/cards/specifiers.html' %}
         </div>
         <div class="col-sm-4">
-            {% include 'metadata/_rights.html' with rights=file.rights_dict %}
+            {% if dataset.rights_dict %}
+            <h3>{% trans 'Rights' %}</h3>
+            {% include 'metadata/cards/rights.html' with rights=file.rights_dict %}
+            {% endif %}
 
             {% if file.dataset.public %}
 
@@ -108,60 +100,29 @@
                 <h4>
                     <a href="{% url 'dataset' file.dataset.id %}">{{ file.dataset.name }}</a>
                 </h4>
-                {% include 'metadata/_shields.html' with obj=file %}
+                {% include 'metadata/snippets/shields.html' with obj=file %}
             </li>
         </ul>
     </div>
 
     {% if caveats %}
     <h3>{% trans 'Caveats for the dataset' %}</h3>
-    <div class="card">
-        <ul class="list-group list-group-flush">
-            {% for caveat in caveats %}
-            <li class="list-group-item">
-                <h4>
-                    <a href="{% url 'caveat' caveat.id %}">{{ caveat.title }}</a>
-                    <span class="text-muted">#{{ caveat.id }}</span>
-                </h4>
-                <p>{{ caveat.get_creator_display }} opened this caveat {{ caveat.created|timesince }} ago.</p>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+    {% include 'caveats/cards/caveats.html' %}
+    {% endif %}
+
+    {% if caveats_versions %}
+    <h3>{% trans 'Caveats for other versions of the dataset' %}</h3>
+    {% include 'caveats/cards/caveats.html' with caveats=caveats_versions %}
     {% endif %}
 
     {% if file.dataset.files.count > 1 %}
     <h3>{% trans 'Other files in the dataset' %}</h3>
-    <div class="card">
-        <ul class="list-group list-group-flush">
-            {% for sibling in file.dataset.files.all %}
-            {% if sibling != file %}
-            <li class="list-group-item">
-                <h4>
-                    <a href="{% url 'file' sibling.id %}">{{ sibling.name }}</a>
-                </h4>
-                {% include 'metadata/_shields.html' with obj=sibling %}
-            </li>
-            {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
+    {% include 'metadata/cards/files.html' with files=file.dataset.files.all file_exclude=file %}
     {% endif %}
 
     {% if versions %}
     <h3>{% trans 'Other versions of this file' %}</h3>
-    <div class="card">
-        <ul class="list-group list-group-flush">
-            {% for version in versions %}
-            <li class="list-group-item">
-                <h4>
-                    <a href="{% url 'file' version.id %}">{{ version.name }}</a>
-                </h4>
-                {% include 'metadata/_shields.html' with obj=version %}
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+    {% include 'metadata/cards/files.html' with files=versions %}
     {% endif %}
 </div>
 

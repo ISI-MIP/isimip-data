@@ -50,11 +50,17 @@ def dataset(request, pk=None, path=None):
 
     caveats = Caveat.objects.filter(datasets__contains=[obj.id])
 
+    if versions:
+        caveats_versions = Caveat.objects.filter(datasets__contains=list(versions.values_list('id', flat=True)))
+    else:
+        caveats_versions = None
+
     return render(request, 'metadata/dataset.html', {
         'dataset': obj,
         'versions': versions,
         'specifiers': prettify_attributes(obj.specifier_list),
-        'caveats': caveats
+        'caveats': caveats,
+        'caveats_versions': caveats_versions
     })
 
 
@@ -70,13 +76,19 @@ def file(request, pk=None, path=None):
                                              .exclude(id=obj.id) \
                                              .order_by('-version')
 
-    caveats = Caveat.objects.filter(datasets__contains=[obj.dataset.id])
+    caveats = Caveat.objects.filter(datasets__contains=[obj.dataset_id])
+
+    if versions:
+        caveats_versions = Caveat.objects.filter(datasets__contains=list(versions.values_list('dataset_id', flat=True)))
+    else:
+        caveats_versions = None
 
     return render(request, 'metadata/file.html', {
         'file': obj,
         'versions': versions,
         'specifiers': prettify_attributes(obj.specifier_list),
-        'caveats': caveats
+        'caveats': caveats,
+        'caveats_versions': caveats_versions
     })
 
 
@@ -104,9 +116,13 @@ def resource(request, doi=None):
             else:
                 references['Other'].append(identifier)
 
+    dataset_ids = [str(dataset_id) for dataset_id in resource.datasets.values_list('id', flat=True)]
+    caveats = Caveat.objects.filter(datasets__contains=dataset_ids)
+
     return render(request, 'metadata/resource.html', {
         'resource': resource,
-        'references': references
+        'references': references,
+        'caveats': caveats
     })
 
 
