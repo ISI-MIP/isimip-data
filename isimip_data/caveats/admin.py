@@ -15,8 +15,7 @@ class CaveatSpecifierWidget(forms.Widget):
 
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
-        context['widget']['attributes'] = [(attribute.key, Dataset.objects.using('metadata').specifiers(attribute))
-                                           for attribute in Attribute.objects.using('metadata').all()]
+        context['widget']['attributes'] = Attribute.objects.using('metadata').all()
         return context
 
     def value_from_datadict(self, data, files, name):

@@ -1,14 +1,14 @@
 <div style="margin-left: 170px;">
-{% for attribute, specifiers in widget.attributes %}
-    <div style="padding: 6px 0;">
-        <strong>{{ attribute }}:</strong>
+{% for attribute in widget.attributes %}
+    <div style="line-height: 40px;">
+        <strong>{{ attribute.identifier }}:</strong>
 
-        {% for specifier in specifiers %}
+        {% for specifier in attribute.specifiers %}
         {% if specifier is not None %}
-        {% with 'id_specifiers_'|add:attribute|add:'_'|add:specifier as id %}
-        <span class="">
+        {% with 'id_specifiers_'|add:attribute.identifier|add:'_'|add:specifier as id %}
+        <span>
             <input type="checkbox" id="{{ id }}" {% if id in widget.value %}checked{% endif %}
-                   name="specifiers_{{ attribute }}" value="{{ specifier }}"
+                   name="specifiers_{{ attribute.identifier }}" value="{{ specifier }}"
                    style="margin-top: -2px; margin-left: 8px;">
             <label class="vCheckboxLabel" style="vertical-align: 0; padding: 0;" for="{{ id }}">{{ specifier }}</label>
         </span>
@@ -16,5 +16,6 @@
         {% endif %}
         {% endfor %}
     </div>
+    {% if not forloop.last %}<hr />{% endif %}
 {% endfor %}
 </div>

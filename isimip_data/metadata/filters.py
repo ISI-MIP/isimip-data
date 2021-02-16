@@ -4,8 +4,9 @@ from django.conf import settings
 from django.contrib.postgres.search import (SearchQuery, SearchRank,
                                             TrigramSimilarity)
 from django.db.models import Q
-from isimip_data.metadata.models import Attribute, Word
 from rest_framework.filters import BaseFilterBackend
+
+from isimip_data.metadata.models import Attribute, Word
 
 logger = logging.getLogger(__name__)
 
@@ -125,12 +126,12 @@ class AttributeFilterBackend(BaseFilterBackend):
         # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#std:fieldlookup-hstorefield.contains
         # and https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#containment-and-key-operations
         # for optimal jsonb lookups: queryset.filter(field={'foo': 'bar', 'egg': 'spam'})
-        for attribute in Attribute.objects.using('metadata').all():
-            if attribute.key != getattr(view, 'attribute_filter_exclude', None):
+        for identifier in Attribute.objects.using('metadata').identifiers():
+            if identifier != getattr(view, 'attribute_filter_exclude', None):
                 q = Q()
-                for value in request.GET.getlist(attribute.key):
+                for value in request.GET.getlist(identifier):
                     if value:
-                        q |= Q(specifiers__contains={attribute.key: value})
+                        q |= Q(specifiers__contains={identifier: value})
                 queryset = queryset.filter(q)
 
         return queryset

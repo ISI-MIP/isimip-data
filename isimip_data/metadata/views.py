@@ -152,8 +152,8 @@ def resource_datacite_xml(request, doi=None):
 
 def attributes(request):
     attributes_list = []
-    for attribute in Attribute.objects.using('metadata').all():
-        attributes_list.append((attribute, Dataset.objects.using('metadata').histogram(attribute)))
+    for identifier in Attribute.objects.using('metadata').identifiers():
+        attributes_list.append((identifier, Dataset.objects.using('metadata').histogram(identifier)))
 
     return render(request, 'metadata/attributes.html', {
         'attributes': attributes_list

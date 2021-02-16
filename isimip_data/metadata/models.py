@@ -7,7 +7,7 @@ from django.contrib.postgres.search import SearchVectorField
 from django.db import models
 
 from .constants import RIGHTS
-from .managers import DatasetManager
+from .managers import AttributeManager, DatasetManager
 from .utils import get_terms_of_use
 
 
@@ -221,12 +221,15 @@ class Word(models.Model):
 
 class Attribute(models.Model):
 
-    key = models.TextField(primary_key=True)
+    objects = AttributeManager()
+
+    identifier = models.TextField(primary_key=True)
+    specifiers = ArrayField(models.TextField())
 
     class Meta:
         db_table = 'attributes'
         managed = False
-        ordering = ('key', )
+        ordering = ('identifier', )
 
     def __str__(self):
-        return self.key
+        return self.identifier
