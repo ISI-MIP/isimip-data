@@ -6,7 +6,9 @@
         <li class="list-group-item">
             <h4>
                 <div class="float-right">
-                    {% include 'caveats/snippets/not_public.html' %}
+                    {% if not caveat.public %}
+                        {% include 'caveats/snippets/not_public.html' %}
+                    {% endif %}
                     {% include 'caveats/snippets/severity.html' %}
                     {% include 'caveats/snippets/status.html' %}
                 </div>

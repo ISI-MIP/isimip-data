@@ -6,6 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from isimip_data.accounts.utils import get_full_name
 from isimip_data.metadata.models import ArrayField, Dataset
 
+from .managers import ModerationManager
+
 
 class Caveat(models.Model):
 
@@ -31,10 +33,12 @@ class Caveat(models.Model):
         (SEVERITY_CRITICAL, _('critical')),
     )
 
+    objects = ModerationManager()
+
     title = models.CharField(max_length=512)
     description = models.TextField()
     public = models.BooleanField(default=False)
-    creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='issues')
+    creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='caveats')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     severity = models.TextField(choices=SEVERITY_CHOICES)
@@ -45,7 +49,7 @@ class Caveat(models.Model):
     version_before = models.CharField(max_length=8, blank=True)
 
     class Meta:
-        ordering = ('updated', )
+        ordering = ('-updated', )
 
     def __str__(self):
         return self.title
@@ -91,3 +95,24 @@ class Caveat(models.Model):
             self.STATUS_RESOLVED: 'success',
             self.STATUS_WONT_FIX: 'secondary'
         }.get(self.status)
+
+
+class Comment(models.Model):
+
+    objects = ModerationManager()
+
+    text = models.TextField()
+    public = models.BooleanField(default=False)
+    creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='comments')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    caveat = models.ForeignKey(Caveat, on_delete=models.CASCADE, related_name='comments')
+
+    class Meta:
+        ordering = ('created', )
+
+    def __str__(self):
+        return '{} {} {}'.format(self.caveat, self.creator, self.created)
+
+    def get_creator_display(self):
+        return get_full_name(self.creator)

@@ -2,6 +2,12 @@
 {% load static %}
 {% load i18n %}
 
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'caveats.css' %}" />
+{% endblock %}
+
+
 {% block main %}
 
 <div class="container">
@@ -54,6 +60,10 @@
             </dl>
         </div>
     </div>
+
+    <h3 id="comments">{% trans 'Comments' %}</h3>
+    {% include 'caveats/cards/comments.html' %}
+
 
     {% if datasets %}
     <h3>{% trans 'Affected datasets' %}</h3>

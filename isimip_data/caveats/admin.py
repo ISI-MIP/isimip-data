@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 
 from isimip_data.metadata.models import Attribute, Dataset
 
-from .models import Caveat
+from .models import Caveat, Comment
 
 
 class CaveatSpecifierWidget(forms.Widget):
@@ -56,7 +56,7 @@ class CaveatAdmin(admin.ModelAdmin):
 
     search_fields = ('title', 'description')
     list_display = ('title', 'created', 'updated', 'severity', 'status', 'public')
-    list_filter = ('severity', 'status')
+    list_filter = ('severity', 'status', 'public')
     readonly_fields = ('created', 'updated', 'affected_datasets')
     exclude = ('datasets',)
 
@@ -69,4 +69,12 @@ class CaveatAdmin(admin.ModelAdmin):
         )
 
 
+class CommentAdmin(admin.ModelAdmin):
+    search_fields = ('caveat', 'creator', 'text')
+    list_display = ('caveat', 'creator', 'created', 'public')
+    list_filter = ('public', )
+    readonly_fields = ('created', )
+
+
 admin.site.register(Caveat, CaveatAdmin)
+admin.site.register(Comment, CommentAdmin)

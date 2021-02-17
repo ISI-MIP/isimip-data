@@ -3,14 +3,15 @@ from urllib.parse import urlparse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.http import HttpResponseBadRequest, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import resolve
+from django.urls import resolve, reverse
 from django.utils.translation import gettext as _
 
 from isimip_data.metadata.models import Dataset
 from isimip_data.metadata.utils import prettify_attributes_dict
 
-from .forms import CaveatForm
+from .forms import CaveatForm, CommentForm
 from .models import Caveat
 
 
@@ -32,12 +33,15 @@ def caveat(request, pk=None):
         q |= Q(creator=request.user)
 
     caveat = get_object_or_404(Caveat.objects.filter(q), id=pk)
+    comments = caveat.comments.filter(q)
     datasets = Dataset.objects.using('metadata').filter(id__in=caveat.datasets)
 
     return render(request, 'caveats/caveat.html', {
         'caveat': caveat,
         'specifiers': prettify_attributes_dict(caveat.specifiers),
-        'datasets': datasets
+        'comments': comments,
+        'datasets': datasets,
+        'comment_form': CommentForm(caveat=caveat)
     })
 
 
@@ -64,3 +68,24 @@ def caveat_create(request):
     return render(request, 'caveats/caveat_create.html', {
         'form': form
     })
+
+
+@login_required
+def comment_create(request):
+    if request.method == 'POST':
+        form = CommentForm(request.POST or None, creator=request.user)
+
+        if form.is_valid():
+            comment = form.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                _('Comment successfully submitted.'),
+            )
+
+            url = reverse('caveat', args=[comment.caveat.id]) + '#comments'
+            return redirect(url)
+        else:
+            return HttpResponseBadRequest()
+    else:
+        return redirect('caveats')

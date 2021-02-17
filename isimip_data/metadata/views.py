@@ -48,7 +48,7 @@ def dataset(request, pk=None, path=None):
                                                 .exclude(id=obj.id) \
                                                 .order_by('-version')
 
-    caveats = Caveat.objects.filter(datasets__contains=[obj.id])
+    caveats = Caveat.objects.filter(datasets__contains=[obj.id]).public(request.user)
 
     if versions:
         caveats_versions = Caveat.objects.filter(datasets__contains=list(versions.values_list('id', flat=True)))
@@ -76,7 +76,7 @@ def file(request, pk=None, path=None):
                                              .exclude(id=obj.id) \
                                              .order_by('-version')
 
-    caveats = Caveat.objects.filter(datasets__contains=[obj.dataset_id])
+    caveats = Caveat.objects.filter(datasets__contains=[obj.dataset_id]).public(request.user)
 
     if versions:
         caveats_versions = Caveat.objects.filter(datasets__contains=list(versions.values_list('dataset_id', flat=True)))
@@ -117,7 +117,7 @@ def resource(request, doi=None):
                 references['Other'].append(identifier)
 
     dataset_ids = [str(dataset_id) for dataset_id in resource.datasets.values_list('id', flat=True)]
-    caveats = Caveat.objects.filter(datasets__contains=dataset_ids)
+    caveats = Caveat.objects.filter(datasets__contains=dataset_ids).public(request.user)
 
     return render(request, 'metadata/resource.html', {
         'resource': resource,
