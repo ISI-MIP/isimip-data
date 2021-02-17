@@ -244,7 +244,7 @@ class Result extends Component {
                     </span>
                   </div>
                   <a href={caveat.url} target="_blank">{caveat.title}</a>
-                  <span className="text-muted">#{caveat.id}</span>
+                  <span className="text-muted"> #{caveat.id}</span>
                 </li>
               )
             })

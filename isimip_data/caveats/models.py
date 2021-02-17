@@ -33,6 +33,7 @@ class Caveat(models.Model):
 
     title = models.CharField(max_length=512)
     description = models.TextField()
+    public = models.BooleanField(default=False)
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='issues')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -42,7 +43,6 @@ class Caveat(models.Model):
     datasets = ArrayField(models.UUIDField(), blank=True, default=list)
     version_after = models.CharField(max_length=8, blank=True)
     version_before = models.CharField(max_length=8, blank=True)
-    public = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('updated', )

@@ -9,12 +9,20 @@
         <h1>{{ caveat.title }} <span class="text-muted">#{{ caveat.id }}</span></h1>
 
         <p class="text-center">
-
+            {{ caveat.get_creator_display }} opened this caveat {{ caveat.created|timesince }} ago.
         </p>
 
         <p class="text-center">
-            {{ caveat.get_creator_display }} opened this caveat {{ caveat.created|timesince }} ago.
+            {% include 'caveats/snippets/not_public.html' %}
         </p>
+
+        {% if request.user.is_staff %}
+        <p class="text-center">
+            <a href="{% url 'admin:caveats_caveat_change' caveat.id %}">
+                Edit in Django Admin
+            </a>
+        </p>
+        {% endif %}
     </header>
 
     <h3>{% trans 'Details' %}</h3>
