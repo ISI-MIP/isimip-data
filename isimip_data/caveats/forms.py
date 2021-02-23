@@ -62,7 +62,12 @@ class CommentForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields['text'].label = False
-        self.fields['text'].widget.attrs['placeholder'] = _('Leave a comment')
+
+        if Comment.objects.filter(creator=self.creator, public=True).exists():
+            self.fields['text'].widget.attrs['placeholder'] = _('Leave a comment')
+        else:
+            self.fields['text'].widget.attrs['placeholder'] = _('Leave a comment (since you have no public comments yet, your comment will be held for moderation)')
+
         self.fields['text'].widget.attrs['rows'] = 6
         self.fields['caveat_id'].initial = self.caveat.id if self.caveat else None
 

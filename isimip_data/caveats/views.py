@@ -41,7 +41,7 @@ def caveat(request, pk=None):
         'specifiers': prettify_attributes_dict(caveat.specifiers),
         'comments': comments,
         'datasets': datasets,
-        'comment_form': CommentForm(caveat=caveat)
+        'comment_form': CommentForm(caveat=caveat, creator=request.user)
     })
 
 
