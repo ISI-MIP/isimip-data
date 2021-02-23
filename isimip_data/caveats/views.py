@@ -93,3 +93,12 @@ def comment_create(request):
             return HttpResponseBadRequest()
     else:
         return redirect('caveats')
+
+
+@login_required
+def subscriptions(request):
+    caveats = Caveat.objects.filter(subscribers=request.user)
+
+    return render(request, 'caveats/subscriptions.html', {
+        'caveats': caveats,
+    })

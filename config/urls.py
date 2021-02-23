@@ -8,7 +8,7 @@ from isimip_data.accounts.views import (profile_delete, profile_delete_success,
                                         profile_update)
 from isimip_data.caveats.views import (caveat, caveat_create, caveat_subscribe,
                                        caveat_unsubscribe, caveats,
-                                       comment_create)
+                                       comment_create, subscriptions)
 from isimip_data.core.viewsets import SettingsViewSet
 from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
@@ -73,6 +73,7 @@ urlpatterns = [
     path('caveats/<int:pk>/unsubscribe/', caveat_unsubscribe, name='caveat_unsubscribe'),
     path('caveats/create/', caveat_create, name='caveat_create'),
     path('caveats/comments/', comment_create, name='comment_create'),
+    path('subscriptions/', subscriptions, name='subscriptions'),
 
     # path('wizard/', wizard, name='wizard'),
 

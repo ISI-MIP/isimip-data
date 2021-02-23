@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block main %}
+
+<div class="container">
+    <header>
+        <h1>{% trans 'Subscriptions' %}</h1>
+        <p class="text-center">
+            {% trans 'You are receiving mail notifications for the following caveats:' %}
+        </p>
+    </header>
+
+    {% if caveats %}
+    {% include 'caveats/cards/caveats.html' %}
+    {% endif %}
+</div>
+
+{% endblock %}
