@@ -1,4 +1,6 @@
-{% load i18n %}{{ comment.text|safe }}
+{% load i18n %}{% load account %}{% user_display comment.creator as creator_display %}{% blocktrans %}{{ creator_display }} commented:{% endblocktrans %}
+
+{{ comment.text|safe }}
 
 --
 {% trans 'You are receiving this because you are subscribed to this caveat.' %}
