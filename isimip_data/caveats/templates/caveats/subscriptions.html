@@ -7,8 +7,13 @@
 <div class="container">
     <header>
         <h1>{% trans 'Subscriptions' %}</h1>
+
         <p class="text-center">
+            {% if caveats %}
             {% trans 'You are receiving mail notifications for the following caveats:' %}
+            {% else %}
+            {% trans 'You do not have any subscriptions yet.' %}
+            {% endif %}
         </p>
     </header>
 
