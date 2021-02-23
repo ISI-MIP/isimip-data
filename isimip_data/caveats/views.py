@@ -73,7 +73,8 @@ def caveat_create(request):
         return redirect('caveat', caveat.id)
 
     return render(request, 'caveats/caveat_create.html', {
-        'form': form
+        'form': form,
+        'dataset': Dataset.objects.using('metadata').filter(id=dataset_id).first()
     })
 
 

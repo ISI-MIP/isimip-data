@@ -1,33 +1,52 @@
-{% extends 'core/page.html' %}
+{% extends 'core/base.html' %}
 {% load static %}
 {% load i18n %}
 {% load form_tags %}
 
-{% block page %}
+{% block main %}
 
-    <h1>{% trans "Submit new caveat" %}</h1>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-8">
+            <h1>{% trans "Submit new caveat" %}</h1>
 
-    <p>
-        {% blocktrans trimmed %}
-        The caveat will be hidden to other users utill reviewed
-        by a data manager.
-        {% endblocktrans %}
-    </p>
+            <p>
+            {% if dataset %}
+                {% blocktrans trimmed with dataset_name=dataset.name dataset_url=dataset.get_absolute_url %}
+                The new caveat will be created for the dataset <a href="{{ dataset_url }}">{{ dataset_name }}</a>.
+                {% endblocktrans %}
+                {% trans 'If more datasets are affected, please note so in the description.' %}
+            {% else %}
+                {% trans 'Please provide a detailed description, so that we can assign the corresponding datasets.' %}
+                {% trans 'If you use the "Submit new caveat" link from a particular dataset, it will be associated to new caveat automatically.' %}
+            {% endif %}
+            </p>
 
-    <form method="post" action="{% url 'caveat_create' %}">
-        {% csrf_token %}
+            <p>
+                {% trans 'The caveat will be hidden to other users utill reviewed by a data manager.' %}
+                {% blocktrans trimmed %}
+                Please contact <a href="mailto:info@isimip.org?subject=ISIMIP%20inquiry">info@isimip.org</a>
+                if you need assistance.
+                {% endblocktrans %}
+            </p>
 
-        {% for field in form.hidden_fields %}
-            {{ field }}
-        {% endfor %}
+            <form method="post" action="{% url 'caveat_create' %}">
+                {% csrf_token %}
 
-        {% for field in form.visible_fields %}
-            {% bootstrap_form_field field %}
-        {% endfor %}
+                {% for field in form.hidden_fields %}
+                    {{ field }}
+                {% endfor %}
 
-        {% bootstrap_form_errors form %}
+                {% for field in form.visible_fields %}
+                    {% bootstrap_form_field field %}
+                {% endfor %}
 
-        <input type="submit" class="btn btn-success" value="{% trans 'Submit caveat' %}" />
-    </form>
+                {% bootstrap_form_errors form %}
+
+                <input type="submit" class="btn btn-success" value="{% trans 'Submit caveat' %}" />
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

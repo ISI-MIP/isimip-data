@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.contrib.postgres.search import SearchVectorField
 from django.db import models
+from django.urls import reverse
 
 from .constants import RIGHTS
 from .managers import AttributeManager, DatasetManager
@@ -55,6 +56,9 @@ class Dataset(models.Model):
     @property
     def terms_of_use(self):
         return get_terms_of_use()
+
+    def get_absolute_url(self):
+        return reverse('dataset', kwargs={'pk': self.pk})
 
 
 class File(models.Model):
@@ -120,6 +124,9 @@ class File(models.Model):
     @property
     def terms_of_use(self):
         return get_terms_of_use()
+
+    def get_absolute_url(self):
+        return reverse('file', kwargs={'pk': self.pk})
 
 
 class Resource(models.Model):
@@ -190,6 +197,9 @@ class Resource(models.Model):
     @property
     def terms_of_use(self):
         return get_terms_of_use()
+
+    def get_absolute_url(self):
+        return reverse('resource', kwargs={'pk': self.pk})
 
 
 class Tree(models.Model):

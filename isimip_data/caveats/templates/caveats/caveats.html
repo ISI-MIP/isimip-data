@@ -7,6 +7,9 @@
 <div class="container">
     <header>
         <h1>{% trans 'Caveats' %}</h1>
+        <p class="text-center">
+            <a href="{% url 'caveat_create' %}">{% trans 'Submit new caveat' %}</a>
+        </p>
     </header>
 
     {% if caveats %}
