@@ -14,26 +14,29 @@
     <header>
         <h1>{{ caveat.title }} <span class="text-muted">#{{ caveat.id }}</span></h1>
 
-        <p class="text-center">
+        <p class="text-center mb-2">
             {{ caveat.get_creator_display }} opened this caveat {{ caveat.created|timesince }} ago.
-        </p>
-
-        <p class="text-center">
             {% include 'caveats/snippets/not_public.html' %}
         </p>
 
-        {% if request.user.is_staff %}
-        <p class="text-center">
-            <a href="{% url 'admin:caveats_caveat_change' caveat.id %}">
-                Edit in Django Admin
-            </a>
-        </p>
+        <p class="text-center mb-2">
+        {% if request.user in caveat.subscribers.all %}
+        <a href="{% url 'caveat_unsubscribe' caveat.id %}"><i class="fas fa-eye-slash"></i> {% trans 'Unsubscribe' %}</a>
+        {% else %}
+        <a href="{% url 'caveat_subscribe' caveat.id %}"><i class="fas fa-eye"></i> {% trans 'Subscribe' %}</a>
         {% endif %}
+        </p>
     </header>
 
     <h3>{% trans 'Details' %}</h3>
     <div class="card">
         <div class="card-body">
+            {% if request.user.is_staff %}
+            <a class="d-block float-right" href="{% url 'admin:caveats_caveat_change' caveat.id %}">
+                <i class="fas fa-pen"></i>
+            </a>
+            {% endif %}
+
             <dl class="row">
                 <dt class="col-sm-2">{% trans 'Title' %}</dt>
                 <dd class="col-sm-10">{{ caveat.title }}</dd>
@@ -63,7 +66,6 @@
 
     <h3 id="comments">{% trans 'Comments' %}</h3>
     {% include 'caveats/cards/comments.html' %}
-
 
     {% if datasets %}
     <h3>{% trans 'Affected datasets' %}</h3>

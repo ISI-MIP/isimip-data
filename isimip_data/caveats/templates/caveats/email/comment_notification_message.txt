@@ -1,0 +1,6 @@
+{% load i18n %}{{ comment.text|safe }}
+
+--
+{% trans 'You are receiving this because you are subscribed to this caveat.' %}
+{% blocktrans %}You can reply at: {{ reply_url }}.{% endblocktrans %}
+{% blocktrans %}You can unsubscribe at: {{ unsubscribe_url }}.{% endblocktrans %}

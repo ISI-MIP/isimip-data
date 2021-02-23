@@ -28,7 +28,7 @@ class CaveatForm(forms.ModelForm):
         self.instance.creator = self.creator
         self.instance.severity = self.instance.SEVERITY_MEDIUM
         self.instance.status = self.instance.STATUS_NEW
-        self.instance.public = False
+        self.instance.public = self.creator.is_staff
 
         dataset_id = self.cleaned_data.get('dataset_id')
         if dataset_id:
@@ -62,19 +62,14 @@ class CommentForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields['text'].label = False
-
-        if Comment.objects.filter(creator=self.creator, public=True).exists():
-            self.fields['text'].widget.attrs['placeholder'] = _('Leave a comment')
-        else:
-            self.fields['text'].widget.attrs['placeholder'] = _('Leave a comment (since you have no public comments yet, your comment will be held for moderation)')
-
+        self.fields['text'].widget.attrs['placeholder'] = _('Leave a comment')
         self.fields['text'].widget.attrs['rows'] = 6
         self.fields['caveat_id'].initial = self.caveat.id if self.caveat else None
 
     def save(self, *args, **kwargs):
         self.instance.caveat_id = self.cleaned_data.get('caveat_id')
         self.instance.creator = self.creator
-        self.instance.public = Comment.objects.filter(creator=self.creator, public=True).exists()
+        self.instance.public = True
 
         self.instance.save()
         return self.instance

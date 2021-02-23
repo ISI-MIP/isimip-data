@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from isimip_data.accounts.utils import get_full_name
@@ -47,6 +48,7 @@ class Caveat(models.Model):
     datasets = ArrayField(models.UUIDField(), blank=True, default=list)
     version_after = models.CharField(max_length=8, blank=True)
     version_before = models.CharField(max_length=8, blank=True)
+    subscribers = models.ManyToManyField(User)
 
     class Meta:
         ordering = ('-updated', )
@@ -96,6 +98,18 @@ class Caveat(models.Model):
             self.STATUS_WONT_FIX: 'secondary'
         }.get(self.status)
 
+    def get_absolute_url(self):
+        return reverse('caveat', kwargs={'pk': self.pk})
+
+    def get_reply_url(self):
+        return reverse('caveat', kwargs={'pk': self.pk}) + '#reply'
+
+    def get_unsubscribe_url(self):
+        return reverse('caveat_unsubscribe', kwargs={'pk': self.pk})
+
+    def get_admin_url(self):
+        return reverse('admin:caveats_caveat_change', kwargs={'object_id': self.pk})
+
 
 class Comment(models.Model):
 
@@ -116,3 +130,6 @@ class Comment(models.Model):
 
     def get_creator_display(self):
         return get_full_name(self.creator)
+
+    def get_absolute_url(self):
+        return reverse('caveat', args=[self.caveat.id]) + '#comment-{}'.format(self.id)

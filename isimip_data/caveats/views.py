@@ -2,25 +2,21 @@ from urllib.parse import urlparse
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from django.http import HttpResponseBadRequest, HttpResponseNotAllowed
+from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import resolve, reverse
+from django.urls import resolve
 from django.utils.translation import gettext as _
 
 from isimip_data.metadata.models import Dataset
 from isimip_data.metadata.utils import prettify_attributes_dict
 
 from .forms import CaveatForm, CommentForm
+from .mail import send_caveat_notifications, send_comment_notifications
 from .models import Caveat
 
 
 def caveats(request):
-    q = Q(public=True)
-    if request.user.is_authenticated:
-        q |= Q(creator=request.user)
-
-    caveats = Caveat.objects.filter(q).order_by('-updated')
+    caveats = Caveat.objects.public(request.user)
 
     return render(request, 'caveats/caveats.html', {
         'caveats': caveats
@@ -28,12 +24,8 @@ def caveats(request):
 
 
 def caveat(request, pk=None):
-    q = Q(public=True)
-    if request.user.is_authenticated:
-        q |= Q(creator=request.user)
-
-    caveat = get_object_or_404(Caveat.objects.filter(q), id=pk)
-    comments = caveat.comments.filter(q)
+    caveat = get_object_or_404(Caveat.objects.public(request.user), id=pk)
+    comments = caveat.comments.public(request.user)
     datasets = Dataset.objects.using('metadata').filter(id__in=caveat.datasets)
 
     return render(request, 'caveats/caveat.html', {
@@ -43,6 +35,22 @@ def caveat(request, pk=None):
         'datasets': datasets,
         'comment_form': CommentForm(caveat=caveat, creator=request.user)
     })
+
+
+@login_required
+def caveat_subscribe(request, pk=None):
+    caveat = get_object_or_404(Caveat.objects.public(request.user), id=pk)
+    caveat.subscribers.add(request.user)
+    messages.add_message(request, messages.SUCCESS, _('You are now subscribed to this caveat.'))
+    return redirect('caveat', caveat.id)
+
+
+@login_required
+def caveat_unsubscribe(request, pk=None):
+    caveat = get_object_or_404(Caveat.objects.public(request.user), id=pk)
+    caveat.subscribers.remove(request.user)
+    messages.add_message(request, messages.SUCCESS, _('You are not longer subscribed to this caveat.'))
+    return redirect('caveat', caveat.id)
 
 
 @login_required
@@ -58,11 +66,10 @@ def caveat_create(request):
 
     if request.method == 'POST' and form.is_valid():
         caveat = form.save()
-        messages.add_message(
-            request,
-            messages.SUCCESS,
-            _('Caveat successfully submitted.'),
-        )
+        caveat.subscribers.add(request.user)
+        if not caveat.public:
+            send_caveat_notifications(request, caveat)
+        messages.add_message(request, messages.SUCCESS, _('Caveat successfully submitted.'))
         return redirect('caveat', caveat.id)
 
     return render(request, 'caveats/caveat_create.html', {
@@ -77,14 +84,10 @@ def comment_create(request):
 
         if form.is_valid():
             comment = form.save()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                _('Comment successfully submitted.'),
-            )
-
-            url = reverse('caveat', args=[comment.caveat.id]) + '#comments'
-            return redirect(url)
+            comment.caveat.subscribers.add(request.user)
+            send_comment_notifications(request, comment)
+            messages.add_message(request, messages.SUCCESS, _('Comment successfully submitted.'))
+            return redirect(comment.get_absolute_url())
         else:
             return HttpResponseBadRequest()
     else:

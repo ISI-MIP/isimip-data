@@ -3,7 +3,7 @@
 
 {% if comments %}
 {% for comment in comments %}
-<div class="card mb-2">
+<div class="card mb-2" id="comment-{{ comment.id }}">
     <div class="card-header">
         {% if not comment.public %}
         <div class="float-right">
@@ -14,12 +14,12 @@
         commented {{ comment.created|timesince }} ago.
     </div>
     <div class="card-body">
-        {{ comment.text }}
+        {{ comment.text|linebreaksbr }}
     </div>
 </div>
 {% endfor %}
 {% else %}
-<div class="card mb-3">
+<div class="card mb-2">
     <div class="card-body">
         {% trans 'No comments have been submitted, yet.' %}
         {% if not request.user.is_authenticated %}
@@ -33,7 +33,7 @@
 {% endif %}
 
 {% if request.user.is_authenticated %}
-<form class="form-card" action="{% url 'comment_create' %}" method="post">
+<form class="form-card" id="reply" action="{% url 'comment_create' %}" method="post">
     {% csrf_token %}
 
     {% for field in comment_form.hidden_fields %}
@@ -49,7 +49,7 @@
     <input type="submit" class="btn btn-success mt-2" value="{% trans 'Comment' %}" />
 </form>
 {% elif comments %}
-<div class="card mb-3">
+<div class="card">
     <div class="card-body">
         {% if not request.user.is_authenticated %}
             {% url 'account_login' as login_url %}
