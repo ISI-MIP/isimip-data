@@ -4,64 +4,57 @@
 {% block main %}
 
 <div class="container">
-    <div class="row justify-content-sm-center">
+    <div class="row justify-content-sm-center text-center ">
         <div class="col-md-8">
-            <header>
-                <h1>
+            <header class="mb-5">
+                <h1 class="mb-5">
                     Welcome to the ISIMIP Repository
                 </h1>
 
-                <p>
-                    Here you will find data relating to the <a href="http://www.isimip.org">Inter-Sectoral Impact Model Intercomparison Project</a> (ISIMIP). Use of these data are subject to the <strong><a href="http://www.isimip.org/protocol/terms-of-use">ISIMIP terms of use</a></strong>. Changes to the data published on this archive are document in the <a href="https://www.isimip.org/outputdata/output-data-changelog/">ISIMIP output data changelog</a> and <a href="https://www.isimip.org/gettingstarted/#input-data-changelog">input data changelog</a>.
+                <p class="text-center">
+                    Here you will find data relating to the <a href="http://www.isimip.org">Inter-Sectoral Impact Model Intercomparison Project</a> (ISIMIP). Use of these data are subject to the <a href="http://www.isimip.org/protocol/terms-of-use">ISIMIP terms of use</a>.
                 </p>
 
-                <p>
+                <p class="text-center">
                     Documentation of the impact models that provided impact simulations for this archive can be found in the <a href="https://www.isimip.org/impactmodels/">ISIMIP Impact Model Database</a>.
                 </p>
 
-                <p>
+                <p class="text-center">
                     This version of the ISIMIP Repository is currently under development. The current ISIMIP data archive is located at <a href="https://esg.pik-potsdam.de/projects/isimip">https://esg.pik-potsdam.de/projects/isimip</a>.
                 </p>
             </header>
-
-            <div class="mt-5">
-                <form id="metadata-form" class="text-center" method="GET" action="{% url 'search' %}">
-                    <div class="form-row">
-                        <div class="col">
-                            <input class="form-control" name="query" placeholder="Search the repository" />
-                        </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-light" type="button" onClick={this.handleSubmit}>
-                                Search
-                            </button>
-                        </div>
+        </div>
+        <div class="col-md-10">
+            <form id="metadata-form" class="mb-5" method="GET" action="{% url 'search' %}">
+                <div class="form-row">
+                    <div class="col">
+                        <input class="form-control" name="query" placeholder="Search for variable, sector, scenario, climate forcing, ..." />
+                        <small class="form-text text-muted text-left">You can use any specifier from the <a href="https://www.isimip.org/protocol/">ISIMIP protocols</a>, e.g. "qtot", "water_global", "rcp26", "climate", "water_global",  etc.</small>
                     </div>
-                </form>
-            </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-light" type="button" onClick={this.handleSubmit}>
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-8">
+            <p class="mb-3">
+                You can also directly use the <a href="{% url 'search' %}">advanced search interface</a>.
 
-            <div class="mt-3">
-                <p class="text-center">
-                    ~ or ~
-                </p>
-            </div>
+            <p class="mb-3">
+                If you want to get notified, when we find issues found in the ISIMIP input and output data, please
+                <a href="{% url 'search' %}">subscribe to our caveats mailing list</a>.
+            </p>
 
-            <div class="mt-3 text-center">
-                <p>
-                    <a class="btn btn-light w-100" href="{% url 'search' %}">
-                        Use the advanced search interface
-                    </a>
-                </p>
-            </div>
+            <p class="mb-3">
+                In order to refine the portal and to improve user convenience we would appreciate your feedback on the portal. So, please use the portal for searching and downloading input data and collect feedback from your sector about experiences, pitfalls and things that should be improved.
+            </p>
 
-            <div class="mt-5 text-center">
-                <p>
-                    In order to refine the portal and to improve user convenience we would appreciate your feedback on the portal. So, please use the portal for searching and downloading input data and collect feedback from your sector about experiences, pitfalls and things that should be improved.
-                </p>
-
-                <p>
-                    Your feedback as well as any questions related to ISIMIP can be directed to <a href="mailto:info@isimip.org?subject=ISIMIP%20inquiry">info@isimip.org</a>.
-                </p>
-            </div>
+            <p>
+                Your feedback as well as any questions related to ISIMIP can be directed to <a href="mailto:info@isimip.org?subject=ISIMIP%20inquiry">info@isimip.org</a>.
+            </p>
         </div>
     </div>
 </div>
