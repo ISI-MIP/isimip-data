@@ -7,6 +7,13 @@
 <div class="container">
     <header>
         <h1>{% trans 'Caveats' %}</h1>
+
+        <p class="text-center">
+            {% blocktrans trimmed %}
+            If you want to get notified, when we find issues found in the ISIMIP input and output data, please subscribe to our <a href="https://www.listserv.dfn.de/sympa/subscribe/isimip-caveats">caveats mailing list</a>.
+            {% endblocktrans %}
+        </p>
+
         <p class="text-center">
             <a href="{% url 'caveat_create' %}">{% trans 'Submit new caveat' %}</a>
         </p>
