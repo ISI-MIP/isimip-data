@@ -54,7 +54,7 @@
                 <dt class="col-sm-2">{% trans 'Title' %}</dt>
                 <dd class="col-sm-10">{{ caveat.title }}</dd>
                 <dt class="col-sm-2">{% trans 'Description' %}</dt>
-                <dd class="col-sm-10">{{ caveat.description }}</dd>
+                <dd class="col-sm-10">{{ caveat.description|linebreaksbr|urlize }}</dd>
                 <dt class="col-sm-2">{% trans 'Severity' %}</dt>
                 <dd class="col-sm-10">
                     {% include 'caveats/snippets/severity.html' %}
