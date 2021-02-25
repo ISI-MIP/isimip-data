@@ -53,25 +53,25 @@
                     {% endif %}
 
                     <dl class="row">
-                        <dt class="col-sm-2">{% trans 'Title' %}</dt>
-                        <dd class="col-sm-10">{{ caveat.title }}</dd>
-                        <dt class="col-sm-2">{% trans 'Description' %}</dt>
-                        <dd class="col-sm-10">{{ caveat.description|linebreaksbr|urlize }}</dd>
-                        <dt class="col-sm-2">{% trans 'Severity' %}</dt>
-                        <dd class="col-sm-10">
+                        <dt class="col-sm-3">{% trans 'Title' %}</dt>
+                        <dd class="col-sm-9">{{ caveat.title }}</dd>
+                        <dt class="col-sm-3">{% trans 'Description' %}</dt>
+                        <dd class="col-sm-9">{{ caveat.description|linebreaksbr|urlize }}</dd>
+                        <dt class="col-sm-3">{% trans 'Severity' %}</dt>
+                        <dd class="col-sm-9">
                             {% include 'caveats/snippets/severity.html' %}
                         </dd>
-                        <dt class="col-sm-2">{% trans 'Status' %}</dt>
-                        <dd class="col-sm-10">
+                        <dt class="col-sm-3">{% trans 'Status' %}</dt>
+                        <dd class="col-sm-9">
                             {% include 'caveats/snippets/status.html' %}
                         </dd>
-                        <dt class="col-sm-2">{% trans 'Versions' %}</dt>
-                        <dd class="col-sm-10">
+                        <dt class="col-sm-3">{% trans 'Versions' %}</dt>
+                        <dd class="col-sm-9">
                             {% include 'caveats/snippets/versions.html' %}
                         </dd>
                         {% for identifier, specifiers in specifiers.items %}
-                        <dt class="col-sm-2">{{ identifier }}</dt>
-                        <dd class="col-sm-10">
+                        <dt class="col-sm-3">{{ identifier }}</dt>
+                        <dd class="col-sm-9">
                             {{specifiers|join:', '}}
                         </dd>
                         {% endfor %}
