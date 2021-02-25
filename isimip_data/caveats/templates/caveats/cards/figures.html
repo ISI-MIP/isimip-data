@@ -10,9 +10,11 @@
                         <img class="img-fluid" src="{{ figure.image.url }}" alt="{{ figure.title }}">
                     </a>
                 </div>
-                {% if figure.caption %}
-                <div class="mt-3"><strong>{{ figure.title }}:</strong> {{ figure.caption|linebreaksbr|urlize }}</div>
-                {% endif %}
+                <div class="mt-3">
+                    <strong>{{ figure.title }}</strong>{% if figure.caption %}<strong>:</strong>
+                    {{ figure.caption|linebreaksbr|urlize }}
+                    {% endif %}
+                </div>
                 {% if figure.credits %}
                 <div class="text-muted mt-3">{% trans 'Credit:' %} {{ figure.credits|linebreaksbr|urlize }}</div>
                 {% endif %}

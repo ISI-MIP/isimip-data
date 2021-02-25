@@ -1,6 +1,11 @@
 from django.contrib import admin
 
-from .models import Figure
+from .models import Download, Figure
+
+
+class DownloadAdmin(admin.ModelAdmin):
+    search_fields = ('title', )
+    list_display = ('title', )
 
 
 class FigureAdmin(admin.ModelAdmin):
@@ -8,4 +13,5 @@ class FigureAdmin(admin.ModelAdmin):
     list_display = ('title', )
 
 
+admin.site.register(Download, DownloadAdmin)
 admin.site.register(Figure, FigureAdmin)

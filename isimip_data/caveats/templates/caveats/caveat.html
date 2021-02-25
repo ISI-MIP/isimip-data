@@ -42,7 +42,7 @@
     </header>
 
     <div class="row">
-        <div class="{% if caveats.has_files %}col-md-9{% else %}col-md-12{% endif %}">
+        <div class="{% if caveat.has_downloads %}col-md-9{% else %}col-md-12{% endif %}">
             <h3>{% trans 'Details' %}</h3>
             <div class="card">
                 <div class="card-body">
@@ -79,9 +79,11 @@
                 </div>
             </div>
         </div>
-        {% if caveat.has_files %}
-        <div class="col-md-3">
 
+        {% if caveat.has_downloads %}
+        <div class="col-md-3">
+            <h3 id="downloads">{% trans 'Downloads' %}</h3>
+            {% include 'caveats/cards/downloads.html' with downloads=caveat.downloads.all %}
         </div>
         {% endif %}
     </div>

@@ -6,7 +6,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from isimip_data.accounts.utils import get_full_name
-from isimip_data.annotations.models import Figure
+from isimip_data.annotations.models import Download, Figure
 from isimip_data.metadata.models import ArrayField, Dataset
 
 from .managers import ModerationManager
@@ -41,7 +41,6 @@ class Caveat(models.Model):
     public = models.BooleanField(default=False)
     title = models.CharField(max_length=512)
     description = models.TextField()
-    figures = models.ManyToManyField(Figure, related_name='caveats')
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='caveats')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -52,6 +51,8 @@ class Caveat(models.Model):
     version_after = models.CharField(max_length=8, blank=True)
     version_before = models.CharField(max_length=8, blank=True)
     subscribers = models.ManyToManyField(User)
+    figures = models.ManyToManyField(Figure, related_name='caveats')
+    downloads = models.ManyToManyField(Download, related_name='caveats')
 
     class Meta:
         ordering = ('-updated', )
@@ -102,9 +103,8 @@ class Caveat(models.Model):
         }.get(self.status)
 
     @cached_property
-    def has_files(self):
-        return False
-        # return self.files.exists()
+    def has_downloads(self):
+        return self.downloads.exists()
 
     @cached_property
     def has_figures(self):

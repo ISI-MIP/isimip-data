@@ -6,7 +6,7 @@ from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from isimip_data.annotations.models import Figure
+from isimip_data.annotations.models import Download, Figure
 from isimip_data.metadata.models import Attribute, Dataset
 
 from .models import Caveat, Comment
@@ -60,16 +60,22 @@ class FigureInline(admin.TabularInline):
     verbose_name_plural = _('Figures')
 
 
+class DownloadInline(admin.TabularInline):
+    model = Download.caveats.through
+    extra = 0
+    verbose_name = _('Download')
+    verbose_name_plural = _('Downloads')
+
+
 class CaveatAdmin(admin.ModelAdmin):
     form = CaveatAdminForm
-    inlines = [FigureInline]
-    exclude = ('members',)
+    inlines = [FigureInline, DownloadInline]
 
     search_fields = ('title', 'description')
     list_display = ('title', 'created', 'updated', 'severity', 'status', 'public')
     list_filter = ('severity', 'status', 'public')
     readonly_fields = ('created', 'updated', 'affected_datasets')
-    exclude = ('datasets', 'figures')
+    exclude = ('datasets', 'figures', 'downloads')
 
     fieldsets = (
         (None, {

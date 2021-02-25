@@ -12,3 +12,14 @@ class Figure(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Download(models.Model):
+    title = models.CharField(max_length=128)
+    file = models.FileField(upload_to='files')
+
+    class Meta:
+        ordering = ('title', )
+
+    def __str__(self):
+        return self.title

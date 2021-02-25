@@ -1,0 +1,11 @@
+{% load i18n %}
+
+<div class="card">
+    <ul class="list-group list-group-flush">
+        {% for download in downloads %}
+        <li class="list-group-item">
+            <a href="{{ download.file.url }}">{{ download.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
