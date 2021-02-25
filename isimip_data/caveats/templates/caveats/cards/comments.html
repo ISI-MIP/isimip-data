@@ -14,7 +14,7 @@
         commented {{ comment.created|timesince }} ago.
     </div>
     <div class="card-body">
-        {{ comment.text|linebreaksbr }}
+        {{ comment.text|linebreaksbr|urlize }}
     </div>
 </div>
 {% endfor %}

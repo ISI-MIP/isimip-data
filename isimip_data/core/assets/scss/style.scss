@@ -96,6 +96,15 @@ form {
     }
 }
 
+.modal {
+    .modal-body {
+        .close {
+            position: absolute;
+            right: 15px;
+        }
+    }
+}
+
 .doi-link:before {
     display: inline-block;
     vertical-align: middle;

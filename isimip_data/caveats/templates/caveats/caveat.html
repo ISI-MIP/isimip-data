@@ -41,41 +41,55 @@
         </p>
     </header>
 
-    <h3>{% trans 'Details' %}</h3>
-    <div class="card">
-        <div class="card-body">
-            {% if request.user.is_staff %}
-            <a class="d-block float-right" href="{% url 'admin:caveats_caveat_change' caveat.id %}">
-                <i class="fas fa-pen"></i>
-            </a>
-            {% endif %}
+    <div class="row">
+        <div class="{% if caveats.has_files %}col-md-9{% else %}col-md-12{% endif %}">
+            <h3>{% trans 'Details' %}</h3>
+            <div class="card">
+                <div class="card-body">
+                    {% if request.user.is_staff %}
+                    <a class="d-block float-right" href="{% url 'admin:caveats_caveat_change' caveat.id %}">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                    {% endif %}
 
-            <dl class="row">
-                <dt class="col-sm-2">{% trans 'Title' %}</dt>
-                <dd class="col-sm-10">{{ caveat.title }}</dd>
-                <dt class="col-sm-2">{% trans 'Description' %}</dt>
-                <dd class="col-sm-10">{{ caveat.description|linebreaksbr|urlize }}</dd>
-                <dt class="col-sm-2">{% trans 'Severity' %}</dt>
-                <dd class="col-sm-10">
-                    {% include 'caveats/snippets/severity.html' %}
-                </dd>
-                <dt class="col-sm-2">{% trans 'Status' %}</dt>
-                <dd class="col-sm-10">
-                    {% include 'caveats/snippets/status.html' %}
-                </dd>
-                <dt class="col-sm-2">{% trans 'Versions' %}</dt>
-                <dd class="col-sm-10">
-                    {% include 'caveats/snippets/versions.html' %}
-                </dd>
-                {% for identifier, specifiers in specifiers.items %}
-                <dt class="col-sm-2">{{ identifier }}</dt>
-                <dd class="col-sm-10">
-                    {{specifiers|join:', '}}
-                </dd>
-                {% endfor %}
-            </dl>
+                    <dl class="row">
+                        <dt class="col-sm-2">{% trans 'Title' %}</dt>
+                        <dd class="col-sm-10">{{ caveat.title }}</dd>
+                        <dt class="col-sm-2">{% trans 'Description' %}</dt>
+                        <dd class="col-sm-10">{{ caveat.description|linebreaksbr|urlize }}</dd>
+                        <dt class="col-sm-2">{% trans 'Severity' %}</dt>
+                        <dd class="col-sm-10">
+                            {% include 'caveats/snippets/severity.html' %}
+                        </dd>
+                        <dt class="col-sm-2">{% trans 'Status' %}</dt>
+                        <dd class="col-sm-10">
+                            {% include 'caveats/snippets/status.html' %}
+                        </dd>
+                        <dt class="col-sm-2">{% trans 'Versions' %}</dt>
+                        <dd class="col-sm-10">
+                            {% include 'caveats/snippets/versions.html' %}
+                        </dd>
+                        {% for identifier, specifiers in specifiers.items %}
+                        <dt class="col-sm-2">{{ identifier }}</dt>
+                        <dd class="col-sm-10">
+                            {{specifiers|join:', '}}
+                        </dd>
+                        {% endfor %}
+                    </dl>
+                </div>
+            </div>
         </div>
+        {% if caveat.has_files %}
+        <div class="col-md-3">
+
+        </div>
+        {% endif %}
     </div>
+
+    {% if caveat.has_figures %}
+    <h3 id="figures">{% trans 'Figures' %}</h3>
+    {% include 'caveats/cards/figures.html' with figures=caveat.figures.all %}
+    {% endif %}
 
     <h3 id="comments">{% trans 'Comments' %}</h3>
     {% include 'caveats/cards/comments.html' %}

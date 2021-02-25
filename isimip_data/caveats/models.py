@@ -2,9 +2,11 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.urls import reverse
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from isimip_data.accounts.utils import get_full_name
+from isimip_data.annotations.models import Figure
 from isimip_data.metadata.models import ArrayField, Dataset
 
 from .managers import ModerationManager
@@ -36,9 +38,10 @@ class Caveat(models.Model):
 
     objects = ModerationManager()
 
+    public = models.BooleanField(default=False)
     title = models.CharField(max_length=512)
     description = models.TextField()
-    public = models.BooleanField(default=False)
+    figures = models.ManyToManyField(Figure, related_name='caveats')
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='caveats')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -97,6 +100,15 @@ class Caveat(models.Model):
             self.STATUS_RESOLVED: 'success',
             self.STATUS_WONT_FIX: 'secondary'
         }.get(self.status)
+
+    @cached_property
+    def has_files(self):
+        return False
+        # return self.files.exists()
+
+    @cached_property
+    def has_figures(self):
+        return self.figures.exists()
 
     def get_absolute_url(self):
         return reverse('caveat', kwargs={'pk': self.pk})

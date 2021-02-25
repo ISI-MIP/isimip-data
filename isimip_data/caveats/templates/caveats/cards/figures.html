@@ -1,0 +1,45 @@
+{% load i18n %}
+
+<div class="row">
+    {% for figure in caveat.figures.all %}
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-text text-center">
+                    <a href="{{ figure.image.url }}" data-toggle="modal" data-target="#figure-modal-{{ forloop.counter }}">
+                        <img class="img-fluid" src="{{ figure.image.url }}" alt="{{ figure.title }}">
+                    </a>
+                </div>
+                {% if figure.caption %}
+                <div class="mt-3"><strong>{{ figure.title }}:</strong> {{ figure.caption|linebreaksbr|urlize }}</div>
+                {% endif %}
+                {% if figure.credits %}
+                <div class="text-muted mt-3">{% trans 'Credit:' %} {{ figure.credits|linebreaksbr|urlize }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="modal" id="figure-modal-{{ forloop.counter }}" tabindex="-1"
+             role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="card-text text-center mb-3">
+                    <img class="img-fluid" src="{{ figure.image.url }}" alt="{{ figure.title }}">
+                </div>
+                {% if figure.caption %}
+                <div class="mt-3"><strong>{{ figure.title }}:</strong> {{ figure.caption|linebreaksbr|urlize }}</div>
+                {% endif %}
+                {% if figure.credits %}
+                <div class="text-muted mt-3">{% trans 'Credit:' %} {{ figure.credits|linebreaksbr|urlize }}</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
