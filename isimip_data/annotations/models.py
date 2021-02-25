@@ -6,6 +6,8 @@ class Figure(models.Model):
     image = models.ImageField(upload_to='figures')
     caption = models.TextField(blank=True)
     credits = models.TextField(blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ('title', )
@@ -17,6 +19,8 @@ class Figure(models.Model):
 class Download(models.Model):
     title = models.CharField(max_length=128)
     file = models.FileField(upload_to='files')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ('title', )
