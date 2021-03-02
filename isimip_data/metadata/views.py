@@ -6,6 +6,8 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
+from isimip_data.caveats.models import Caveat
+
 from .models import Attribute, Dataset, File, Resource
 from .renderers import BibTexRenderer, DataCiteRenderer
 from .utils import prettify_attributes
@@ -46,10 +48,19 @@ def dataset(request, pk=None, path=None):
                                                 .exclude(id=obj.id) \
                                                 .order_by('-version')
 
+    caveats = Caveat.objects.filter(datasets__contains=[obj.id]).public(request.user)
+
+    if versions:
+        caveats_versions = Caveat.objects.filter(datasets__contains=list(versions.values_list('id', flat=True)))
+    else:
+        caveats_versions = None
+
     return render(request, 'metadata/dataset.html', {
         'dataset': obj,
         'versions': versions,
-        'specifiers': prettify_attributes(obj.specifier_list)
+        'specifiers': prettify_attributes(obj.specifier_list),
+        'caveats': caveats,
+        'caveats_versions': caveats_versions
     })
 
 
@@ -65,10 +76,19 @@ def file(request, pk=None, path=None):
                                              .exclude(id=obj.id) \
                                              .order_by('-version')
 
+    caveats = Caveat.objects.filter(datasets__contains=[obj.dataset_id]).public(request.user)
+
+    if versions:
+        caveats_versions = Caveat.objects.filter(datasets__contains=list(versions.values_list('dataset_id', flat=True)))
+    else:
+        caveats_versions = None
+
     return render(request, 'metadata/file.html', {
         'file': obj,
         'versions': versions,
-        'specifiers': prettify_attributes(obj.specifier_list)
+        'specifiers': prettify_attributes(obj.specifier_list),
+        'caveats': caveats,
+        'caveats_versions': caveats_versions
     })
 
 
@@ -96,9 +116,13 @@ def resource(request, doi=None):
             else:
                 references['Other'].append(identifier)
 
+    dataset_ids = [str(dataset_id) for dataset_id in resource.datasets.values_list('id', flat=True)]
+    caveats = Caveat.objects.filter(datasets__contains=dataset_ids).public(request.user)
+
     return render(request, 'metadata/resource.html', {
         'resource': resource,
-        'references': references
+        'references': references,
+        'caveats': caveats
     })
 
 
@@ -128,8 +152,8 @@ def resource_datacite_xml(request, doi=None):
 
 def attributes(request):
     attributes_list = []
-    for attribute in Attribute.objects.using('metadata').all():
-        attributes_list.append((attribute, Dataset.objects.using('metadata').histogram(attribute)))
+    for identifier in Attribute.objects.using('metadata').identifiers():
+        attributes_list.append((identifier, Dataset.objects.using('metadata').histogram(identifier)))
 
     return render(request, 'metadata/attributes.html', {
         'attributes': attributes_list

@@ -13,6 +13,8 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost 127.0.0.1 ::1').split()
 
 INTERNAL_IPS = ['127.0.0.1']
 
+SITE_ID = 1
+
 INSTALLED_APPS = [
     # apps
     'django.contrib.admin',
@@ -21,8 +23,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.postgres',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
     # isimip_data apps
+    'isimip_data.accounts',
+    'isimip_data.annotations',
+    'isimip_data.caveats',
     'isimip_data.core',
     'isimip_data.download',
     'isimip_data.metadata',
@@ -32,7 +38,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
+    'django_cleanup',
     'adminsortable2',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.orcid',
 ]
 
 if DEBUG:
@@ -111,15 +122,39 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-LOGIN_URL = '/admin/'
+LOGIN_URL = '/account/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_URL = '/account/logout/'
+LOGOUT_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+]
+
+ACCOUNT_USER_DISPLAY = 'isimip_data.accounts.utils.get_full_name'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_ACTIVATION_DAYS = 7
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+ACCOUNT_PASSWORD_MIN_LENGTH = 4
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    EMAIL_FROM = 'info@example.com'
+    EMAIL_FROM = 'noreply@isimip.org'
 
 else:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    EMAIL_FROM = 'info@example.com'
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = os.getenv('EMAIL_HOST')
+    EMAIL_PORT = os.getenv('EMAIL_PORT', 25)
+    EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+    EMAIL_USE_TLS = (os.getenv('EMAIL_USE_TLS', 'False').upper() == 'TRUE')
+    EMAIL_USE_SSL = (os.getenv('EMAIL_USE_SSL', 'False').upper() == 'TRUE')
+    DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@isimip.org')
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [],
@@ -131,7 +166,9 @@ SETTINGS_EXPORT = [
     'NAVIGATION',
     'FILES_BASE_URL',
     'TERMS_OF_USE',
-    'TERMS_OF_USE_URL'
+    'TERMS_OF_USE_URL',
+    'LOGIN_URL',
+    'LOGOUT_URL'
 ]
 
 if DEBUG:

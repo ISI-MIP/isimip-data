@@ -24,6 +24,9 @@
                 <li class="nav-item {% if request.resolver_match.url_name in 'metadata,dataset,file' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'metadata' %}">Metadata</a>
                 </li>
+                <li class="nav-item {% if request.resolver_match.url_name in 'caveats,caveat' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'caveats' %}">Caveats</a>
+                </li>
             </ul>
             <ul class="navbar-nav">
                 {% for link in settings.NAVIGATION %}
@@ -31,6 +34,61 @@
                     <a class="nav-link" href="{{ link.href }}" target="_blank">{{ link.title }}</a>
                 </li>
                 {% endfor %}
+
+                {% if user.is_authenticated %}
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ user }}<span class="caret"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="{% url 'profile_update' %}">
+                            {% trans 'Update profile' %}
+                        </a>
+
+                        <a class="dropdown-item" href="{% url 'account_email' %}">
+                            {% trans 'Update email' %}
+                        </a>
+                        <a class="dropdown-item" href="{% url 'account_change_password' %}">
+                            {% trans 'Change password' %}
+                        </a>
+                        <a class="dropdown-item" href="{% url 'socialaccount_connections' %}">
+                            {% trans 'Account connections' %}
+                        </a>
+                        <a class="dropdown-item" href="{% url 'subscriptions' %}">
+                            {% trans 'Caveat subscriptions' %}
+                        </a>
+                        {% if user.is_staff %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'resources' %}">
+                            {% trans 'List of registered DOIs' %}
+                        </a>
+                        <a class="dropdown-item" href="{% url 'attributes' %}">
+                            {% trans 'Attribute statistics' %}
+                        </a>
+                        <a class="dropdown-item" href="{% url 'admin:index' %}">
+                            {% trans 'Django administration' %}
+                        </a>
+                        {% endif %}
+                        <div class="dropdown-divider"></div>
+                        <form id="logout-form" class="d-none" method="POST" action="{{ settings.LOGOUT_URL }}">
+                            {% csrf_token %}
+                        </form>
+                        <a class="dropdown-item" href="{{ settings.LOGOUT_URL }}"
+                           onclick="document.getElementById('logout-form').submit(); return false;">
+                            {% trans 'Logout' %}
+                        </a>
+                    </div>
+                </li>
+
+                {% else %}
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ settings.LOGIN_URL }}">{% trans 'Login' %}</a>
+                </li>
+
+                {% endif %}
             </ul>
         </div>
     </div>

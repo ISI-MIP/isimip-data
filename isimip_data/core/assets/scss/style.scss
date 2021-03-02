@@ -1,4 +1,6 @@
 .card {
+    font-size: 10pt;
+
     border: 1px solid $color-neutral;
     border-radius: 0;
 
@@ -8,22 +10,74 @@
         border-bottom: none;
     }
 
+    .card-body {
+        padding: 0.75rem 1.25rem;
+    }
+
     .card-footer {
         background-color: $color-white;
     }
 
+    h4 {
+        font-size: 20px;
+        font-weight: normal;
+        margin-bottom: 10px;
+        word-break: break-all;
+    }
+
     h4,
     p,
-    dl {
+    dl,
+    dd {
         &:last-child {
             margin-bottom: 0;
         }
     }
 }
 
+nav {
+    .dropdown-menu {
+        top: 64px;
+
+        border-top: none;
+        border-radius: 0;
+        font-size: 10pt;
+
+        .dropdown-item {
+            padding: 0.1rem 1rem;
+        }
+    }
+}
+
+form {
+    margin-bottom: 1rem;
+
+    label {
+        font-weight: bold;
+    }
+
+    .form-group,
+    .form-check {
+        margin-bottom: 1rem;
+    }
+}
+
 .form-control {
     border: 1px solid $color-neutral;
     border-radius: 0;
+}
+
+.form-card {
+    margin-bottom: 40px;
+
+    textarea {
+        font-size: 10pt;
+        padding: 0.75rem 1.25rem;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
 }
 
 .btn:not(.btn-link) {
@@ -39,6 +93,15 @@
     .page-link {
         border: 1px solid $color-neutral !important;
         border-radius: 0 !important;
+    }
+}
+
+.modal {
+    .modal-body {
+        .close {
+            position: absolute;
+            right: 15px;
+        }
     }
 }
 

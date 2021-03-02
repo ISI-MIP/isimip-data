@@ -1,0 +1,16 @@
+{% load i18n %}{% load account %}{% user_display caveat.creator as creator_display %}{% blocktrans %}A new caveat had been submitted by {{ creator_display }}:{% endblocktrans %}
+
+{{ caveat.title|safe }}
+
+{{ caveat.description|safe }}
+
+{% blocktrans %}The caveat can be accessed at {{ caveat_url }}.{% endblocktrans %}
+
+{% blocktrans trimmed %}
+For now, this caveat is not public. You can publish it at {{ admin_url }}.
+{% endblocktrans %}
+
+--
+{% blocktrans trimmed with site_domain=site.domain %}
+You are receiving this because you are a staff member at {{ site_domain }}.
+{% endblocktrans %}

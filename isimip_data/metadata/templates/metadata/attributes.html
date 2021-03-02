@@ -11,28 +11,28 @@
 
 <div class="container">
     <header>
-        <h1>{% trans 'Stats' %}</h1>
+        <h1>{% trans 'Attribute statistics' %}</h1>
     </header>
 
-    <div class="card-columns">
-        {% for attribute, rows in attributes %}
-        <div class="card" style="width: 18rem;">
-            <div class="card-header">
-                {{ attribute }}
-            </div>
-            <ul class="list-group list-group-flush">
-                {% for specifier, count in rows %}
-                <li class="list-group-item">
-                    <span>{{ specifier }}</span>
-                    <div class="badge badge-secondary badge-pill float-right">
-                        {{ count }}
-                    </div>
-                </li>
-                {% endfor %}
+    {% for identifier, rows in attributes %}
+    <div class="card attributes">
+        <div class="card-header">
+            {{ identifier }}
+        </div>
+        <div class="card-body">
+            <ul class="list-inline mb-0">
+            {% for specifier, count in rows %}
+            <li class="list-inline-item">
+                {{ specifier }}
+                <div class="badge badge-secondary badge-pill">
+                    {{ count }}
+                </div>
+            </li>
+            {% endfor %}
             </ul>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
 </div>
 
 {% endblock %}

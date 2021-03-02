@@ -1,0 +1,26 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load form_tags %}
+
+{% block page %}
+
+    <h1>{% trans "Create a new account" %}</h1>
+
+    <p>
+        {% blocktrans trimmed with provider_name=account.get_provider.name site_name=site.name %}
+        You are about to use your <strong>{{provider_name}}</strong> account to login to {{site_name}}. As a final step, please complete the following form:{% endblocktrans %}
+    </p>
+
+    <form method="post" action="{% url 'socialaccount_signup' %}">
+        {% csrf_token %}
+
+        {% for field in form.visible_fields %}
+            {% bootstrap_form_field field %}
+        {% endfor %}
+
+        {% bootstrap_form_errors form %}
+
+        <input type="submit" class="btn btn-success" value="{% trans 'Create account' %}" />
+    </form>
+
+{% endblock %}

@@ -25,9 +25,7 @@
     <div class="row">
         <div class="col-sm-12">
             <h3>{% trans 'Cite as' %}</h3>
-            <div class="card">
-                {% include 'metadata/_citation.html' %}
-            </div>
+            {% include 'metadata/cards/citation.html' %}
         </div>
     </div>
 
@@ -66,8 +64,8 @@
                                     {% else %}
                                         {{ creator.name }}
                                     {% endif %}
-                                    {% include 'metadata/_name_credit.html' with name=creator %}
-                                    {% include 'metadata/_name_identifier.html' with name=creator %}
+                                    {% include 'metadata/snippets/name_credit.html' with name=creator %}
+                                    {% include 'metadata/snippets/name_identifier.html' with name=creator %}
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -81,7 +79,7 @@
                                 {% for contact_persion in resource.contact_persons %}
                                 <li>
                                     {{ contact_persion.name }}
-                                    {% include 'metadata/_name_identifier.html' with name=contact_persion %}
+                                    {% include 'metadata/snippets/name_identifier.html' with name=contact_persion %}
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -96,13 +94,13 @@
                                 {% if contributor.nameType == 'Organizational' %}
                                 <li>
                                     {{ contributor.name }}
-                                    {% include 'metadata/_name_identifier.html' with name=contributor %}
+                                    {% include 'metadata/snippets/name_identifier.html' with name=contributor %}
                                 </li>
                                 {% else %}
                                 <li>
                                     {{ contributor.givenName }} {{ contributor.familyName }}
-                                    {% include 'metadata/_name_credit.html' with name=contributor %}
-                                    {% include 'metadata/_name_identifier.html' with name=contributor %}
+                                    {% include 'metadata/snippets/name_credit.html' with name=contributor %}
+                                    {% include 'metadata/snippets/name_identifier.html' with name=contributor %}
                                 </li>
                                 {% endif %}
                                 {% endfor %}
@@ -118,7 +116,10 @@
         </div>
 
         <div class="col-sm-4">
-            {% include 'metadata/_rights.html' with rights=resource.rights %}
+            {% if resource.rights %}
+            <h3>{% trans 'Rights' %}</h3>
+            {% include 'metadata/cards/rights.html' with rights=resource.rights %}
+            {% endif %}
 
             <h3>{% trans 'Export' %}</h3>
             <div class="card">
@@ -146,46 +147,41 @@
 
             {% if resource.datacite.subjects %}
             <h3>{% trans 'GCMD Keywords' %}</h3>
-            <div class="card">
-                <ul class="list-group list-group-flush">
-                    {% for subject in resource.datacite.subjects %}
-                    <li class="list-group-item">
-                        {{ subject.subject }}
-                    </li>
-                    {% endfor %}
-                    <li class="list-group-item text-muted">
-                        Global Change Master Directory (GCMD) Keywords are a hierarchical set of controlled vocabularies maintained by NASA (<a href="https://earthdata.nasa.gov/earth-observation-data/find-data/gcmd/gcmd-keywords" target="_blank">more information</a>).
-                    </li>
-                </ul>
-            </div>
+            {% include 'metadata/cards/keywords.html' with subjects=resource.datacite.subjects %}
             {% endif %}
         </div>
     </div>
 
-    {% include 'metadata/_related_identifiers.html' with title='Is documented by' identifiers=references.IsDocumentedBy %}
-
-    {% include 'metadata/_related_identifiers.html' with title='References' identifiers=references.Cites %}
-
-    {% include 'metadata/_related_identifiers.html' with title='Is derived from' identifiers=references.IsDerivedFrom %}
-
-    {% include 'metadata/_related_identifiers.html' with title='Other references' identifiers=references.Other %}
-
+    {% if references.IsDocumentedBy %}
+    <h3>{% trans 'Is documented by' %}</h3>
+    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsDocumentedBy %}
     {% endif %}
 
-    {% if resource.datasets.all %}
+    {% if references.Cites %}
+    <h3>{% trans 'References' %}</h3>
+    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.Cites %}
+    {% endif %}
+
+    {% if references.IsDerivedFrom %}
+    <h3>{% trans 'Is derived from' %}</h3>
+    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsDerivedFrom %}
+    {% endif %}
+
+    {% if references.Other %}
+    <h3>{% trans 'Other references' %}</h3>
+    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.Other %}
+    {% endif %}
+
+    {% if caveats %}
+    <h3>{% trans 'Caveats for datasets for this DOI' %}</h3>
+    {% include 'caveats/cards/caveats.html' %}
+    {% endif %}
+
+    {% if resource.datasets.exists %}
     <h3>{% trans 'Datasets for this DOI' %}</h3>
-    <div class="card">
-        <ul class="list-group list-group-flush">
-            {% for dataset in resource.datasets.all %}
-            <li class="list-group-item">
-                <h4>
-                    <a href="{% url 'dataset' dataset.id %}">{{ dataset.name }}</a>
-                </h4>
-                {% include 'metadata/_shields.html' with obj=dataset %}
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+    {% include 'metadata/cards/datasets.html' with datasets=resource.datasets.all %}
+    {% endif %}
+
     {% endif %}
 </div>
 

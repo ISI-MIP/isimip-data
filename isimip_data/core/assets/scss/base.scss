@@ -16,12 +16,14 @@ $fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
 @import '~@fortawesome/fontawesome-free/scss/solid';
 @import '~@fortawesome/fontawesome-free/scss/regular';
 
-@import 'style';
 @import 'fonts';
-@import 'layout';
-@import 'nav';
-@import 'header';
 @import 'footer';
+@import 'layout';
+@import 'messages';
+@import 'nav';
+@import 'page';
+
+@import 'style';
 
 main {
     background-image: url('../../../core/assets/images/mountain-range.jpg');

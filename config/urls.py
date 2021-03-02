@@ -1,7 +1,15 @@
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic.base import TemplateView
+from rest_framework import routers
+
+from isimip_data.accounts.views import (profile_delete, profile_delete_success,
+                                        profile_update)
+from isimip_data.caveats.views import (caveat, caveat_create, caveat_subscribe,
+                                       caveat_unsubscribe, caveats,
+                                       comment_create, subscriptions)
 from isimip_data.core.viewsets import SettingsViewSet
 from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
@@ -16,7 +24,6 @@ from isimip_data.search.views import search
 from isimip_data.search.viewsets import FacetViewSet
 # from isimip_data.wizard.views import wizard
 from isimip_data.wizard.viewsets import LayerViewSet
-from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'datasets', DatasetViewSet, basename='dataset')
@@ -32,6 +39,11 @@ router.register(r'settings', SettingsViewSet, basename='setting')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
+
+    path('account/profile/', profile_update, name='profile_update'),
+    path('account/profile/delete/', profile_delete, name='profile_delete'),
+    path('account/profile/delete/success/', profile_delete_success, name='profile_delete_success'),
+    path('account/', include('allauth.urls')),
 
     path('metadata/', metadata, name='metadata'),
 
@@ -56,6 +68,14 @@ urlpatterns = [
     path('download/', download, name='download'),
     path('download/<path:path>/', download, name='download'),
 
+    path('caveats/', caveats, name='caveats'),
+    path('caveats/<int:pk>/', caveat, name='caveat'),
+    path('caveats/<int:pk>/subscribe/', caveat_subscribe, name='caveat_subscribe'),
+    path('caveats/<int:pk>/unsubscribe/', caveat_unsubscribe, name='caveat_unsubscribe'),
+    path('caveats/create/', caveat_create, name='caveat_create'),
+    path('caveats/comments/', comment_create, name='comment_create'),
+    path('subscriptions/', subscriptions, name='subscriptions'),
+
     # path('wizard/', wizard, name='wizard'),
 
     path('', TemplateView.as_view(template_name='core/home.html'), name='home'),
@@ -70,4 +90,4 @@ if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+    ] + urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

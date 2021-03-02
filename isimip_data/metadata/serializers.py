@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
+from isimip_data.caveats.models import Caveat
+
 from .models import Dataset, File, Resource
 
 
@@ -46,10 +48,35 @@ class DatasetResourceSerializer(serializers.ModelSerializer):
         )
 
 
+class DatasetCaveatSerializer(serializers.ModelSerializer):
+
+    url = serializers.SerializerMethodField()
+    severity_display = serializers.CharField(source='get_severity_display')
+    status_display = serializers.CharField(source='get_status_display')
+
+    class Meta:
+        model = Caveat
+        fields = (
+            'id',
+            'title',
+            'url',
+            'severity',
+            'severity_display',
+            'severity_color',
+            'status',
+            'status_display',
+            'status_color'
+        )
+
+    def get_url(self, obj):
+        return reverse('caveat', args=[obj.id])
+
+
 class DatasetSerializer(serializers.ModelSerializer):
 
     files = DatasetFileSerializer(many=True)
     resources = DatasetResourceSerializer(many=True)
+    caveats = serializers.SerializerMethodField()
     search_rank = serializers.FloatField(required=False, default=0.0)
     metadata_url = serializers.SerializerMethodField()
     download_url = serializers.SerializerMethodField()
@@ -75,6 +102,7 @@ class DatasetSerializer(serializers.ModelSerializer):
             'rights',
             'files',
             'resources',
+            'caveats',
             'terms_of_use'
         )
 
@@ -88,6 +116,11 @@ class DatasetSerializer(serializers.ModelSerializer):
     def get_filelist_url(self, obj):
         if obj.public:
             return reverse('dataset-detail-filelist', args=[obj.id], request=self.context['request'])
+
+    def get_caveats(self, obj):
+        queryset = Caveat.objects.filter(datasets__contains=[obj.id])
+        serializer = DatasetCaveatSerializer(queryset, many=True)
+        return serializer.data
 
 
 class FileSerializer(serializers.ModelSerializer):

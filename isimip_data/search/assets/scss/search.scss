@@ -26,6 +26,17 @@ main {
 }
 
 .search {
+    h1 {
+        margin-top: 0;
+        text-align: left;
+        font-size: 28px;
+        color: $color-neutral-dark;
+    }
+
+    form {
+        margin-bottom: 0;
+    }
+
     button {
         background-color: $color-white;
         border: 1px solid $color-neutral;
@@ -187,13 +198,12 @@ main {
             }
         }
 
-        .result-files {
-            li {
-                margin-bottom: 0.75rem;
+        .result-file,
+        .result-caveat {
+            padding-bottom: 0.5rem;
 
-                &:last-child {
-                    margin-bottom: 0;
-                }
+            &:last-child {
+                padding-bottom: 0;
             }
         }
 
