@@ -163,6 +163,7 @@ REST_FRAMEWORK = {
 
 SETTINGS_EXPORT = [
     'LABEL',
+    'ALERT',
     'NAVIGATION',
     'FILES_BASE_URL',
     'TERMS_OF_USE',
@@ -197,6 +198,7 @@ METADATA_PAGE_SIZE = 10
 METADATA_MAX_PAGE_SIZE = 1000
 
 LABEL = os.getenv('LABEL')
+ALERT = os.getenv('ALERT')
 
 TERMS_OF_USE = 'When using ISIMIP data for your research, please appropriately credit the data providers, e.g. either by citing the DOI for the dataset, or by appropriate acknowledgment. We strongly encourage to offer co-authorship to at least a representative of the data providers.'
 

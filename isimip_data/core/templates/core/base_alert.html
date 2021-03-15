@@ -1,0 +1,7 @@
+{% if settings.ALERT %}
+<div class="container">
+    <div class="row justify-content-md-center">
+    	{{ settings.ALERT|safe }}
+	</div>
+</div>
+{% endif %}
