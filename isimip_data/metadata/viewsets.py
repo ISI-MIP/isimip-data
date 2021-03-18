@@ -42,7 +42,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
 
     @action(detail=False, url_path='histogram/(?P<attribute>[A-Za-z0-9_]+)')
     def histogram(self, request, attribute):
-        if Attribute.objects.using('metadata').filter(key=attribute).exists():
+        if Attribute.objects.using('metadata').filter(identifier=attribute).exists():
             # exclude the attribute from AttributeFilterBackend
             self.attribute_filter_exclude = attribute
             queryset = self.filter_queryset(self.get_queryset())
