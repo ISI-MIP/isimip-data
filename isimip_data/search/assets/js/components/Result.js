@@ -52,7 +52,9 @@ class Result extends Component {
 
   handleDownload(e, files) {
     e.preventDefault()
-    DatasetApi.downloadFiles(files)
+    files.map(file => {
+      DatasetApi.downloadFile(file)
+    })
   }
 
   renderDataset(dataset) {
@@ -80,19 +82,22 @@ class Result extends Component {
 
           <div className="float-md-right">
             <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
-              <a href={dataset.download_url}>
+              <a href={dataset.download_url}
+                 title="Download only a specific country, a lat/lon box or landonly data.">
                 Configure download
               </a>
             </div>
 
             <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
-              <a href={dataset.filelist_url}>
+              <a href={dataset.filelist_url}
+                 title="Download file list for this dataset.">
                 Download file list
               </a>
             </div>
 
             <div className="d-sm-inline-block mb-2 mb-md-0">
-              <button className="btn btn-link" onClick={e => this.handleDownload(e, dataset.files)}>
+              <button className="btn btn-link" onClick={e => this.handleDownload(e, dataset.files)}
+                      title="Download all files in this dataset at once.">
                 Download all files
               </button>
             </div>
@@ -213,9 +218,7 @@ class Result extends Component {
                       {get_size(file.size)}
                     </div>
                     <div className="col-md-2">
-                      {file.file_url && <button className="btn btn-link" onClick={e => this.handleDownload(e, [file])}>
-                          Download file
-                      </button>}
+                      <a href={file.file_url } target="_blank">Download file</a>
                     </div>
                   </div>
                 </li>

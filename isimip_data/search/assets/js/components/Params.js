@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
+import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 
 const hiddenParams = ['page']
@@ -14,8 +15,13 @@ class Params extends Component {
     super(props)
   }
 
+  handleDownload(e, params) {
+    e.preventDefault()
+    DatasetApi.downloadFiles(params)
+  }
+
   render() {
-    const { params, isLoading, onRemove } = this.props
+    const { params, count, isLoading, onRemove } = this.props
 
     const items = []
     Object.keys(params).map(key => {
@@ -41,30 +47,42 @@ class Params extends Component {
     return (
       <div className="card params">
         <div className="card-body">
-          <ul className="list-inline params-list mb-0">
-            <li className="list-inline-item">
+          <div className=" mb-2">
+            <div className="d-inline">
               <strong>Search constraints</strong>
-            </li>
+            </div>
             {
               items.map((item, index) => {
                 const [key, value] = item
                 return (
-                  <li key={index} className="list-inline-item">
+                  <div key={index} className="d-inline ml-2">
                     <button className="btn btn-link" onClick={() => onRemove(key, value)}>
                       {key} = {value} <FontAwesomeIcon icon={faTimes} />
                     </button>
-                  </li>
+                  </div>
                 )
               })
             }
-          </ul>
-          <ul className="list-inline float-right mb-0">
-            <li className="list-inline-item">
-              <a href={`/api/v1/datasets/filelist/?${encodeParams(params)}`}>
-                Download file list for this search
+          </div>
+
+          <div className="float-md-right">
+            {count > 0 &&
+            <div className="d-sm-inline-block mb-2 mb-md-0">
+              <a href={`/api/v1/datasets/filelist/?${encodeParams(params)}`}
+                 title="Download file list for this search.">
+                Download file list
               </a>
-            </li>
-          </ul>
+            </div>
+            }
+            {count > 0 && count < 10 &&
+              <div className="d-sm-inline-block ml-2 mb-2 mb-md-0">
+                <button className="btn btn-link" onClick={e => this.handleDownload(e, params)}
+                   title="Download all files for this search at once.">
+                  Download all files
+                </button>
+              </div>
+            }
+          </div>
         </div>
       </div>
     )
@@ -73,6 +91,7 @@ class Params extends Component {
 
 Params.propTypes = {
   params: PropTypes.object.isRequired,
+  count: PropTypes.number.isRequired,
   onRemove: PropTypes.func.isRequired
 }
 

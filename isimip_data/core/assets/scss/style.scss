@@ -87,6 +87,10 @@ form {
 
 .btn-link {
     border: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 .pagination {

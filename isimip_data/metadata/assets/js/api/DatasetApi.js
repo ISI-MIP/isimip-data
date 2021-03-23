@@ -29,7 +29,7 @@ class DatasetApi {
       return response.json()
     }).catch(error => {
       return error
-    });
+    })
   }
 
   static fetchTree(urlParams, fetchParams = {}) {
@@ -37,26 +37,29 @@ class DatasetApi {
       return response.json()
     }).catch(error => {
       return error
-    });
+    })
   }
 
-  static downloadFiles(files, fetchParams = {}) {
-    return files.map(file => {
-      if (file.file_url) {
-        return fetch(file.file_url, fetchParams)
-          .then(response => response.blob())
-          .then(blob => {
-            const url = window.URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = file.name
-
-            document.body.appendChild(a)
-            a.click()
-            a.remove()
-          })
-      }
+  static downloadFiles(params, fetchParams = {}) {
+    return this.fetchDatasets(params, fetchParams).then(json => {
+      json.results.map(result => {
+        result.files.map(file => {
+          this.downloadFile(file)
+        })
+      })
     })
+  }
+
+  static downloadFile(file) {
+    if (file.file_url) {
+      const iframe = document.createElement('iframe')
+      iframe.style.display = 'none'
+      iframe.src = file.file_url
+      iframe.onload = function() {
+          this.parentNode.removeChild(this)
+      }
+      document.body.appendChild(iframe)
+    }
   }
 }
 

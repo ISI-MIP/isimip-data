@@ -196,6 +196,10 @@ main {
                 cursor: pointer;
                 user-select: none;
             }
+
+            label:hover {
+                text-decoration: underline;
+            }
         }
 
         .result-file,

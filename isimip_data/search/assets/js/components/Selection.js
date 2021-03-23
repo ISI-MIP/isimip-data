@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronUp, faTimes, faSpinner  } from '@fortawesome/free-solid-svg-icons'
-
+import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 import bytes from 'bytes'
 
@@ -26,6 +26,10 @@ class Selection extends Component {
     this.setState({ showDatasets: !this.state.showDatasets})
   }
 
+  handleDownload(e, ids) {
+    e.preventDefault()
+    DatasetApi.downloadFiles(ids)
+  }
 
   renderSelection() {
     const { selected, count, isLoading, onReset } = this.props
@@ -58,10 +62,19 @@ class Selection extends Component {
         </div>
         {selected.length > 0 &&
         <div className="mt-2">
-          <div className="float-md-right mb-2 mb-md-0">
-            <a href={`/api/v1/datasets/filelist/?${encodeParams(ids)}`}>
-              Download file list for this selection
-            </a>
+          <div className="float-md-right">
+            <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
+              <a href={`/api/v1/datasets/filelist/?${encodeParams(ids)}`}
+                 title="Download the file list for this selection.">
+                Download file list
+              </a>
+            </div>
+            <div className="d-sm-inline-block mb-2 mb-md-0">
+              <button className="btn btn-link" onClick={e => this.handleDownload(e, ids)}
+                 title="Download all files in this selection at once.">
+                Download all files
+              </button>
+            </div>
           </div>
           <div className="d-inline mr-2">
             <button className="btn btn-link" onClick={this.toggleDatasets}>

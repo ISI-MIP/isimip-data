@@ -128,7 +128,7 @@ class Results extends Component {
     return (
       <div className="results">
         <Selection selected={selected} count={count} isLoading={isLoading} onReset={this.handleSelectionReset} />
-        <Params params={params} onRemove={onParamsRemove} />
+        <Params params={params} count={count} onRemove={onParamsRemove} />
         {
           results.map(dataset => {
             return <Result key={dataset.id} dataset={dataset} glossary={glossary}
