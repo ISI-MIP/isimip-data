@@ -26,21 +26,15 @@
     </header>
 
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-8">
             <h3>{% trans 'Cite as' %}</h3>
             {% include 'metadata/cards/citation.html' with resource=file.dataset.resources.first citation_footer=True %}
-        </div>
-        <div class="col-sm-8">
-            {% if dataset.public %}
-            <h3>{% trans 'Preview' %}</h3>
-            {% include 'metadata/cards/preview.html' with src=file.thumbnail_url alt=file.name %}
-            {% endif %}
 
             <h3>{% trans 'Specifiers' %}</h3>
             {% include 'metadata/cards/specifiers.html' %}
         </div>
         <div class="col-sm-4">
-            {% if dataset.rights_dict %}
+            {% if file.dataset.rights_dict %}
             <h3>{% trans 'Rights' %}</h3>
             {% include 'metadata/cards/rights.html' with rights=file.rights_dict %}
             {% endif %}
@@ -55,12 +49,6 @@
                     </li>
                     <li class="list-group-item">
                         <a href="{{ file.json_url }}">{% trans 'Download metadata file' %}</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="{{ file.checksum_url }}">{% trans 'Download checksum file' %}</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="{{ file.thumbnail_url }}">{% trans 'Download thumbnail' %}</a>
                     </li>
                     {% if file.is_global and file.is_netcdf %}
                     <li class="list-group-item">
