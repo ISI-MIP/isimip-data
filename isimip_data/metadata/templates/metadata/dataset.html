@@ -29,15 +29,9 @@
     </header>
 
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-8">
             <h3>{% trans 'Cite as' %}</h3>
             {% include 'metadata/cards/citation.html' with resource=dataset.resources.first citation_footer=True %}
-        </div>
-        <div class="col-lg-8">
-            {% if dataset.public %}
-            <h3>{% trans 'Preview' %}</h3>
-            {% include 'metadata/cards/preview.html' with src=dataset.files.first.thumbnail_url alt=dataset.name %}
-            {% endif %}
 
             <h3>{% trans 'Specifiers' %}</h3>
             {% include 'metadata/cards/specifiers.html' %}

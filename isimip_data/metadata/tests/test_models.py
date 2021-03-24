@@ -16,14 +16,6 @@ def test_file_json_url(client, files):
             assert instance.json_url is None
 
 
-def test_file_thumbnail_url(client, files):
-    for instance in files:
-        if instance.dataset.public:
-            assert instance.thumbnail_url == 'http://isimip/' + instance.path.replace('.nc', '.png')
-        else:
-            assert instance.json_url is None
-
-
 def test_word_str(client, words):
     for instance in words:
         assert str(instance) == instance.word
@@ -31,4 +23,4 @@ def test_word_str(client, words):
 
 def test_attribute_str(client, attributes):
     for instance in attributes:
-        assert str(instance) == instance.key
+        assert str(instance) == instance.identifier

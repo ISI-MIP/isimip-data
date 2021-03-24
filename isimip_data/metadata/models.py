@@ -96,16 +96,6 @@ class File(models.Model):
             return settings.FILES_BASE_URL + str(Path(self.path).with_suffix('.json'))
 
     @property
-    def thumbnail_url(self):
-        if self.dataset.public:
-            return settings.FILES_BASE_URL + str(Path(self.path).with_suffix('.png'))
-
-    @property
-    def checksum_url(self):
-        if self.dataset.public:
-            return settings.FILES_BASE_URL + str(Path(self.path).with_suffix('.' + self.checksum_type))
-
-    @property
     def is_global(self):
         return '_global_' in self.name
 
