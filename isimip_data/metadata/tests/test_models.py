@@ -23,4 +23,4 @@ def test_word_str(client, words):
 
 def test_attribute_str(client, attributes):
     for instance in attributes:
-        assert str(instance) == instance.key
+        assert str(instance) == instance.identifier
