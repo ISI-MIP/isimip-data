@@ -39,6 +39,7 @@ class Caveat(models.Model):
     objects = ModerationManager()
 
     public = models.BooleanField(default=False)
+    email = models.BooleanField(default=False)
     title = models.CharField(max_length=512)
     description = models.TextField()
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='caveats')
@@ -129,6 +130,7 @@ class Comment(models.Model):
 
     text = models.TextField()
     public = models.BooleanField(default=False)
+    email = models.BooleanField(default=False)
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='comments')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

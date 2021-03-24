@@ -2,6 +2,7 @@ import json
 
 from django import forms
 from django.contrib import admin
+from django.contrib.messages import ERROR, INFO
 from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -79,7 +80,7 @@ class CaveatAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('public', 'title', 'description', 'creator', 'severity', 'status', 'subscribers')
+            'fields': ('public', 'email', 'title', 'description', 'creator', 'severity', 'status', 'subscribers')
         }),
         ('Specifiers', {
             'classes': ('collapse',),
@@ -102,6 +103,22 @@ class CaveatAdmin(admin.ModelAdmin):
             '{}#{}',
             ((dataset.name, dataset.version) for dataset in datasets)
         )
+
+    def response_add(self, request, obj, post_url_continue=None):
+        self.send_email(request, obj)
+        return super().response_add(request, obj, post_url_continue)
+
+    def response_change(self, request, obj):
+        self.send_email(request, obj)
+        return super().response_change(request, obj)
+
+    def send_email(self, request, obj):
+        if '_email' in request.POST and not obj.email:
+            obj.email = True
+            obj.save()
+            self.message_user(request, 'An email has been send.', level=INFO)
+        else:
+            self.message_user(request, 'No email has been send, since the email flag was set before.', level=ERROR)
 
 
 class CommentAdmin(admin.ModelAdmin):
