@@ -1,7 +1,8 @@
 import os
 
-import dj_database_url
 from django.utils.translation import gettext_lazy as _
+
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -223,6 +224,8 @@ FILES_BASE_URL = os.getenv('FILES_BASE_URL')
 FILES_API_URL = os.getenv('FILES_API_URL')
 
 PROTOCOL_LOCATIONS = os.getenv('PROTOCOL_LOCATIONS', '').split()
+
+CAVEATS_ANNOUNCEMENT_EMAIL_TO = os.getenv('CAVEATS_ANNOUNCEMENT_EMAIL_TO', '').split()
 
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
 LOG_DIR = os.getenv('LOG_DIR')

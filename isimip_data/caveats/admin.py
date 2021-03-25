@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from isimip_data.annotations.models import Download, Figure
 from isimip_data.metadata.models import Attribute, Dataset
 
+from .mail import send_caveat_announcement, send_comment_announcement
 from .models import Caveat, Comment
 
 
@@ -113,12 +114,14 @@ class CaveatAdmin(admin.ModelAdmin):
         return super().response_change(request, obj)
 
     def send_email(self, request, obj):
-        if '_email' in request.POST and not obj.email:
-            obj.email = True
-            obj.save()
-            self.message_user(request, 'An email has been send.', level=INFO)
-        else:
-            self.message_user(request, 'No email has been send, since the email flag was set before.', level=ERROR)
+        if '_email' in request.POST:
+            if obj.email:
+                self.message_user(request, 'No email has been send, since the email flag was set before.', level=ERROR)
+            else:
+                obj.email = True
+                obj.save()
+                send_caveat_announcement(request, obj)
+                self.message_user(request, 'An email has been send.', level=INFO)
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -126,6 +129,24 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('caveat', 'creator', 'created', 'public')
     list_filter = ('public', )
     readonly_fields = ('created', )
+
+    def response_add(self, request, obj, post_url_continue=None):
+        self.send_email(request, obj)
+        return super().response_add(request, obj, post_url_continue)
+
+    def response_change(self, request, obj):
+        self.send_email(request, obj)
+        return super().response_change(request, obj)
+
+    def send_email(self, request, obj):
+        if '_email' in request.POST:
+            if obj.email:
+                self.message_user(request, 'No email has been send, since the email flag was set before.', level=ERROR)
+            else:
+                obj.email = True
+                obj.save()
+                send_comment_announcement(request, obj)
+                self.message_user(request, 'An email has been send.', level=INFO)
 
 
 admin.site.register(Caveat, CaveatAdmin)

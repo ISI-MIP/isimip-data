@@ -1,3 +1,6 @@
+import mimetypes
+from pathlib import Path
+
 from django.db import models
 
 
@@ -14,6 +17,17 @@ class Figure(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def image_name(self):
+        return Path(self.image.name).name
+
+    @property
+    def image_type(self):
+        try:
+            return mimetypes.guess_type(self.image_name)[0]
+        except IndexError:
+            return None
 
 
 class Download(models.Model):

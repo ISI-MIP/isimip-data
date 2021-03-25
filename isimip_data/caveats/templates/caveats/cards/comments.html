@@ -14,6 +14,12 @@
         commented {{ comment.created|timesince }} ago.
     </div>
     <div class="card-body">
+        {% if request.user.is_staff %}
+        <a class="d-block float-right" href="{% url 'admin:caveats_comment_change' comment.id %}">
+            <i class="fas fa-pen"></i>
+        </a>
+        {% endif %}
+
         {{ comment.text|linebreaksbr|urlize }}
     </div>
 </div>
