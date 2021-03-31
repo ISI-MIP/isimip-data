@@ -1,4 +1,6 @@
 from django import forms
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.utils.translation import gettext_lazy as _
 
 from isimip_data.metadata.models import Dataset
@@ -73,3 +75,32 @@ class CommentForm(forms.ModelForm):
 
         self.instance.save()
         return self.instance
+
+
+class AnnouncementAdminForm(forms.Form):
+    subject = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'vLargeTextField',
+        'rows': 2
+    }), required=True)
+    message = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'vLargeTextField',
+        'rows': 20
+    }), required=True)
+    recipients = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'vLargeTextField',
+        'rows': 4
+    }), required=True, help_text=_('You can add multiple recipients line by line.'))
+
+    def __init__(self, *args, **kwargs):
+        self.object = kwargs.pop('object')
+        super().__init__(*args, **kwargs)
+
+    def clean_recipients(self):
+        recipients = self.cleaned_data['recipients'].splitlines()
+        for recipient in recipients:
+            validate_email(recipient)
+        return recipients
+
+    def clean(self):
+        if self.object.email:
+            raise ValidationError(_('No email can been send, since the email flag was set before.'))

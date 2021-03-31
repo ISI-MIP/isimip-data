@@ -38,7 +38,14 @@ class Caveat(models.Model):
 
     objects = ModerationManager()
 
-    public = models.BooleanField(default=False)
+    public = models.BooleanField(
+        default=False,
+        help_text=_('Designates whether this caveat is publicly visible.')
+    )
+    email = models.BooleanField(
+        default=False,
+        help_text=_('Designates whether an announcement mail for this caveat has been send.')
+    )
     title = models.CharField(max_length=512)
     description = models.TextField()
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='caveats')
@@ -50,7 +57,7 @@ class Caveat(models.Model):
     datasets = ArrayField(models.UUIDField(), blank=True, default=list)
     version_after = models.CharField(max_length=8, blank=True)
     version_before = models.CharField(max_length=8, blank=True)
-    subscribers = models.ManyToManyField(User)
+    subscribers = models.ManyToManyField(User, blank=True)
     figures = models.ManyToManyField(Figure, related_name='caveats')
     downloads = models.ManyToManyField(Download, related_name='caveats')
 
@@ -127,8 +134,15 @@ class Comment(models.Model):
 
     objects = ModerationManager()
 
+    public = models.BooleanField(
+        default=False,
+        help_text=_('Designates whether this comment is publicly visible.')
+    )
+    email = models.BooleanField(
+        default=False,
+        help_text=_('Designates whether an announcement mail for this comment has been send.')
+    )
     text = models.TextField()
-    public = models.BooleanField(default=False)
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='comments')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

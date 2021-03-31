@@ -1,0 +1,72 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}">
+
+    <style>
+        input[type="submit"].danger {
+            background: #ba2121;
+        }
+        input[type="submit"].danger:hover {
+            background: #a41515;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+{% if form.object.email %}
+
+<p>
+    {% trans 'No email can been send, since the email flag was set before.' %}
+</p>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    <input type="submit" value="{% trans 'Back' %}" name="_back">
+</form>
+
+{% else %}
+
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    {% if form.errors %}
+    <p class="errornote">
+    {% if form.errors|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+    </p>
+    {{ form.non_field_errors }}
+    {% endif %}
+
+    <fieldset class="module aligned">
+        <div class="form-row">
+            {{ form.subject.errors }}
+            <label class="required" for="{{ form.subject.auto_id }}">{{ form.subject.label }}</label>
+            {{ form.subject }}
+            <div class="help">{{ form.subject.help_text|safe }}</div>
+        </div>
+        <div class="form-row {% if form.message.errors %}errors{% endif %}">
+            {{ form.message.errors }}
+            <label class="required" for="{{ form.message.auto_id }}">{{ form.message.label }}</label>
+            {{ form.message }}
+            <div class="help">{{ form.message.help_text|safe }}</div>
+        </div>
+        <div class="form-row {% if form.recipients.errors %}errors{% endif %}">
+            {{ form.recipients.errors }}
+            <label class="required" for="{{ form.recipients.auto_id }}">{{ form.recipients.label }}</label>
+            {{ form.recipients }}
+            <div class="help">{{ form.recipients.help_text|safe }}</div>
+        </div>
+    </fieldset>
+
+    <input type="submit" value="{% trans 'Send email' %}" class="danger" name="_send">
+    <input type="submit" value="{% trans 'Back' %}" name="_back">
+</form>
+
+{% endif %}
+
+{% endblock %}

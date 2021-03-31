@@ -1,0 +1,11 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block object-tools-items %}
+    <li>
+        <a href="{% url 'admin:caveats_comment_send' original.pk %}">
+            {% trans 'Announce comment via email' %}
+        </a>
+    </li>
+    {{ block.super }}
+{% endblock %}

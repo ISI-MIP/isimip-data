@@ -1,1 +1,1 @@
-{{ comment.caveat.title }}
+[{{ site.name }}] {{ comment.caveat.title }}

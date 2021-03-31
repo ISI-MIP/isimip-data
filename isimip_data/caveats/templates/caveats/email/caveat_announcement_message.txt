@@ -1,0 +1,14 @@
+{% load i18n %}{% load account %}Dear ISIMIP data users,
+
+{% blocktrans %}We would like to draw your attention to the following caveat:{% endblocktrans %}
+
+{{ caveat.title|safe }}
+
+{{ caveat.description|safe }}
+
+{% blocktrans %}More information about the caveat can be accessed at {{ caveat_url }}.{% endblocktrans %}
+
+{% blocktrans %}On this page, you can also subscribe to future updates.{% endblocktrans %}
+
+Best wishes,
+The ISIMIP data team

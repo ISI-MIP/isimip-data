@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from isimip_data.core.mail import send_mail
 
 
-def send_caveat_notifications(request, caveat):
+def send_caveat_notifications_mail(request, caveat):
     context = {
         'caveat': caveat,
         'caveat_url': request.build_absolute_uri(caveat.get_absolute_url()),
@@ -22,7 +22,25 @@ def send_caveat_notifications(request, caveat):
     send_mail(subject, message, from_email=from_email, to=to)
 
 
-def send_comment_notifications(request, comment):
+def get_caveat_announcement_mail(request, caveat):
+    context = {
+        'caveat': caveat,
+        'caveat_url': request.build_absolute_uri(caveat.get_absolute_url()),
+        'site': Site.objects.get_current()
+    }
+
+    subject = render_to_string('caveats/email/caveat_announcement_subject.txt', context, request=request)
+    message = render_to_string('caveats/email/caveat_announcement_message.txt', context, request=request)
+
+    return subject, message
+
+
+def send_caveat_announcement_mail(subject, message, recipients):
+    for recipient in recipients:
+        send_mail(subject, message, to=[recipient])
+
+
+def send_comment_notifications_mail(request, comment):
     context = {
         'comment': comment,
         'reply_url': request.build_absolute_uri(comment.caveat.get_reply_url()),
@@ -36,3 +54,21 @@ def send_comment_notifications(request, comment):
 
     for subscriber in comment.caveat.subscribers.exclude(id=comment.creator.id):
         send_mail(subject, message, from_email=from_email, to=[subscriber.email])
+
+
+def get_comment_announcement_mail(request, comment):
+    context = {
+        'comment': comment,
+        'caveat_url': request.build_absolute_uri(comment.get_absolute_url()),
+        'site': Site.objects.get_current()
+    }
+
+    subject = render_to_string('caveats/email/comment_announcement_subject.txt', context, request=request)
+    message = render_to_string('caveats/email/comment_announcement_message.txt', context, request=request)
+
+    return subject, message
+
+
+def send_comment_announcement_mail(subject, message, recipients):
+    for recipient in recipients:
+        send_mail(subject, message, to=[recipient])
