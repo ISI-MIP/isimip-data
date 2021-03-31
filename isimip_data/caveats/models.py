@@ -57,7 +57,7 @@ class Caveat(models.Model):
     datasets = ArrayField(models.UUIDField(), blank=True, default=list)
     version_after = models.CharField(max_length=8, blank=True)
     version_before = models.CharField(max_length=8, blank=True)
-    subscribers = models.ManyToManyField(User)
+    subscribers = models.ManyToManyField(User, blank=True)
     figures = models.ManyToManyField(Figure, related_name='caveats')
     downloads = models.ManyToManyField(Download, related_name='caveats')
 

@@ -11,7 +11,8 @@ from isimip_data.metadata.models import Dataset
 from isimip_data.metadata.utils import prettify_attributes_dict
 
 from .forms import CaveatForm, CommentForm
-from .mail import send_caveat_notifications, send_comment_notifications
+from .mail import (send_caveat_notifications_mail,
+                   send_comment_notifications_mail)
 from .models import Caveat
 
 
@@ -35,6 +36,8 @@ def caveat(request, pk=None):
         'datasets': datasets,
         'comment_form': CommentForm(caveat=caveat, creator=request.user)
     })
+
+# caveat.get_creator_display()
 
 
 @login_required
@@ -68,7 +71,7 @@ def caveat_create(request):
         caveat = form.save()
         caveat.subscribers.add(request.user)
         if not caveat.public:
-            send_caveat_notifications(request, caveat)
+            send_caveat_notifications_mail(request, caveat)
         messages.add_message(request, messages.SUCCESS, _('Caveat successfully submitted.'))
         return redirect('caveat', caveat.id)
 
@@ -86,7 +89,7 @@ def comment_create(request):
         if form.is_valid():
             comment = form.save()
             comment.caveat.subscribers.add(request.user)
-            send_comment_notifications(request, comment)
+            send_comment_notifications_mail(request, comment)
             messages.add_message(request, messages.SUCCESS, _('Comment successfully submitted.'))
             return redirect(comment.get_absolute_url())
         else:

@@ -1,0 +1,9 @@
+{% extends "admin/caveats/base_send.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h1>
+        {% trans 'Announce comment via email' %}
+    </h1>
+    {{ block.super }}
+{% endblock %}

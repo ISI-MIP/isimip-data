@@ -2,7 +2,9 @@ import json
 
 from django import forms
 from django.contrib import admin
-from django.contrib.messages import ERROR, INFO
+from django.contrib.messages import INFO
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import path
 from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -10,7 +12,10 @@ from django.utils.translation import gettext_lazy as _
 from isimip_data.annotations.models import Download, Figure
 from isimip_data.metadata.models import Attribute, Dataset
 
-from .mail import send_caveat_announcement, send_comment_announcement
+from .forms import AnnouncementAdminForm
+from .mail import (get_caveat_announcement_mail, get_comment_announcement_mail,
+                   send_caveat_announcement_mail,
+                   send_comment_announcement_mail)
 from .models import Caveat, Comment
 
 
@@ -97,6 +102,38 @@ class CaveatAdmin(admin.ModelAdmin):
         })
     )
 
+    def get_urls(self):
+        view = self.admin_site.admin_view(self.caveats_caveat_send)
+        return [path('<int:pk>/send/', view, name='caveats_caveat_send')] + super().get_urls()
+
+    def caveats_caveat_send(self, request, pk):
+        caveat = get_object_or_404(Caveat, id=pk)
+
+        subject, message = get_caveat_announcement_mail(request, caveat)
+
+        form = AnnouncementAdminForm(request.POST or None, object=caveat, initial={
+            'subject': subject,
+            'message': message
+        })
+
+        if request.method == 'POST':
+            if '_back' in request.POST:
+                return redirect('admin:caveats_caveat_change', object_id=caveat.id)
+
+            elif '_send' in request.POST and form.is_valid():
+                caveat.email = True
+                caveat.save()
+
+                send_caveat_announcement_mail(form.cleaned_data['subject'],
+                                              form.cleaned_data['message'],
+                                              form.cleaned_data['recipients'])
+                self.message_user(request, 'An email has been send.', level=INFO)
+                return redirect('admin:caveats_caveat_change', object_id=caveat.id)
+
+        return render(request, 'admin/caveats/caveat_send.html', context={
+            'form': form
+        })
+
     def affected_datasets(self, instance):
         datasets = Dataset.objects.using('metadata').filter(id__in=instance.datasets)
         return format_html_join(
@@ -105,24 +142,6 @@ class CaveatAdmin(admin.ModelAdmin):
             ((dataset.name, dataset.version) for dataset in datasets)
         )
 
-    def response_add(self, request, obj, post_url_continue=None):
-        self.send_email(request, obj)
-        return super().response_add(request, obj, post_url_continue)
-
-    def response_change(self, request, obj):
-        self.send_email(request, obj)
-        return super().response_change(request, obj)
-
-    def send_email(self, request, obj):
-        if '_email' in request.POST:
-            if obj.email:
-                self.message_user(request, 'No email has been send, since the email flag was set before.', level=ERROR)
-            else:
-                obj.email = True
-                obj.save()
-                send_caveat_announcement(request, obj)
-                self.message_user(request, 'An email has been send.', level=INFO)
-
 
 class CommentAdmin(admin.ModelAdmin):
     search_fields = ('caveat', 'creator', 'text')
@@ -130,23 +149,37 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('public', )
     readonly_fields = ('created', )
 
-    def response_add(self, request, obj, post_url_continue=None):
-        self.send_email(request, obj)
-        return super().response_add(request, obj, post_url_continue)
+    def get_urls(self):
+        view = self.admin_site.admin_view(self.caveats_comment_send)
+        return [path('<int:pk>/send/', view, name='caveats_comment_send')] + super().get_urls()
 
-    def response_change(self, request, obj):
-        self.send_email(request, obj)
-        return super().response_change(request, obj)
+    def caveats_comment_send(self, request, pk):
+        comment = get_object_or_404(Comment, id=pk)
 
-    def send_email(self, request, obj):
-        if '_email' in request.POST:
-            if obj.email:
-                self.message_user(request, 'No email has been send, since the email flag was set before.', level=ERROR)
-            else:
-                obj.email = True
-                obj.save()
-                send_comment_announcement(request, obj)
+        subject, message = get_comment_announcement_mail(request, comment)
+
+        form = AnnouncementAdminForm(request.POST or None, object=comment, initial={
+            'subject': subject,
+            'message': message
+        })
+
+        if request.method == 'POST':
+            if '_back' in request.POST:
+                return redirect('admin:caveats_comment_change', object_id=comment.id)
+
+            elif '_send' in request.POST and form.is_valid():
+                comment.email = True
+                comment.save()
+
+                send_comment_announcement_mail(form.cleaned_data['subject'],
+                                               form.cleaned_data['message'],
+                                               form.cleaned_data['recipients'])
                 self.message_user(request, 'An email has been send.', level=INFO)
+                return redirect('admin:caveats_comment_change', object_id=comment.id)
+
+        return render(request, 'admin/caveats/comment_send.html', context={
+            'form': form
+        })
 
 
 admin.site.register(Caveat, CaveatAdmin)
