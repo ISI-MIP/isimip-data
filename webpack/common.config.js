@@ -76,13 +76,15 @@ module.exports = {
       filename: '[name].css',
       chunkFilename: '[id].css'
     }),
-    new CopyWebpackPlugin([
-      {
-        from: '**/*',
-        to: './/images/',
-        context: './isimip_data/core/assets/images/',
-      }
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: '**/*',
+          to: './/images/',
+          context: './isimip_data/core/assets/images/'
+        }
+      ]
+    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
