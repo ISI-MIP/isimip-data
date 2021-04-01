@@ -1,8 +1,8 @@
 {% load i18n %}
 
 <div class="row">
-    {% for figure in caveat.figures.all %}
-    <div class="col-md-6">
+    {% for figure in figures %}
+    <div class="{% if col %}col-md-{{ col }}{% else %}col-md-12{% endif %}">
         <div class="card">
             <div class="card-body">
                 <div class="card-text text-center">
@@ -10,13 +10,13 @@
                         <img class="img-fluid" src="{{ figure.image.url }}" alt="{{ figure.title }}">
                     </a>
                 </div>
-                <div class="mt-3">
+                <div class="mt-1">
                     <strong>{{ figure.title }}</strong>{% if figure.caption %}<strong>:</strong>
                     {{ figure.caption|linebreaksbr|urlize }}
                     {% endif %}
                 </div>
                 {% if figure.credits %}
-                <div class="text-muted mt-3">{% trans 'Credit:' %} {{ figure.credits|linebreaksbr|urlize }}</div>
+                <div class="text-muted mt-1">{% trans 'Credit:' %} {{ figure.credits|linebreaksbr|urlize }}</div>
                 {% endif %}
             </div>
         </div>
@@ -33,10 +33,10 @@
                     <img class="img-fluid" src="{{ figure.image.url }}" alt="{{ figure.title }}">
                 </div>
                 {% if figure.caption %}
-                <div class="mt-3"><strong>{{ figure.title }}:</strong> {{ figure.caption|linebreaksbr|urlize }}</div>
+                <div class="mt-1"><strong>{{ figure.title }}:</strong> {{ figure.caption|linebreaksbr|urlize }}</div>
                 {% endif %}
                 {% if figure.credits %}
-                <div class="text-muted mt-3">{% trans 'Credit:' %} {{ figure.credits|linebreaksbr|urlize }}</div>
+                <div class="text-muted mt-1">{% trans 'Credit:' %} {{ figure.credits|linebreaksbr|urlize }}</div>
                 {% endif %}
               </div>
             </div>

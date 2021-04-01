@@ -30,6 +30,11 @@
 
     <div class="row">
         <div class="col-lg-8">
+            {% if figures %}
+            <h3>{% trans 'Figures' %}</h3>
+            {% include 'annotations/cards/figures.html' with figures=figures %}
+            {% endif %}
+
             <h3>{% trans 'Cite as' %}</h3>
             {% include 'metadata/cards/citation.html' with resource=dataset.resources.first citation_footer=True %}
 
@@ -55,6 +60,11 @@
                     <li class="list-group-item">
                         <a href="{% url 'dataset-detail-filelist' dataset.id %}">{% trans 'Download file list' %}</a>
                     </li>
+                    {% for download in downloads %}
+                    <li class="list-group-item">
+                        <a href="{{ download.file.url }}">{{ download.title }}</a>
+                    </li>
+                    {% endfor %}
                 </ul>
             </div>
 
@@ -76,6 +86,11 @@
                     {% endfor %}
                 </div>
             </div>
+
+            {% if downloads %}
+            <h3>{% trans 'Download' %}</h3>
+            {% include 'annotations/cards/downloads.html' with downloads=downloads %}
+            {% endif %}
 
             {% endif %}
         </div>

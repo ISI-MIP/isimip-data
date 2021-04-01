@@ -1,7 +1,30 @@
 import mimetypes
 from pathlib import Path
 
+from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
+
+from .utils import query_datasets
+
+
+class Annotation(models.Model):
+    title = models.CharField(max_length=128)
+    specifiers = JSONField(default=dict)
+    datasets = ArrayField(models.UUIDField(), blank=True, default=list)
+    version_after = models.CharField(max_length=8, blank=True)
+    version_before = models.CharField(max_length=8, blank=True)
+    figures = models.ManyToManyField('Figure', related_name='annotations')
+    downloads = models.ManyToManyField('Download', related_name='annotations')
+
+    class Meta:
+        ordering = ('title', )
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        self.datasets = query_datasets(self.specifiers, self.version_after, self.version_before)
+        super().save(*args, **kwargs)
 
 
 class Figure(models.Model):

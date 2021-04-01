@@ -1,58 +1,28 @@
-import json
-
 from django import forms
 from django.contrib import admin
 from django.contrib.messages import INFO
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path
-from django.utils.html import format_html_join
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from isimip_data.annotations.models import Download, Figure
-from isimip_data.metadata.models import Attribute, Dataset
+from isimip_data.annotations.utils import format_affected_datasets
+from isimip_data.annotations.widgets import SpecifierWidget
+from isimip_data.metadata.models import Dataset
 
-from .forms import AnnouncementAdminForm
 from .mail import (get_caveat_announcement_mail, get_comment_announcement_mail,
                    send_caveat_announcement_mail,
                    send_comment_announcement_mail)
 from .models import Caveat, Comment
 
 
-class CaveatSpecifierWidget(forms.Widget):
-    template_name = 'caveats/widgets/caveat_specifier_widget.html'
-
-    def get_context(self, name, value, attrs):
-        context = super().get_context(name, value, attrs)
-        context['widget']['attributes'] = Attribute.objects.using('metadata').all()
-        return context
-
-    def value_from_datadict(self, data, files, name):
-        value = {}
-        for key, values in data.lists():
-            if key.startswith('specifiers_'):
-                value[key.replace('specifiers_', '')] = values
-        return json.dumps(value)
-
-    def value_omitted_from_data(self, data, files, name):
-        return False
-
-    def format_value(self, value):
-        if value == 'null':
-            return {}
-        else:
-            data = json.loads(value)
-            checked = []
-            for key, values in data.items():
-                checked += ['id_specifiers_{}_{}'.format(key, value) for value in values]
-            return checked
-
-
 class CaveatAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['specifiers'].widget = CaveatSpecifierWidget()
+        self.fields['specifiers'].widget = SpecifierWidget()
         self.fields['specifiers'].required = False
 
     class Meta:
@@ -72,6 +42,35 @@ class DownloadInline(admin.TabularInline):
     extra = 0
     verbose_name = _('Download')
     verbose_name_plural = _('Downloads')
+
+
+class AnnouncementAdminForm(forms.Form):
+    subject = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'vLargeTextField',
+        'rows': 2
+    }), required=True)
+    message = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'vLargeTextField',
+        'rows': 20
+    }), required=True)
+    recipients = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'vLargeTextField',
+        'rows': 4
+    }), required=True, help_text=_('You can add multiple recipients line by line.'))
+
+    def __init__(self, *args, **kwargs):
+        self.object = kwargs.pop('object')
+        super().__init__(*args, **kwargs)
+
+    def clean_recipients(self):
+        recipients = self.cleaned_data['recipients'].splitlines()
+        for recipient in recipients:
+            validate_email(recipient)
+        return recipients
+
+    def clean(self):
+        if self.object.email:
+            raise ValidationError(_('No email can been send, since the email flag was set before.'))
 
 
 class CaveatAdmin(admin.ModelAdmin):
@@ -135,12 +134,7 @@ class CaveatAdmin(admin.ModelAdmin):
         })
 
     def affected_datasets(self, instance):
-        datasets = Dataset.objects.using('metadata').filter(id__in=instance.datasets)
-        return format_html_join(
-            mark_safe('<br>'),
-            '{}#{}',
-            ((dataset.name, dataset.version) for dataset in datasets)
-        )
+        return format_affected_datasets(instance.datasets)
 
 
 class CommentAdmin(admin.ModelAdmin):

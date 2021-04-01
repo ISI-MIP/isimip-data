@@ -15,6 +15,12 @@
         </p>
 
         <p class="text-center">
+            {% blocktrans trimmed %}
+            The archive of this mailing list can be accessed <a href="https://www.listserv.dfn.de/sympa/arc/isimip-caveats">here</a>.
+            {% endblocktrans %}
+        </p>
+
+        <p class="text-center">
             <a href="{% url 'caveat_create' %}">{% trans 'Submit new caveat' %}</a>
         </p>
     </header>

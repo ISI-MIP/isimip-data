@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
+from isimip_data.annotations.models import Download, Figure
 from isimip_data.caveats.models import Caveat
 
 from .models import Attribute, Dataset, File, Resource
@@ -59,6 +60,8 @@ def dataset(request, pk=None, path=None):
         'dataset': obj,
         'versions': versions,
         'specifiers': prettify_attributes(obj.specifier_list),
+        'figures': Figure.objects.filter(annotations__datasets__contains=[obj.id]),
+        'downloads': Download.objects.filter(annotations__datasets__contains=[obj.id]),
         'caveats': caveats,
         'caveats_versions': caveats_versions
     })
@@ -76,6 +79,8 @@ def file(request, pk=None, path=None):
                                              .exclude(id=obj.id) \
                                              .order_by('-version')
 
+    annotations = Annotation.objects.filter(datasets__contains=[obj.id])
+
     caveats = Caveat.objects.filter(datasets__contains=[obj.dataset_id]).public(request.user)
 
     if versions:
@@ -87,6 +92,7 @@ def file(request, pk=None, path=None):
         'file': obj,
         'versions': versions,
         'specifiers': prettify_attributes(obj.specifier_list),
+        'annotations': annotations,
         'caveats': caveats,
         'caveats_versions': caveats_versions
     })

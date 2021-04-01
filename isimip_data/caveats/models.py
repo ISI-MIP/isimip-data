@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from isimip_data.accounts.utils import get_full_name
 from isimip_data.annotations.models import Download, Figure
-from isimip_data.metadata.models import ArrayField, Dataset
+from isimip_data.annotations.utils import query_datasets
 
 from .managers import ModerationManager
 
@@ -68,24 +68,7 @@ class Caveat(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        if self.specifiers:
-            queryset = Dataset.objects.using('metadata')
-            for identifier, specifiers in self.specifiers.items():
-                q = models.Q()
-                for specifier in specifiers:
-                    q |= models.Q(specifiers__contains={identifier: specifier})
-                queryset = queryset.filter(q)
-
-            if self.version_after:
-                queryset = queryset.filter(version__gte=self.version_after)
-
-            if self.version_before:
-                queryset = queryset.filter(version__lte=self.version_before)
-
-            self.datasets = list(queryset.values_list('id', flat=True))
-        else:
-            self.datasets = []
-
+        self.datasets = query_datasets(self.specifiers, self.version_after, self.version_before)
         super().save(*args, **kwargs)
 
     def get_creator_display(self):

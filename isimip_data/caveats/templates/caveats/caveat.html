@@ -83,14 +83,14 @@
         {% if caveat.has_downloads %}
         <div class="col-md-3">
             <h3 id="downloads">{% trans 'Downloads' %}</h3>
-            {% include 'caveats/cards/downloads.html' with downloads=caveat.downloads.all %}
+            {% include 'annotations/cards/downloads.html' with downloads=caveat.downloads.all %}
         </div>
         {% endif %}
     </div>
 
     {% if caveat.has_figures %}
     <h3 id="figures">{% trans 'Figures' %}</h3>
-    {% include 'caveats/cards/figures.html' with figures=caveat.figures.all %}
+    {% include 'annotations/cards/figures.html' with figures=caveat.figures.all col=6 %}
     {% endif %}
 
     <h3 id="comments">{% trans 'Comments' %}</h3>
