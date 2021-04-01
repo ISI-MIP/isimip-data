@@ -1,0 +1,33 @@
+{% load i18n %}
+
+<div class="card">
+    <ul class="list-group list-group-flush">
+        {% for reference in references %}
+
+        {% if reference.identifier_type == reference.IDENTIFIER_TYPE_DOI %}
+        <li class="list-group-item related-identifier">
+            {% include 'annotations/snippets/isipedia.html' %}
+
+            {{ reference.title }}&nbsp;
+            <a class="doi-link" href="{{ reference.identifier }}" target="blank">
+                {{ reference.identifier }}
+            </a>
+        </li>
+        {% elif reference.identifier_type == reference.IDENTIFIER_TYPE_URL %}
+        <li class="list-group-item related-identifier">
+            {% include 'annotations/snippets/isipedia.html' %}
+
+            {{ reference.title }}&nbsp;&rarr;
+            <a href="{{ reference.identifier }}" target="blank">
+                {{ reference.identifier }}
+            </a>
+        </li>
+        {% else %}
+        <li class="list-group-item related-identifier">
+            {{ reference.title }}
+        </li>
+        {% endif %}
+
+        {% endfor %}
+    </ul>
+</div>

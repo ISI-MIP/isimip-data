@@ -96,6 +96,11 @@
         </div>
     </div>
 
+    {% if references %}
+    <h3>{% trans 'References' %}</h3>
+    {% include 'annotations/cards/references.html' %}
+    {% endif %}
+
     {% if caveats %}
     <h3>{% trans 'Caveats for this dataset' %}</h3>
     {% include 'caveats/cards/caveats.html' %}

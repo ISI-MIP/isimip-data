@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from .models import Annotation, Download, Figure
+from .models import Annotation, Download, Figure, Reference
 from .utils import format_affected_datasets
 from .widgets import SpecifierWidget
 
@@ -33,9 +33,16 @@ class DownloadInline(admin.TabularInline):
     verbose_name_plural = _('Downloads')
 
 
+class ReferenceInline(admin.TabularInline):
+    model = Reference.annotations.through
+    extra = 0
+    verbose_name = _('Reference')
+    verbose_name_plural = _('References')
+
+
 class AnnotationAdmin(admin.ModelAdmin):
     form = AnnotationAdminForm
-    inlines = [FigureInline, DownloadInline]
+    inlines = [FigureInline, DownloadInline, ReferenceInline]
 
     search_fields = ('title', )
     list_display = ('title', )
@@ -77,6 +84,12 @@ class FigureAdmin(admin.ModelAdmin):
     list_display = ('title', 'created', 'updated')
 
 
+class ReferenceAdmin(admin.ModelAdmin):
+    search_fields = ('title', 'identifier')
+    list_display = ('title', 'identifier', 'identifier_type', 'reference_type')
+
+
 admin.site.register(Annotation, AnnotationAdmin)
 admin.site.register(Download, DownloadAdmin)
 admin.site.register(Figure, FigureAdmin)
+admin.site.register(Reference, ReferenceAdmin)
