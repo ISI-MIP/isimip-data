@@ -4,6 +4,9 @@ import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
 class DatasetApi {
 
   static fetchDatasets(params, fetchParams = {}) {
+    params['caveats'] = true
+    params['annotations'] = true
+
     return fetch('/api/v1/datasets/?' + encodeParams(params), fetchParams).then(response => {
       if (response.ok) {
         return response.json()
@@ -41,7 +44,13 @@ class DatasetApi {
   }
 
   static downloadFiles(params, fetchParams = {}) {
-    return this.fetchDatasets(params, fetchParams).then(json => {
+    return fetch('/api/v1/datasets/?' + encodeParams(params), fetchParams).then(response => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        throw new Error(response.statusText)
+      }
+    }).then(json => {
       json.results.map(result => {
         result.files.map(file => {
           this.downloadFile(file)
