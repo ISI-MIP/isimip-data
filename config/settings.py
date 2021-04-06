@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     'isimip_data.download',
     'isimip_data.metadata',
     'isimip_data.search',
-    'isimip_data.wizard',
     # 3rd party apps
     'rest_framework',
     'rest_framework.authtoken',

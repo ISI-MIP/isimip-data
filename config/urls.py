@@ -3,8 +3,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic.base import TemplateView
-from rest_framework import routers
-
 from isimip_data.accounts.views import (profile_delete, profile_delete_success,
                                         profile_update)
 from isimip_data.caveats.views import (caveat, caveat_create, caveat_subscribe,
@@ -22,8 +20,7 @@ from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
                                            TreeViewSet)
 from isimip_data.search.views import search
 from isimip_data.search.viewsets import FacetViewSet
-# from isimip_data.wizard.views import wizard
-from isimip_data.wizard.viewsets import LayerViewSet
+from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'datasets', DatasetViewSet, basename='dataset')
@@ -33,7 +30,6 @@ router.register(r'tree', TreeViewSet, basename='tree')
 router.register(r'files', FileViewSet, basename='file')
 router.register(r'resources', ResourceViewSet, basename='resource')
 router.register(r'facets', FacetViewSet, basename='facet')
-router.register(r'layers', LayerViewSet, basename='layer')
 router.register(r'settings', SettingsViewSet, basename='setting')
 
 urlpatterns = [
@@ -75,8 +71,6 @@ urlpatterns = [
     path('caveats/create/', caveat_create, name='caveat_create'),
     path('caveats/comments/', comment_create, name='comment_create'),
     path('subscriptions/', subscriptions, name='subscriptions'),
-
-    # path('wizard/', wizard, name='wizard'),
 
     path('', TemplateView.as_view(template_name='core/home.html'), name='home'),
 ]
