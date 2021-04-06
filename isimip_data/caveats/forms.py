@@ -1,6 +1,5 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-
 from isimip_data.metadata.models import Dataset
 
 from .models import Caveat, Comment
@@ -34,7 +33,7 @@ class CaveatForm(forms.ModelForm):
         if dataset_id:
             try:
                 dataset = Dataset.objects.using('metadata').get(id=dataset_id)
-                self.instance.version_after = dataset.version
+                self.instance.version_before = dataset.version
                 self.instance.specifiers = {
                     identifier: [specifier]
                     for identifier, specifier in dataset.specifiers.items()

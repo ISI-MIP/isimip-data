@@ -6,7 +6,6 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import resolve
 from django.utils.translation import gettext as _
-
 from isimip_data.metadata.models import Dataset
 from isimip_data.metadata.utils import prettify_attributes_dict
 
