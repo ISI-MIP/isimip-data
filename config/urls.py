@@ -3,6 +3,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic.base import TemplateView
+from rest_framework import routers
+
 from isimip_data.accounts.views import (profile_delete, profile_delete_success,
                                         profile_update)
 from isimip_data.caveats.views import (caveat, caveat_create, caveat_subscribe,
@@ -20,7 +22,6 @@ from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
                                            TreeViewSet)
 from isimip_data.search.views import search
 from isimip_data.search.viewsets import FacetViewSet
-from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'datasets', DatasetViewSet, basename='dataset')
@@ -69,10 +70,11 @@ urlpatterns = [
     path('caveats/<int:pk>/subscribe/', caveat_subscribe, name='caveat_subscribe'),
     path('caveats/<int:pk>/unsubscribe/', caveat_unsubscribe, name='caveat_unsubscribe'),
     path('caveats/create/', caveat_create, name='caveat_create'),
-    path('caveats/comments/', comment_create, name='comment_create'),
+    path('caveats/comments/create/', comment_create, name='comment_create'),
     path('subscriptions/', subscriptions, name='subscriptions'),
 
     path('', TemplateView.as_view(template_name='core/home.html'), name='home'),
+    path('robots.txt', TemplateView.as_view(template_name='core/robots.txt'), name='robots.txt'),
 ]
 
 handler400 = 'isimip_data.core.views.bad_request'

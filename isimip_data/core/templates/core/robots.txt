@@ -1,0 +1,19 @@
+User-Agent: *
+
+# Disallow routes
+Disallow: /admin/
+Disallow: /api/v1/
+Disallow: /account/
+Disallow: /resources/
+Disallow: /attributes/
+Disallow: /search/
+Disallow: /download/
+
+# Allow plain routes
+Allow: /search/$
+Allow: /download/$
+
+# Generic operations
+Disallow: /*/subscribe/
+Disallow: /*/unsubscribe/
+Disallow: /*/create/
