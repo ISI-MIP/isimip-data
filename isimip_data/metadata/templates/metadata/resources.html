@@ -35,7 +35,7 @@
     {% if resources_external %}
     <h3>External resources</h3>
     {% for resource in resources_external %}
-    <div class="card mb-3">
+    <div class="mb-3">
         {% with resource.paths|join:', ' as citation_header %}
         {% include 'metadata/cards/citation.html' with citation_footer=True %}
         {% endwith %}
