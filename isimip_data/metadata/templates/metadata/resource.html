@@ -56,7 +56,7 @@
                     <dl class="row">
                         <dt class="col-sm-3 text-right">Creators:</dt>
                         <dd class="col-sm-9">
-                            <ul class="list-unstyled">
+                            <ul class="list-unstyled mb-0">
                                 {% for creator in resource.datacite.creators %}
                                 <li>
                                     {% if creator.givenName and creator.familyName %}
@@ -75,7 +75,7 @@
                     <dl class="row">
                         <dt class="col-sm-3 text-right">Contact person:</dt>
                         <dd class="col-sm-9">
-                            <ul class="list-unstyled">
+                            <ul class="list-unstyled mb-0">
                                 {% for contact_persion in resource.contact_persons %}
                                 <li>
                                     {{ contact_persion.name }}
@@ -89,7 +89,7 @@
                     <dl class="row">
                         <dt class="col-sm-3 text-right">Contributors:</dt>
                         <dd class="col-sm-9">
-                            <ul class="list-unstyled">
+                            <ul class="list-unstyled mb-0">
                                 {% for contributor in resource.datacite.contributors %}
                                 {% if contributor.nameType == 'Organizational' %}
                                 <li>
