@@ -5,7 +5,6 @@ from uuid import UUID
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
 from isimip_data.annotations.models import Download, Figure, Reference
 from isimip_data.caveats.models import Caveat
 
@@ -121,7 +120,7 @@ def resource(request, doi=None):
                 references['Other'].append(identifier)
 
     dataset_ids = [str(dataset_id) for dataset_id in resource.datasets.values_list('id', flat=True)]
-    caveats = Caveat.objects.filter(datasets__contains=dataset_ids).public(request.user)
+    caveats = Caveat.objects.filter(datasets__contains=dataset_ids).public(request.user) if dataset_ids else []
 
     return render(request, 'metadata/resource.html', {
         'resource': resource,
