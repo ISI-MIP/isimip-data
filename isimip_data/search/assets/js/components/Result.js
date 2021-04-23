@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFile, faChevronDown, faChevronUp  } from '@fortawesome/free-solid-svg-icons'
-import { faFile as faFileRegular } from '@fortawesome/free-regular-svg-icons'
+import { faChevronDown, faChevronUp, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import jQuery from 'jquery'
 import bytes from 'bytes'
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
@@ -66,9 +65,19 @@ class Result extends Component {
       <li className="list-group-item">
         <Badges glossary={glossary} dataset={dataset} />
 
-        <h4 className="card-title mt-3 mb-3">
-          <a className="result-title" href={dataset.metadata_url} target="_blank">{dataset.name}</a>
-        </h4>
+        <div>
+          {dataset.caveats.length > 0 && <div className="float-right">
+            <button className="btn btn-link" onClick={this.toggleCaveats}>
+              <FontAwesomeIcon className="result-caveat-icon"
+                               title="There are caveats for this dataset"
+                               icon={faExclamationTriangle} />
+            </button>
+          </div>}
+
+          <h4 className="card-title mt-3 mb-3">
+            <a className="result-title" href={dataset.metadata_url} target="_blank">{dataset.name}</a>
+          </h4>
+        </div>
 
         <div>
           {dataset.public &&
