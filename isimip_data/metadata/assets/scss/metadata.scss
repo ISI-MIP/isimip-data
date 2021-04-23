@@ -23,3 +23,16 @@ header {
         line-height: 24px;
     }
 }
+
+.resources {
+    table {
+        thead {
+            th {
+                border-top: none;
+            }
+        }
+        ul {
+            margin: 0;
+        }
+    }
+}
