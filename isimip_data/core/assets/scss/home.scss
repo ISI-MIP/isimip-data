@@ -1,0 +1,52 @@
+.home-img-wrapper {
+    background-color: black;
+    box-shadow: 0 0 4px #ccc;
+
+    position: relative;
+
+    ul {
+        display: none;
+        font-size: 20px;
+
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+
+        li {
+            list-style: none;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        a, a:hover, a:focus, a:visited {
+            color: white;
+            text-decoration: none;
+            text-align: center;
+
+            display: block;
+            padding: 5px 20px;
+            width: 100%;
+        }
+    }
+
+    img {
+        opacity: 1;
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    &:hover {
+        img {
+            opacity: 0.3;
+        }
+        ul {
+            display: block;
+        }
+    }
+}
