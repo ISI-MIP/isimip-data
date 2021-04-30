@@ -40,23 +40,27 @@
         <div class="card-body pt-4 pb-0">
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <img class="w-100 mb-3" src="{% static 'images/home/climate.jpg' %}" alt="Climate forcing">
+                    <div class="home-img-wrapper mb-3">
+                        <img class="w-100" src="{% static 'images/home/climate.jpg' %}" alt="Climate forcing"/>
+                        <ul>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2a%2FInputData%2Fclimate' %}">ISIMIP2a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2b%2FInputData%2Fclimate' %}">ISIMIP2b</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP3a%2FInputData%2Fclimate' %}">ISIMIP3a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP3b%2FInputData%2Fclimate' %}">ISIMIP3b</a>
+                            </li>
+                        </ul>
+                    </div>
                     <h5>Climate forcing</h5>
                     <p>
                         Climate and climate-related forcing data for the ISIMIP3a and ISIMIP3b simulation rounds.
                     </p>
-                    <ul class="list-unstyled mb-2">
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP3a%2FInputData%2Fclimate' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP3a climate input data
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP3b%2FInputData%2Fclimate' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP3b climate input data
-                            </a>
-                        </li>
-                    </ul>
                     <p>
                         <small class="text-muted">
                         Photo by <a href="https://unsplash.com/@nasa">NASA</a> on <a href="https://unsplash.com/photos/i9w4Uy1pU-s">Unsplash</a>
@@ -64,23 +68,28 @@
                     </p>
                 </div>
                 <div class="col-md-4 mb-4">
-                    <img class="w-100 mb-3" src="{% static 'images/home/socioeconomic.jpg' %}" alt="Socioeconomic forcing">
+                    <div class="home-img-wrapper mb-3">
+                        <img class="w-100" src="{% static 'images/home/socioeconomic.jpg' %}" alt="Socioeconomic forcing"/>
+                        <ul>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2a%2FInputData%2Fsocioeconomic' %}">ISIMIP2a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2b%2FInputData%2Fsocioeconomic' %}">ISIMIP2b</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP3a%2FInputData%2Fsocioeconomic' %}">ISIMIP3a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP3b%2FInputData%2Fsocioeconomic' %}">ISIMIP3b</a>
+                            </li>
+                        </ul>
+                    </div>
                     <h5>Socioeconomic forcing</h5>
                     <p>
                         Socioeconomic datasets for the ISIMIP3a and ISIMIP3b simulation rounds.
                     </p>
-                    <ul class="list-unstyled mb-2">
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP3a%2FInputData%2Fsocioeconomic' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP3a socioeconomic input data
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP3b%2FInputData%2Fsocioeconomic' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP3b socioeconomic input data
-                            </a>
-                        </li>
-                    </ul>
+
                     <p>
                         <small class="text-muted">
                             Photo by <a href="https://unsplash.com/@rstar50">Roger Starnes Sr</a> on <a href="https://unsplash.com/photos/cKpqTbJevKs">Unsplash</a>
@@ -88,23 +97,28 @@
                     </p>
                 </div>
                 <div class="col-md-4 mb-4">
-                    <img class="w-100 mb-3" src="{% static 'images/home/geo_conditions.jpg' %}" alt="Static geographic information">
+                    <div class="home-img-wrapper mb-3">
+                        <img class="w-100" src="{% static 'images/home/geo_conditions.jpg' %}" alt="Static geographic information"/>
+                        <ul>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2a%2FInputData%2Fgeo_conditions' %}">ISIMIP2a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2b%2FInputData%2Fgeo_conditions' %}">ISIMIP2b</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP3a%2FInputData%2Fgeo_conditions' %}">ISIMIP3a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP3b%2FInputData%2Fgeo_conditions' %}">ISIMIP3b</a>
+                            </li>
+                        </ul>
+                    </div>
                     <h5 class="">Static geographic information</h5>
                     <p>
                         Geographic data and information for the ISIMIP3a and ISIMIP3b simulation rounds.
                     </p>
-                    <ul class="list-unstyled mb-2">
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP3a%2FInputData%2Fgeo_conditions' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP3a static geographic information
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP3b%2FInputData%2Fgeo_conditions' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP3b static geographic information
-                            </a>
-                        </li>
-                    </ul>
+
                     <p>
                         <small class="text-muted">
                             Photo by <a href="https://unsplash.com/@greg_rosenke">Greg Rosenke</a> on <a href="https://unsplash.com/photos/3ULMRQZ5APA">Unsplash</a>
@@ -121,20 +135,18 @@
         <div class="card-body pt-4 pb-0">
             <div class="row">
                 <div class="col-md-3 mb-4">
-                    <img class="w-100 mb-3" src="{% static 'images/home/agriculture.jpg' %}" alt="Agriculture sector">
+                    <div class="home-img-wrapper mb-3">
+                        <img class="w-100" src="{% static 'images/home/agriculture.jpg' %}" alt="Agriculture sector">
+                        <ul>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fagriculture' %}">ISIMIP2a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fagriculture' %}">ISIMIP2b</a>
+                            </li>
+                        </ul>
+                    </div>
                     <h5>Agriculture sector</h5>
-                    <ul class="list-unstyled mb-2">
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fagriculture' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2a agriculture output
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fagriculture' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2b agriculture output
-                            </a>
-                        </li>
-                    </ul>
                     <p>
                         <small class="text-muted">
                             Photo by <a href="https://unsplash.com/@jxk">Jan Kopřiva</a> on <a href="https://unsplash.com/photos/LTMaAwxanGk">Unsplash</a>
@@ -142,20 +154,18 @@
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
-                    <img src="{% static 'images/home/biodiversity.jpg' %}" class="w-100 mb-3" alt="Terrestrial biodiversity sector">
-                    <h5 >Terrestrial biodiversity sector</h5>
-                    <ul class="list-unstyled mb-2">
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fbiodiversity' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2a biodiversity output
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fbiodiversity' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2b biodiversity output
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="home-img-wrapper mb-3">
+                        <img class="w-100" src="{% static 'images/home/biodiversity.jpg' %}" alt="Terrestrial biodiversity sector">
+                        <ul>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fbiodiversity' %}">ISIMIP2a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fbiodiversity' %}">ISIMIP2b</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <h5>Terrestrial biodiversity sector</h5>
                     <p>
                         <small class="text-muted">
                             Photo by <a href="https://unsplash.com/@juanmacllas">Juanma Clemente-Alloza</a> on <a href="https://unsplash.com/photos/2fpyPtVcm2M">Unsplash</a>
@@ -163,20 +173,18 @@
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
-                    <img class="w-100 mb-3" src="{% static 'images/home/biomes.jpg' %}"alt="Biomes sector">
+                    <div class="home-img-wrapper mb-3">
+                        <img class="w-100" src="{% static 'images/home/biomes.jpg' %}"alt="Biomes sector">
+                        <ul>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fbiomes' %}">ISIMIP2a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fbiomes' %}">ISIMIP2b</a>
+                            </li>
+                        </ul>
+                    </div>
                     <h5>Biomes sector</h5>
-                    <ul class="list-unstyled mb-2">
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fbiomes' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2a biomes output
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fbiomes' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2b biomes output
-                            </a>
-                        </li>
-                    </ul>
                     <p>
                         <small class="text-muted">
                             Photo by <a href="https://unsplash.com/@jasperboer">Jasper Boer</a> on <a href="https://unsplash.com/photos/LJD6U920zVo">Unsplash</a>
@@ -184,20 +192,18 @@
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
-                    <img class="w-100 mb-3" src="{% static 'images/home/lakes_global.jpg' %}" alt="Lakes (global) sector">
+                    <div class="home-img-wrapper mb-3">
+                        <img class="w-100" src="{% static 'images/home/lakes_global.jpg' %}" alt="Lakes (global) sector">
+                        <ul>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Flakes_global' %}">ISIMIP2a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Flakes_global' %}">ISIMIP2b</a>
+                            </li>
+                        </ul>
+                    </div>
                     <h5>Lakes (global) sector</h5>
-                    <ul class="list-unstyled mb-2">
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Flakes_global' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2a lakes (global) output
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Flakes_global' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2b lakes (global) output
-                            </a>
-                        </li>
-                    </ul>
                     <p>
                         <small class="text-muted">
                             Photo by <a href="https://unsplash.com/@josswoodhead">Joss Woodhead</a> on <a href="https://unsplash.com/photos/OHMsnLTejfM">Unsplash</a>
@@ -205,20 +211,18 @@
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
-                    <img class="w-100 mb-3" src="{% static 'images/home/lakes_local.jpg' %}" alt="Lakes (local) sector">
+                    <div class="home-img-wrapper mb-3">
+                        <img class="w-100" src="{% static 'images/home/lakes_local.jpg' %}" alt="Lakes (local) sector">
+                        <ul>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Flakes_local' %}">ISIMIP2a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Flakes_local' %}">ISIMIP2b</a>
+                            </li>
+                        </ul>
+                    </div>
                     <h5>Lakes (local) sector</h5>
-                    <ul class="list-unstyled mb-2">
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Flakes_local' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2a lakes (local) output
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Flakes_local' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2b lakes (local) lakes output
-                            </a>
-                        </li>
-                    </ul>
                     <p>
                         <small class="text-muted">
                             Photo by <a href="https://unsplash.com/@wesleygibbs">Wesley Gibbs</a> on <a href="https://unsplash.com/photos/nmXRwI_--Fo">Unsplash</a>
@@ -226,15 +230,15 @@
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
-                    <img class="w-100 mb-3" src="{% static 'images/home/marine-fisheries_global.jpg' %}" alt="Fisheries & Marine Ecosystems (global) sector">
+                    <div class="home-img-wrapper mb-3">
+                        <img class="w-100" src="{% static 'images/home/marine-fisheries_global.jpg' %}" alt="Fisheries & Marine Ecosystems (global) sector">
+                        <ul>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fmarine-fisheries_global' %}">ISIMIP2b</a>
+                            </li>
+                        </ul>
+                    </div>
                     <h5>Fisheries & Marine Ecosystems (global) sector</h5>
-                    <ul class="list-unstyled mb-2">
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fmarine-fisheries_global' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2b fisheries & marine ecosystems (global) output
-                            </a>
-                        </li>
-                    </ul>
                     <p>
                         <small class="text-muted">
                             Photo by <a href="https://unsplash.com/@frogman39">Jet Kim</a> on <a href="https://unsplash.com/photos/_w-VVA8PrC0">Unsplash</a>
@@ -242,15 +246,15 @@
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
-                    <img class="w-100 mb-3" src="{% static 'images/home/marine-fisheries_regional.jpg' %}" alt="Fisheries & Marine Ecosystems (local) sector">
+                    <div class="home-img-wrapper mb-3">
+                        <img class="w-100" src="{% static 'images/home/marine-fisheries_regional.jpg' %}" alt="Fisheries & Marine Ecosystems (local) sector">
+                        <ul>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fmarine-fisheries_local' %}">ISIMIP2b</a>
+                            </li>
+                        </ul>
+                    </div>
                     <h5>Fisheries & Marine Ecosystems (local) sector</h5>
-                    <ul class="list-unstyled mb-2">
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fmarine-fisheries_local' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2b fisheries & marine ecosystems (local) output
-                            </a>
-                        </li>
-                    </ul>
                     <p>
                         <small class="text-muted">
                             Photo by <a href="https://unsplash.com/@ycko">Yungchuan KO</a> on <a href="https://unsplash.com/photos/mMQdtuu_7IA">Unsplash</a>
@@ -258,20 +262,18 @@
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
-                    <img class="w-100 mb-3" src="{% static 'images/home/permafrost.jpg' %}" alt="Permafrost sector">
-                        <h5 class="card-title">Permafrost sector</h5>
-                    <ul class="list-unstyled mb-2">
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fpermafrost' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2a permafrost output
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fpermafrost' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2b permafrost output
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="home-img-wrapper mb-3">
+                        <img class="w-100" src="{% static 'images/home/permafrost.jpg' %}" alt="Permafrost sector">
+                        <ul>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fpermafrost' %}">ISIMIP2a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fpermafrost' %}">ISIMIP2b</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <h5 class="card-title">Permafrost sector</h5>
                     <p>
                         <small class="text-muted">
                             Photo by <a href="https://unsplash.com/@malcoo">Tomáš Malík</a> on <a href="https://unsplash.com/photos/9XQzqcAr-3I">Unsplash</a>
@@ -279,20 +281,18 @@
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
-                    <img class="w-100 mb-3" src="{% static 'images/home/water_global.jpg' %}" alt="Water (global) sector">
+                    <div class="home-img-wrapper mb-3">
+                        <img class="w-100" src="{% static 'images/home/water_global.jpg' %}" alt="Water (global) sector">
+                        <ul>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fwater_global' %}">ISIMIP2a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fwater_global' %}">ISIMIP2b</a>
+                            </li>
+                        </ul>
+                    </div>
                     <h5>Water (global) sector</h5>
-                    <ul class="list-unstyled mb-2">
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fwater_global' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2a water (global) output
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fwater_global' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2b water (global) output
-                            </a>
-                        </li>
-                    </ul>
                     <p>
                         <small class="text-muted">
                             Photo by <a href="https://unsplash.com/@kietbeo778">Nguyen Kiet</a> on <a href="https://unsplash.com/photos/OGp18qMyq-k">Unsplash</a>
@@ -300,20 +300,18 @@
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
-                    <img class="w-100 mb-3" src="{% static 'images/home/water_regional.jpg' %}" alt="Water (regional) sector">
+                    <div class="home-img-wrapper mb-3">
+                        <img class="w-100" src="{% static 'images/home/water_regional.jpg' %}" alt="Water (regional) sector">
+                        <ul>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fwater_regional' %}">ISIMIP2a</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fwater_regional' %}">ISIMIP2b</a>
+                            </li>
+                        </ul>
+                    </div>
                     <h5>Water (regional) sector</h5>
-                    <ul class="list-unstyled mb-2">
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fwater_regional' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2a water (regional) output
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fwater_regional' %}">
-                                <i class="fas fa-long-arrow-alt-right"></i> ISIMIP2b water (regional) output
-                            </a>
-                        </li>
-                    </ul>
                     <p>
                         <small class="text-muted">
                             Photo by <a href="https://unsplash.com/@cedric">Cédric Dhaenens</a> on <a href="https://unsplash.com/photos/Ul-1-YbuyX4">Unsplash</a>
