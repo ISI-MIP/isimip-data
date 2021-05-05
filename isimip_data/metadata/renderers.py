@@ -81,10 +81,13 @@ class DataCiteRenderer(object):
 
         # titles
         self.xml.startElement('titles', {})
-        for title in self.data.get('titles', []):
-            self.render_node('title', {
-                'titleType': title.get('titleType', 'AlternativeTitle')
-            }, title.get('title'))
+        for i, title in enumerate(self.data.get('titles', [])):
+            if i == 0:
+                self.render_node('title', {}, title.get('title'))
+            else:
+                self.render_node('title', {
+                    'titleType': title.get('titleType', 'AlternativeTitle')
+                }, title.get('title'))
         self.xml.endElement('titles')
 
         # publisher
