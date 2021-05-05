@@ -4,10 +4,11 @@
     <ul class="list-group list-group-flush">
         {% for dataset in datasets %}
         <li class="list-group-item">
-            <h4>
+            {% include 'metadata/snippets/shields.html' with obj=dataset %}
+            <h4 class="mt-3 mb-0">
                 <a href="{% url 'dataset' dataset.id %}">{{ dataset.name }}</a>
             </h4>
-            {% include 'metadata/snippets/shields.html' with obj=dataset %}
+            {% include 'metadata/snippets/downloads.html' with obj=dataset %}
         </li>
         {% endfor %}
     </ul>

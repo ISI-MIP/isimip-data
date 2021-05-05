@@ -38,23 +38,41 @@ class Badges extends Component {
           </span>
         </OverlayTrigger>
 
-        <OverlayTrigger placement="bottom" overlay={this.renderTooltip('sector', dataset.specifiers.sector)}>
+        {dataset.specifiers.category && <OverlayTrigger placement="bottom" overlay={this.renderTooltip('category', dataset.specifiers.category)}>
+          <span className="badge badge-success">
+            {dataset.specifiers.category}
+          </span>
+        </OverlayTrigger>}
+
+        {dataset.specifiers.sector && <OverlayTrigger placement="bottom" overlay={this.renderTooltip('sector', dataset.specifiers.sector)}>
           <span className="badge badge-success">
             {dataset.specifiers.sector}
           </span>
-        </OverlayTrigger>
+        </OverlayTrigger>}
 
-        <OverlayTrigger placement="bottom" overlay={this.renderTooltip('climate_forcing', dataset.specifiers.climate_forcing)}>
+        {dataset.specifiers.publication && <OverlayTrigger placement="bottom" overlay={this.renderTooltip('publication', dataset.specifiers.publication)}>
+          <span className="badge badge-success">
+            {dataset.specifiers.publication}
+          </span>
+        </OverlayTrigger>}
+
+        {dataset.specifiers.climate_forcing && <OverlayTrigger placement="bottom" overlay={this.renderTooltip('climate_forcing', dataset.specifiers.climate_forcing)}>
           <span className="badge badge-info">
             {dataset.specifiers.climate_forcing}
           </span>
-        </OverlayTrigger>
+        </OverlayTrigger>}
 
-        <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>Model</strong></Tooltip>}>
+        {dataset.specifiers.period && <OverlayTrigger placement="bottom" overlay={this.renderTooltip('period', dataset.specifiers.period)}>
+          <span className="badge badge-light">
+            {dataset.specifiers.period}
+          </span>
+        </OverlayTrigger>}
+
+        {dataset.specifiers.model && <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>Model</strong></Tooltip>}>
           <span className="badge badge-primary">
             {dataset.specifiers.model}
           </span>
-        </OverlayTrigger>
+        </OverlayTrigger>}
 
         <span className="ml-auto invisible"></span>
 
@@ -75,7 +93,7 @@ class Badges extends Component {
         }
 
         {dataset.rights &&
-          <OverlayTrigger placement="bottom" overlay={<Tooltip>This dataset is published under the <i>{dataset.rights.rights}.</i></Tooltip>}>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>This dataset is published under the <i>{dataset.rights.rights}</i>.</Tooltip>}>
             <span className="badge badge-light">
               {dataset.rights.short}
             </span>

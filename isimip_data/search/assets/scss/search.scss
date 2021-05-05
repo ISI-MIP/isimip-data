@@ -177,6 +177,10 @@ main {
 
             span {
                 margin-right: 0.25rem;
+
+                &:last-child {
+                    margin-right: 0;
+                }
             }
 
             a.badge {

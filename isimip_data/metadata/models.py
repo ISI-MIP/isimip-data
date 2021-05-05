@@ -86,6 +86,14 @@ class File(models.Model):
         return self.path
 
     @property
+    def public(self):
+        return self.dataset.public
+
+    @property
+    def resources(self):
+        return self.dataset.resources
+
+    @property
     def file_url(self):
         if self.dataset.public:
             return settings.FILES_BASE_URL + str(Path(self.path))

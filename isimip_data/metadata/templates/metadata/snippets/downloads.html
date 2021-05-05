@@ -1,0 +1,22 @@
+{% if obj.public %}
+<div class="d-lg-flex">
+    <span class="ml-auto invisible"></span>
+
+    {% if obj.is_global and obj.is_netcdf %}
+    <div class="d-sm-inline-block mr-2 mb-2 mb-md-0">
+        <a href="{% url 'download' obj.path %}" title="Download only a specific country, a lat/lon box or landonly data.">Configure download</a>
+    </div>
+    {% endif %}
+    {% if obj.file_url %}
+    <div class="d-sm-inline-block mr-2 mb-2 mb-md-0">
+        <a href="{{ obj.file_url }}">Download file</a>
+    </div>
+    {% else %}
+    <div class="d-sm-inline-block mr-2 mb-2 mb-md-0">
+        <a href="{% url 'dataset-detail-filelist' obj.id %}" title="Download file list for this dataset.">Download file list</a>
+    </div>
+    {% endif %}
+</div>
+{% else %}
+<div class="mb-2"></div>
+{% endif %}
