@@ -13,13 +13,6 @@
 <div class="container">
     <header>
         <h1>{{ resource.title }}</h1>
-
-        <h4>
-            {% blocktrans trimmed with resource_type=resource.type doi_url=resource.doi_url %}
-            You can use the following DOI to cite this resource in a publication:
-            <a href="{{ doi_url }}" target="_blank">{{ doi_url }}</a>.
-            {% endblocktrans %}
-        </h4>
     </header>
 
     <div class="row">
@@ -36,27 +29,21 @@
             <div class="card">
                 <div class="card-body">
                     <dl class="row">
-                        <dt class="col-sm-3 text-right">Publication date:</dt>
-                        <dd class="col-sm-9">{{ resource.publication_date|date:"DATE_FORMAT" }}</dd>
-                    </dl>
-                    <dl class="row">
-                        <dt class="col-sm-3 text-right">Publisher:</dt>
-                        <dd class="col-sm-9">{{ resource.datacite.publisher }}</dd>
-                    </dl>
-                    {% for description in resource.datacite.descriptions %}
-                    <dl class="row">
-                        <dt class="col-sm-3 text-right">{{ description.descriptionType }}:</dt>
+                        <dt class="col-sm-3 text-right">DOI:</dt>
                         <dd class="col-sm-9">
-                        {% for paragraph in description.description|split_br %}
-                            <p>{{ paragraph }}</p>
-                        {% endfor %}
+                            <a href="{{ resource.doi_url }}" target="_blank">
+                                {{ resource.doi_url }}
+                            </a>
                         </dd>
                     </dl>
-                    {% endfor %}
+                    <dl class="row">
+                        <dt class="col-sm-3 text-right">Title:</dt>
+                        <dd class="col-sm-9">{{ resource.title }}</dd>
+                    </dl>
                     <dl class="row">
                         <dt class="col-sm-3 text-right">Creators:</dt>
                         <dd class="col-sm-9">
-                            <ul class="list-unstyled">
+                            <ul class="list-unstyled mb-0">
                                 {% for creator in resource.datacite.creators %}
                                 <li>
                                     {% if creator.givenName and creator.familyName %}
@@ -75,7 +62,7 @@
                     <dl class="row">
                         <dt class="col-sm-3 text-right">Contact person:</dt>
                         <dd class="col-sm-9">
-                            <ul class="list-unstyled">
+                            <ul class="list-unstyled mb-0">
                                 {% for contact_persion in resource.contact_persons %}
                                 <li>
                                     {{ contact_persion.name }}
@@ -83,13 +70,34 @@
                                 </li>
                                 {% endfor %}
                             </ul>
+                            <p class="text-muted mt-1 mb-0">
+                                For inqueries concerning this dataset, please contact <a href="mailto:info@isimip.org">info@isimip.org</a>.
+                            </p>
                         </dd>
                     </dl>
                     {% endif %}
+                    {% for description in resource.datacite.descriptions %}
                     <dl class="row">
+                        <dt class="col-sm-3 text-right">{{ description.descriptionType }}:</dt>
+                        <dd class="col-sm-9">
+                        {% for paragraph in description.description|split_br %}
+                            <p>{{ paragraph }}</p>
+                        {% endfor %}
+                        </dd>
+                    </dl>
+                    {% endfor %}
+                    <dl class="row">
+                        <dt class="col-sm-3 text-right">Publication date:</dt>
+                        <dd class="col-sm-9">{{ resource.publication_date|date:"DATE_FORMAT" }}</dd>
+                    </dl>
+                    <dl class="row">
+                        <dt class="col-sm-3 text-right">Publisher:</dt>
+                        <dd class="col-sm-9">{{ resource.datacite.publisher }}</dd>
+                    </dl>
+                    <dl class="row mb-2">
                         <dt class="col-sm-3 text-right">Contributors:</dt>
                         <dd class="col-sm-9">
-                            <ul class="list-unstyled">
+                            <ul class="list-unstyled mb-0">
                                 {% for contributor in resource.datacite.contributors %}
                                 {% if contributor.nameType == 'Organizational' %}
                                 <li>
@@ -105,14 +113,13 @@
                                 {% endif %}
                                 {% endfor %}
                             </ul>
+                            <p class="text-muted mt-1 mb-0">
+                                Here we list the persons and organizations, who are responsible for the collection, the management, and the publication of this dataset. The icons indicate the different roles of the Data Authorship Contributor Roles Taxonomy <a href="https://www.wsl.ch/datacredit/">DataCRediT</a>, which was initially developed for <a href="https://www.envidat.ch">EnviDat</a>.
+                            </p>
                         </dd>
                     </dl>
-                    <p class="text-muted">
-                        The icons indicate the different roles of the Data Authorship Contributor Roles Taxonomy <a href="https://www.wsl.ch/datacredit/">DataCRediT</a>, which was initially developed for <a href="https://www.envidat.ch">EnviDat</a>.
-                    </p>
                 </div>
             </div>
-
         </div>
 
         <div class="col-sm-4">

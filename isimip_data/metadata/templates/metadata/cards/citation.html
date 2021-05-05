@@ -8,12 +8,20 @@
         {% if resource %}
         <p class="card-text cite-as">
             {% if resource.datacite %}
+            <button class="btn btn-link btn-copy-to-clipboard float-right" title="Copy to clipboard">
+                <i class="far fa-clipboard"></i>
+                <code class="d-none">{{ resource.creators_str }} ({{ resource.datacite.publicationYear }}): {{ resource.title }}. {{ resource.datacite.publisher }}. {{ resource.doi_url }}</code>
+            </button>
+            </i>
             <b>{{ resource.creators_str }} ({{ resource.datacite.publicationYear }}):</b>
             <i>{{ resource.title }}</i>. {{ resource.datacite.publisher }}.
             {% else %}
             {% trans 'Please follow the policies of the original data provider:' %}
             {% endif %}
-            <a class="doi-link" href="{{ resource.doi_url }}" target="_blank">{{ resource.doi_url }}</a>
+
+            <a class="doi-link" href="{{ resource.doi_url }}" target="_blank">
+                {{ resource.doi_url }}
+            </a>
         </p>
         {% else %}
         <p class="card-text">
