@@ -1,0 +1,34 @@
+    <div class="card resources">
+        <table class="table table-condensed smaller mb-0">
+            <thead>
+                <tr>
+                    <th style="width: 40%;">Title</th>
+                    <th style="width: 30%;">Paths</th>
+                    <th style="width: 30%;">DOI</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resource in resources %}
+                <tr>
+                    <td>
+                        <a href="{% url 'resource' resource.doi %}">
+                            {{ resource.title }}
+                        </a>
+                    </td>
+                    <td>
+                        <ul class="list-unstyled">
+                        {% for path in resource.paths %}
+                            <li>{{ path }}</li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        <a class="doi-link" href="{{ resource.doi_url }}" target="_blank">
+                            {{ resource.doi_url }}
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>

@@ -23,72 +23,12 @@
 
     {% if resources %}
     <h3>Resources</h3>
-    <div class="card resources">
-        <table class="table table-condensed smaller mb-0">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Paths</th>
-                    <th>DOI</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for resource in resources %}
-                <tr>
-                    <td>
-                        <a href="{% url 'resource' resource.doi %}">
-                            {{ resource.title }}
-                        </a>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                        {% for path in resource.paths %}
-                            <li>{{ path }}</li>
-                        {% endfor %}
-                        </ul>
-                    </td>
-                    <td>
-                        <a class="doi-link" href="{{ resource.doi_url }}" target="_blank">
-                            {{ resource.doi_url }}
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    {% include 'metadata/cards/resources.html' %}
     {% endif %}
 
     {% if resources_external %}
     <h3>External resources</h3>
-    <div class="card resources">
-        <table class="table table-condensed smaller mb-0">
-            <thead>
-                <tr>
-                    <th>Paths</th>
-                    <th>DOI</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for resource in resources_external %}
-                <tr>
-                    <td>
-                        <ul class="list-unstyled">
-                        {% for path in resource.paths %}
-                            <li>{{ path }}</li>
-                        {% endfor %}
-                        </ul>
-                    </td>
-                    <td>
-                        <a class="doi-link" href="{{ resource.doi_url }}" target="_blank">
-                            {{ resource.doi_url }}
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    {% include 'metadata/cards/resources.html' with resources=resources_external %}
     {% endif %}
 </div>
 

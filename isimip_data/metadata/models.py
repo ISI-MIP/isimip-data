@@ -123,6 +123,7 @@ class Resource(models.Model):
 
     id = models.UUIDField(primary_key=True)
     doi = models.TextField()
+    title = models.TextField()
     paths = ArrayField(models.TextField())
     datacite = JSONField()
 
@@ -134,15 +135,6 @@ class Resource(models.Model):
         ordering = ('doi', )
 
     def __str__(self):
-        return self.doi
-
-    @property
-    def title(self):
-        if self.datacite:
-            for datacite_title in self.datacite.get('titles'):
-                if ('title' in datacite_title) and ('titleType' not in datacite_title):
-                    return datacite_title['title']
-
         return self.doi
 
     @property

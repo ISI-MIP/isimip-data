@@ -38,5 +38,9 @@ header {
         ul {
             margin: 0;
         }
+
+        td {
+            word-break: break-all;
+        }
     }
 }
