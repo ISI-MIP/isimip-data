@@ -37,10 +37,12 @@ def metadata(request):
 
 
 def dataset(request, pk=None, path=None):
+    queryset = Dataset.objects.using('metadata').prefetch_related('files')
+
     if pk is not None:
-        obj = get_object_or_404(Dataset.objects.using('metadata'), id=pk)
+        obj = get_object_or_404(queryset, id=pk)
     elif path is not None:
-        obj = get_object_or_404(Dataset.objects.using('metadata'), path=path)
+        obj = get_object_or_404(queryset, path=path)
     else:
         raise RuntimeError('Either pk or path need to be provided')
 
@@ -88,6 +90,7 @@ def file(request, pk=None, path=None):
 
     return render(request, 'metadata/file.html', {
         'file': obj,
+        'parents': [obj.dataset],
         'versions': versions,
         'specifiers': prettify_attributes(obj.specifier_list),
         'caveats': caveats,

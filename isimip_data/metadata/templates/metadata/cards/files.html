@@ -6,11 +6,18 @@
 
         {% if file_exclude in None or file != file_exclude %}
         <li class="list-group-item">
-            {% include 'metadata/snippets/shields.html' with obj=file %}
-            <h4 class="mt-3 mb-0">
-                <a href="{% url 'file' file.id %}">{{ file.name }}</a>
-            </h4>
-            {% include 'metadata/snippets/downloads.html' with obj=file %}
+            <div class="float-right">
+                <span class="mr-3">
+                    {{ dataset.size|filesizeformat }}
+                </span>
+                <a href="{{ file.file_url }}" target="_blank">
+                    Download file
+                </a>
+            </div>
+
+            <a href="{% url 'file' file.id %}" target="_blank">
+                {{ file.name }}
+            </a>
         </li>
         {% endif %}
         {% endfor %}
