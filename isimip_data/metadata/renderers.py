@@ -69,12 +69,17 @@ class DataCiteRenderer(object):
                 }, creator.get('nameIdentifier'))
 
             for affiliation in creator.get('affiliations', []):
-                scheme = affiliation.get('affiliationIdentifierScheme', 'ROR')
-                self.render_node('affiliation', {
-                    'affiliationIdentifier': affiliation.get('affiliationIdentifier'),
-                    'affiliationIdentifierScheme': scheme,
-                    'schemeURI': self.scheme_uri_choices.get(scheme)
-                }, affiliation.get('affiliation'))
+                if affiliation.get('affiliationIdentifier'):
+                    affiliation_scheme = affiliation.get('affiliationIdentifierScheme', 'ROR')
+                    affiliation_attrs = {
+                        'affiliationIdentifier': affiliation.get('affiliationIdentifier'),
+                        'affiliationIdentifierScheme': affiliation_scheme,
+                        'schemeURI': self.scheme_uri_choices.get(affiliation_scheme)
+                    }
+                else:
+                    affiliation_attrs = {}
+
+                self.render_node('affiliation', affiliation_attrs, affiliation.get('affiliation'))
 
             self.xml.endElement('creator')
         self.xml.endElement('creators')
