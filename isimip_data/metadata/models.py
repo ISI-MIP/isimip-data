@@ -29,6 +29,11 @@ class Dataset(models.Model):
     public = models.BooleanField(null=True)
     tree_path = models.TextField()
 
+    created = models.DateTimeField()
+    updated = models.DateTimeField()
+    published = models.DateTimeField()
+    archived = models.DateTimeField()
+
     class Meta:
         db_table = 'datasets'
         managed = False
@@ -76,6 +81,9 @@ class File(models.Model):
     rights = models.TextField()
     identifiers = ArrayField(models.TextField())
     search_vector = SearchVectorField(null=True)
+
+    created = models.DateTimeField()
+    updated = models.DateTimeField()
 
     class Meta:
         db_table = 'files'
@@ -134,6 +142,9 @@ class Resource(models.Model):
     title = models.TextField()
     paths = ArrayField(models.TextField())
     datacite = JSONField()
+
+    created = models.DateTimeField()
+    updated = models.DateTimeField()
 
     datasets = models.ManyToManyField(Dataset, related_name='resources')
 
@@ -196,6 +207,9 @@ class Tree(models.Model):
 
     id = models.UUIDField(primary_key=True)
     tree_dict = JSONField()
+
+    created = models.DateTimeField()
+    updated = models.DateTimeField()
 
     class Meta:
         db_table = 'trees'
