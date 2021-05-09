@@ -10,9 +10,11 @@
                 <span class="mr-3">
                     {{ file.size|filesizeformat }}
                 </span>
+                {% if file.file_url %}
                 <a href="{{ file.file_url }}" target="_blank">
                     Download file
                 </a>
+                {% endif %}
             </div>
 
             <a href="{% url 'file' file.id %}" target="_blank">
