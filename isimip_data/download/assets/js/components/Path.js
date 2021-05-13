@@ -29,7 +29,7 @@ class Path extends Component {
     return (
       <div className="download-path">
         <label className="form-check-label" htmlFor="input-path">Path</label>
-        <input className={'form-control text-center' + ((error || pathError) && 'is-invalid')}
+        <input className={'form-control text-center ' + ((error || pathError) && 'is-invalid')}
             type="text" id="input-path"
             placeholder="Path" value={path} onChange={this.handleChange} required />
         <div className="invalid-feedback">{error}</div>

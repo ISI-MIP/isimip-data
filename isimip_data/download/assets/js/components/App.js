@@ -98,6 +98,7 @@ class App extends Component {
 
   fetch(url, data) {
     DownloadApi.submitJob(url, data).then(response => {
+
       if (response.status == 'finished') {
         DownloadApi.downloadFile(response.file_url)
         this.setState({ message: '' })
