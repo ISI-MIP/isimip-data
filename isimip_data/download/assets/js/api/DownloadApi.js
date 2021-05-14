@@ -6,6 +6,14 @@ class DownloadApi {
       .catch(error => error)
   }
 
+  static fetchJob(url) {
+    return fetch(url, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+  }
+
   static submitJob(url, data) {
     return fetch(url, {
       method: 'POST',
@@ -16,28 +24,16 @@ class DownloadApi {
     }).then(response => response.json())
   }
 
-  static downloadFile(fileUrl) {
-    let fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1)
-    return fetch(fileUrl)
-      .then(response => response.blob())
-      .then(blob => {
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = fileName
-
-        document.body.appendChild(a)
-        a.click()
-        a.remove()
-      })
-      .catch(error => {
-        return {
-          errors: {
-            path: 'File not found'
-          }
-        }
-      })
+  static downloadFile(file_url) {
+    const iframe = document.createElement('iframe')
+    iframe.style.display = 'none'
+    iframe.src = file_url
+    iframe.onload = function() {
+        this.parentNode.removeChild(this)
+    }
+    document.body.appendChild(iframe)
   }
+
 }
 
 export default DownloadApi

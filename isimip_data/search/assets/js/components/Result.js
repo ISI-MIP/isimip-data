@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faChevronUp, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import jQuery from 'jquery'
 import bytes from 'bytes'
+import Cookies from 'js-cookie'
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 import Badges from './Badges'
@@ -18,7 +19,8 @@ class Result extends Component {
     this.state = {
       showAttributes: false,
       showFiles: false,
-      showCaveats: false
+      showCaveats: false,
+      csrfToken: Cookies.get('csrftoken')
     }
     this.toggleAttributes = this.toggleAttributes.bind(this)
     this.toggleFiles = this.toggleFiles.bind(this)
@@ -81,36 +83,38 @@ class Result extends Component {
 
         <div>
           {dataset.public &&
-          <div className="form-check result-select mb-2 d-xl-inline mr-xl-3 mb-xl-0">
-            <input className="form-check-input" id={inputId} type="checkbox"
-                   checked={isSelected(dataset)} onChange={e => onSelect(e, dataset)} />
-            <label className="form-check-label" htmlFor={inputId}>
-              Select dataset
-            </label>
-          </div>}
-
-          <div className="float-md-right">
-            <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
-              <a href={dataset.download_url}
-                 title="Download only a specific country, a lat/lon box or landonly data.">
-                Configure download
-              </a>
+            <div className="form-check result-select mb-2 d-xl-inline mr-xl-3 mb-xl-0">
+              <input className="form-check-input" id={inputId} type="checkbox"
+                     checked={isSelected(dataset)} onChange={e => onSelect(e, dataset)} />
+              <label className="form-check-label" htmlFor={inputId}>
+                Select dataset
+              </label>
             </div>
+          }
 
-            <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
-              <a href={dataset.filelist_url}
-                 title="Download file list for this dataset.">
-                Download file list
-              </a>
-            </div>
+          {dataset.public &&
+            <div className="float-md-right">
+              {dataset.is_global && dataset.is_global &&
+                <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
+                  {this.renderConfigureDownloadForm(dataset.files)}
+                </div>
+              }
 
-            <div className="d-sm-inline-block mb-2 mb-md-0">
-              <button className="btn btn-link" onClick={e => this.handleDownload(e, dataset.files)}
-                      title="Download all files in this dataset at once.">
-                Download all files
-              </button>
+              <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
+                <a href={dataset.filelist_url}
+                   title="Download file list for this dataset.">
+                  Download file list
+                </a>
+              </div>
+
+              <div className="d-sm-inline-block mb-2 mb-md-0">
+                <button className="btn btn-link" onClick={e => this.handleDownload(e, dataset.files)}
+                        title="Download all files in this dataset at once.">
+                  Download all files
+                </button>
+              </div>
             </div>
-          </div>
+          }
 
           <div className="d-inline mr-2">
             <button className="btn btn-link" onClick={this.toggleAttributes}>
@@ -263,6 +267,23 @@ class Result extends Component {
           }
         </ul>
       </li>
+    )
+  }
+
+  renderConfigureDownloadForm(files) {
+    const { csrfToken } = this.state
+
+    return (
+      <form className="m-0" method="post" action="/download/" target="blank">
+        <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
+        {files.map(file => {
+          return <input type="hidden" name="paths" value={file.path} key={file.id} />
+        })}
+        <button type="submit" className="btn btn-link"
+           title="Download only a specific country, a lat/lon box or landonly data.">
+          Configure download
+        </button>
+      </form>
     )
   }
 

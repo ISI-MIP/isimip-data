@@ -8,11 +8,15 @@ class Landonly extends Component {
     const { selected, onSelect } = this.props
 
     return (
-      <div className="form-check">
-        <input className="form-check-input" type="radio" name="landonly" id="check-landonly"
-            onChange={() => onSelect('landonly')} checked={selected == 'landonly'} />
+      <div className="row download-row align-items-center">
+        <div className="col-md-4 mb-2">
+          <div className="form-check mb-0">
+            <input className="form-check-input" type="radio" name="landonly" id="check-landonly"
+                onChange={() => onSelect('landonly')} checked={selected == 'landonly'} />
 
-        <label className="form-check-label" htmlFor="check-landonly">Mask only land data</label>
+            <label className="form-check-label" htmlFor="check-landonly">Mask only land data</label>
+          </div>
+        </div>
       </div>
     )
   }

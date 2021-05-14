@@ -52,7 +52,11 @@
                     </li>
                     {% if file.is_global and file.is_netcdf %}
                     <li class="list-group-item">
-                        <a href="{% url 'download' file.path %}">{% trans 'Configure download' %}</a>
+                        <form method="post" action="{% url 'download' %}" target="blank" class="mb-0">
+                            {% csrf_token %}
+                            <input type="hidden" name="paths" value="{{ file.path }}">
+                            <button class="btn btn-link" type="submit">{% trans 'Configure download' %}</button>
+                        </form>
                     </li>
                     {% endif %}
                 </ul>

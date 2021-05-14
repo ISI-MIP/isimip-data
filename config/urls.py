@@ -63,7 +63,7 @@ urlpatterns = [
     path('search/<path:path>/', search, name='search'),
 
     path('download/', download, name='download'),
-    path('download/<path:path>/', download, name='download'),
+    path('download/<str:job_id>/', download, name='download'),
 
     path('caveats/', caveats, name='caveats'),
     path('caveats/<int:pk>/', caveat, name='caveat'),

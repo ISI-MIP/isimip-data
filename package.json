@@ -21,6 +21,7 @@
     "bootstrap": "^4.6.0",
     "bytes": "^3.1.0",
     "jquery": "^3.6.0",
+    "js-cookie": "^2.2.1",
     "js-sha512": "^0.8.0",
     "local-storage": "^2.0.0",
     "npm-font-open-sans": "^1.1.0",

@@ -11,7 +11,6 @@ from .models import Dataset, File, Resource
 class DatasetFileSerializer(serializers.ModelSerializer):
 
     metadata_url = serializers.SerializerMethodField()
-    download_url = serializers.SerializerMethodField()
     rights = serializers.JSONField(source='rights_dict')
 
     class Meta:
@@ -19,13 +18,13 @@ class DatasetFileSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
+            'path',
             'version',
             'size',
             'checksum',
             'checksum_type',
             'url',
             'metadata_url',
-            'download_url',
             'file_url',
             'rights',
             'terms_of_use'
@@ -33,10 +32,6 @@ class DatasetFileSerializer(serializers.ModelSerializer):
 
     def get_metadata_url(self, obj):
         return reverse('file', args=[obj.id], request=self.context['request'])
-
-    def get_download_url(self, obj):
-        if obj.dataset.public:
-            return reverse('download', args=[obj.path], request=self.context['request'])
 
 
 class DatasetResourceSerializer(serializers.ModelSerializer):
@@ -138,7 +133,6 @@ class DatasetSerializer(serializers.ModelSerializer):
     annotations = serializers.SerializerMethodField()
     search_rank = serializers.FloatField(required=False, default=0.0)
     metadata_url = serializers.SerializerMethodField()
-    download_url = serializers.SerializerMethodField()
     filelist_url = serializers.SerializerMethodField()
     rights = serializers.JSONField(source='rights_dict')
 
@@ -156,22 +150,19 @@ class DatasetSerializer(serializers.ModelSerializer):
             'public',
             'url',
             'metadata_url',
-            'download_url',
             'filelist_url',
             'rights',
             'files',
             'resources',
             'caveats',
             'annotations',
-            'terms_of_use'
+            'terms_of_use',
+            'is_global',
+            'is_netcdf'
         )
 
     def get_metadata_url(self, obj):
         return reverse('dataset', args=[obj.id], request=self.context['request'])
-
-    def get_download_url(self, obj):
-        if obj.public:
-            return reverse('download', args=[obj.path], request=self.context['request'])
 
     def get_filelist_url(self, obj):
         if obj.public:
@@ -194,7 +185,6 @@ class FileSerializer(serializers.ModelSerializer):
 
     search_rank = serializers.FloatField(required=False, default=0.0)
     metadata_url = serializers.SerializerMethodField()
-    download_url = serializers.SerializerMethodField()
     rights = serializers.JSONField(source='rights_dict')
 
     class Meta:
@@ -211,7 +201,6 @@ class FileSerializer(serializers.ModelSerializer):
             'search_rank',
             'url',
             'metadata_url',
-            'download_url',
             'file_url',
             'rights',
             'terms_of_use'
@@ -219,10 +208,6 @@ class FileSerializer(serializers.ModelSerializer):
 
     def get_metadata_url(self, obj):
         return reverse('file', args=[obj.id], request=self.context['request'])
-
-    def get_download_url(self, obj):
-        if obj.dataset.public:
-            return reverse('file', args=[obj.path], request=self.context['request'])
 
 
 class ResourceSerializer(serializers.ModelSerializer):

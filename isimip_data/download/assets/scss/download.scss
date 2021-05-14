@@ -1,2 +1,10 @@
 @import 'isimip_data/core/assets/scss/colors';
 @import 'isimip_data/core/assets/scss/base';
+
+.download-row {
+    min-height: 46px;
+}
+
+.form-check:last-child {
+    margin-bottom: 0;
+}

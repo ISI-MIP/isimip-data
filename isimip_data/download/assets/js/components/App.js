@@ -1,6 +1,5 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
@@ -20,31 +19,33 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      job: null,
       settings: {},
-      path: '',
-      pathError: '',
+      paths: [...props.paths],
+      pathsError: [],
       selected: '',
       selectedError: '',
       country: '',
       countryError: '',
       bbox: ['', '', '', ''],
       bboxError: '',
-      message: '',
-      error: ''
+      serverError: ''
     }
     this.handlePathChange = this.handlePathChange.bind(this)
     this.handleSelectChange = this.handleSelectChange.bind(this)
     this.handleCountryChange = this.handleCountryChange.bind(this)
     this.handleBBoxChange = this.handleBBoxChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.togglePath = this.togglePath.bind(this)
   }
 
   componentDidMount() {
-    // remove /download/ and trailing slash from path
-    const path = this.props.location.pathname.replace('/download/', '').replace(/\/$/, '')
+    if (this.props.url) {
+      this.fetch(this.props.url)
+    }
 
     CoreApi.fetchSettings().then(settings => {
-      this.setState({ path, settings })
+      this.setState({ settings })
     })
   }
 
@@ -67,129 +68,217 @@ class App extends Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    const { settings, path, selected, country, bbox } = this.state
-    let selectedError = '',
+    const { settings, paths, selected, country, bbox } = this.state
+    let pathsError = [],
+        selectedError = '',
         countryError = '',
-        bboxError = '',
-        error = ''
+        bboxError = ''
 
     if (selected) {
       if (selected == 'country') {
         if (country) {
-          this.fetch(settings.FILES_API_URL, { path, country })
+          this.submit(settings.FILES_API_URL, { paths, country })
         } else {
-          countryError = 'Please select one of the options.'
+          countryError = 'Please select a country.'
         }
       } else if (selected == 'bbox') {
-        if (bbox) {
-          this.fetch(settings.FILES_API_URL, { path, bbox })
+        if (bbox && bbox[0] && bbox[1] && bbox[2] && bbox[3]) {
+          this.submit(settings.FILES_API_URL, { paths, bbox })
         } else {
-          bboxError = 'Please select one of the options.'
+          bboxError = 'Please give a valid bounding box.'
         }
       } else if (selected == 'landonly') {
-          this.fetch(settings.FILES_API_URL, { path, landonly: true })
+          this.submit(settings.FILES_API_URL, { paths, landonly: true })
       }
     } else {
       selectedError = 'Please select one of the options.'
     }
 
-    this.setState({ selectedError, countryError, bboxError, error })
+    this.setState({ pathsError, selectedError, countryError, bboxError })
   }
 
-  fetch(url, data) {
+  submit(url, data) {
     DownloadApi.submitJob(url, data).then(response => {
-
-      if (response.status == 'finished') {
-        DownloadApi.downloadFile(response.file_url)
-        this.setState({ message: '' })
-      } else if (response.status == 'queued') {
-        setTimeout(() => this.fetch(url, data), 2000)
-        this.setState({ message: 'The download request was queued on the server.' })
-      } else if (response.status == 'error') {
-        const pathError = response.errors.path || ''
+      if (response.status == 'error') {
+        const pathsError = response.errors.paths || []
         const countryError = response.errors.country || '';
         const bboxError = response.errors.bbox || '';
-        this.setState({ message: '', pathError, countryError, bboxError })
+        this.setState({ job: {}, pathsError, countryError, bboxError })
       } else {
-        let message
-        if (response.meta.total_files > 0) {
-          message = `The files are created on the server (${response.meta.created_files} of ${response.meta.total_files} created). The download will start once all files are created.`
-        } else {
-          message = 'The file is created on the server. The download will start soon.'
-        }
+        setTimeout(() => this.fetch(response.job_url), 2000)
 
-        setTimeout(() => this.fetch(url, data), 10000)
-        this.setState({ message })
+        window.history.pushState({}, document.title, response.id + '/')
+        this.setState({ job: response })
       }
+
     }).catch(error => {
-      this.setState({ error: 'There has been a problem connecting to the server. If this problem persists, please contact support.' })
+      this.setState({ serverError: 'There has been a problem connecting to the server. If this problem persists, please contact support.' })
     })
   }
 
-  render() {
-    const { path, pathError, selected, selectedError, country, countryError, bbox, bboxError, message, error } = this.state
+  fetch(url) {
+    DownloadApi.fetchJob(url).then(response => {
+      if (response.status == 'finished' || response.status == 'failed') {
+        DownloadApi.downloadFile(response.file_url)
+      } else if (response.status == 'queued' || response.status == 'started') {
+        setTimeout(() => this.fetch(response.job_url), 10000)
+      }
+
+      this.setState({ job: response })
+    }).catch(error => {
+      this.setState({ serverError: 'There has been a problem connecting to the server. If this problem persists, please contact support.' })
+    })
+  }
+
+  togglePath(e, path) {
+    const paths = this.state.paths.filter(item => item != path)
+    this.setState({ paths })
+  }
+
+  renderJob() {
+    const { job, settings } = this.state
+    const jobUrl = `${settings.BASE_URL}/download/${job.id}/`
 
     return (
       <div>
-        <div className="row justify-content-md-center">
-          <div className="col-sm-8">
-            <header>
-              <h1>Configure download</h1>
-            </header>
+        <h3>Download status</h3>
+        <div className="card">
+          <div className="card-body">
+            {
+              job.status == 'queued' &&
+              <p className="text-success">
+                <FontAwesomeIcon icon={faSpinner} spin /> The download has been queued on the server.
+              </p>
+            }
+            {
+              job.status == 'started' &&
+              <p className="text-success">
+                <FontAwesomeIcon icon={faSpinner} spin /> The files are created on the server ({job.meta.created_files} of {job.meta.total_files} created).
+              </p>
+            }
+            {
+              job.status == 'finished' &&
+              <p className="text-success">
+                The files were successfully created on the server, the download should start now.
+              </p>
+            }
+            {
+              job.status == 'failed' &&
+              <p className="text-danger">
+                Due to a timeout, not all files were successfully created on the server, the download will only contain a subset of the selected files. Please select fewer files.
+              </p>
+            }
+            {
+              job.id &&
+              <p>
+                If you need to close the browser, you can check the status of this download later. You can bookmark this page or store its URL otherwise: <a href={jobUrl} target="blank">{jobUrl}</a>. After completion, the files will be stored on the server for {job.ttl/60.0/60.0} hours.
+              </p>
+            }
+            {
+              !job.id &&
+              <p className="text-danger">
+                The download was not found. Probably it was deleted automatically after some time.
+              </p>
+            }
           </div>
         </div>
-        <form className="text-center" onSubmit={this.handleSubmit} noValidate>
-          <Path path={path} pathError={pathError} onChange={this.handlePathChange} />
-
-          <div className="row justify-content-md-center mt-5">
-            <div className="col-md-8">
-              <h2>Restrict download area</h2>
-
-              <p>
-                Download file sizes can be reduced by restricting the geographical extend of the dataset. This is done by masking all data outside of a certain country, bounding box or by applying a land-sea-mask.
-              </p>
-
-              <div className="mt-2">
-                <Country selected={selected} country={country} countryError={countryError}
-                    onChange={this.handleCountryChange} onSelect={this.handleSelectChange} />
-              </div>
-
-              <div className="mt-2">
-                <BBox selected={selected} bbox={bbox} bboxError={bboxError}
-                    onChange={this.handleBBoxChange} onSelect={this.handleSelectChange} />
-              </div>
-
-              <div className="mt-2">
-                <Landonly selected={selected} onSelect={this.handleSelectChange} />
-              </div>
-
-              <div className="mt-4">
-                <button className="btn btn-success btn-lg" onClick={this.handleSubmit}>
-                  Download file
-                </button>
-              </div>
-
-              {
-                message && <p className="text-success mt-4">
-                  <FontAwesomeIcon icon={faSpinner} spin /> {message}
-                </p>
-              }
-              {
-                error && <p className="text-danger mt-4">
-                  {error}
-                </p>
-              }
-              {
-                selectedError && <p className="col-md-8 text-danger mt-4">
-                  {selectedError}
-                </p>
-              }
-            </div>
-          </div>
-        </form>
       </div>
     )
   }
+
+  renderForm() {
+    const { settings, paths, pathsError, selected, selectedError, country, countryError, bbox, bboxError, serverError } = this.state
+
+    return (
+      <form onSubmit={this.handleSubmit} noValidate>
+        <h3>Selected files</h3>
+        <div className="card">
+          <div className="card-body">
+          {
+            this.props.paths.map((path, index) => {
+              return (
+                <div className="form-check" key={index}>
+                  <input className="form-check-input" type="checkbox" id={index}
+                         defaultChecked={paths.includes(path)}
+                         onChange={e => this.togglePath(e, path)} />
+                  <label className="form-check-label" htmlFor={index}>{path}</label>
+                </div>
+              )
+            })
+          }
+          {
+            pathsError && pathsError.map(error => {
+              return <p className="text-danger">{error}</p>
+            })
+          }
+          </div>
+        </div>
+
+        <h3>Restrict download area</h3>
+        <div className="card">
+          <div className="card-body">
+            <p>
+              Download file sizes can be reduced by restricting the geographical extend of the dataset. This is done by masking all data outside of a certain country, bounding box or by applying a land-sea-mask.
+            </p>
+
+            <p>
+              Please note that the masking of NetCDF files takes a considerable amount of time. Depending on the size of the dataset, it can take tens of minutes to create the download. It is only possible to mask global files.
+            </p>
+
+            <div className="mt-2">
+              <Country selected={selected} country={country} countryError={countryError}
+                  onChange={this.handleCountryChange} onSelect={this.handleSelectChange} />
+            </div>
+
+            <div className="mt-2">
+              <BBox selected={selected} bbox={bbox} bboxError={bboxError}
+                  onChange={this.handleBBoxChange} onSelect={this.handleSelectChange} />
+            </div>
+
+            <div className="mt-2">
+              <Landonly selected={selected} onSelect={this.handleSelectChange} />
+            </div>
+
+            {
+              selectedError && <p className="text-danger">
+                {selectedError}
+              </p>
+            }
+          </div>
+        </div>
+
+        <div className="text-center">
+          <div className="mb-3">
+            <button className="btn btn-success btn-lg" onClick={this.handleSubmit}>
+              Download file
+            </button>
+          </div>
+          {
+            serverError && <p className="text-danger mt-4">
+              {serverError}
+            </p>
+          }
+        </div>
+      </form>
+    )
+  }
+
+  render() {
+    if (this.state.job) {
+      return this.renderJob()
+    } else if (this.props.paths.length > 0) {
+      return this.renderForm()
+    } else if (this.state.serverError) {
+      return <p className="text-center text-danger mt-4">{this.state.serverError}</p>
+    } else {
+      return null
+    }
+  }
 }
 
-export default withRouter(App)
+App.propTypes = {
+  url: PropTypes.string,
+  paths: PropTypes.array.isRequired
+}
+
+export default App

@@ -44,7 +44,7 @@ class Dataset(models.Model):
 
     @property
     def is_global(self):
-        return '_global_' in self.name
+        return self.specifiers.get('region') == 'global'
 
     @property
     def is_netcdf(self):
@@ -113,7 +113,7 @@ class File(models.Model):
 
     @property
     def is_global(self):
-        return '_global_' in self.name
+        return self.specifiers.get('region') == 'global'
 
     @property
     def is_netcdf(self):

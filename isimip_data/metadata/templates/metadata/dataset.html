@@ -54,7 +54,13 @@
                 <ul class="list-group list-group-flush">
                     {% if dataset.is_global and dataset.is_netcdf %}
                     <li class="list-group-item">
-                        <a href="{% url 'download' dataset.path %}">{% trans 'Configure download' %}</a>
+                        <form method="post" action="{% url 'download' %}" target="blank" class="mb-0">
+                            {% csrf_token %}
+                            {% for file in dataset.files.all %}
+                            <input type="hidden" name="paths" value="{{ file.path }}">
+                            {% endfor %}
+                            <button class="btn btn-link" type="submit">{% trans 'Configure download' %}</button>
+                        </form>
                     </li>
                     {% endif %}
                     <li class="list-group-item">

@@ -12,15 +12,37 @@
 {% block main %}
 
 <div class="container">
-    <div id="app"></div>
+    <div className="row justify-content-md-center">
+        <div className="col-sm-8">
+            <header>
+                <h1>Configure download</h1>
+            </header>
+        </div>
+    </div>
+
+    {% if job_url %}
+
+    <div id="app"
+         data-url="{{ job_url }}">
+    </div>
+
+    {% elif paths %}
+
+    <div id="app" {% for path in paths %}
+         data-path-{{ forloop.counter0 }}="{{ path }}"{% endfor %}>
+    </div>
+
+    {% else %}
 
     <div class="row justify-content-md-center mt-3">
         <div class="col-sm-8">
-            <p class="text-center">
-                Please note that the masking of NetCDF files takes a considerable amount of time. Depending on the size of the dataset, it can take tens of minutes to create the download. It is only possible to mask global files.
+            <p class="text-center text-danger">
+                No files where provided as POST data and no job id was given. Please note that this page needs to be accessed from a dataset or file metadata page, or directly from the search interface.
             </p>
         </div>
     </div>
+
+    {% endif %}
 </div>
 
 {% endblock %}

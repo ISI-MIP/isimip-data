@@ -5,6 +5,7 @@ import { faChevronDown, faChevronUp, faTimes, faSpinner  } from '@fortawesome/fr
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 import bytes from 'bytes'
+import Cookies from 'js-cookie'
 
 import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
 
@@ -16,7 +17,8 @@ class Selection extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      showDatasets: false
+      showDatasets: false,
+      csrfToken: Cookies.get('csrftoken')
     }
     this.toggleDatasets = this.toggleDatasets.bind(this)
   }
@@ -33,7 +35,7 @@ class Selection extends Component {
 
   renderSelection() {
     const { selected, count, isLoading, onReset } = this.props
-    const { showDatasets } = this.state
+    const { showDatasets, csrfToken } = this.state
 
     const selected_count = selected.length
     const size = get_size(selected.reduce((accumulator, dataset) => {
@@ -45,6 +47,10 @@ class Selection extends Component {
         return dataset.id
       })
     }
+    const files = selected.reduce((files, dataset) => {
+      files = files.concat(dataset.files)
+      return files
+    }, [])
 
     return (
       <li className="list-group-item">
@@ -63,6 +69,18 @@ class Selection extends Component {
         {selected.length > 0 &&
         <div className="mt-2">
           <div className="float-md-right">
+            <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
+              <form className="m-0" method="post" action="/download/" target="blank">
+                <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
+                {files.map(file => {
+                  return <input type="hidden" name="paths" value={file.path} key={file.id} />
+                })}
+                <button type="submit" className="btn btn-link"
+                   title="Download only a specific country, a lat/lon box or landonly data.">
+                  Configure download
+                </button>
+              </form>
+            </div>
             <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
               <a href={`/api/v1/datasets/filelist/?${encodeParams(ids)}`}
                  title="Download the file list for this selection.">
