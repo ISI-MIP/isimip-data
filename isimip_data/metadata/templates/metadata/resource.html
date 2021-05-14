@@ -159,6 +159,11 @@
         </div>
     </div>
 
+    {% if references.IsNewVersionOf %}
+    <h3>{% trans 'Is new version of' %}</h3>
+    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsNewVersionOf %}
+    {% endif %}
+
     {% if references.IsDocumentedBy %}
     <h3>{% trans 'Is documented by' %}</h3>
     {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsDocumentedBy %}

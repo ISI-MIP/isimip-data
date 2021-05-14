@@ -8,7 +8,7 @@
         {% if resource %}
         <p class="card-text cite-as">
             {% if resource.datacite %}
-            <button class="btn btn-link btn-copy-to-clipboard float-right" title="Copy to clipboard">
+            <button class="btn btn-link btn-copy-to-clipboard float-right ml-1" title="Copy to clipboard">
                 <i class="far fa-clipboard"></i>
                 <code class="d-none">{{ resource.creators_str }} ({{ resource.datacite.publicationYear }}): {{ resource.title }}. {{ resource.datacite.publisher }}. {{ resource.doi_url }}</code>
             </button>
