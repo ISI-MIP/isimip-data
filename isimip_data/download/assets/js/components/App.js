@@ -103,7 +103,7 @@ class App extends Component {
         const pathsError = response.errors.paths || []
         const countryError = response.errors.country || '';
         const bboxError = response.errors.bbox || '';
-        this.setState({ job: {}, pathsError, countryError, bboxError })
+        this.setState({ job: null, pathsError, countryError, bboxError })
       } else {
         setTimeout(() => this.fetch(response.job_url), 2000)
 
@@ -207,8 +207,8 @@ class App extends Component {
             })
           }
           {
-            pathsError && pathsError.map(error => {
-              return <p className="text-danger">{error}</p>
+            pathsError && pathsError.map((error, index) => {
+              return <p className="text-danger" key={index}>{error}</p>
             })
           }
           </div>
