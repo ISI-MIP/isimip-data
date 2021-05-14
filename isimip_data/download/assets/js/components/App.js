@@ -137,7 +137,6 @@ class App extends Component {
 
   renderJob() {
     const { job, settings } = this.state
-    const jobUrl = `${settings.BASE_URL}/download/${job.id}/`
 
     return (
       <div>
@@ -171,7 +170,7 @@ class App extends Component {
             {
               job.id &&
               <p>
-                If you need to close the browser, you can check the status of this download later. You can bookmark this page or store its URL otherwise: <a href={jobUrl} target="blank">{jobUrl}</a>. After completion, the files will be stored on the server for {job.ttl/60.0/60.0} hours.
+                If you need to close the browser, you can check the status of this download later. You can bookmark this page or store its URL otherwise: <a href={document.location.toString()} target="blank">{document.location.toString()}</a>. After completion, the files will be stored on the server for {job.ttl/60.0/60.0} hours.
               </p>
             }
             {
