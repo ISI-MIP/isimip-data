@@ -224,7 +224,7 @@ FILES_API_URL = os.getenv('FILES_API_URL')
 PROTOCOL_LOCATIONS = os.getenv('PROTOCOL_LOCATIONS', '').split()
 
 DOWNLOAD_HELP_COUNTRY = 'The files are masked using the countrymask of the ISIPEDIA project, <a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc">available on GitHub</a>.'
-DOWNLOAD_HELP_BBOX = 'The files are masked using a bounding box given by you, e.g. (51.2867602, 51.6918741, -0.5103751, 0.3340155) for Greater London.'
+DOWNLOAD_HELP_BBOX = 'The files are masked using a bounding box given by you, e.g. (-23.43651, 23.43651, -180, 180) for the tropical zone around the equator.'
 DOWNLOAD_HELP_LANDONLY = 'The ISIMIP3 landseamask without Antarctica is applied. The mask is available at <a href="https://doi.org/10.48364/ISIMIP.822294">https://data.isimip.org/10.48364/ISIMIP.822294</a>.'
 
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
