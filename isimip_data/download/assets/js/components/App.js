@@ -82,7 +82,7 @@ class App extends Component {
           countryError = 'Please select a country.'
         }
       } else if (selected == 'bbox') {
-        if (bbox && bbox[0] && bbox[1] && bbox[2] && bbox[3]) {
+        if (bbox && bbox[0] !== '' && bbox[1] !== '' && bbox[2] !== '' && bbox[3] !== '') {
           this.submit(settings.FILES_API_URL, { paths, bbox })
         } else {
           bboxError = 'Please give a valid bounding box.'
