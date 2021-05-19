@@ -16,7 +16,7 @@ class BBox extends Component {
     const { bbox, onChange, onSelect } = this.props
 
     if (e.target.value) {
-      bbox[index] = parseInt(e.target.value)
+      bbox[index] = parseFloat(e.target.value)
     } else {
       bbox[index] = ''
     }
@@ -41,22 +41,22 @@ class BBox extends Component {
         </div>
         <div className="col-lg-2 mb-2">
           <input className={'form-control download-form-input-bbox ' + (bboxError && 'is-invalid')}
-              type="number" placeholder="South" min="-90" max="90"
+              type="number" placeholder="South" min="-90" max="90" step="any"
               value={south} onChange={e => this.handleChange(e, 0)} />
         </div>
         <div className="col-lg-2 mb-2">
           <input className={'form-control download-form-input-bbox ' + (bboxError && 'is-invalid')}
-              type="number" placeholder="North" min="-90" max="90"
+              type="number" placeholder="North" min="-90" max="90" step="any"
               value={north} onChange={e => this.handleChange(e, 1)} />
         </div>
         <div className="col-lg-2 mb-2">
           <input className={'form-control download-form-input-bbox ' + (bboxError && 'is-invalid')}
-              type="number" placeholder="West" min="-180" max="180"
+              type="number" placeholder="West" min="-180" max="180" step="any"
               value={west} onChange={e => this.handleChange(e, 2)} />
         </div>
         <div className="col-lg-2 mb-2">
           <input className={'form-control download-form-input-bbox ' + (bboxError && 'is-invalid')}
-              type="number" placeholder="East" min="-180" max="180"
+              type="number" placeholder="East" min="-180" max="180" step="any"
               value={east} onChange={e => this.handleChange(e, 3)} />
         </div>
         <div className="col-lg-12 mb-2">
