@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 class Landonly extends Component {
 
   render() {
-    const { selected, onSelect } = this.props
+    const { selected, onSelect, help } = this.props
 
     return (
       <div className="row download-row align-items-center">
@@ -16,6 +16,9 @@ class Landonly extends Component {
 
             <label className="form-check-label" htmlFor="check-landonly">Mask only land data</label>
           </div>
+        </div>
+        <div className="col-lg-12">
+          <p className="text-muted small" dangerouslySetInnerHTML={{__html: help}}></p>
         </div>
       </div>
     )

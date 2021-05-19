@@ -12,5 +12,12 @@ class SettingsViewSet(ListModelMixin, GenericViewSet):
         {
             'key': key,
             'value': getattr(settings, key)
-        } for key in ['FILES_BASE_URL', 'FILES_API_URL', 'METADATA_PAGE_SIZE']
+        } for key in [
+            'FILES_BASE_URL',
+            'FILES_API_URL',
+            'METADATA_PAGE_SIZE',
+            'DOWNLOAD_HELP_COUNTRY',
+            'DOWNLOAD_HELP_BBOX',
+            'DOWNLOAD_HELP_LANDONLY'
+        ]
     ]

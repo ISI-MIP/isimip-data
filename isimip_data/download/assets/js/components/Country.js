@@ -26,7 +26,7 @@ class Country extends Component {
   }
 
   render() {
-    const { selected, country, countryError, onSelect } = this.props
+    const { selected, country, countryError, onSelect, help } = this.props
     const { error, countries } = this.state
 
     return (
@@ -52,8 +52,11 @@ class Country extends Component {
             }
           </select>
         </div>
+        <div className="col-lg-12 mb-2">
+          <p className="text-muted small" dangerouslySetInnerHTML={{__html: help}}></p>
+        </div>
         {countryError &&
-          <div className="col-lg-12 text-right">
+          <div className="col-lg-12 mb-2">
             <p className="text-danger">{countryError}</p>
           </div>
         }

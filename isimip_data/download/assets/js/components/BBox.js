@@ -26,7 +26,7 @@ class BBox extends Component {
   }
 
   render() {
-    const { selected, bbox, bboxError, onSelect } = this.props
+    const { selected, bbox, bboxError, onSelect, help } = this.props
     const [ south, north, west, east ] = bbox
 
     return (
@@ -59,13 +59,15 @@ class BBox extends Component {
               type="number" placeholder="East" min="-180" max="180"
               value={east} onChange={e => this.handleChange(e, 3)} />
         </div>
+        <div className="col-lg-12 mb-2">
+          <p className="text-muted small" dangerouslySetInnerHTML={{__html: help}}></p>
+        </div>
         {bboxError &&
-          <div className="col-lg-12 mb-2 text-right">
+          <div className="col-lg-12 mb-2">
             <p className="text-danger">{bboxError}</p>
           </div>
         }
       </div>
-
     )
   }
 }

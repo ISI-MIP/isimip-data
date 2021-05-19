@@ -226,16 +226,19 @@ class App extends Component {
 
             <div className="mt-2">
               <Country selected={selected} country={country} countryError={countryError}
-                  onChange={this.handleCountryChange} onSelect={this.handleSelectChange} />
+                  onChange={this.handleCountryChange} onSelect={this.handleSelectChange}
+                  help={settings.DOWNLOAD_HELP_COUNTRY} />
             </div>
 
             <div className="mt-2">
               <BBox selected={selected} bbox={bbox} bboxError={bboxError}
-                  onChange={this.handleBBoxChange} onSelect={this.handleSelectChange} />
+                  onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
+                  help={settings.DOWNLOAD_HELP_BBOX} />
             </div>
 
             <div className="mt-2">
-              <Landonly selected={selected} onSelect={this.handleSelectChange} />
+              <Landonly selected={selected} onSelect={this.handleSelectChange}
+                        help={settings.DOWNLOAD_HELP_LANDONLY} />
             </div>
 
             {
