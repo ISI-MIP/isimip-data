@@ -78,6 +78,7 @@ class File(models.Model):
     checksum = models.TextField()
     checksum_type = models.TextField()
     specifiers = JSONField()
+    netcdf_header = JSONField()
     rights = models.TextField()
     identifiers = ArrayField(models.TextField())
     search_vector = SearchVectorField(null=True)

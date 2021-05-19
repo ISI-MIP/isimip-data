@@ -41,8 +41,8 @@ class FilesAdmin(ReadOnlyMixin, admin.ModelAdmin):
     search_fields = ('path', )
     list_display = ('path', 'size', 'version', 'created', 'updated')
 
-    readonly_fields = ('specifiers_json', )
-    exclude = ('specifiers', )
+    readonly_fields = ('specifiers_json', 'netcdf_header_json')
+    exclude = ('specifiers', 'netcdf_header')
 
     def get_queryset(self, request):
         return File.objects.using('metadata')
@@ -50,6 +50,12 @@ class FilesAdmin(ReadOnlyMixin, admin.ModelAdmin):
     def specifiers_json(self, instance):
         lines = [
             textwrap.fill(l, 80) for l in json.dumps(instance.specifiers, indent=2).splitlines()
+        ]
+        return mark_safe('<pre>%s</pre>' % '\n'.join(lines))
+
+    def netcdf_header_json(self, instance):
+        lines = [
+            textwrap.fill(l, 80) for l in json.dumps(instance.netcdf_header, indent=2).splitlines()
         ]
         return mark_safe('<pre>%s</pre>' % '\n'.join(lines))
 
