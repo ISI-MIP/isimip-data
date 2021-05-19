@@ -27,7 +27,7 @@ class Badges extends Component {
     return (
       <div className="d-lg-flex badges mb-2">
         <OverlayTrigger placement="bottom" overlay={this.renderTooltip('simulation_round', dataset.specifiers.simulation_round)}>
-          <span className="badge" style={{ backgroundColor: '#FABA53' }}>
+          <span className="badge badge-isimip">
             {dataset.specifiers.simulation_round}
           </span>
         </OverlayTrigger>

@@ -4,39 +4,9 @@
 
     position: relative;
 
-    ul {
-        display: none;
-        font-size: 18px;
-
-        position: absolute;
-        bottom: 0;
+    > img {
         width: 100%;
-        margin: 0;
-        padding: 0;
 
-        li {
-            list-style: none;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-
-            &:hover {
-                background-color: rgba(255, 255, 255, 0.5);
-            }
-        }
-
-        a, a:hover, a:focus, a:visited {
-            color: white;
-            text-decoration: none;
-            text-align: center;
-
-            display: block;
-            padding: 5px 20px;
-            width: 100%;
-        }
-    }
-
-    img {
         opacity: 1;
         -webkit-transition: opacity 0.5s ease-in-out;
         -moz-transition: opacity 0.5s ease-in-out;
@@ -45,12 +15,74 @@
         transition: opacity 0.5s ease-in-out;
     }
 
+    > div {
+        display: none; // becomes flex on hover
+        align-items: center;
+
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        ul {
+            font-size: 18px;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+
+            li {
+                list-style: none;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.5);
+                }
+            }
+
+            a, a:hover, a:focus, a:visited {
+                color: white;
+                text-decoration: none;
+                text-align: center;
+
+                display: block;
+                padding: 5px 20px;
+                width: 100%;
+            }
+        }
+
+        p {
+            font-size: 10px;
+            width: 100%;
+            text-align: center;
+
+            position: absolute;
+            margin: 0;
+            padding: 5px;
+
+            color: white;
+
+            a, a:hover, a:focus, a:visited {
+                color: white;
+                text-decoration: none;
+            }
+        }
+        p:first-child {
+            top: 0;
+        }
+        p:last-child {
+            bottom: 0;
+        }
+    }
+
     &:hover {
-        img {
+        > img {
             opacity: 0.3;
         }
-        ul {
-            display: block;
+        > div {
+            display: flex;
         }
     }
 }
