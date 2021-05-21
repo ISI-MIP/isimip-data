@@ -194,7 +194,7 @@ class DataCiteRenderer(object):
             self.xml.startElement('rightsList', {})
             for rights in self.data.get('rightsList', []):
                 self.render_node('rights', {
-                    'rightsURI': rights.get('rights_uri')
+                    'rightsURI': rights.get('rightsURI')
                 }, rights.get('rights'))
             self.xml.endElement('rightsList')
 
