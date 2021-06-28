@@ -27,9 +27,9 @@ def query_datasets(specifiers_dict, version_after, version_before):
 
 
 def format_affected_datasets(datasets):
-    datasets = Dataset.objects.using('metadata').filter(id__in=datasets)
+    datasets = Dataset.objects.using('metadata').filter(target=None, id__in=datasets)
     return format_html_join(
         mark_safe('<br>'),
         '{}#{}',
-        ((dataset.name, dataset.version) for dataset in datasets)
+        ((dataset.path, dataset.version) for dataset in datasets)
     )

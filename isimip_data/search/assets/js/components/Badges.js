@@ -23,56 +23,66 @@ class Badges extends Component {
   render() {
     const { dataset } = this.props
     const resource = dataset.resources[0]
+    const specifiers = dataset.merged_specifiers
 
     return (
       <div className="d-lg-flex badges mb-2">
-        <OverlayTrigger placement="bottom" overlay={this.renderTooltip('simulation_round', dataset.specifiers.simulation_round)}>
-          <span className="badge badge-isimip">
-            {dataset.specifiers.simulation_round}
-          </span>
-        </OverlayTrigger>
-
-        <OverlayTrigger placement="bottom" overlay={this.renderTooltip('product', dataset.specifiers.product)}>
-          <span className="badge badge-secondary">
-            {dataset.specifiers.product}
-          </span>
-        </OverlayTrigger>
-
-        {dataset.specifiers.category && <OverlayTrigger placement="bottom" overlay={this.renderTooltip('category', dataset.specifiers.category)}>
-          <span className="badge badge-success">
-            {dataset.specifiers.category}
-          </span>
-        </OverlayTrigger>}
-
-        {dataset.specifiers.sector && <OverlayTrigger placement="bottom" overlay={this.renderTooltip('sector', dataset.specifiers.sector)}>
-          <span className="badge badge-success">
-            {dataset.specifiers.sector}
-          </span>
-        </OverlayTrigger>}
-
-        {dataset.specifiers.publication && <OverlayTrigger placement="bottom" overlay={this.renderTooltip('publication', dataset.specifiers.publication)}>
-          <span className="badge badge-success">
-            {dataset.specifiers.publication}
-          </span>
-        </OverlayTrigger>}
-
-        {dataset.specifiers.climate_forcing && <OverlayTrigger placement="bottom" overlay={this.renderTooltip('climate_forcing', dataset.specifiers.climate_forcing)}>
-          <span className="badge badge-info">
-            {dataset.specifiers.climate_forcing}
-          </span>
-        </OverlayTrigger>}
-
-        {dataset.specifiers.period && <OverlayTrigger placement="bottom" overlay={this.renderTooltip('period', dataset.specifiers.period)}>
-          <span className="badge badge-light">
-            {dataset.specifiers.period}
-          </span>
-        </OverlayTrigger>}
-
-        {dataset.specifiers.model && <OverlayTrigger placement="bottom" overlay={<Tooltip><strong>Model</strong></Tooltip>}>
-          <span className="badge badge-primary">
-            {dataset.specifiers.model}
-          </span>
-        </OverlayTrigger>}
+        {
+          specifiers.simulation_round && specifiers.simulation_round.map((simulation_round, index) =>
+            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('simulation_round', simulation_round)}>
+              <span className="badge badge-isimip">{simulation_round}</span>
+            </OverlayTrigger>
+          )
+        }
+        {
+          specifiers.product && specifiers.product.map((product, index) =>
+            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('product', product)}>
+              <span className="badge badge-secondary">{product}</span>
+            </OverlayTrigger>
+          )
+        }
+        {
+          specifiers.category && specifiers.category.map((category, index) =>
+            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('category', category)}>
+              <span className="badge badge-success">{category}</span>
+            </OverlayTrigger>
+          )
+        }
+        {
+          specifiers.sector && specifiers.sector.map((sector, index) =>
+            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('sector', sector)}>
+              <span className="badge badge-success">{sector}</span>
+            </OverlayTrigger>
+          )
+        }
+        {
+          specifiers.publication && specifiers.publication.map((publication, index) =>
+            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('publication', publication)}>
+              <span className="badge badge-success">{publication}</span>
+            </OverlayTrigger>
+          )
+        }
+        {
+          specifiers.climate_forcing && specifiers.climate_forcing.map((climate_forcing, index) =>
+            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('climate_forcing', climate_forcing)}>
+              <span className="badge badge-info">{climate_forcing}</span>
+            </OverlayTrigger>
+          )
+        }
+        {
+          specifiers.period && specifiers.period.map((period, index) =>
+            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('period', period)}>
+              <span className="badge badge-light">{period}</span>
+            </OverlayTrigger>
+          )
+        }
+        {
+          specifiers.model && specifiers.model.map((model, index) =>
+            <OverlayTrigger key={index} placement="bottom" overlay={<Tooltip><strong>Model</strong></Tooltip>}>
+              <span className="badge badge-primary">{model}</span>
+            </OverlayTrigger>
+          )
+        }
 
         <span className="ml-auto invisible"></span>
 

@@ -13,16 +13,6 @@
     <header>
         <h1>{% trans 'Dataset' %}</h1>
         <h2>{{ dataset.name }}</h2>
-
-        <p>
-            {{ dataset.attributes.description }}
-        </p>
-
-        <h4>{% trans 'Size' %}: {{ dataset.size|filesizeformat }}</h4>
-        <h4>{% trans 'Version' %}: {{ dataset.version }}</h4>
-        <h4>{% trans 'Internal ID' %}: {{ dataset.id }}</h4>
-        <h4>{% trans 'Path' %}: {{ dataset.path }}</h4>
-
         <a href="{% url 'caveat_create' %}">
             {% trans 'Submit new caveat for this dataset' %}
         </a>
@@ -38,8 +28,11 @@
             <h3>{% trans 'Cite as' %}</h3>
             {% include 'metadata/cards/citation.html' with resource=dataset.resources.first citation_footer=True %}
 
+            <h3>{% trans 'Properties' %}</h3>
+            {% include 'metadata/cards/properties.html' with obj=dataset %}
+
             <h3>{% trans 'Specifiers' %}</h3>
-            {% include 'metadata/cards/specifiers.html' %}
+            {% include 'metadata/cards/specifiers.html' with obj=dataset %}
         </div>
         <div class="col-lg-4">
             {% if dataset.rights_dict %}

@@ -69,7 +69,7 @@
                         <dd class="col-sm-9">
                             {% include 'caveats/snippets/versions.html' %}
                         </dd>
-                        {% for identifier, specifiers in specifiers.items %}
+                        {% for identifier, specifiers in caveat.pretty_specifiers.items %}
                         <dt class="col-sm-3">{{ identifier }}</dt>
                         <dd class="col-sm-9">
                             {{specifiers|join:', '}}

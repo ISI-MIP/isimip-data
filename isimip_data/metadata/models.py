@@ -6,10 +6,11 @@ from django.contrib.postgres.fields import ArrayField, JSONField
 from django.contrib.postgres.search import SearchVectorField
 from django.db import models
 from django.urls import reverse
+from django.utils.functional import cached_property
 
 from .constants import RIGHTS
 from .managers import AttributeManager, DatasetManager
-from .utils import get_terms_of_use
+from .utils import get_terms_of_use, merge_identifiers, merge_specifiers, prettify_specifiers
 
 
 class Dataset(models.Model):
@@ -17,6 +18,7 @@ class Dataset(models.Model):
     objects = DatasetManager()
 
     id = models.UUIDField(primary_key=True)
+    target = models.ForeignKey('Dataset', on_delete=models.CASCADE, related_name='links')
 
     name = models.TextField()
     path = models.TextField()
@@ -42,23 +44,39 @@ class Dataset(models.Model):
     def __str__(self):
         return self.path
 
-    @property
+    @cached_property
+    def is_link(self):
+        return self.target is not None
+
+    @cached_property
     def is_global(self):
         return self.specifiers.get('region') == 'global'
 
-    @property
+    @cached_property
     def is_netcdf(self):
         return all([Path(file.path).suffix.startswith('.nc') for file in self.files.all()])
 
-    @property
-    def specifier_list(self):
-        return [(identifier, self.specifiers.get(identifier)) for identifier in self.identifiers]
+    @cached_property
+    def paths(self):
+        return [self.path] + list(self.links.values_list('path', flat=True))
 
-    @property
+    @cached_property
+    def pretty_specifiers(self):
+        return prettify_specifiers(self.merged_specifiers, self.merged_identifiers)
+
+    @cached_property
+    def merged_specifiers(self):
+        return merge_specifiers(self)
+
+    @cached_property
+    def merged_identifiers(self):
+        return merge_identifiers(self)
+
+    @cached_property
     def rights_dict(self):
         return RIGHTS.get(self.rights, {})
 
-    @property
+    @cached_property
     def terms_of_use(self):
         return get_terms_of_use()
 
@@ -70,6 +88,7 @@ class File(models.Model):
 
     id = models.UUIDField(primary_key=True)
     dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE, related_name='files')
+    target = models.ForeignKey('File', on_delete=models.CASCADE, related_name='links')
 
     name = models.TextField()
     path = models.TextField()
@@ -77,9 +96,8 @@ class File(models.Model):
     size = models.BigIntegerField()
     checksum = models.TextField()
     checksum_type = models.TextField()
-    specifiers = JSONField()
     netcdf_header = JSONField()
-    rights = models.TextField()
+    specifiers = JSONField()
     identifiers = ArrayField(models.TextField())
     search_vector = SearchVectorField(null=True)
 
@@ -94,41 +112,57 @@ class File(models.Model):
     def __str__(self):
         return self.path
 
-    @property
+    @cached_property
     def public(self):
         return self.dataset.public
 
-    @property
+    @cached_property
     def resources(self):
         return self.dataset.resources
 
-    @property
+    @cached_property
     def file_url(self):
         if self.dataset.public:
             return settings.FILES_BASE_URL + str(Path(self.path))
 
-    @property
+    @cached_property
     def json_url(self):
         if self.dataset.public:
             return settings.FILES_BASE_URL + str(Path(self.path).with_suffix('.json'))
 
-    @property
+    @cached_property
+    def is_link(self):
+        return self.target is not None
+
+    @cached_property
     def is_global(self):
         return self.specifiers.get('region') == 'global'
 
-    @property
+    @cached_property
     def is_netcdf(self):
         return Path(self.path).suffix.startswith('.nc')
 
-    @property
-    def specifier_list(self):
-        return [(identifier, self.specifiers.get(identifier)) for identifier in self.identifiers]
+    @cached_property
+    def paths(self):
+        return [self.path] + list(self.links.values_list('path', flat=True))
 
-    @property
+    @cached_property
+    def pretty_specifiers(self):
+        return prettify_specifiers(self.merged_specifiers, self.merged_identifiers)
+
+    @cached_property
+    def merged_specifiers(self):
+        return merge_specifiers(self)
+
+    @cached_property
+    def merged_identifiers(self):
+        return merge_identifiers(self)
+
+    @cached_property
     def rights_dict(self):
-        return RIGHTS.get(self.rights, {})
+        return RIGHTS.get(self.dataset.rights, {})
 
-    @property
+    @cached_property
     def terms_of_use(self):
         return get_terms_of_use()
 

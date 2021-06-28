@@ -3,15 +3,14 @@ from collections import defaultdict
 from uuid import UUID
 
 from django.db.models import Q
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render, reverse
 
 from isimip_data.annotations.models import Download, Figure, Reference
 from isimip_data.caveats.models import Caveat
 
 from .models import Attribute, Dataset, File, Resource
 from .renderers import BibTexRenderer, DataCiteRenderer
-from .utils import prettify_attributes
 
 
 def metadata(request):
@@ -38,7 +37,7 @@ def metadata(request):
 
 
 def dataset(request, pk=None, path=None):
-    queryset = Dataset.objects.using('metadata').prefetch_related('files')
+    queryset = Dataset.objects.using('metadata').prefetch_related('files', 'links')
 
     if pk is not None:
         obj = get_object_or_404(queryset, id=pk)
@@ -46,6 +45,11 @@ def dataset(request, pk=None, path=None):
         obj = get_object_or_404(queryset, path=path)
     else:
         raise RuntimeError('Either pk or path need to be provided')
+
+    try:
+        return HttpResponseRedirect(reverse('dataset', args=[str(obj.target.id)]), status=303)
+    except Dataset.DoesNotExist:
+        pass
 
     versions = Dataset.objects.using('metadata').filter(path=obj.path) \
                                                 .exclude(id=obj.id) \
@@ -61,7 +65,6 @@ def dataset(request, pk=None, path=None):
     return render(request, 'metadata/dataset.html', {
         'dataset': obj,
         'versions': versions,
-        'specifiers': prettify_attributes(obj.specifier_list),
         'figures': Figure.objects.filter(annotations__datasets__contains=[obj.id]),
         'downloads': Download.objects.filter(annotations__datasets__contains=[obj.id]),
         'references': Reference.objects.filter(annotations__datasets__contains=[obj.id]),
@@ -71,12 +74,19 @@ def dataset(request, pk=None, path=None):
 
 
 def file(request, pk=None, path=None):
+    queryset = File.objects.using('metadata').prefetch_related('links')
+
     if pk is not None:
-        obj = get_object_or_404(File.objects.using('metadata'), id=pk)
+        obj = get_object_or_404(queryset, id=pk)
     elif path is not None:
-        obj = get_object_or_404(File.objects.using('metadata'), path=path)
+        obj = get_object_or_404(queryset, path=path)
     else:
         raise RuntimeError('Either pk or path need to be provided')
+
+    try:
+        return HttpResponseRedirect(reverse('file', args=[str(obj.target.id)]), status=303)
+    except File.DoesNotExist:
+        pass
 
     versions = File.objects.using('metadata').filter(path=obj.path) \
                                              .exclude(id=obj.id) \
@@ -93,7 +103,6 @@ def file(request, pk=None, path=None):
         'file': obj,
         'parents': [obj.dataset],
         'versions': versions,
-        'specifiers': prettify_attributes(obj.specifier_list),
         'caveats': caveats,
         'caveats_versions': caveats_versions
     })

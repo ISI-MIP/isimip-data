@@ -3,11 +3,13 @@
 <div class="card">
     <div class="card-body">
         <dl class="row">
-        {% for key, value in specifiers.items %}
-        {% if key != 'description' %}
-            <dt class="col-sm-4">{{ key }}</dt>
-            <dd class="col-sm-8">{{ value }}</dd>
-        {% endif %}
+        {% for key, values in obj.pretty_specifiers.items %}
+        <dt class="col-sm-4">{{ key }}</dt>
+        <dd class="col-sm-8">
+            {% for value in values %}
+            <div>{{ value }}</div>
+            {% endfor %}
+        </dd>
         {% endfor %}
         </dl>
     </div>

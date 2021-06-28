@@ -51,37 +51,51 @@ def fetch_glossary():
     return glossary
 
 
-def prettify_attributes(attribute_list):
+def prettify_specifiers(specifiers, identifiers):
     glossary = fetch_glossary()
 
     pretty = OrderedDict()
-    for key, value in attribute_list:
+    for key, values in [(identifier, specifiers.get(identifier)) for identifier in identifiers]:
         try:
-            pretty_value = glossary[key][value]['title']
+            pretty_key = glossary['identifier'][key]['title']
         except (KeyError, TypeError):
-            pretty_value = value
+            pretty_key = key.replace('_', ' ').title()
 
-        pretty[key.replace('_', ' ').title()] = pretty_value
-
-    return pretty
-
-
-def prettify_attributes_dict(attribute_dict):
-    glossary = fetch_glossary()
-
-    pretty = OrderedDict()
-    for key, values in attribute_dict.items():
         pretty_values = []
         for value in values:
             try:
-                pretty_value = glossary[key][value]['title']
+                pretty_values.append(glossary[key][value]['title'])
             except (KeyError, TypeError):
-                pretty_value = value
-            pretty_values.append(pretty_value)
+                pretty_values.append(value)
 
-        pretty[key.replace('_', ' ').title()] = pretty_values
+        pretty[pretty_key] = pretty_values
 
     return pretty
+
+
+def merge_identifiers(obj):
+    identifiers = obj.identifiers
+
+    for link in obj.links.all():
+        for identifier in link.identifiers:
+            if identifier not in identifiers:
+                identifiers.append(identifier)
+
+    return identifiers
+
+
+def merge_specifiers(obj):
+    specifiers = {key: [value] for key, value in obj.specifiers.items()}
+
+    for link in obj.links.all():
+        for key, value in link.specifiers.items():
+            if key in specifiers:
+                if value not in specifiers[key]:
+                    specifiers[key].append(value)
+            else:
+                specifiers[key] = [value]
+
+    return specifiers
 
 
 def get_terms_of_use():

@@ -13,16 +13,6 @@
     <header>
         <h1>{% trans 'File' %}</h1>
         <h2>{{ file.name }}</h2>
-
-        <p>
-            {{ file.attributes.description }}
-        </p>
-
-        <h4>{% trans 'Size' %}: {{ file.size|filesizeformat }}</h4>
-        <h4>{% trans 'Version' %}: {{ file.version }}</h4>
-        <h4>{% trans 'ISIMIP ID' %}: {{ file.id }}</h4>
-        <h4>{% trans 'Path' %}: {{ file.path }}</h4>
-        <h4>{% trans 'Checksum' %}: {{ file.checksum }} ({{ file.checksum_type }})</h4>
     </header>
 
     <div class="row">
@@ -30,8 +20,11 @@
             <h3>{% trans 'Cite as' %}</h3>
             {% include 'metadata/cards/citation.html' with resource=file.dataset.resources.first citation_footer=True %}
 
+            <h3>{% trans 'Properties' %}</h3>
+            {% include 'metadata/cards/properties.html' with obj=file %}
+
             <h3>{% trans 'Specifiers' %}</h3>
-            {% include 'metadata/cards/specifiers.html' %}
+            {% include 'metadata/cards/specifiers.html' with obj=file %}
         </div>
         <div class="col-sm-4">
             {% if file.dataset.rights_dict %}
