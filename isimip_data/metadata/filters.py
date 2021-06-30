@@ -91,7 +91,7 @@ class SearchFilterBackend(BaseFilterBackend):
             queryset = queryset.filter(
                 search_vector=search_query
             ).annotate(
-                search_rank=search_rank,
+                search_rank=search_rank
             ).order_by('-search_rank', 'name')
 
         return queryset

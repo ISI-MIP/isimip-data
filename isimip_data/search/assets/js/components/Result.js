@@ -164,7 +164,7 @@ class Result extends Component {
             <strong>Path</strong>
           </div>
           <div className="col-lg-9">
-            {dataset.path}
+            {dataset.paths.map((path, index) => <div key={index}>{path}</div>)}
           </div>
         </div>
         <div className="row">

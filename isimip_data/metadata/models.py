@@ -58,7 +58,7 @@ class Dataset(models.Model):
 
     @cached_property
     def paths(self):
-        return [self.path] + list(self.links.values_list('path', flat=True))
+        return [self.path] + [link.path for link in self.links.all()]
 
     @cached_property
     def pretty_specifiers(self):
@@ -144,7 +144,7 @@ class File(models.Model):
 
     @cached_property
     def paths(self):
-        return [self.path] + list(self.links.values_list('path', flat=True))
+        return [self.path] + [link.path for link in self.links.all()]
 
     @cached_property
     def pretty_specifiers(self):
