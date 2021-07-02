@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from isimip_data.accounts.utils import get_full_name
 from isimip_data.annotations.models import Download, Figure
 from isimip_data.annotations.utils import query_datasets
+from isimip_data.metadata.utils import prettify_specifiers
 
 from .managers import ModerationManager
 
@@ -99,6 +100,10 @@ class Caveat(models.Model):
     @cached_property
     def has_figures(self):
         return self.figures.exists()
+
+    @cached_property
+    def pretty_specifiers(self):
+        return prettify_specifiers(self.specifiers, self.specifiers.keys())
 
     def get_absolute_url(self):
         return reverse('caveat', kwargs={'pk': self.pk})

@@ -26,7 +26,12 @@ class Pagination(PageNumberPagination):
 class DatasetViewSet(ReadOnlyModelViewSet):
 
     serializer_class = DatasetSerializer
-    queryset = Dataset.objects.using('metadata').prefetch_related('files', 'resources')
+    queryset = Dataset.objects.using('metadata').filter(target=None).prefetch_related(
+        'files',
+        'files__links',
+        'links',
+        'resources'
+    )
     pagination_class = Pagination
 
     filter_backends = (
@@ -45,7 +50,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         if Attribute.objects.using('metadata').filter(identifier=attribute).exists():
             # exclude the attribute from AttributeFilterBackend
             self.attribute_filter_exclude = attribute
-            queryset = self.filter_queryset(self.get_queryset())
+            queryset = self.filter_queryset(Dataset.objects.using('metadata'))
             values = queryset.histogram(attribute)
             return Response(values)
         else:
@@ -74,7 +79,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
 class FileViewSet(ReadOnlyModelViewSet):
 
     serializer_class = FileSerializer
-    queryset = File.objects.using('metadata')
+    queryset = File.objects.using('metadata').filter(target=None).select_related('dataset').prefetch_related('links')
     pagination_class = Pagination
 
     filter_backends = (

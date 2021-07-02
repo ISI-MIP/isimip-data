@@ -1,0 +1,24 @@
+{% load i18n %}
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-4">{% trans 'Path' %}</dt>
+            <dd class="col-sm-8">
+                {% for path in obj.paths %}
+                {{ path }}
+                {% endfor %}
+            </dd>
+            <dt class="col-sm-4">{% trans 'ISIMIP ID' %}</dt>
+            <dd class="col-sm-8">{{ obj.id }}</dd>
+            <dt class="col-sm-4">{% trans 'Version' %}</dt>
+            <dd class="col-sm-8">{{ obj.version }}</dd>
+            <dt class="col-sm-4">{% trans 'Size' %}</dt>
+            <dd class="col-sm-8">{{ obj.size|filesizeformat }}</dd>
+            {% if obj.checksum %}
+            <dt class="col-sm-4">{% trans 'Checksum' %} ({{ file.checksum_type }})</dt>
+            <dd class="col-sm-8">{{ file.checksum }}</dd>
+            {% endif %}
+        </dl>
+    </div>
+</div>

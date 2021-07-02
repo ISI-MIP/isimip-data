@@ -155,15 +155,24 @@ class Result extends Component {
 
   renderAttributes(dataset) {
     const { glossary } = this.props
+    const specifiers = dataset.pretty_specifiers
 
     return (
       <li className="list-group-item">
         <div className="row">
           <div className="col-lg-3">
-            <strong>Size</strong>
+            <strong>Path</strong>
           </div>
           <div className="col-lg-9">
-            {get_size(dataset.size)}
+            {dataset.paths.map((path, index) => <div key={index}>{path}</div>)}
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-3">
+            <strong>ISIMIP ID</strong>
+          </div>
+          <div className="col-lg-9">
+            {dataset.id}
           </div>
         </div>
         <div className="row">
@@ -176,36 +185,23 @@ class Result extends Component {
         </div>
         <div className="row">
           <div className="col-lg-3">
-            <strong>ISIMIP id</strong>
+            <strong>Size</strong>
           </div>
           <div className="col-lg-9">
-            {dataset.id}
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-lg-3">
-            <strong>ISIMIP path</strong>
-          </div>
-          <div className="col-lg-9">
-            {dataset.path}
+            {get_size(dataset.size)}
           </div>
         </div>
         {
-          dataset.identifiers.map(identifier => {
-            const specifier = dataset.specifiers[identifier]
-
-            let label
-            if (glossary['identifier'] && glossary['identifier'][identifier]) {
-              label = glossary['identifier'][identifier].title
-            }
+          Object.keys(specifiers).map((key, index) => {
+            const values = specifiers[key]
 
             return (
-              <div key={identifier} className="row">
+              <div key={index} className="row">
                 <div className="col-lg-3">
-                  <strong>{label || identifier}</strong>
+                  <strong>{key}</strong>
                 </div>
                 <div className="col-lg-9">
-                  {specifier}
+                  {values.map((v, i) => <div key={i}>{v}</div>)}
                 </div>
               </div>
             )

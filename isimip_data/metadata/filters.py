@@ -47,7 +47,7 @@ class PathFilterBackend(BaseFilterBackend):
         if path_list:
             q = Q()
             for path in path_list:
-                q |= Q(path__startswith=path)
+                q |= Q(path__startswith=path) | Q(links__path__startswith=path)
             queryset = queryset.filter(q)
 
         return queryset
@@ -91,7 +91,7 @@ class SearchFilterBackend(BaseFilterBackend):
             queryset = queryset.filter(
                 search_vector=search_query
             ).annotate(
-                search_rank=search_rank,
+                search_rank=search_rank
             ).order_by('-search_rank', 'name')
 
         return queryset
@@ -131,7 +131,7 @@ class AttributeFilterBackend(BaseFilterBackend):
                 q = Q()
                 for value in request.GET.getlist(identifier):
                     if value:
-                        q |= Q(specifiers__contains={identifier: value})
+                        q |= Q(specifiers__contains={identifier: value}) | Q(links__specifiers__contains={identifier: value})
                 queryset = queryset.filter(q)
 
         return queryset
@@ -147,7 +147,7 @@ class TreeFilterBackend(BaseFilterBackend):
         if tree_list:
             q = Q()
             for tree in tree_list:
-                q |= Q(tree_path__startswith=tree)
+                q |= Q(tree_path__startswith=tree) | Q(links__tree_path__startswith=tree)
 
             queryset = queryset.filter(q)
 

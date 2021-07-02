@@ -21,7 +21,7 @@ class ReadOnlyMixin(object):
 
 class DatasetAdmin(ReadOnlyMixin, admin.ModelAdmin):
     search_fields = ('path', )
-    list_display = ('path', 'size', 'version', 'created', 'updated', 'public')
+    list_display = ('path', 'size', 'version', 'created', 'updated', 'public', 'link')
     list_filter = ('version', 'public')
 
     readonly_fields = ('specifiers_json', )
@@ -29,6 +29,11 @@ class DatasetAdmin(ReadOnlyMixin, admin.ModelAdmin):
 
     def get_queryset(self, request):
         return Dataset.objects.using('metadata')
+
+    def link(self, instance):
+        return instance.is_link
+
+    link.boolean = True
 
     def specifiers_json(self, instance):
         lines = [
@@ -39,13 +44,18 @@ class DatasetAdmin(ReadOnlyMixin, admin.ModelAdmin):
 
 class FilesAdmin(ReadOnlyMixin, admin.ModelAdmin):
     search_fields = ('path', )
-    list_display = ('path', 'size', 'version', 'created', 'updated')
+    list_display = ('path', 'size', 'version', 'created', 'updated', 'link')
 
     readonly_fields = ('specifiers_json', 'netcdf_header_json')
     exclude = ('specifiers', 'netcdf_header')
 
     def get_queryset(self, request):
         return File.objects.using('metadata')
+
+    def link(self, instance):
+        return instance.is_link
+
+    link.boolean = True
 
     def specifiers_json(self, instance):
         lines = [

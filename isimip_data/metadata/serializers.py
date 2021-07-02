@@ -19,6 +19,7 @@ class DatasetFileSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'path',
+            'paths',
             'version',
             'size',
             'checksum',
@@ -125,9 +126,23 @@ class DatasetAnnotationSerializer(serializers.ModelSerializer):
         )
 
 
+class DatasetLinkSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Dataset
+        fields = (
+            'id',
+            'name',
+            'path',
+            'specifiers',
+            'identifiers'
+        )
+
+
 class DatasetSerializer(serializers.ModelSerializer):
 
     files = DatasetFileSerializer(many=True)
+    links = DatasetLinkSerializer(many=True)
     resources = DatasetResourceSerializer(many=True)
     caveats = serializers.SerializerMethodField()
     annotations = serializers.SerializerMethodField()
@@ -142,17 +157,21 @@ class DatasetSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'path',
+            'paths',
             'version',
             'size',
             'specifiers',
             'identifiers',
             'search_rank',
             'public',
+            'merged_specifiers',
+            'pretty_specifiers',
             'url',
             'metadata_url',
             'filelist_url',
             'rights',
             'files',
+            'links',
             'resources',
             'caveats',
             'annotations',
@@ -181,8 +200,22 @@ class DatasetSerializer(serializers.ModelSerializer):
             return serializer.data
 
 
+class FileLinkSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Dataset
+        fields = (
+            'id',
+            'name',
+            'path',
+            'specifiers',
+            'identifiers'
+        )
+
+
 class FileSerializer(serializers.ModelSerializer):
 
+    links = FileLinkSerializer(many=True)
     search_rank = serializers.FloatField(required=False, default=0.0)
     metadata_url = serializers.SerializerMethodField()
     rights = serializers.JSONField(source='rights_dict')
@@ -192,18 +225,23 @@ class FileSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
+            'path',
+            'paths',
             'version',
             'size',
             'checksum',
             'checksum_type',
             'specifiers',
             'identifiers',
+            'merged_specifiers',
+            'pretty_specifiers',
+            'links',
             'search_rank',
             'url',
             'metadata_url',
             'file_url',
             'rights',
-            'terms_of_use'
+            'terms_of_use',
         )
 
     def get_metadata_url(self, obj):

@@ -11,14 +11,6 @@ class DatasetQuerySet(models.QuerySet):
         field = 'specifiers__%s' % identifier
         return self.values_list(field).annotate(count=models.Count(field)).order_by(field)
 
-    def attribute_values(self, identifier):
-        field = 'specifiers__%s' % identifier
-        return self.values_list(field).annotate(count=models.Count(field)).values_list(field, flat=True).order_by(field)
-
-    def specifiers(self, identifier):
-        field = 'specifiers__%s' % identifier
-        return self.values_list(field).values_list(field, flat=True).distinct().order_by(field)
-
 
 class DatasetManager(models.Manager):
 

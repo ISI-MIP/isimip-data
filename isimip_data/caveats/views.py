@@ -7,7 +7,6 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import resolve
 from django.utils.translation import gettext as _
 from isimip_data.metadata.models import Dataset
-from isimip_data.metadata.utils import prettify_attributes_dict
 
 from .forms import CaveatForm, CommentForm
 from .mail import (send_caveat_notifications_mail,
@@ -24,19 +23,17 @@ def caveats(request):
 
 
 def caveat(request, pk=None):
-    caveat = get_object_or_404(Caveat.objects.public(request.user), id=pk)
+    queryset = Caveat.objects.public(request.user)
+    caveat = get_object_or_404(queryset, id=pk)
     comments = caveat.comments.public(request.user)
-    datasets = Dataset.objects.using('metadata').filter(id__in=caveat.datasets)
+    datasets = Dataset.objects.using('metadata').filter(target=None, id__in=caveat.datasets)
 
     return render(request, 'caveats/caveat.html', {
         'caveat': caveat,
-        'specifiers': prettify_attributes_dict(caveat.specifiers),
         'comments': comments,
         'datasets': datasets,
         'comment_form': CommentForm(caveat=caveat, creator=request.user)
     })
-
-# caveat.get_creator_display()
 
 
 @login_required
