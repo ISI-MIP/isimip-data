@@ -1,5 +1,6 @@
 import pytest
 from django.core.management import call_command
+from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 
 
@@ -35,25 +36,41 @@ def test_metadata_file(client, files):
 def test_dataset_id(client, datasets):
     for dataset in datasets:
         response = client.get(reverse('dataset', args=[dataset.id]))
-        assert response.status_code == 200
+        try:
+            dataset.target
+            assert response.status_code == 303
+        except ObjectDoesNotExist:
+            assert response.status_code == 200
 
 
 def test_dataset_path(client, datasets):
     for dataset in datasets:
         response = client.get(reverse('dataset', args=[dataset.path]))
-        assert response.status_code == 200
+        try:
+            dataset.target
+            assert response.status_code == 303
+        except ObjectDoesNotExist:
+            assert response.status_code == 200
 
 
 def test_file_id(client, files):
     for file in files:
         response = client.get(reverse('file', args=[file.id]))
-        assert response.status_code == 200
+        try:
+            file.target
+            assert response.status_code == 303
+        except ObjectDoesNotExist:
+            assert response.status_code == 200
 
 
 def test_file_path(client, files):
     for file in files:
         response = client.get(reverse('file', args=[file.path]))
-        assert response.status_code == 200
+        try:
+            file.target
+            assert response.status_code == 303
+        except ObjectDoesNotExist:
+            assert response.status_code == 200
 
 
 def test_attributes(client, db):
