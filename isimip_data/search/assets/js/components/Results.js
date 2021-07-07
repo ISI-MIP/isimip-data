@@ -43,25 +43,21 @@ class Results extends Component {
   fetch() {
     const params = Object.assign({}, this.props.params)
 
-    // reset results the results for the first page
-    if (params.page == 1) {
-      this.setState({ isLoading: true, results: [] })
-    } else {
-      this.setState({ isLoading: true })
-    }
-
     // increase the page_size, if page is set, but no results are present
     if (params.page > 1 && this.state.results.length == 0) {
       params.page_size = this.props.pageSize * params.page
       params.page = 1
     }
 
+    // set the isLoading flag
+    this.setState({ isLoading: true })
+
     DatasetApi.fetchDatasets(params).then(data => {
       this.setState({
         isLoading: false,
         loadMore: data.next ? true: false,
         count: data.count,
-        results: this.state.results.concat(data.results)
+        results: (params.page == 1) ? data.results : this.state.results.concat(data.results)
       })
     })
   }
