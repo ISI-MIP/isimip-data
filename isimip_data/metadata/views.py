@@ -116,7 +116,9 @@ def resources(request):
 
 
 def resource(request, doi=None):
-    resource = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
+    queryset = Resource.objects.using('metadata').prefetch_related('datasets__links')
+
+    resource = get_object_or_404(queryset, doi=doi)
 
     references = defaultdict(list)
     if resource.datacite is not None:
