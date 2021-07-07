@@ -62,11 +62,12 @@ def prettify_specifiers(specifiers, identifiers):
             pretty_key = key.replace('_', ' ').title()
 
         pretty_values = []
-        for value in values:
-            try:
-                pretty_values.append(glossary[key][value]['title'])
-            except (KeyError, TypeError):
-                pretty_values.append(value)
+        if values:
+            for value in values:
+                try:
+                    pretty_values.append(glossary[key][value]['title'])
+                except (KeyError, TypeError):
+                    pretty_values.append(value)
 
         pretty[pretty_key] = pretty_values
 
