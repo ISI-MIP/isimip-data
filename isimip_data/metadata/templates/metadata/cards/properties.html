@@ -11,14 +11,18 @@
             </dd>
             <dt class="col-sm-4">{% trans 'ISIMIP ID' %}</dt>
             <dd class="col-sm-8">{{ obj.id }}</dd>
-            <dt class="col-sm-4">{% trans 'Version' %}</dt>
-            <dd class="col-sm-8">{{ obj.version }}</dd>
             <dt class="col-sm-4">{% trans 'Size' %}</dt>
             <dd class="col-sm-8">{{ obj.size|filesizeformat }}</dd>
             {% if obj.checksum %}
             <dt class="col-sm-4">{% trans 'Checksum' %} ({{ file.checksum_type }})</dt>
             <dd class="col-sm-8">{{ file.checksum }}</dd>
             {% endif %}
+            <dt class="col-sm-4">{% trans 'Version' %}</dt>
+            <dd class="col-sm-8">
+                <span class="badge badge-dark">
+                    {{ obj.version }}
+                </span>
+            </dd>
         </dl>
     </div>
 </div>

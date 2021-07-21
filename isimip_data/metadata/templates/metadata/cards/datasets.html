@@ -50,6 +50,10 @@
                     {{ period }}
                 </span>
                 {% endfor %}
+                <span class="badge badge-dark"
+                    data-toggle="tooltip" data-placement="bottom" title="Version">
+                    {{ dataset.version }}
+                </span>
             </div>
 
             <a href="{% url 'dataset' dataset.id %}" target="_blank">
