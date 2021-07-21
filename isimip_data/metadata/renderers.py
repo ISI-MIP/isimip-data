@@ -237,7 +237,7 @@ class DataCiteRenderer(object):
 class BibTexRenderer(object):
 
     def render(self, data):
-        authors = ' and '.join([creator.get('name') for creator in data.datacite.get('creators', [])])
+        authors = ' and '.join([creator.get('name') for creator in data.datacite.get('creators', []) if creator.get('name')])
 
         return '''
 @misc{{{doi},

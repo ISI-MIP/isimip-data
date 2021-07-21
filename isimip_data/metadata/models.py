@@ -214,7 +214,14 @@ class Resource(models.Model):
 
     @property
     def publication_date(self):
-        date_string = next(item.get('date') for item in self.datacite.get('dates', []) if item.get('dateType') == 'Issued')
+        date_string = None
+        for item in self.datacite.get('dates', []):
+            try:
+                if item['dateType'] == 'Issued':
+                    date_string = item['date']
+            except (TypeError, KeyError):
+                pass
+
         if date_string is not None:
             try:
                 return datetime.strptime(date_string, '%Y-%m-%d')
@@ -227,8 +234,10 @@ class Resource(models.Model):
             rights_uri = rights.get('rightsURI')
             if rights_uri:
                 rights = filter(lambda item: item.get('rights_uri') == rights_uri, RIGHTS.values())
-                if rights:
+                try:
                     return next(rights)
+                except StopIteration:
+                    pass
 
     @property
     def terms_of_use(self):

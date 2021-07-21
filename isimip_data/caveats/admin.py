@@ -6,11 +6,9 @@ from django.core.validators import validate_email
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path
 from django.utils.translation import gettext_lazy as _
-
 from isimip_data.annotations.models import Download, Figure
 from isimip_data.annotations.utils import format_affected_datasets
 from isimip_data.annotations.widgets import SpecifierWidget
-from isimip_data.metadata.models import Dataset
 
 from .mail import (get_caveat_announcement_mail, get_comment_announcement_mail,
                    send_caveat_announcement_mail,

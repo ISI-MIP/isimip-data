@@ -20,4 +20,5 @@ Run the tests with the `--reuse-db` option:
 
 ```bash
 pytest --reuse-db
+pytest --reuse-db --cov --cov-report html
 ```

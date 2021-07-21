@@ -1,0 +1,55 @@
+[
+  {
+    "model": "annotations.annotation",
+    "pk": 1,
+    "fields": {
+      "title": "Annotation",
+      "specifiers": {
+        "model": [
+          "model"
+        ],
+        "sector": [
+          "sector"
+        ]
+      },
+      "datasets": "[\"14e8b51a-89c2-4ee0-a357-77eebca63f6a\", \"1744b083-0a67-406a-8fa9-8340e8e4ab31\"]",
+      "version_after": "",
+      "version_before": "",
+      "figures": [],
+      "downloads": [],
+      "references": []
+    }
+  },
+  {
+    "model": "annotations.figure",
+    "pk": 1,
+    "fields": {
+      "title": "Figure",
+      "image": "figures/test.png",
+      "caption": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "credits": "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna",
+      "created": "2021-07-13T14:09:51.484Z",
+      "updated": "2021-07-13T14:09:51.484Z"
+    }
+  },
+  {
+    "model": "annotations.download",
+    "pk": 1,
+    "fields": {
+      "title": "Download",
+      "file": "files/test.dat",
+      "created": "2021-07-13T14:10:17.542Z",
+      "updated": "2021-07-13T14:10:17.542Z"
+    }
+  },
+  {
+    "model": "annotations.reference",
+    "pk": 1,
+    "fields": {
+      "title": "Reference",
+      "identifier": "https://doi.org/10.12345/12345",
+      "identifier_type": "doi",
+      "reference_type": "OTHER"
+    }
+  }
+]
