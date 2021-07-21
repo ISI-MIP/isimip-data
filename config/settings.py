@@ -9,6 +9,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = (os.getenv('DEBUG', 'False').upper() == 'TRUE')
 
+DEBUG_TOOLBAR = os.getenv('DEBUG_TOOLBAR', 'False').upper() == 'TRUE'
+
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost 127.0.0.1 ::1').split()
 
 INTERNAL_IPS = ['127.0.0.1']
@@ -36,8 +38,9 @@ INSTALLED_APPS = [
     # 3rd party apps
     'rest_framework',
     'rest_framework.authtoken',
-    'django_filters',
     'django_cleanup',
+    'django_extensions',
+    'django_filters',
     'adminsortable2',
     'allauth',
     'allauth.account',
@@ -45,9 +48,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.orcid',
 ]
 
-if DEBUG:
+if DEBUG_TOOLBAR:
     INSTALLED_APPS += [
-        'django_extensions',
         'debug_toolbar',
     ]
 
@@ -59,10 +61,11 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware'
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-if DEBUG:
+if DEBUG_TOOLBAR:
     MIDDLEWARE = [
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     ] + MIDDLEWARE
@@ -119,6 +122,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root/')
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+FIXTURE_DIRS = (
+   os.path.join(BASE_DIR, 'testing/fixtures'),
 )
 
 LOGIN_URL = '/account/login/'

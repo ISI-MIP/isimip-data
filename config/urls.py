@@ -82,7 +82,7 @@ handler403 = 'isimip_data.core.views.forbidden'
 handler404 = 'isimip_data.core.views.not_found'
 handler500 = 'isimip_data.core.views.internal_server_error'
 
-if settings.DEBUG:
+if settings.DEBUG_TOOLBAR:
     import debug_toolbar
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
