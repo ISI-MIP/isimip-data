@@ -96,6 +96,8 @@ DATABASES = {
     'metadata': dj_database_url.parse(os.getenv('DATABASE_METADATA'))
 }
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 LANGUAGE_CODE = 'en-us'
 
 LANGUAGES = [

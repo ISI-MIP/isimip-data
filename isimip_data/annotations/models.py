@@ -1,7 +1,7 @@
 import mimetypes
 from pathlib import Path
 
-from django.contrib.postgres.fields import ArrayField, JSONField
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -10,7 +10,7 @@ from .utils import query_datasets
 
 class Annotation(models.Model):
     title = models.CharField(max_length=128)
-    specifiers = JSONField(default=dict)
+    specifiers = models.JSONField(default=dict)
     datasets = ArrayField(models.UUIDField(), blank=True, default=list)
     version_after = models.CharField(max_length=8, blank=True)
     version_before = models.CharField(max_length=8, blank=True)

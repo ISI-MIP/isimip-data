@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.contrib.postgres.fields import ArrayField, JSONField
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -54,7 +54,7 @@ class Caveat(models.Model):
     updated = models.DateTimeField(auto_now=True)
     severity = models.TextField(choices=SEVERITY_CHOICES)
     status = models.TextField(choices=STATUS_CHOICES)
-    specifiers = JSONField(default=dict)
+    specifiers = models.JSONField(default=dict)
     datasets = ArrayField(models.UUIDField(), blank=True, default=list)
     version_after = models.CharField(max_length=8, blank=True)
     version_before = models.CharField(max_length=8, blank=True)

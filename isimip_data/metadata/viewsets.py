@@ -132,9 +132,9 @@ class TreeViewSet(ViewSet):
         ''')
 
         response_list = [{
-                'identifier': row.identifier,
-                'specifier': row.specifier,
-                'tree': row.specifier
+                'identifier': row.identifier.strip('"'),
+                'specifier': row.specifier.strip('"'),
+                'tree': row.specifier.strip('"')
         } for row in raw_queryset]
 
         # loop over path list arguments
@@ -165,9 +165,9 @@ class TreeViewSet(ViewSet):
                     '''.format(placeholder), current_tree_elements)
 
                     response_node['items'] = [{
-                        'identifier': row.identifier,
-                        'specifier': row.specifier,
-                        'tree': (current_tree / row.specifier).as_posix()
+                        'identifier': row.identifier.strip('"'),
+                        'specifier': row.specifier.strip('"'),
+                        'tree': (current_tree / row.specifier.strip('"')).as_posix()
                     } for row in raw_queryset]
 
                 current_tree_elements.append('items')

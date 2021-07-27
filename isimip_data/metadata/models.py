@@ -2,7 +2,7 @@ from datetime import datetime
 from pathlib import Path
 
 from django.conf import settings
-from django.contrib.postgres.fields import ArrayField, JSONField
+from django.contrib.postgres.fields import ArrayField
 from django.contrib.postgres.search import SearchVectorField
 from django.db import models
 from django.urls import reverse
@@ -24,7 +24,7 @@ class Dataset(models.Model):
     path = models.TextField()
     version = models.TextField()
     size = models.BigIntegerField()
-    specifiers = JSONField()
+    specifiers = models.JSONField()
     rights = models.TextField()
     identifiers = ArrayField(models.TextField())
     search_vector = SearchVectorField(null=True)
@@ -96,8 +96,8 @@ class File(models.Model):
     size = models.BigIntegerField()
     checksum = models.TextField()
     checksum_type = models.TextField()
-    netcdf_header = JSONField()
-    specifiers = JSONField()
+    netcdf_header = models.JSONField()
+    specifiers = models.JSONField()
     identifiers = ArrayField(models.TextField())
     search_vector = SearchVectorField(null=True)
 
@@ -176,7 +176,7 @@ class Resource(models.Model):
     doi = models.TextField()
     title = models.TextField()
     paths = ArrayField(models.TextField())
-    datacite = JSONField()
+    datacite = models.JSONField()
 
     created = models.DateTimeField()
     updated = models.DateTimeField()
@@ -250,7 +250,7 @@ class Resource(models.Model):
 class Tree(models.Model):
 
     id = models.UUIDField(primary_key=True)
-    tree_dict = JSONField()
+    tree_dict = models.JSONField()
 
     created = models.DateTimeField()
     updated = models.DateTimeField()
