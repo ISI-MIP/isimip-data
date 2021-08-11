@@ -17,3 +17,5 @@ Allow: /download/$
 Disallow: /*/subscribe/
 Disallow: /*/unsubscribe/
 Disallow: /*/create/
+
+Sitemap: https://data.isimip.org/sitemap.xml
