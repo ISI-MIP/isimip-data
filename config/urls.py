@@ -1,18 +1,20 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path, re_path
+from django.contrib.sitemaps import Sitemap, views as sitemaps_views
+from django.urls import include, path, re_path, reverse
 from django.views.generic.base import TemplateView
 from rest_framework import routers
-
 from isimip_data.accounts.views import (profile_delete, profile_delete_success,
                                         profile_update)
+from isimip_data.caveats.sitemaps import CaveatSitemap
 from isimip_data.caveats.views import (caveat, caveat_create, caveat_subscribe,
                                        caveat_unsubscribe, caveats,
                                        comment_create, subscriptions)
 from isimip_data.core.viewsets import SettingsViewSet
 from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
+from isimip_data.metadata.sitemaps import DatasetSitemap, FileSitemap, ResourceSitemap
 from isimip_data.metadata.views import (attributes, dataset, file, metadata,
                                         resource, resource_bibtex,
                                         resource_datacite_json,
@@ -32,6 +34,24 @@ router.register(r'files', FileViewSet, basename='file')
 router.register(r'resources', ResourceViewSet, basename='resource')
 router.register(r'facets', FacetViewSet, basename='facet')
 router.register(r'settings', SettingsViewSet, basename='setting')
+
+
+class StaticSitemap(Sitemap):
+
+    def items(self):
+        return ['metadata', 'resources', 'search', 'download', 'caveats', 'home']
+
+    def location(self, item):
+        return reverse(item)
+
+
+sitemaps = {
+    'static': StaticSitemap,
+    'caveats': CaveatSitemap,
+    'datasets': DatasetSitemap,
+    'files': FileSitemap,
+    'resources': ResourceSitemap
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -75,6 +95,10 @@ urlpatterns = [
 
     path('', TemplateView.as_view(template_name='core/home.html'), name='home'),
     path('robots.txt', TemplateView.as_view(template_name='core/robots.txt'), name='robots.txt'),
+
+    path('sitemap.xml', sitemaps_views.index, {'sitemaps': sitemaps}),
+    path('sitemap-<section>.xml', sitemaps_views.sitemap, {'sitemaps': sitemaps},
+         name='django.contrib.sitemaps.views.sitemap')
 ]
 
 handler400 = 'isimip_data.core.views.bad_request'

@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     # isimip_data apps
     'isimip_data.accounts',
     'isimip_data.annotations',
