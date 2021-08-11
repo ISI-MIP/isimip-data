@@ -244,7 +244,7 @@ class Resource(models.Model):
         return get_terms_of_use()
 
     def get_absolute_url(self):
-        return reverse('resource', kwargs={'pk': self.pk})
+        return reverse('resource', kwargs={'doi': self.doi})
 
 
 class Tree(models.Model):
