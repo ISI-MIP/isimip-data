@@ -123,7 +123,14 @@ def resource(request, doi=None):
     references = defaultdict(list)
     if resource.datacite is not None:
         for identifier in resource.datacite.get('relatedIdentifiers'):
-            if identifier.get('relationType') in ['IsNewVersionOf', 'IsDocumentedBy', 'Cites', 'IsDerivedFrom',  'HasPart']:
+            if identifier.get('relationType') in [
+                'IsNewVersionOf',
+                'IsPreviousVersionOf',
+                'IsDocumentedBy',
+                'Cites',
+                'IsDerivedFrom',
+                'HasPart'
+            ]:
                 references[identifier.get('relationType')].append(identifier)
             else:
                 references['Other'].append(identifier)

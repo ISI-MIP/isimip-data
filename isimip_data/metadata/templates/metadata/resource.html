@@ -17,6 +17,25 @@
 
     <div class="row">
         <div class="col-sm-12">
+            {% if references.IsPreviousVersionOf %}
+            <div class="card">
+                <div class="card-body">
+                    <p class="new-doi">
+                        Please note that a <strong>newer version</strong> of this DOI is available:
+                        {% with references.IsPreviousVersionOf|first as resource %}
+                        <a class="doi-link" href="{{ resource.relatedIdentifier }}" target="_blank">
+                            {{ resource.relatedIdentifier }}
+                        </a>
+                        {% endwith %}
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
             <h3>{% trans 'Cite as' %}</h3>
             {% include 'metadata/cards/citation.html' %}
         </div>
@@ -40,6 +59,12 @@
                         <dt class="col-sm-3 text-right">Title:</dt>
                         <dd class="col-sm-9">{{ resource.title }}</dd>
                     </dl>
+                    {% if resource.version %}
+                    <dl class="row">
+                        <dt class="col-sm-3 text-right">Version:</dt>
+                        <dd class="col-sm-9">{{ resource.version }}</dd>
+                    </dl>
+                    {% endif %}
                     <dl class="row">
                         <dt class="col-sm-3 text-right">Creators:</dt>
                         <dd class="col-sm-9">
@@ -159,6 +184,11 @@
         </div>
     </div>
 
+    {% if references.IsPreviousVersionOf %}
+    <h3>{% trans 'Is previous version of' %}</h3>
+    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsPreviousVersionOf %}
+    {% endif %}
+
     {% if references.IsNewVersionOf %}
     <h3>{% trans 'Is new version of' %}</h3>
     {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsNewVersionOf %}
@@ -169,14 +199,14 @@
     {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsDocumentedBy %}
     {% endif %}
 
-    {% if references.Cites %}
-    <h3>{% trans 'References' %}</h3>
-    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.Cites %}
-    {% endif %}
-
     {% if references.IsDerivedFrom %}
     <h3>{% trans 'Is derived from' %}</h3>
     {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsDerivedFrom %}
+    {% endif %}
+
+    {% if references.Cites %}
+    <h3>{% trans 'Cites' %}</h3>
+    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.Cites %}
     {% endif %}
 
     {% if references.Other %}

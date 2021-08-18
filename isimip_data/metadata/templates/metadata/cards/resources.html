@@ -2,8 +2,7 @@
         <table class="table table-condensed smaller mb-0">
             <thead>
                 <tr>
-                    <th style="width: 40%;">Title</th>
-                    <th style="width: 30%;">Paths</th>
+                    <th style="width: 70%;">Title / Paths</th>
                     <th style="width: 30%;">DOI</th>
                 </tr>
             </thead>
@@ -12,15 +11,10 @@
                 <tr>
                     <td>
                         <a href="{% url 'resource' resource.doi %}">
-                            {{ resource.title }}
+                            {{ resource.title_with_version }}
                         </a>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                        {% for path in resource.paths %}
-                            <li>{{ path }}</li>
-                        {% endfor %}
-                        </ul>
+                        <br />
+                        <code>{{ resource.paths|join:', ' }}</code>
                     </td>
                     <td>
                         <a class="doi-link" href="{{ resource.doi_url }}" target="_blank">

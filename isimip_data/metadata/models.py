@@ -175,6 +175,7 @@ class Resource(models.Model):
     id = models.UUIDField(primary_key=True)
     doi = models.TextField()
     title = models.TextField()
+    version = models.TextField()
     paths = ArrayField(models.TextField())
     datacite = models.JSONField()
 
@@ -200,6 +201,13 @@ class Resource(models.Model):
     @property
     def doi_url(self):
         return 'https://doi.org/{}'.format(self.doi)
+
+    @property
+    def title_with_version(self):
+        if not self.version or self.title.endswith(')'):
+            return self.title
+        else:
+            return f'{self.title} (v{self.version})'
 
     @property
     def creators_str(self):
