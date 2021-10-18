@@ -1,10 +1,6 @@
 from django.db import models
 
 
-class JSONKeysFunc(models.Func):
-    function = 'jsonb_object_keys'
-
-
 class DatasetQuerySet(models.QuerySet):
 
     def histogram(self, identifier):

@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block main %}
+
+<div class="container">
+    <header>
+        <h1>{% trans 'Indicators' %}</h1>
+    </header>
+
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            {% for indicator in indicators %}
+            <li class="list-group-item">
+                <h4>
+                    <a href="{% url 'indicator' indicator.id %}">{{ indicator.title }}</a>
+                </h4>
+                {% if indicator.description %}
+                <p>
+                    {{ indicator.description }}
+                </p>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</div>
+
+{% endblock %}

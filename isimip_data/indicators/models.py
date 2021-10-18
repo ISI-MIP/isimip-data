@@ -1,6 +1,8 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.utils.functional import cached_property
 
+from isimip_data.core.models import JsonObjectKeys
 from isimip_data.annotations.models import Download, Figure, Reference
 from isimip_data.annotations.utils import query_datasets
 
@@ -18,6 +20,20 @@ class Indicator(models.Model):
 
     def __str__(self):
         return self.title
+
+    @cached_property
+    def table(self):
+        columns = self.values.annotate(specifier_keys=JsonObjectKeys('specifiers')) \
+                             .values_list('specifier_keys', flat=True).distinct().order_by('specifier_keys')
+        return {
+            'columns': columns,
+            'rows': [
+                {
+                    'specifiers': [value.specifiers.get(column) for column in columns],
+                    'value': value.value
+                } for value in self.values.order_by('-value')
+            ]
+        }
 
 
 class IndicatorValue(models.Model):

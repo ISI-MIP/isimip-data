@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block main %}
+
+<div class="container">
+    <header>
+        <h1>{{ indicator.title }}</h1>
+        {% if indicator.description %}
+        <p>
+            {{ indicator.description }}
+        </p>
+        {% endif %}
+    </header>
+
+    <div class="card">
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    {% for column in indicator.table.columns %}
+                    <th>{{ column }}</th>
+                    {% endfor %}
+                     <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in indicator.table.rows %}
+                <tr>
+                    {% for specifiers in row.specifiers %}
+                    <td>
+                        {{ specifiers|join:'|' }}
+                    </td>
+                    {% endfor %}
+                    <td>
+                        <strong>{{ row.value }}</strong>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}
