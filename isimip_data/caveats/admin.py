@@ -6,6 +6,7 @@ from django.core.validators import validate_email
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path
 from django.utils.translation import gettext_lazy as _
+
 from isimip_data.annotations.models import Download, Figure
 from isimip_data.annotations.utils import format_affected_datasets
 from isimip_data.annotations.widgets import SpecifierWidget

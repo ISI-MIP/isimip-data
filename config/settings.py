@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'isimip_data.caveats',
     'isimip_data.core',
     'isimip_data.download',
+    'isimip_data.indicators',
     'isimip_data.metadata',
     'isimip_data.search',
     # 3rd party apps
