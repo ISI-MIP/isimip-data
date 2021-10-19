@@ -51,6 +51,18 @@ def fetch_glossary():
     return glossary
 
 
+def prettify_identifiers(identifiers):
+    glossary = fetch_glossary()
+    pretty = []
+    for identifier in identifiers:
+        try:
+            pretty.append(glossary['identifier'][identifier]['title'])
+        except (KeyError, TypeError):
+            pretty.append(identifier.replace('_', ' ').title())
+
+    return pretty
+
+
 def prettify_specifiers(specifiers, identifiers):
     glossary = fetch_glossary()
 

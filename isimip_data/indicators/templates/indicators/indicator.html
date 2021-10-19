@@ -15,11 +15,11 @@
     </header>
 
     <div class="card">
-        <table class="table table-condensed">
+        <table class="table small">
             <thead>
                 <tr>
-                    {% for column in indicator.table.columns %}
-                    <th>{{ column }}</th>
+                    {% for identifier in indicator.table.pretty_identifiers %}
+                    <th>{{ identifier }}</th>
                     {% endfor %}
                      <th>Value</th>
                 </tr>
@@ -27,7 +27,7 @@
             <tbody>
                 {% for row in indicator.table.rows %}
                 <tr>
-                    {% for specifiers in row.specifiers %}
+                    {% for identifier, specifiers in row.pretty_specifiers.items %}
                     <td>
                         {{ specifiers|join:'|' }}
                     </td>
