@@ -5,15 +5,45 @@
 {% block main %}
 
 <div class="container">
-    <header>
-        <h1>{{ indicator.title }}</h1>
-        {% if indicator.description %}
-        <p>
-            {{ indicator.description }}
-        </p>
-        {% endif %}
-    </header>
+    <div class="row justify-content-md-center mb-3">
+        <div class="col-md-8">
+            <header>
+                <h1>{{ indicator.title }}</h1>
+                {% if indicator.description %}
+                <p>
+                    {{ indicator.description }}
+                </p>
+                {% endif %}
+            </header>
+        </div>
+    </div>
 
+    {% if indicator.figures.all %}
+    <h3>{% trans 'Figures' %}</h3>
+    {% include 'annotations/cards/figures.html' with figures=indicator.figures.all %}
+    {% endif %}
+
+    {% if indicator.references.all %}
+    <h3>{% trans 'References' %}</h3>
+    {% include 'annotations/cards/references.html' with references=indicator.references.all %}
+    {% endif %}
+
+    {% if indicator.downloads.all %}
+    <h3>{% trans 'Downloads' %}</h3>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            {% for download in indicator.downloads.all %}
+            <li class="list-group-item related-identifier">
+                <a href="{{ download.file.url }}" target="blank">
+                    {{ download.title }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <h3>Indicator values</h3>
     <div class="card">
         <table class="table small">
             <thead>
@@ -21,7 +51,8 @@
                     {% for identifier in indicator.table.pretty_identifiers %}
                     <th>{{ identifier }}</th>
                     {% endfor %}
-                     <th>Value</th>
+                    <th>Value</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +65,11 @@
                     {% endfor %}
                     <td>
                         <strong>{{ row.value }}</strong>
+                    </td>
+                    <td>
+                        <a href="{{ row.search_url }}" target="blank">
+                            Search
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}

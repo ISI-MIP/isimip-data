@@ -5,7 +5,7 @@ from django.utils.functional import cached_property
 from isimip_data.annotations.models import Download, Figure, Reference
 from isimip_data.annotations.utils import query_datasets
 from isimip_data.core.models import JsonObjectKeys
-from isimip_data.metadata.utils import prettify_identifiers, prettify_specifiers
+from isimip_data.metadata.utils import get_search_url, prettify_identifiers, prettify_specifiers
 
 
 class Indicator(models.Model):
@@ -36,7 +36,8 @@ class Indicator(models.Model):
             rows.append({
                 'specifiers': specifiers,
                 'pretty_specifiers': pretty_specifiers,
-                'value': value.value
+                'value': value.value,
+                'search_url': get_search_url(specifiers, identifiers)
             })
 
         return {

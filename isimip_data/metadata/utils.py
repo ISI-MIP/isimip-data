@@ -1,7 +1,7 @@
 import json
 import logging
 from collections import OrderedDict
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 from urllib.request import HTTPError, urlopen
 
 from django.conf import settings
@@ -109,6 +109,14 @@ def merge_specifiers(obj):
                 specifiers[key] = [value]
 
     return specifiers
+
+
+def get_search_url(specifiers, identifiers):
+    url = '/search/'
+    for key, values in [(identifier, specifiers.get(identifier)) for identifier in identifiers]:
+        for value in values:
+            url += '{}/{}/'.format(quote(key), quote(value))
+    return url
 
 
 def get_terms_of_use():
