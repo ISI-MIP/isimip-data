@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def fetch_json(glossary_location):
-    glossary_json = {}
+    glossary_json = None
     try:
         if urlparse(glossary_location).scheme:
             with urlopen(glossary_location) as response:
