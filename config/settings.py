@@ -182,15 +182,13 @@ SETTINGS_EXPORT = [
     'LOGOUT_URL'
 ]
 
-if DEBUG:
+if os.getenv('CACHE') == 'dummy':
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'isimip-data',
-            'TIMEOUT': 5
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
         }
     }
-else:
+elif os.getenv('CACHE') == 'redis':
     CACHES = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
@@ -200,7 +198,14 @@ else:
             }
         }
     }
-
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'isimip-data',
+            'TIMEOUT': 5
+        }
+    }
 
 SEARCH_SIMILARITY = 0.5
 SEARCH_SIMILARITY_LIMIT = 3
