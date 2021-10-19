@@ -1,16 +1,18 @@
 import json
 import logging
 from collections import OrderedDict
+
 from urllib.parse import urlparse, quote
 from urllib.request import HTTPError, urlopen
 
+from django.core.cache import cache
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
 
 def fetch_json(glossary_location):
-    glossary_json = None
+    glossary_json = {}
     try:
         if urlparse(glossary_location).scheme:
             with urlopen(glossary_location) as response:
@@ -30,23 +32,26 @@ def fetch_json(glossary_location):
 
 
 def fetch_glossary():
-    glossary = {}
-    for location in settings.PROTOCOL_LOCATIONS:
-        glossary_location = location.rstrip('/') + '/glossary.json'
-        glossary_json = fetch_json(glossary_location)
+    glossary = cache.get('glossary')
+    if glossary is None:
+        glossary = {}
+        for location in settings.PROTOCOL_LOCATIONS:
+            glossary_location = location.rstrip('/') + '/glossary.json'
+            glossary_json = fetch_json(glossary_location)
+            if glossary_json is not None:
+                try:
+                    for identifier, values in glossary_json.get('terms', {}).items():
+                        if identifier not in glossary:
+                            glossary[identifier] = values
+                        else:
+                            glossary[identifier].update(values)
 
-        if glossary_json is not None:
-            try:
-                for identifier, values in glossary_json['terms'].items():
-                    if identifier not in glossary:
-                        glossary[identifier] = values
-                    else:
-                        glossary[identifier].update(values)
+                except TypeError:
+                    logger.error('TypeError for {}'.format(location))
+                except AttributeError:
+                    logger.error('AttributeError for {}'.format(location))
 
-            except TypeError:
-                logger.error('TypeError for {}'.format(location))
-            except AttributeError:
-                logger.error('AttributeError for {}'.format(location))
+        cache.set('glossary', glossary)
 
     return glossary
 

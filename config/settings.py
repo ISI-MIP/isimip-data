@@ -187,6 +187,7 @@ if DEBUG:
         'default': {
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
             'LOCATION': 'isimip-data',
+            'TIMEOUT': 5
         }
     }
 else:
