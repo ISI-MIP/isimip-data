@@ -29,7 +29,7 @@ class Indicator(models.Model):
 
         pretty_identifiers = prettify_identifiers(identifiers)
         rows = []
-        for value in self.values.order_by('-value'):
+        for value in self.values.all():
             specifiers = {identifier: value.specifiers.get(identifier) for identifier in identifiers}
             pretty_specifiers = prettify_specifiers(specifiers, identifiers)
 
@@ -41,7 +41,7 @@ class Indicator(models.Model):
             })
 
         return {
-            'identifiers': identifiers,
+            'identifiers': list(identifiers),
             'pretty_identifiers': pretty_identifiers,
             'rows': rows
         }
