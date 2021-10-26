@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
+import Scale from './Scale'
+
 class App extends Component {
 
   constructor(props) {
@@ -99,8 +101,8 @@ class App extends Component {
                     <td key={index}>{specifiers.join('|')}</td>
                   ))
                 }
-                <td>
-                  <strong>{row.value}</strong>
+                <td style={{paddingTop: 0, paddingBottom: 0, width: 150}}>
+                  <Scale value={row.value} minimum={table.minimum} maximum={table.maximum} />
                 </td>
                 <td>
                   <a href="{row.search_url}" target="blank">Search</a>

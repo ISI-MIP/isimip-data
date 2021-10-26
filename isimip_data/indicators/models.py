@@ -12,6 +12,8 @@ class Indicator(models.Model):
 
     title = models.CharField(max_length=128)
     description = models.TextField(blank=True)
+    minimum = models.FloatField(default=0)
+    maximum = models.FloatField(default=1)
     figures = models.ManyToManyField(Figure, related_name='indicators')
     downloads = models.ManyToManyField(Download, related_name='indicators')
     references = models.ManyToManyField(Reference, related_name='indicators')
@@ -43,7 +45,9 @@ class Indicator(models.Model):
         return {
             'identifiers': list(identifiers),
             'pretty_identifiers': pretty_identifiers,
-            'rows': rows
+            'rows': rows,
+            'minimum': self.minimum,
+            'maximum': self.maximum
         }
 
 

@@ -7,6 +7,7 @@ import bytes from 'bytes'
 import Cookies from 'js-cookie'
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
+import Scale from 'isimip_data/indicators/assets/js/components/Scale'
 import Badges from './Badges'
 
 
@@ -286,18 +287,18 @@ class Result extends Component {
 
   renderIndicators(dataset) {
     return (
-      <li className="list-group-item">
+      <li className="list-group-item result-indicators">
         <ul className="list-unstyled">
           {
             dataset.indicators.map(indicator => {
               return (
                 <li className="result-indicator" key={indicator.id}>
                   <div className="row">
-                    <div className="col-md-10">
+                    <div className="col-md-8">
                       <a href={indicator.url} target="_blank">{indicator.title}</a>
                     </div>
-                    <div className="col-md-2 text-right">
-                      <strong>{indicator.value}</strong>
+                    <div className="col-md-4">
+                      <Scale value={indicator.value} minimum={indicator.minimum} maximum={indicator.maximum} />
                     </div>
                   </div>
                 </li>

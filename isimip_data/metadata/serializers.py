@@ -144,6 +144,8 @@ class DatasetIndicatorValueSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(source='indicator.id')
     title = serializers.CharField(source='indicator.title')
+    minimum = serializers.FloatField(source='indicator.minimum')
+    maximum = serializers.FloatField(source='indicator.maximum')
     url = serializers.SerializerMethodField()
 
     class Meta:
@@ -151,8 +153,10 @@ class DatasetIndicatorValueSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'value',
-            'url'
+            'minimum',
+            'maximum',
+            'url',
+            'value'
         )
 
     def get_url(self, obj):
