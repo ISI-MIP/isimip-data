@@ -80,7 +80,7 @@ class IndicatorValue(models.Model):
         ordering = ('indicator', )
 
     def __str__(self):
-        return self.indicator.title
+        return '{} [{}]'.format(self.indicator.title, self.specifier_values)
 
     @property
     def specifier_values(self):
