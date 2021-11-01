@@ -16,6 +16,7 @@ addons:
 env:
   global:
   - SECRET_KEY=thisisnotaverysecretkey
+  - CACHE=dummy
   - DATABASE=postgresql://@/isimip_data
   - DATABASE_METADATA=postgresql://@/isimip_metadata
   - FILES_BASE_URL=http://isimip/

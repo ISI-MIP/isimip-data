@@ -4,6 +4,7 @@ from rest_framework.reverse import reverse
 from isimip_data.annotations.models import (Annotation, Download, Figure,
                                             Reference)
 from isimip_data.caveats.models import Caveat
+from isimip_data.indicators.models import IndicatorValue
 
 from .models import Dataset, File, Resource
 
@@ -139,6 +140,30 @@ class DatasetLinkSerializer(serializers.ModelSerializer):
         )
 
 
+class DatasetIndicatorValueSerializer(serializers.ModelSerializer):
+
+    id = serializers.IntegerField(source='indicator.id')
+    title = serializers.CharField(source='indicator.title')
+    minimum = serializers.FloatField(source='indicator.minimum')
+    maximum = serializers.FloatField(source='indicator.maximum')
+    reverse = serializers.FloatField(source='indicator.reverse')
+    url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = IndicatorValue
+        fields = (
+            'id',
+            'title',
+            'minimum',
+            'maximum',
+            'url',
+            'value'
+        )
+
+    def get_url(self, obj):
+        return reverse('indicator', args=[obj.indicator.id])
+
+
 class DatasetSerializer(serializers.ModelSerializer):
 
     files = DatasetFileSerializer(many=True)
@@ -146,6 +171,7 @@ class DatasetSerializer(serializers.ModelSerializer):
     resources = DatasetResourceSerializer(many=True)
     caveats = serializers.SerializerMethodField()
     annotations = serializers.SerializerMethodField()
+    indicators = serializers.SerializerMethodField()
     search_rank = serializers.FloatField(required=False, default=0.0)
     metadata_url = serializers.SerializerMethodField()
     filelist_url = serializers.SerializerMethodField()
@@ -175,6 +201,7 @@ class DatasetSerializer(serializers.ModelSerializer):
             'resources',
             'caveats',
             'annotations',
+            'indicators',
             'terms_of_use',
             'is_global',
             'is_netcdf'
@@ -197,6 +224,12 @@ class DatasetSerializer(serializers.ModelSerializer):
         if self.context.get('request').GET.get('annotations'):
             queryset = Annotation.objects.filter(datasets__contains=[obj.id])
             serializer = DatasetAnnotationSerializer(queryset, many=True)
+            return serializer.data
+
+    def get_indicators(self, obj):
+        if self.context.get('request').GET.get('indicators'):
+            queryset = IndicatorValue.objects.filter(datasets__contains=[obj.id]).select_related('indicator')
+            serializer = DatasetIndicatorValueSerializer(queryset, many=True)
             return serializer.data
 
 

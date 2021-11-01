@@ -49,9 +49,6 @@ class AnnotationAdmin(admin.ModelAdmin):
     readonly_fields = ('affected_datasets', )
     exclude = ('datasets', 'figures', 'downloads')
 
-    search_fields = ('title', )
-    list_display = ('title', )
-
     fieldsets = (
         (None, {
             'fields': ('title', )

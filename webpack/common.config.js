@@ -13,6 +13,10 @@ module.exports = {
       './isimip_data/download/assets/scss/download.scss',
       './isimip_data/download/assets/js/download.js',
     ],
+    indicators: [
+      './isimip_data/indicators/assets/scss/indicators.scss',
+      './isimip_data/indicators/assets/js/indicators.js',
+    ],
     metadata: [
       './isimip_data/metadata/assets/scss/metadata.scss',
       './isimip_data/metadata/assets/js/metadata.js',

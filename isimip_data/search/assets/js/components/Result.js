@@ -7,6 +7,7 @@ import bytes from 'bytes'
 import Cookies from 'js-cookie'
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
+import Scale from 'isimip_data/indicators/assets/js/components/Scale'
 import Badges from './Badges'
 
 
@@ -20,11 +21,13 @@ class Result extends Component {
       showAttributes: false,
       showFiles: false,
       showCaveats: false,
+      showIndicators: false,
       csrfToken: Cookies.get('csrftoken')
     }
     this.toggleAttributes = this.toggleAttributes.bind(this)
     this.toggleFiles = this.toggleFiles.bind(this)
     this.toggleCaveats = this.toggleCaveats.bind(this)
+    this.toggleIndicators = this.toggleIndicators.bind(this)
     this.handleDownload = this.handleDownload.bind(this)
   }
 
@@ -51,6 +54,11 @@ class Result extends Component {
     this.setState({ showCaveats: !this.state.showCaveats})
   }
 
+  toggleIndicators(e) {
+    e.preventDefault()
+    this.setState({ showIndicators: !this.state.showIndicators})
+  }
+
   handleDownload(e, files) {
     e.preventDefault()
     files.map(file => {
@@ -60,7 +68,7 @@ class Result extends Component {
 
   renderDataset(dataset) {
     const { glossary, onSelect, isSelected } = this.props
-    const { showAttributes, showFiles, showCaveats } = this.state
+    const { showAttributes, showFiles, showCaveats, showIndicators } = this.state
     const inputId = `${dataset.id}-input`
 
     return (
@@ -145,6 +153,17 @@ class Result extends Component {
               </span>}
               {!showCaveats && <span>
                 Caveats <FontAwesomeIcon icon={faChevronDown} />
+              </span>}
+            </button>
+          </div>}
+
+          {dataset.indicators.length > 0 && <div className="d-inline">
+            <button className="btn btn-link" onClick={this.toggleIndicators}>
+              {showIndicators && <span>
+                Indicators <FontAwesomeIcon icon={faChevronUp} />
+              </span>}
+              {!showIndicators && <span>
+                Indicators <FontAwesomeIcon icon={faChevronDown} />
               </span>}
             </button>
           </div>}
@@ -266,6 +285,31 @@ class Result extends Component {
     )
   }
 
+  renderIndicators(dataset) {
+    return (
+      <li className="list-group-item result-indicators">
+        <ul className="list-unstyled">
+          {
+            dataset.indicators.map(indicator => {
+              return (
+                <li className="result-indicator" key={indicator.id}>
+                  <div className="row">
+                    <div className="col-md-8">
+                      <a href={indicator.url} target="_blank">{indicator.title}</a>
+                    </div>
+                    <div className="col-md-4">
+                      <Scale value={indicator.value} minimum={indicator.minimum} maximum={indicator.maximum} />
+                    </div>
+                  </div>
+                </li>
+              )
+            })
+          }
+        </ul>
+      </li>
+    )
+  }
+
   renderConfigureDownloadForm(files) {
     const { csrfToken } = this.state
 
@@ -285,7 +329,7 @@ class Result extends Component {
 
   render() {
     const { dataset } = this.props
-    const { showAttributes, showFiles, showCaveats } = this.state
+    const { showAttributes, showFiles, showCaveats, showIndicators } = this.state
 
     return (
       <div className="card result">
@@ -294,6 +338,7 @@ class Result extends Component {
           {showAttributes && this.renderAttributes(dataset)}
           {showFiles && this.renderFiles(dataset)}
           {showCaveats && this.renderCaveats(dataset)}
+          {showIndicators && this.renderIndicators(dataset)}
         </ul>
       </div>
     )

@@ -23,7 +23,7 @@
     "fields": {
       "title": "Input category",
       "attribute": "category",
-      "order": 12
+      "order": 14
     }
   },
   {
@@ -50,7 +50,7 @@
     "fields": {
       "title": "Climate variable",
       "attribute": "climate_variable",
-      "order": 15
+      "order": 17
     }
   },
   {
@@ -59,7 +59,7 @@
     "fields": {
       "title": "Input subcategory",
       "attribute": "subcategory",
-      "order": 13
+      "order": 15
     }
   },
   {
@@ -77,7 +77,7 @@
     "fields": {
       "title": "Socio-economic dataset",
       "attribute": "soc_dataset",
-      "order": 14
+      "order": 16
     }
   },
   {
@@ -86,7 +86,7 @@
     "fields": {
       "title": "Geographic dataset",
       "attribute": "geo_dataset",
-      "order": 16
+      "order": 18
     }
   },
   {
@@ -95,7 +95,7 @@
     "fields": {
       "title": "Output variable",
       "attribute": "variable",
-      "order": 11
+      "order": 13
     }
   },
   {
@@ -104,7 +104,7 @@
     "fields": {
       "title": "Temporal resolution",
       "attribute": "time_step",
-      "order": 10
+      "order": 11
     }
   },
   {
@@ -132,6 +132,24 @@
       "title": "Simulation period",
       "attribute": "period",
       "order": 3
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 28,
+    "fields": {
+      "title": "Sensitivity scenario",
+      "attribute": "sens_scenario",
+      "order": 10
+    }
+  },
+  {
+    "model": "search.facet",
+    "pk": 29,
+    "fields": {
+      "title": "Spacial resolution",
+      "attribute": "resolution",
+      "order": 12
     }
   }
 ]

@@ -1,9 +1,11 @@
 import json
 import logging
 from collections import OrderedDict
-from urllib.parse import urlparse
+
+from urllib.parse import urlparse, quote
 from urllib.request import HTTPError, urlopen
 
+from django.core.cache import cache
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
@@ -30,25 +32,40 @@ def fetch_json(glossary_location):
 
 
 def fetch_glossary():
-    glossary = {}
-    for location in settings.PROTOCOL_LOCATIONS:
-        glossary_location = location.rstrip('/') + '/glossary.json'
-        glossary_json = fetch_json(glossary_location)
+    glossary = cache.get('glossary')
+    if glossary is None:
+        glossary = {}
+        for location in settings.PROTOCOL_LOCATIONS:
+            glossary_location = location.rstrip('/') + '/glossary.json'
+            glossary_json = fetch_json(glossary_location)
+            if glossary_json is not None:
+                try:
+                    for identifier, values in glossary_json.get('terms', {}).items():
+                        if identifier not in glossary:
+                            glossary[identifier] = values
+                        else:
+                            glossary[identifier].update(values)
 
-        if glossary_json is not None:
-            try:
-                for identifier, values in glossary_json['terms'].items():
-                    if identifier not in glossary:
-                        glossary[identifier] = values
-                    else:
-                        glossary[identifier].update(values)
+                except TypeError:
+                    logger.error('TypeError for {}'.format(location))
+                except AttributeError:
+                    logger.error('AttributeError for {}'.format(location))
 
-            except TypeError:
-                logger.error('TypeError for {}'.format(location))
-            except AttributeError:
-                logger.error('AttributeError for {}'.format(location))
+        cache.set('glossary', glossary)
 
     return glossary
+
+
+def prettify_identifiers(identifiers):
+    glossary = fetch_glossary()
+    pretty = []
+    for identifier in identifiers:
+        try:
+            pretty.append(glossary['identifier'][identifier]['title'])
+        except (KeyError, TypeError):
+            pretty.append(identifier.replace('_', ' ').title())
+
+    return pretty
 
 
 def prettify_specifiers(specifiers, identifiers):
@@ -97,6 +114,14 @@ def merge_specifiers(obj):
                 specifiers[key] = [value]
 
     return specifiers
+
+
+def get_search_url(specifiers, identifiers):
+    url = '/search/'
+    for key, values in [(identifier, specifiers.get(identifier)) for identifier in identifiers]:
+        for value in values:
+            url += '{}/{}/'.format(quote(key), quote(value))
+    return url
 
 
 def get_terms_of_use():

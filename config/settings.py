@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'isimip_data.caveats',
     'isimip_data.core',
     'isimip_data.download',
+    'isimip_data.indicators',
     'isimip_data.metadata',
     'isimip_data.search',
     # 3rd party apps
@@ -181,14 +182,13 @@ SETTINGS_EXPORT = [
     'LOGOUT_URL'
 ]
 
-if DEBUG:
+if os.getenv('CACHE') == 'dummy':
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'isimip-data',
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
         }
     }
-else:
+elif os.getenv('CACHE') == 'redis':
     CACHES = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
@@ -198,7 +198,14 @@ else:
             }
         }
     }
-
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'isimip-data',
+            'TIMEOUT': 5
+        }
+    }
 
 SEARCH_SIMILARITY = 0.5
 SEARCH_SIMILARITY_LIMIT = 3
