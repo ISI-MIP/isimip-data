@@ -58,7 +58,7 @@ class IndicatorAdmin(admin.ModelAdmin):
     inlines = [FigureInline, DownloadInline, ReferenceInline]
 
     search_fields = ('title', 'description')
-    list_display = ('title', )
+    list_display = ('title', 'minimum', 'maximum', 'reverse')
     exclude = ('datasets', 'figures', 'downloads', 'references')
 
     def get_urls(self):

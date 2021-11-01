@@ -146,6 +146,7 @@ class DatasetIndicatorValueSerializer(serializers.ModelSerializer):
     title = serializers.CharField(source='indicator.title')
     minimum = serializers.FloatField(source='indicator.minimum')
     maximum = serializers.FloatField(source='indicator.maximum')
+    reverse = serializers.FloatField(source='indicator.reverse')
     url = serializers.SerializerMethodField()
 
     class Meta:

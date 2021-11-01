@@ -10,7 +10,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      order: '-value'
+      order: this.props.table.reverse ? 'value' : '-value'
     }
   }
 

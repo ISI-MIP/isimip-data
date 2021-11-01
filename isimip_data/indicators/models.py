@@ -1,6 +1,7 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 
 from isimip_data.annotations.models import Download, Figure, Reference
 from isimip_data.annotations.utils import query_datasets
@@ -12,8 +13,18 @@ class Indicator(models.Model):
 
     title = models.CharField(max_length=128)
     description = models.TextField(blank=True)
-    minimum = models.FloatField(default=0)
-    maximum = models.FloatField(default=1)
+    minimum = models.FloatField(
+        default=0,
+        help_text=_('The minimum value for the scale visualization of this indicator.')
+    )
+    maximum = models.FloatField(
+        default=1,
+        help_text=_('The maximum value for the scale visualization of this indicator.')
+    )
+    reverse = models.BooleanField(
+        default=False,
+        help_text=_('Designates whether the values of this indicator should be ordered from small to large.')
+    )
     figures = models.ManyToManyField(Figure, related_name='indicators')
     downloads = models.ManyToManyField(Download, related_name='indicators')
     references = models.ManyToManyField(Reference, related_name='indicators')
@@ -47,7 +58,8 @@ class Indicator(models.Model):
             'pretty_identifiers': pretty_identifiers,
             'rows': rows,
             'minimum': self.minimum,
-            'maximum': self.maximum
+            'maximum': self.maximum,
+            'reverse': self.reverse
         }
 
 
