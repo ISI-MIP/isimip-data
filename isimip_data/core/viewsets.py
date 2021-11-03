@@ -16,8 +16,9 @@ class SettingsViewSet(ListModelMixin, GenericViewSet):
             'FILES_BASE_URL',
             'FILES_API_URL',
             'METADATA_PAGE_SIZE',
-            'DOWNLOAD_HELP_COUNTRY',
-            'DOWNLOAD_HELP_BBOX',
-            'DOWNLOAD_HELP_LANDONLY'
+            'DOWNLOAD_HELP_CUTOUT_BBOX',
+            'DOWNLOAD_HELP_MASK_COUNTRY',
+            'DOWNLOAD_HELP_MASK_BBOX',
+            'DOWNLOAD_HELP_MASK_LANDONLY'
         ]
     ]

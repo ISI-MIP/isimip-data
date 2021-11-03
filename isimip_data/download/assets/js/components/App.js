@@ -23,8 +23,8 @@ class App extends Component {
       settings: {},
       paths: [...props.paths],
       pathsError: [],
-      selected: '',
-      selectedError: '',
+      task: '',
+      taskError: '',
       country: '',
       countryError: '',
       bbox: ['', '', '', ''],
@@ -54,7 +54,7 @@ class App extends Component {
   }
 
   handleSelectChange(value) {
-    this.setState({ selected: value, selectedError: '' })
+    this.setState({ task: value, taskError: '', countryError: '', bboxError: '' })
   }
 
   handleCountryChange(value) {
@@ -68,33 +68,33 @@ class App extends Component {
   handleSubmit(e) {
     e.preventDefault()
 
-    const { settings, paths, selected, country, bbox } = this.state
+    const { settings, paths, task, country, bbox } = this.state
     let pathsError = [],
-        selectedError = '',
+        taskError = '',
         countryError = '',
         bboxError = ''
 
-    if (selected) {
-      if (selected == 'country') {
+    if (task) {
+      if (['mask_country'].includes(task)) {
         if (country) {
-          this.submit(settings.FILES_API_URL, { paths, country })
+          this.submit(settings.FILES_API_URL, { paths, task, country })
         } else {
           countryError = 'Please select a country.'
         }
-      } else if (selected == 'bbox') {
+      } else if (['cutout_bbox', 'mask_bbox'].includes(task)) {
         if (bbox && bbox[0] !== '' && bbox[1] !== '' && bbox[2] !== '' && bbox[3] !== '') {
-          this.submit(settings.FILES_API_URL, { paths, bbox })
+          this.submit(settings.FILES_API_URL, { paths, task, bbox })
         } else {
           bboxError = 'Please give a valid bounding box.'
         }
-      } else if (selected == 'landonly') {
-          this.submit(settings.FILES_API_URL, { paths, landonly: true })
+      } else {
+          this.submit(settings.FILES_API_URL, { paths, task })
       }
     } else {
-      selectedError = 'Please select one of the options.'
+      taskError = 'Please select one of the options.'
     }
 
-    this.setState({ pathsError, selectedError, countryError, bboxError })
+    this.setState({ pathsError, taskError, countryError, bboxError })
   }
 
   submit(url, data) {
@@ -186,7 +186,7 @@ class App extends Component {
   }
 
   renderForm() {
-    const { settings, paths, pathsError, selected, selectedError, country, countryError, bbox, bboxError, serverError } = this.state
+    const { settings, paths, pathsError, task, taskError, country, countryError, bbox, bboxError, serverError } = this.state
 
     return (
       <form onSubmit={this.handleSubmit} noValidate>
@@ -213,41 +213,60 @@ class App extends Component {
           </div>
         </div>
 
-        <h3>Restrict download area</h3>
+        <h3>Cut out area</h3>
         <div className="card">
           <div className="card-body">
             <p>
-              Download file sizes can be reduced by restricting the geographical extend of the dataset. This is done by masking all data outside of a certain country, bounding box or by applying a land-sea-mask.
+              You can cutout a specific bounding box given by its south, north, west, and east border. This is done using the <code>ncks</code> command which is part of the <a href="http://nco.sourceforge.net" target="_blank">NCO toolkit</a>.
+            </p>
+
+            <div className="mt-2">
+              <BBox name="cutout_bbox" task={task} bbox={bbox} bboxError={bboxError}
+                  onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
+                  label="Cut out bounding box" help={settings.DOWNLOAD_HELP_CUTOUT_BBOX} />
+            </div>
+          </div>
+        </div>
+
+        <h3>Mask area</h3>
+        <div className="card">
+          <div className="card-body">
+            <p>
+              You can also mask all data outside of a certain country, bounding box or by applying a land-sea-mask. The compression of the NetCDF file will then reduce the file size considerably. The resulting file will still have the same dimensions and metadata as the original.
             </p>
 
             <p>
-              Please note that the masking of NetCDF files takes a considerable amount of time. Depending on the size of the dataset, it can take tens of minutes to create the download. It is only possible to mask global files.
+              <strong>Masking will only work on global files using a 0.5° grid.</strong>
             </p>
 
             <div className="mt-2">
-              <Country selected={selected} country={country} countryError={countryError}
+              <Country name="mask_country" task={task} country={country} countryError={countryError}
                   onChange={this.handleCountryChange} onSelect={this.handleSelectChange}
-                  help={settings.DOWNLOAD_HELP_COUNTRY} />
+                  label="Mask by country" help={settings.DOWNLOAD_HELP_MASK_COUNTRY} />
             </div>
 
             <div className="mt-2">
-              <BBox selected={selected} bbox={bbox} bboxError={bboxError}
+              <BBox name="mask_bbox" task={task} bbox={bbox} bboxError={bboxError}
                   onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
-                  help={settings.DOWNLOAD_HELP_BBOX} />
+                  label="Mask by bounding box" help={settings.DOWNLOAD_HELP_MASK_BBOX} />
             </div>
 
             <div className="mt-2">
-              <Landonly selected={selected} onSelect={this.handleSelectChange}
-                        help={settings.DOWNLOAD_HELP_LANDONLY} />
+              <Landonly name="mask_landonly" task={task} onSelect={this.handleSelectChange}
+                        label="Mask only land data" help={settings.DOWNLOAD_HELP_MASK_LANDONLY} />
             </div>
-
-            {
-              selectedError && <p className="text-danger">
-                {selectedError}
-              </p>
-            }
           </div>
         </div>
+
+        {
+          taskError && <div className="card">
+            <div className="card-body">
+              <p className="text-danger">
+                {taskError}
+              </p>
+            </div>
+          </div>
+        }
 
         <div className="text-center">
           <div className="mb-3">
