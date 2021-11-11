@@ -5,6 +5,14 @@
     min-height: 46px;
 }
 
-.form-check:last-child {
-    margin-bottom: 0;
+form .form-check {
+    margin-bottom: 0.5rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    label.text-muted {
+        font-weight: normal;
+    }
 }

@@ -131,8 +131,22 @@ class App extends Component {
   }
 
   togglePath(e, path) {
-    const paths = this.state.paths.filter(item => item != path)
-    this.setState({ paths })
+    const { paths } = this.state
+    if (paths.includes(path)) {
+      this.setState({ paths: paths.filter(item => item != path) })
+    } else {
+      paths.push(path)
+      this.setState({ paths })
+    }
+  }
+
+  toggleAll(e) {
+    const allChecked = (this.state.paths.length == this.props.paths.length)
+    if (allChecked) {
+      this.setState({ paths: [] })
+    } else {
+      this.setState({ paths: this.props.paths })
+    }
   }
 
   renderJob() {
@@ -187,29 +201,40 @@ class App extends Component {
 
   renderForm() {
     const { settings, paths, pathsError, task, taskError, country, countryError, bbox, bboxError, serverError } = this.state
+    const allChecked = (paths.length == this.props.paths.length)
 
     return (
       <form onSubmit={this.handleSubmit} noValidate>
         <h3>Selected files</h3>
         <div className="card">
           <div className="card-body">
-          {
-            this.props.paths.map((path, index) => {
-              return (
-                <div className="form-check" key={index}>
-                  <input className="form-check-input" type="checkbox" id={index}
-                         defaultChecked={paths.includes(path)}
-                         onChange={e => this.togglePath(e, path)} />
-                  <label className="form-check-label" htmlFor={index}>{path}</label>
-                </div>
-              )
-            })
-          }
-          {
-            pathsError && pathsError.map((error, index) => {
-              return <p className="text-danger" key={index}>{error}</p>
-            })
-          }
+            {
+              this.props.paths.length > 3 && <div className="form-check">
+                <input className="form-check-input" type="checkbox" id="check-all"
+                       checked={allChecked}
+                       onChange={e => this.toggleAll(e)} />
+                <label className="form-check-label text-muted" htmlFor="check-all">
+                  {allChecked ? <span>Uncheck all</span> : <span>Check all</span>}
+                </label>
+              </div>
+            }
+            {
+              this.props.paths.map((path, index) => {
+                return (
+                  <div className="form-check" key={index}>
+                    <input className="form-check-input" type="checkbox" id={index}
+                           checked={paths.includes(path)}
+                           onChange={e => this.togglePath(e, path)} />
+                    <label className="form-check-label" htmlFor={index}>{path}</label>
+                  </div>
+                )
+              })
+            }
+            {
+              pathsError && pathsError.map((error, index) => {
+                return <p className="text-danger" key={index}>{error}</p>
+              })
+            }
           </div>
         </div>
 
