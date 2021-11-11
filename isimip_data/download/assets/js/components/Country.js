@@ -21,28 +21,32 @@ class Country extends Component {
   }
 
   handleChange(e) {
-    this.props.onSelect('country')
+    const { name } = this.props
+
+    this.props.onSelect(name)
     this.props.onChange(e.target.value)
   }
 
   render() {
-    const { selected, country, countryError, onSelect, help } = this.props
+    const { name, task, country, countryError, onSelect, label, help } = this.props
     const { error, countries } = this.state
+    const htmlId = 'check-' + name
+    const checked = (task == name)
 
     return (
       <div className="row download-row align-items-center">
         <div className="col-md-4 mb-2">
           <div className="form-check mb-0">
             <input className="form-check-input" className="form-check-input"
-                type="radio" name="country" id="check-country"
-                onChange={() => onSelect('country')} checked={selected == 'country'} />
+                type="radio" name="country" id={htmlId}
+                onChange={() => onSelect(name)} checked={checked} />
 
-            <label className="form-check-label" htmlFor="check-country">Mask by country</label>
+            <label className="form-check-label" htmlFor={htmlId}>{label}</label>
           </div>
         </div>
         <div className="col-md-8 mb-2">
-          <select className={'form-control download-form-input-country ' + (countryError && 'is-invalid')}
-              value={country} onChange={this.handleChange}>
+          <select className={'form-control download-form-input-country ' + (checked && countryError && 'is-invalid')}
+              value={checked ? country : ''} onChange={this.handleChange}>
 
             <option disabled value="">Choose...</option>
             {
@@ -55,7 +59,7 @@ class Country extends Component {
         <div className="col-lg-12 mb-2">
           <p className="text-muted small" dangerouslySetInnerHTML={{__html: help}}></p>
         </div>
-        {countryError &&
+        {checked && countryError &&
           <div className="col-lg-12 mb-2">
             <p className="text-danger">{countryError}</p>
           </div>
@@ -66,11 +70,14 @@ class Country extends Component {
 }
 
 Country.propTypes = {
-  selected: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  task: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
   countryError: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+  help: PropTypes.string
 }
 
 export default Country

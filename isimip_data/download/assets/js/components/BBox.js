@@ -13,7 +13,7 @@ class BBox extends Component {
   }
 
   handleChange(e, index) {
-    const { bbox, onChange, onSelect } = this.props
+    const { name, bbox, onChange, onSelect } = this.props
 
     if (e.target.value) {
       bbox[index] = parseFloat(e.target.value)
@@ -21,48 +21,50 @@ class BBox extends Component {
       bbox[index] = ''
     }
 
-    onSelect('bbox')
+    onSelect(name)
     onChange(bbox)
   }
 
   render() {
-    const { selected, bbox, bboxError, onSelect, help } = this.props
+    const { name, task, bbox, bboxError, onSelect, label, help } = this.props
     const [ south, north, west, east ] = bbox
+    const htmlId = 'check-' + name
+    const checked = (task == name)
 
     return (
       <div className="row download-row align-items-center">
         <div className="col-lg-4 mb-2">
           <div className="form-check mb-0">
-            <input className="form-check-input" type="radio" name="country" id="check-bbox"
-                onChange={() => onSelect('bbox')} checked={selected == 'bbox'} />
+            <input className="form-check-input" type="radio" id={htmlId}
+                onChange={() => onSelect(name)} checked={checked} />
 
-            <label className="form-check-label" htmlFor="check-bbox">Mask by bounding box</label>
+            <label className="form-check-label" htmlFor={htmlId}>{label}</label>
           </div>
         </div>
         <div className="col-lg-2 mb-2">
-          <input className={'form-control download-form-input-bbox ' + (bboxError && 'is-invalid')}
+          <input className={'form-control download-form-input-bbox ' + (checked && bboxError && 'is-invalid')}
               type="number" placeholder="South" min="-90" max="90" step="any"
-              value={south} onChange={e => this.handleChange(e, 0)} />
+              value={checked && south} onChange={e => this.handleChange(e, 0)} />
         </div>
         <div className="col-lg-2 mb-2">
-          <input className={'form-control download-form-input-bbox ' + (bboxError && 'is-invalid')}
+          <input className={'form-control download-form-input-bbox ' + (checked && bboxError && 'is-invalid')}
               type="number" placeholder="North" min="-90" max="90" step="any"
-              value={north} onChange={e => this.handleChange(e, 1)} />
+              value={checked && north} onChange={e => this.handleChange(e, 1)} />
         </div>
         <div className="col-lg-2 mb-2">
-          <input className={'form-control download-form-input-bbox ' + (bboxError && 'is-invalid')}
+          <input className={'form-control download-form-input-bbox ' + (checked && bboxError && 'is-invalid')}
               type="number" placeholder="West" min="-180" max="180" step="any"
-              value={west} onChange={e => this.handleChange(e, 2)} />
+              value={checked && west} onChange={e => this.handleChange(e, 2)} />
         </div>
         <div className="col-lg-2 mb-2">
-          <input className={'form-control download-form-input-bbox ' + (bboxError && 'is-invalid')}
+          <input className={'form-control download-form-input-bbox ' + (checked && bboxError && 'is-invalid')}
               type="number" placeholder="East" min="-180" max="180" step="any"
-              value={east} onChange={e => this.handleChange(e, 3)} />
+              value={checked && east} onChange={e => this.handleChange(e, 3)} />
         </div>
         <div className="col-lg-12 mb-2">
           <p className="text-muted small" dangerouslySetInnerHTML={{__html: help}}></p>
         </div>
-        {bboxError &&
+        {checked && bboxError &&
           <div className="col-lg-12 mb-2">
             <p className="text-danger">{bboxError}</p>
           </div>
@@ -73,11 +75,14 @@ class BBox extends Component {
 }
 
 BBox.propTypes = {
-  selected: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  task: PropTypes.string.isRequired,
   bbox: PropTypes.array.isRequired,
   bboxError: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+  help: PropTypes.string
 }
 
 export default BBox

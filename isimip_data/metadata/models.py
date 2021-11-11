@@ -204,7 +204,7 @@ class Resource(models.Model):
 
     @property
     def title_with_version(self):
-        if not self.version or self.title.endswith(')'):
+        if not self.version or self.title.endswith(')') or self.title[-1].isdigit():
             return self.title
         else:
             return f'{self.title} (v{self.version})'
