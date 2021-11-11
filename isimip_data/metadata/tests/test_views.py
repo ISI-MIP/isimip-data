@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import reverse
 
 from isimip_data.metadata.models import Dataset, File, Resource
@@ -90,7 +91,7 @@ def test_attributes(db, client):
 
 
 def test_resources(db, client):
-    response = client.get(reverse('resources'))
+    response = client.get(reverse('resources', args=[settings.DOI_PREFIX]))
     assert response.status_code == 200
 
 
