@@ -108,7 +108,7 @@ def file(request, pk=None, path=None):
     })
 
 
-def resources(request):
+def resources(request, prefix):
     return render(request, 'metadata/resources.html', {
         'resources': Resource.objects.using('metadata').exclude(datacite=None).order_by('paths'),
         'resources_external': Resource.objects.using('metadata').filter(datacite=None).order_by('paths')

@@ -9,25 +9,29 @@
 {% block main %}
 
 <div class="container">
-    <header>
-        <h1>Resources</h1>
+    <div class="row justify-content-md-center">
+        <div class="col-md-8">
+            <header>
+                <h1>Digital Object Identifier</h1>
 
-        <h4>
-            {% if resources or resources_external %}
-            The following resources have been registered.
-            {% else %}
-            No resources have been registered, yet.
-            {% endif %}
-        </h4>
-    </header>
+                <p>
+                    In order to make our data uniquely identifiable and citable in scolarly publications, we use Digital Object Identifiers. While for output data, we register one DOI per sector, for input data, we create one DOI per subcategory, e.g. socioeconomic/landuse. The DOI metadata contains references to each included dataset. The DOI are registered using the DOI service of <a href="https://datacite.org/" target="_blank">DataCite</a>.
+                </p>
+
+                <p>
+                    If you use ISIMIP data in your research, we kindly ask you to cite the used dataset using the DOI listed here. More information can be found in our <a href="https://www.isimip.org/gettingstarted/terms-of-use/" target="_blank">Terms of Use</a>.
+                </p>
+            </header>
+        </div>
+    </div>
 
     {% if resources %}
-    <h3>Resources</h3>
+    <h3>ISIMIP DOI</h3>
     {% include 'metadata/cards/resources.html' %}
     {% endif %}
 
     {% if resources_external %}
-    <h3>External resources</h3>
+    <h3>External DOI</h3>
     {% include 'metadata/cards/resources.html' with resources=resources_external %}
     {% endif %}
 </div>

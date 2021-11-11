@@ -75,8 +75,7 @@ urlpatterns = [
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).datacite.xml', resource_datacite_xml, name='resource_datacite_xml'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).datacite.json', resource_datacite_json, name='resource_datacite_json'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)', resource, name='resource'),
-
-    path('resources/', resources, name='resources'),
+    re_path(r'^(?P<prefix>\d{2}\.\d+)\/$', resources, name='resources'),
 
     path('attributes/', attributes, name='attributes'),
 
