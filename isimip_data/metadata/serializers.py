@@ -4,6 +4,7 @@ from rest_framework.reverse import reverse
 from isimip_data.annotations.models import (Annotation, Download, Figure,
                                             Reference)
 from isimip_data.caveats.models import Caveat
+from isimip_data.core.utils import get_file_base_url
 from isimip_data.indicators.models import IndicatorValue
 
 from .models import Dataset, File, Resource
@@ -12,6 +13,7 @@ from .models import Dataset, File, Resource
 class DatasetFileSerializer(serializers.ModelSerializer):
 
     metadata_url = serializers.SerializerMethodField()
+    file_url = serializers.SerializerMethodField()
     rights = serializers.JSONField(source='rights_dict')
 
     class Meta:
@@ -34,6 +36,10 @@ class DatasetFileSerializer(serializers.ModelSerializer):
 
     def get_metadata_url(self, obj):
         return reverse('file', args=[obj.id], request=self.context['request'])
+
+    def get_file_url(self, obj):
+        if obj.dataset.public:
+            return get_file_base_url(self.context['request']) + obj.path
 
 
 class DatasetResourceSerializer(serializers.ModelSerializer):
@@ -251,6 +257,8 @@ class FileSerializer(serializers.ModelSerializer):
     links = FileLinkSerializer(many=True)
     search_rank = serializers.FloatField(required=False, default=0.0)
     metadata_url = serializers.SerializerMethodField()
+    file_url = serializers.SerializerMethodField()
+    json_url = serializers.SerializerMethodField()
     rights = serializers.JSONField(source='rights_dict')
 
     class Meta:
@@ -273,12 +281,21 @@ class FileSerializer(serializers.ModelSerializer):
             'url',
             'metadata_url',
             'file_url',
+            'json_url',
             'rights',
             'terms_of_use',
         )
 
     def get_metadata_url(self, obj):
         return reverse('file', args=[obj.id], request=self.context['request'])
+
+    def get_file_url(self, obj):
+        if obj.dataset.public:
+            return get_file_base_url(self.context['request']) + obj.path
+
+    def get_json_url(self, obj):
+        if obj.dataset.public:
+            return get_file_base_url(self.context['request']) + obj.json_path
 
 
 class ResourceSerializer(serializers.ModelSerializer):

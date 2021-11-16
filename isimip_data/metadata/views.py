@@ -7,6 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render, reverse
 
 from isimip_data.annotations.models import Download, Figure, Reference
+from isimip_data.core.utils import get_file_base_url
 from isimip_data.caveats.models import Caveat
 
 from .models import Attribute, Dataset, File, Resource
@@ -101,6 +102,7 @@ def file(request, pk=None, path=None):
 
     return render(request, 'metadata/file.html', {
         'file': obj,
+        'file_base_url': get_file_base_url(request),
         'parents': [obj.dataset],
         'versions': versions,
         'caveats': caveats,

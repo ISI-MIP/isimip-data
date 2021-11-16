@@ -121,14 +121,8 @@ class File(models.Model):
         return self.dataset.resources
 
     @cached_property
-    def file_url(self):
-        if self.dataset.public:
-            return settings.FILES_BASE_URL + str(Path(self.path))
-
-    @cached_property
-    def json_url(self):
-        if self.dataset.public:
-            return settings.FILES_BASE_URL + str(Path(self.path).with_suffix('.json'))
+    def json_path(self):
+        return str(Path(self.path).with_suffix('.json'))
 
     @cached_property
     def is_link(self):

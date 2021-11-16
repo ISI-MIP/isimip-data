@@ -16,14 +16,9 @@ def test_file_str(db, client):
     assert str(file) == file.path
 
 
-def test_file_json_url_public(db, client):
+def test_file_json_path(db, client):
     file = File.objects.using('metadata').filter(dataset__public=True).first()
-    assert file.json_url == 'http://isimip/' + file.path.replace('.nc', '.json')
-
-
-def test_file_json_url_(db, client):
-    file = File.objects.using('metadata').filter(dataset__public=False).first()
-    assert file.json_url is None
+    assert file.json_path == file.path.replace('.nc', '.json')
 
 
 def test_resource_str(db, client):

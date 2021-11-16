@@ -239,6 +239,10 @@ NAVIGATION = [
 FILES_BASE_URL = os.getenv('FILES_BASE_URL')
 FILES_API_URL = os.getenv('FILES_API_URL')
 
+PROXY = os.getenv('PROXY')
+PROXY_FILES_BASE_URL = os.getenv('PROXY_FILES_BASE_URL')
+PROXY_FILES_API_URL = os.getenv('PROXY_FILES_API_URL')
+
 PROTOCOL_LOCATIONS = os.getenv('PROTOCOL_LOCATIONS', '').split()
 
 DOWNLOAD_HELP_CUTOUT_BBOX = 'The files are cut out using a bounding box given by you, e.g. (-23.43651, 23.43651, -180, 180) for the tropical zone around the equator.'

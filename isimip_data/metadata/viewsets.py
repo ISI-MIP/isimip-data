@@ -8,6 +8,8 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 
+from isimip_data.core.utils import get_file_base_url
+
 from .filters import (AttributeFilterBackend, IdFilterBackend,
                       NameFilterBackend, PathFilterBackend,
                       SearchFilterBackend, TreeFilterBackend,
@@ -60,6 +62,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     def filelist(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         response = Response({
+            'file_base_url': get_file_base_url(request),
             'files': File.objects.using('metadata').filter(dataset__in=queryset)
         }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
         response['Content-Disposition'] = 'attachment; filename=filelist.txt'
@@ -70,6 +73,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         dataset = self.get_object()
 
         response = Response({
+            'file_base_url': get_file_base_url(request),
             'files': File.objects.using('metadata').filter(dataset=dataset)
         }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
         response['Content-Disposition'] = 'attachment; filename=%s.txt' % dataset.name
@@ -114,6 +118,7 @@ class ResourceViewSet(ReadOnlyModelViewSet):
         resource = self.get_object()
 
         response = Response({
+            'file_base_url': get_file_base_url(request),
             'files': File.objects.using('metadata').filter(dataset__resources=resource)
         }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
         response['Content-Disposition'] = 'attachment; filename=%s.txt' % resource.doi
