@@ -239,7 +239,7 @@ NAVIGATION = [
 FILES_BASE_URL = os.getenv('FILES_BASE_URL')
 FILES_API_URL = os.getenv('FILES_API_URL')
 
-PROXY = os.getenv('PROXY')
+PROXY = os.getenv('PROXY', '').split()
 PROXY_FILES_BASE_URL = os.getenv('PROXY_FILES_BASE_URL')
 PROXY_FILES_API_URL = os.getenv('PROXY_FILES_API_URL')
 
