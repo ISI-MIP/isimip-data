@@ -2,7 +2,10 @@ from django.conf import settings
 
 
 def trailing_slash(string):
-    return string.rstrip('/') + '/'
+    if string is None:
+        return string
+    else:
+        return string.rstrip('/') + '/'
 
 
 def via_proxy(request):
