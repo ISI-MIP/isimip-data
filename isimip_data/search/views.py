@@ -13,4 +13,4 @@ def search(request, path=None):
 
         return redirect(url)
 
-    return render(request, 'search/search.html')
+    return render(request, 'search/search.html', {'title': 'Search'})

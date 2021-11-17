@@ -18,6 +18,7 @@ def caveats(request):
     caveats = Caveat.objects.public(request.user)
 
     return render(request, 'caveats/caveats.html', {
+        'title': 'Caveats',
         'caveats': caveats
     })
 
@@ -29,6 +30,7 @@ def caveat(request, pk=None):
     datasets = Dataset.objects.using('metadata').filter(target=None, id__in=caveat.datasets)
 
     return render(request, 'caveats/caveat.html', {
+        'title': caveat.title,
         'caveat': caveat,
         'comments': comments,
         'datasets': datasets,
@@ -72,6 +74,7 @@ def caveat_create(request):
         return redirect('caveat', caveat.id)
 
     return render(request, 'caveats/caveat_create.html', {
+        'title': 'Submit new caveat',
         'form': form,
         'dataset': Dataset.objects.using('metadata').filter(id=dataset_id).first()
     })
@@ -99,5 +102,6 @@ def subscriptions(request):
     caveats = Caveat.objects.filter(subscribers=request.user)
 
     return render(request, 'caveats/subscriptions.html', {
+        'title': 'Subscriptions',
         'caveats': caveats,
     })

@@ -33,6 +33,7 @@ def metadata(request):
             return redirect('file', file.id)
 
     return render(request, 'metadata/metadata.html', {
+        'title': 'Metadata',
         'example_file': File.objects.using('metadata').first()
     })
 
@@ -64,6 +65,7 @@ def dataset(request, pk=None, path=None):
         caveats_versions = None
 
     return render(request, 'metadata/dataset.html', {
+        'title': 'Dataset {}'.format(obj.name),
         'dataset': obj,
         'versions': versions,
         'figures': Figure.objects.filter(annotations__datasets__contains=[obj.id]),
@@ -101,6 +103,7 @@ def file(request, pk=None, path=None):
         caveats_versions = None
 
     return render(request, 'metadata/file.html', {
+        'title': 'File {}'.format(obj.name),
         'file': obj,
         'file_base_url': get_file_base_url(request),
         'parents': [obj.dataset],
@@ -112,6 +115,7 @@ def file(request, pk=None, path=None):
 
 def resources(request, prefix):
     return render(request, 'metadata/resources.html', {
+        'title': 'DOI',
         'resources': Resource.objects.using('metadata').exclude(datacite=None).order_by('paths'),
         'resources_external': Resource.objects.using('metadata').filter(datacite=None).order_by('paths')
     })
@@ -141,6 +145,7 @@ def resource(request, doi=None):
     caveats = Caveat.objects.filter(datasets__contains=dataset_ids).public(request.user) if dataset_ids else []
 
     return render(request, 'metadata/resource.html', {
+        'title': 'DOI {}'.format(resource.doi),
         'resource': resource,
         'references': references,
         'caveats': caveats
@@ -177,5 +182,6 @@ def attributes(request):
         attributes_list.append((identifier, Dataset.objects.using('metadata').histogram(identifier)))
 
     return render(request, 'metadata/attributes.html', {
+        'title': 'Attributes',
         'attributes': attributes_list
     })

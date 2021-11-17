@@ -20,6 +20,7 @@ def profile_update(request):
         )
 
     return render(request, 'profile/profile_update.html', {
+        'title': 'Update account',
         'form': form
     })
 
@@ -39,6 +40,7 @@ def profile_delete(request):
         return redirect('profile_delete_success')
 
     return render(request, 'profile/profile_delete.html', {
+        'title': 'Delete account',
         'form': form
     })
 
