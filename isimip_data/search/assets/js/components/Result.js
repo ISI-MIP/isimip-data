@@ -71,18 +71,33 @@ class Result extends Component {
     const { showAttributes, showFiles, showCaveats, showIndicators } = this.state
     const inputId = `${dataset.id}-input`
 
+    const get_caveats_color = caveats => {
+      const [level, color] = caveats.reduce((acc, cur) => {
+        const [acc_level, acc_color] = acc
+        if (cur.severity_level > acc_level) {
+          return [cur.severity_level, cur.severity_color]
+        } else {
+          return acc
+        }
+      }, [0, 'text-info'])
+
+      return color
+    }
+
     return (
       <li className="list-group-item">
         <Badges glossary={glossary} dataset={dataset} />
 
         <div>
-          {dataset.caveats.length > 0 && <div className="float-right">
-            <button className="btn btn-link" onClick={this.toggleCaveats}>
+          {
+            dataset.caveats.length > 0 &&
+            <div className={'float-right text-' + get_caveats_color(dataset.caveats)}>
               <FontAwesomeIcon className="result-caveat-icon"
                                title="There are caveats for this dataset"
-                               icon={faExclamationTriangle} />
-            </button>
-          </div>}
+                               icon={faExclamationTriangle}
+                               onClick={this.toggleCaveats} />
+            </div>
+          }
 
           <h4 className="card-title mt-3 mb-3">
             <a className="result-title" href={dataset.metadata_url} target="_blank">{dataset.name}</a>

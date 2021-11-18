@@ -67,6 +67,7 @@ class DatasetCaveatSerializer(serializers.ModelSerializer):
             'url',
             'severity',
             'severity_display',
+            'severity_level',
             'severity_color',
             'status',
             'status_display',

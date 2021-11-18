@@ -76,11 +76,20 @@ class Caveat(models.Model):
         return get_full_name(self.creator)
 
     @property
+    def severity_level(self):
+        {
+            self.SEVERITY_LOW: 1,
+            self.SEVERITY_MEDIUM: 2,
+            self.SEVERITY_HIGH: 3,
+            self.SEVERITY_CRITICAL: 4
+        }.get(self.severity)
+
+    @property
     def severity_color(self):
         return {
             self.SEVERITY_LOW: 'info',
             self.SEVERITY_MEDIUM: 'warning',
-            self.SEVERITY_HIGH: 'red',
+            self.SEVERITY_HIGH: 'danger',
             self.SEVERITY_CRITICAL: 'dark'
         }.get(self.severity)
 
