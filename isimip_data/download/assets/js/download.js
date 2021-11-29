@@ -9,8 +9,9 @@ const appElement = document.getElementById('app')
 
 if (appElement !== null) {
   if (appElement.dataset.url) {
-    ReactDOM.render(<App url={appElement.dataset.url} paths={[]} />, appElement)
+    ReactDOM.render(<App url={appElement.dataset.url} files={[]} />, appElement)
   } else {
-    ReactDOM.render(<App url={null} paths={Object.values(appElement.dataset)}/>, appElement)
+    const files = JSON.parse(document.getElementById('files').textContent);
+    ReactDOM.render(<App url={null} files={files}/>, appElement)
   }
 }

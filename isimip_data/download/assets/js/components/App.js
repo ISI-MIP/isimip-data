@@ -21,7 +21,7 @@ class App extends Component {
     this.state = {
       job: null,
       settings: {},
-      paths: [...props.paths],
+      paths: [...props.files.map(file => file.path)],
       pathsError: [],
       task: '',
       taskError: '',
@@ -141,11 +141,11 @@ class App extends Component {
   }
 
   toggleAll(e) {
-    const allChecked = (this.state.paths.length == this.props.paths.length)
+    const allChecked = (this.state.paths.length == this.props.files.length)
     if (allChecked) {
       this.setState({ paths: [] })
     } else {
-      this.setState({ paths: this.props.paths })
+      this.setState({ paths: this.props.files.map(file => file.path) })
     }
   }
 
@@ -201,7 +201,15 @@ class App extends Component {
 
   renderForm() {
     const { settings, paths, pathsError, task, taskError, country, countryError, bbox, bboxError, serverError } = this.state
-    const allChecked = (paths.length == this.props.paths.length)
+    const allChecked = (paths.length == this.props.files.length)
+
+    const cutout = this.props.files.every(file => {
+      return [undefined, '30arcsec', 'halfdeg'].includes(file.specifiers.resolution)
+    })
+    const mask = this.props.files.every(file => {
+      return [undefined, 'halfdeg'].includes(file.specifiers.resolution)
+    })
+    const select = mask;
 
     return (
       <form onSubmit={this.handleSubmit} noValidate>
@@ -209,7 +217,7 @@ class App extends Component {
         <div className="card">
           <div className="card-body">
             {
-              this.props.paths.length > 3 && <div className="form-check">
+              this.props.files.length > 3 && <div className="form-check">
                 <input className="form-check-input" type="checkbox" id="check-all"
                        checked={allChecked}
                        onChange={e => this.toggleAll(e)} />
@@ -219,13 +227,13 @@ class App extends Component {
               </div>
             }
             {
-              this.props.paths.map((path, index) => {
+              this.props.files.map((file, index) => {
                 return (
                   <div className="form-check" key={index}>
                     <input className="form-check-input" type="checkbox" id={index}
-                           checked={paths.includes(path)}
-                           onChange={e => this.togglePath(e, path)} />
-                    <label className="form-check-label" htmlFor={index}>{path}</label>
+                           checked={paths.includes(file.path)}
+                           onChange={e => this.togglePath(e, file.path)} />
+                    <label className="form-check-label" htmlFor={index}>{file.path}</label>
                   </div>
                 )
               })
@@ -238,50 +246,54 @@ class App extends Component {
           </div>
         </div>
 
-        <h3>Cut out area</h3>
-        <div className="card">
-          <div className="card-body">
-            <p>
-              You can cutout a specific bounding box given by its south, north, west, and east border. This is done using the <code>ncks</code> command which is part of the <a href="http://nco.sourceforge.net" target="_blank">NCO toolkit</a>.
-            </p>
+        {
+          cutout && <div>
+            <h3>Cut out area</h3>
+            <div className="card">
+              <div className="card-body">
+                <p>
+                  You can cutout a specific bounding box given by its south, north, west, and east border. This is done using the <code>ncks</code> command which is part of the <a href="http://nco.sourceforge.net" target="_blank">NCO toolkit</a>.
+                </p>
 
-            <div className="mt-2">
-              <BBox name="cutout_bbox" task={task} bbox={bbox} bboxError={bboxError}
-                  onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
-                  label="Cut out bounding box" help={settings.DOWNLOAD_HELP_CUTOUT_BBOX} />
+                <div className="mt-2">
+                  <BBox name="cutout_bbox" task={task} bbox={bbox} bboxError={bboxError}
+                      onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
+                      label="Cut out bounding box" help={settings.DOWNLOAD_HELP_CUTOUT_BBOX} />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        }
 
-        <h3>Mask area</h3>
-        <div className="card">
-          <div className="card-body">
-            <p>
-              You can also mask all data outside of a certain country, bounding box or by applying a land-sea-mask. The compression of the NetCDF file will then reduce the file size considerably. The resulting file will still have the same dimensions and metadata as the original.
-            </p>
+        {
+          mask && <div>
+            <h3>Mask area</h3>
+            <div className="card">
+              <div className="card-body">
+                <p>
+                  You can also mask all data outside of a certain country, bounding box or by applying a land-sea-mask. The compression of the NetCDF file will then reduce the file size considerably. The resulting file will still have the same dimensions and metadata as the original.
+                </p>
 
-            <p>
-              <strong>Masking will only work on global files using a 0.5° grid.</strong>
-            </p>
+                <div className="mt-2">
+                  <Country name="mask_country" task={task} country={country} countryError={countryError}
+                      onChange={this.handleCountryChange} onSelect={this.handleSelectChange}
+                      label="Mask by country" help={settings.DOWNLOAD_HELP_MASK_COUNTRY} />
+                </div>
 
-            <div className="mt-2">
-              <Country name="mask_country" task={task} country={country} countryError={countryError}
-                  onChange={this.handleCountryChange} onSelect={this.handleSelectChange}
-                  label="Mask by country" help={settings.DOWNLOAD_HELP_MASK_COUNTRY} />
-            </div>
+                <div className="mt-2">
+                  <BBox name="mask_bbox" task={task} bbox={bbox} bboxError={bboxError}
+                      onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
+                      label="Mask by bounding box" help={settings.DOWNLOAD_HELP_MASK_BBOX} />
+                </div>
 
-            <div className="mt-2">
-              <BBox name="mask_bbox" task={task} bbox={bbox} bboxError={bboxError}
-                  onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
-                  label="Mask by bounding box" help={settings.DOWNLOAD_HELP_MASK_BBOX} />
-            </div>
-
-            <div className="mt-2">
-              <Landonly name="mask_landonly" task={task} onSelect={this.handleSelectChange}
-                        label="Mask only land data" help={settings.DOWNLOAD_HELP_MASK_LANDONLY} />
+                <div className="mt-2">
+                  <Landonly name="mask_landonly" task={task} onSelect={this.handleSelectChange}
+                            label="Mask only land data" help={settings.DOWNLOAD_HELP_MASK_LANDONLY} />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        }
 
         {
           taskError && <div className="card">
@@ -312,7 +324,7 @@ class App extends Component {
   render() {
     if (this.state.job) {
       return this.renderJob()
-    } else if (this.props.paths.length > 0) {
+    } else if (this.props.files.length > 0) {
       return this.renderForm()
     } else if (this.state.serverError) {
       return <p className="text-center text-danger mt-4">{this.state.serverError}</p>
@@ -324,7 +336,7 @@ class App extends Component {
 
 App.propTypes = {
   url: PropTypes.string,
-  paths: PropTypes.array.isRequired
+  files: PropTypes.array.isRequired
 }
 
 export default App

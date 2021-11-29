@@ -33,11 +33,11 @@
          data-url="{{ job_url }}">
     </div>
 
-    {% elif paths %}
+    {% elif files %}
 
-    <div id="app" {% for path in paths %}
-         data-path-{{ forloop.counter0 }}="{{ path }}"{% endfor %}>
-    </div>
+    <div id="app"></div>
+
+    {{ files|json_script:"files" }}
 
     {% else %}
 
