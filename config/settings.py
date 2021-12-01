@@ -180,7 +180,8 @@ SETTINGS_EXPORT = [
     'TERMS_OF_USE_URL',
     'LOGIN_URL',
     'LOGOUT_URL',
-    'DOI_PREFIX'
+    'DOI_PREFIX',
+    'HOME'
 ]
 
 if os.getenv('CACHE') == 'dummy':
@@ -235,6 +236,22 @@ NAVIGATION = [
         'href': TERMS_OF_USE_URL
     }
 ]
+
+HOME = {
+    'climate': ['ISIMIP2a', 'ISIMIP2b', 'ISIMIP3a', 'ISIMIP3b'],
+    'socioeconomic': ['ISIMIP2a', 'ISIMIP2b', 'ISIMIP3a', 'ISIMIP3b'],
+    'geo_conditions': ['ISIMIP2a', 'ISIMIP2b', 'ISIMIP3a', 'ISIMIP3b'],
+    'agriculture': ['ISIMIP2a', 'ISIMIP2b'],
+    'biodiversity': ['ISIMIP2a', 'ISIMIP2b'],
+    'biomes': ['ISIMIP2a', 'ISIMIP2b'],
+    'lakes_global': ['ISIMIP2a', 'ISIMIP2b'],
+    'lakes_local': ['ISIMIP2a', 'ISIMIP2b'],
+    'marine-fisheries_global': ['ISIMIP3b'],
+    'marine-fisheries_regional': ['ISIMIP3b'],
+    'permafrost': ['ISIMIP2a', 'ISIMIP2b'],
+    'water_global': ['ISIMIP2a', 'ISIMIP2b'],
+    'water_regional': ['ISIMIP2a', 'ISIMIP2b']
+}
 
 FILES_BASE_URL = os.getenv('FILES_BASE_URL')
 FILES_API_URL = os.getenv('FILES_API_URL')

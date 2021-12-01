@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load core_tags %}
 
 {% block main %}
 
@@ -45,18 +46,7 @@
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2a%2FInputData%2Fclimate' %}">ISIMIP2a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2b%2FInputData%2Fclimate' %}">ISIMIP2b</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP3a%2FInputData%2Fclimate' %}">ISIMIP3a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP3b%2FInputData%2Fclimate' %}">ISIMIP3b</a>
-                                </li>
+                                {% home_list 'InputData' 'climate' %}
                             </ul>
                             <p>
                                 Photo by <a href="https://unsplash.com/@nasa">NASA</a> on <a href="https://unsplash.com/photos/i9w4Uy1pU-s">Unsplash</a>
@@ -65,12 +55,7 @@
                     </div>
                     <h5>Climate forcing</h5>
                     <p>
-                        Climate and climate-related forcing data for the
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2a%2FInputData%2Fclimate' %}">ISIMIP2a</a>,
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2b%2FInputData%2Fclimate' %}">ISIMIP2b</a>,
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP3a%2FInputData%2Fclimate' %}">ISIMIP3a</a>, and
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP3b%2FInputData%2Fclimate' %}">ISIMIP3b</a>
-                        simulation rounds.
+                        Climate and climate-related forcing data for the {% home_inline_list 'InputData' 'climate' %} simulation rounds.
                     </p>
                 </div>
                 <div class="col-md-4 mb-4">
@@ -79,18 +64,7 @@
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2a%2FInputData%2Fsocioeconomic' %}">ISIMIP2a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2b%2FInputData%2Fsocioeconomic' %}">ISIMIP2b</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP3a%2FInputData%2Fsocioeconomic' %}">ISIMIP3a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP3b%2FInputData%2Fsocioeconomic' %}">ISIMIP3b</a>
-                                </li>
+                                {% home_list 'InputData' 'socioeconomic' %}
                             </ul>
                             <p>
                                 Photo by <a href="https://unsplash.com/@rstar50">Roger Starnes Sr</a> on <a href="https://unsplash.com/photos/cKpqTbJevKs">Unsplash</a>
@@ -99,12 +73,7 @@
                     </div>
                     <h5>Socioeconomic forcing</h5>
                     <p>
-                        Socioeconomic datasets for the
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2a%2FInputData%2Fsocioeconomic' %}">ISIMIP2a</a>,
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2b%2FInputData%2Fsocioeconomic' %}">ISIMIP2b</a>,
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP3a%2FInputData%2Fsocioeconomic' %}">ISIMIP3a</a>, and
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP3b%2FInputData%2Fsocioeconomic' %}">ISIMIP3b</a>
-                        simulation rounds.
+                        Socioeconomic datasets for the {% home_inline_list 'InputData' 'socioeconomic' %} simulation rounds.
                     </p>
                 </div>
                 <div class="col-md-4 mb-4">
@@ -113,18 +82,7 @@
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2a%2FInputData%2Fgeo_conditions' %}">ISIMIP2a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2b%2FInputData%2Fgeo_conditions' %}">ISIMIP2b</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP3a%2FInputData%2Fgeo_conditions' %}">ISIMIP3a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP3b%2FInputData%2Fgeo_conditions' %}">ISIMIP3b</a>
-                                </li>
+                                {% home_list 'InputData' 'geo_conditions' %}
                             </ul>
                             <p>
                                 Photo by <a href="https://unsplash.com/@greg_rosenke">Greg Rosenke</a> on <a href="https://unsplash.com/photos/3ULMRQZ5APA">Unsplash</a>
@@ -133,12 +91,7 @@
                     </div>
                     <h5 class="">Static geographic information</h5>
                     <p>
-                        Geographic data and information for the
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2a%2FInputData%2Fgeo_conditions' %}">ISIMIP2a</a>,
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2b%2FInputData%2Fgeo_conditions' %}">ISIMIP2b</a>,
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP3a%2FInputData%2Fgeo_conditions' %}">ISIMIP3a</a>, and
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP3b%2FInputData%2Fgeo_conditions' %}">ISIMIP3b</a>
-                        simulation rounds.
+                        Geographic data and information for the {% home_inline_list 'InputData' 'geo_conditions' %} simulation rounds.
                     </p>
                 </div>
             </div>
@@ -156,12 +109,7 @@
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fagriculture' %}">ISIMIP2a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fagriculture' %}">ISIMIP2b</a>
-                                </li>
+                                {% home_list 'OutputData' 'agriculture' %}
                             </ul>
                             <p>
                                 Photo by <a href="https://unsplash.com/@jxk">Jan Kopřiva</a> on <a href="https://unsplash.com/photos/LTMaAwxanGk">Unsplash</a>
@@ -170,10 +118,7 @@
                     </div>
                     <h5>Agriculture sector</h5>
                     <p>
-                        Output data from the
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fagriculture' %}">ISIMIP2a</a> and
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fagriculture' %}">ISIMIP2b</a>
-                        simulation rounds.
+                        Output data from the {% home_inline_list 'OutputData' 'agriculture' %} simulation rounds.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
@@ -182,12 +127,7 @@
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fbiodiversity' %}">ISIMIP2a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fbiodiversity' %}">ISIMIP2b</a>
-                                </li>
+                                {% home_list 'OutputData' 'biodiversity' %}
                             </ul>
                             <p>
                                 Photo by <a href="https://unsplash.com/@juanmacllas">Juanma Clemente-Alloza</a> on <a href="https://unsplash.com/photos/2fpyPtVcm2M">Unsplash</a>
@@ -196,10 +136,7 @@
                     </div>
                     <h5>Terrestrial biodiversity sector</h5>
                     <p>
-                        Output data from the
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fbiodiversity' %}">ISIMIP2a</a> and
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fbiodiversity' %}">ISIMIP2b</a>
-                        simulation rounds.
+                        Output data from the {% home_inline_list 'OutputData' 'biodiversity' %} simulation rounds.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
@@ -208,12 +145,7 @@
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fbiomes' %}">ISIMIP2a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fbiomes' %}">ISIMIP2b</a>
-                                </li>
+                                {% home_list 'OutputData' 'biomes' %}
                             </ul>
                             <p>
                                 Photo by <a href="https://unsplash.com/@jasperboer">Jasper Boer</a> on <a href="https://unsplash.com/photos/LJD6U920zVo">Unsplash</a>
@@ -222,10 +154,7 @@
                     </div>
                     <h5>Biomes sector</h5>
                     <p>
-                        Output data from the
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fbiomes' %}">ISIMIP2a</a> and
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fbiomes' %}">ISIMIP2b</a>
-                        simulation rounds.
+                        Output data from the {% home_inline_list 'OutputData' 'biomes' %} simulation rounds.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
@@ -234,12 +163,7 @@
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Flakes_global' %}">ISIMIP2a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Flakes_global' %}">ISIMIP2b</a>
-                                </li>
+                                {% home_list 'OutputData' 'lakes_global' %}
                             </ul>
                             <p>
                                 Photo by <a href="https://unsplash.com/@josswoodhead">Joss Woodhead</a> on <a href="https://unsplash.com/photos/OHMsnLTejfM">Unsplash</a>
@@ -248,10 +172,7 @@
                     </div>
                     <h5>Lakes (global) sector</h5>
                     <p>
-                        Output data from the
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Flakes_global' %}">ISIMIP2a</a> and
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Flakes_global' %}">ISIMIP2b</a>
-                        simulation rounds.
+                        Output data from the {% home_inline_list 'OutputData' 'lakes_global' %} simulation rounds.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
@@ -260,12 +181,7 @@
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Flakes_local' %}">ISIMIP2a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Flakes_local' %}">ISIMIP2b</a>
-                                </li>
+                                {% home_list 'OutputData' 'lakes_local' %}
                             </ul>
                             <p>
                                 Photo by <a href="https://unsplash.com/@wesleygibbs">Wesley Gibbs</a> on <a href="https://unsplash.com/photos/nmXRwI_--Fo">Unsplash</a>
@@ -274,10 +190,7 @@
                     </div>
                     <h5>Lakes (local) sector</h5>
                     <p>
-                        Output data from the
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Flakes_local' %}">ISIMIP2a</a> and
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Flakes_local' %}">ISIMIP2b</a>
-                        simulation rounds.
+                        Output data from the {% home_inline_list 'OutputData' 'lakes_local' %} simulation rounds.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
@@ -286,12 +199,7 @@
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
-<!--                                 <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fmarine-fisheries_global' %}">ISIMIP2b</a>
-                                </li> -->
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP3b%2FOutputData%2Fmarine-fisheries_global' %}">ISIMIP3b</a>
-                                </li>
+                                {% home_list 'OutputData' 'marine-fisheries_global' %}
                             </ul>
                             <p>
                                 Photo by <a href="https://unsplash.com/@frogman39">Jet Kim</a> on <a href="https://unsplash.com/photos/_w-VVA8PrC0">Unsplash</a>
@@ -300,10 +208,7 @@
                     </div>
                     <h5>Fisheries & Marine Ecosystems (global) sector</h5>
                     <p>
-                        Output data from the
-                        <!-- <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fmarine-fisheries_global' %}">ISIMIP2b</a> and -->
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP3b%2FOutputData%2Fmarine-fisheries_global' %}">ISIMIP3b</a>
-                        simulation round.
+                        Output data from the {% home_inline_list 'OutputData' 'marine-fisheries_global' %} simulation round.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
@@ -312,12 +217,7 @@
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
-<!--                                 <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fmarine-fisheries_local' %}">ISIMIP2b</a>
-                                </li> -->
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP3b%2FOutputData%2Fmarine-fisheries_local' %}">ISIMIP3b</a>
-                                </li>
+                                {% home_list 'OutputData' 'marine-fisheries_regional' %}
                             </ul>
                             <p>
                                 Photo by <a href="https://unsplash.com/@ycko">Yungchuan KO</a> on <a href="https://unsplash.com/photos/mMQdtuu_7IA">Unsplash</a>
@@ -326,10 +226,7 @@
                     </div>
                     <h5>Fisheries & Marine Ecosystems (local) sector</h5>
                     <p>
-                        Output data from the
-                        <!-- <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fmarine-fisheries_local' %}">ISIMIP2b</a> and -->
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP3b%2FOutputData%2Fmarine-fisheries_local' %}">ISIMIP3b</a>
-                        simulation round.
+                        Output data from the {% home_inline_list 'OutputData' 'marine-fisheries_regional' %} simulation round.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
@@ -338,12 +235,7 @@
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fpermafrost' %}">ISIMIP2a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fpermafrost' %}">ISIMIP2b</a>
-                                </li>
+                                {% home_list 'OutputData' 'permafrost' %}
                             </ul>
                             <p>
                                 Photo by <a href="https://unsplash.com/@malcoo">Tomáš Malík</a> on <a href="https://unsplash.com/photos/9XQzqcAr-3I">Unsplash</a>
@@ -352,10 +244,7 @@
                     </div>
                     <h5 class="card-title">Permafrost sector</h5>
                     <p>
-                        Output data from the
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fpermafrost' %}">ISIMIP2a</a> and
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fpermafrost' %}">ISIMIP2b</a>
-                        simulation rounds.
+                        Output data from the {% home_inline_list 'OutputData' 'permafrost' %} simulation rounds.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
@@ -364,12 +253,7 @@
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fwater_global' %}">ISIMIP2a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fwater_global' %}">ISIMIP2b</a>
-                                </li>
+                                {% home_list 'OutputData' 'water_global' %}
                             </ul>
                             <p>
                                 Photo by <a href="https://unsplash.com/@kietbeo778">Nguyen Kiet</a> on <a href="https://unsplash.com/photos/OGp18qMyq-k">Unsplash</a>
@@ -378,10 +262,7 @@
                     </div>
                     <h5>Water (global) sector</h5>
                     <p>
-                        Output data from the
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fwater_global' %}">ISIMIP2a</a> and
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fwater_global' %}">ISIMIP2b</a>
-                        simulation rounds.
+                        Output data from the {% home_inline_list 'OutputData' 'water_global' %} simulation rounds.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
@@ -390,12 +271,7 @@
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fwater_regional' %}">ISIMIP2a</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fwater_regional' %}">ISIMIP2b</a>
-                                </li>
+                                {% home_list 'OutputData' 'water_regional' %}
                             </ul>
                             <p>
                                 Photo by <a href="https://unsplash.com/@cedric">Cédric Dhaenens</a> on <a href="https://unsplash.com/photos/Ul-1-YbuyX4">Unsplash</a>
@@ -404,10 +280,7 @@
                     </div>
                     <h5>Water (regional) sector</h5>
                     <p>
-                        Output data from the
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2a%2FOutputData%2Fwater_regional' %}">ISIMIP2a</a> and
-                        <a class="badge badge-light" href="{% url 'search' 'tree/ISIMIP2b%2FOutputData%2Fwater_regional' %}">ISIMIP2b</a>
-                        simulation rounds.
+                        Output data from the {% home_inline_list 'OutputData' 'water_regional' %} simulation rounds.
                     </p>
                 </div>
             </div>
