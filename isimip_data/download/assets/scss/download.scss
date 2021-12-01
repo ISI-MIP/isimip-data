@@ -5,9 +5,14 @@
     min-height: 46px;
 }
 
-.card-header {
-    background-color: white;
-    padding: 0.5rem 1.25rem;
+.card {
+    p {
+        margin-bottom: 0.5rem;
+    }
+    .card-header {
+        background-color: white;
+        padding: 0.5rem 1.25rem;
+    }
 }
 
 form .form-check {

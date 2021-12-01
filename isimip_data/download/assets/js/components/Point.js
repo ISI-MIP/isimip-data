@@ -51,14 +51,10 @@ class Point extends Component {
               type="number" placeholder="Longitude" min="-180" max="180" step="any"
               value={checked && lon} onChange={e => this.handleChange(e, 1)} />
         </div>
-        <div className="col-lg-12 mb-2">
+        <div className="col-lg-12">
+          {checked && pointError && <p className="text-danger">{pointError}</p>}
           <p className="text-muted small" dangerouslySetInnerHTML={{__html: help}}></p>
         </div>
-        {checked && pointError &&
-          <div className="col-lg-12 mb-2">
-            <p className="text-danger">{pointError}</p>
-          </div>
-        }
       </div>
     )
   }
