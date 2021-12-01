@@ -31,7 +31,7 @@ Landonly.propTypes = {
   name: PropTypes.string.isRequired,
   task: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   help: PropTypes.string
 }
 

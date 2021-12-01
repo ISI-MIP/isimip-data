@@ -81,7 +81,7 @@ BBox.propTypes = {
   bboxError: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   help: PropTypes.string
 }
 

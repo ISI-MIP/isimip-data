@@ -10,7 +10,7 @@ def download(request, job_id=None):
 
     return render(request, 'download/download.html', {
         'title': 'Configure download',
-        'job_url': get_file_api_url() + job_id if job_id else None,
+        'job_url': get_file_api_url(request) + job_id if job_id else None,
         'files': [
             {
                 'path': file.path,

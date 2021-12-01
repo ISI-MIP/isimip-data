@@ -26,9 +26,22 @@ class SettingsViewSet(ListModelMixin, GenericViewSet):
                 'value': getattr(settings, key)
             } for key in [
                 'METADATA_PAGE_SIZE',
+                'DOWNLOAD_LABEL_CUTOUT_BBOX',
+                'DOWNLOAD_LABEL_MASK_COUNTRY',
+                'DOWNLOAD_LABEL_MASK_BBOX',
+                'DOWNLOAD_LABEL_MASK_LANDONLY',
+                'DOWNLOAD_LABEL_SELECT_COUNTRY',
+                'DOWNLOAD_LABEL_SELECT_BBOX',
+                'DOWNLOAD_LABEL_SELECT_POINT',
+                'DOWNLOAD_HELP_CUTOUT',
                 'DOWNLOAD_HELP_CUTOUT_BBOX',
+                'DOWNLOAD_HELP_MASK',
                 'DOWNLOAD_HELP_MASK_COUNTRY',
                 'DOWNLOAD_HELP_MASK_BBOX',
-                'DOWNLOAD_HELP_MASK_LANDONLY'
+                'DOWNLOAD_HELP_MASK_LANDONLY',
+                'DOWNLOAD_HELP_SELECT',
+                'DOWNLOAD_HELP_SELECT_COUNTRY',
+                'DOWNLOAD_HELP_SELECT_BBOX',
+                'DOWNLOAD_HELP_SELECT_POINT'
             ]
         ]

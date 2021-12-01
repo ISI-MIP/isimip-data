@@ -76,7 +76,7 @@ Country.propTypes = {
   countryError: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   help: PropTypes.string
 }
 
