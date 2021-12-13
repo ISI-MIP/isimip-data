@@ -105,7 +105,7 @@ class App extends Component {
                   <Scale value={row.value} minimum={table.minimum} maximum={table.maximum} />
                 </td>
                 <td>
-                  <a href="{row.search_url}" target="blank">Search</a>
+                  <a href="{row.search_url}" target="_blank">Search</a>
                 </td>
               </tr>
             ))
