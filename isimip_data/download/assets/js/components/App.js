@@ -98,7 +98,7 @@ class App extends Component {
     }
 
     const paths = this.props.files.filter(file => {
-      return (file.specifiers.end_year === undefined) ||
+      return (file.specifiers.start_year === undefined) ||
              (file.specifiers.start_year >= startYear && file.specifiers.start_year <= endYear)
     }).map(file => file.path)
 
