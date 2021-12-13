@@ -239,9 +239,14 @@ class App extends Component {
             }
             {
               job.status == 'finished' &&
-              <p className="text-success">
-                The files were successfully created on the server, the download should start now.
-              </p>
+              <>
+                <p className="text-success">
+                  The files were successfully created on the server, the download should start now.
+                </p>
+                <p>
+                  Alternatively, you can use the following link: <a href={job.file_url} target="_blank">{job.file_url}</a>.
+                </p>
+              </>
             }
             {
               job.status == 'failed' &&
@@ -251,9 +256,14 @@ class App extends Component {
             }
             {
               job.id &&
-              <p>
-                If you need to close the browser, you can check the status of this download later. You can bookmark this page or store its URL otherwise: <a href={document.location.toString()} target="blank">{document.location.toString()}</a>. After completion, the files will be stored on the server for {job.ttl/60.0/60.0} hours.
-              </p>
+              <>
+                <p>
+                  If you need to close the browser, you can bookmark this page or store its URL otherwise: <a href={document.location.toString()} target="_blank">{document.location.toString()}</a>.
+                </p>
+                <p>
+                  After completion, the files will be stored on the server for {job.ttl/60.0/60.0} hours.
+                </p>
+              </>
             }
             {
               !job.id &&
