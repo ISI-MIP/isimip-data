@@ -6,7 +6,7 @@ from isimip_data.metadata.models import File
 
 def download(request, job_id=None):
     paths = request.POST.getlist('paths')
-    files = File.objects.using('metadata').filter(path__in=paths)
+    files = File.objects.using('metadata').filter(path__in=paths, dataset__public=True)
 
     return render(request, 'download/download.html', {
         'title': 'Configure download',
