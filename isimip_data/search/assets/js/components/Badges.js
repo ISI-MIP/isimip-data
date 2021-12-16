@@ -22,7 +22,7 @@ class Badges extends Component {
 
   render() {
     const { dataset } = this.props
-    const resource = dataset.resources[0]
+    const resource = dataset.resources[dataset.resources.length - 1]
     const specifiers = dataset.merged_specifiers
 
     return (
