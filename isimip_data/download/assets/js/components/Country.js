@@ -56,14 +56,10 @@ class Country extends Component {
             }
           </select>
         </div>
-        <div className="col-lg-12 mb-2">
+        <div className="col-lg-12">
+          {checked && countryError && <p className="text-danger">{countryError}</p>}
           <p className="text-muted small" dangerouslySetInnerHTML={{__html: help}}></p>
         </div>
-        {checked && countryError &&
-          <div className="col-lg-12 mb-2">
-            <p className="text-danger">{countryError}</p>
-          </div>
-        }
       </div>
     )
   }
@@ -76,7 +72,7 @@ Country.propTypes = {
   countryError: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   help: PropTypes.string
 }
 

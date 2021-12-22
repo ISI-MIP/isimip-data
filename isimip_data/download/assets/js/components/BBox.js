@@ -61,14 +61,10 @@ class BBox extends Component {
               type="number" placeholder="East" min="-180" max="180" step="any"
               value={checked && east} onChange={e => this.handleChange(e, 3)} />
         </div>
-        <div className="col-lg-12 mb-2">
+        <div className="col-lg-12">
+          {checked && bboxError && <p className="text-danger">{bboxError}</p>}
           <p className="text-muted small" dangerouslySetInnerHTML={{__html: help}}></p>
         </div>
-        {checked && bboxError &&
-          <div className="col-lg-12 mb-2">
-            <p className="text-danger">{bboxError}</p>
-          </div>
-        }
       </div>
     )
   }
@@ -81,7 +77,7 @@ BBox.propTypes = {
   bboxError: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   help: PropTypes.string
 }
 

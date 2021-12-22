@@ -7,14 +7,14 @@
         {% if related_identifier.relatedIdentifierType == 'DOI' %}
         <li class="list-group-item related-identifier">
             {{ related_identifier.title }}&nbsp;
-            <a class="doi-link" href="{{ related_identifier.relatedIdentifier }}" target="blank">
+            <a class="doi-link" href="{{ related_identifier.relatedIdentifier }}" target="_blank">
                 {{ related_identifier.relatedIdentifier }}
             </a>
         </li>
         {% elif related_identifier.relatedIdentifierType == 'URL' %}
         <li class="list-group-item related-identifier">
             {{ related_identifier.title }}&nbsp;&rarr;
-            <a href="{{ related_identifier.relatedIdentifier }}" target="blank">
+            <a href="{{ related_identifier.relatedIdentifier }}" target="_blank">
                 {{ related_identifier.relatedIdentifier }}
             </a>
         </li>

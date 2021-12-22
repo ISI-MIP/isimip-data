@@ -329,7 +329,7 @@ class Result extends Component {
     const { csrfToken } = this.state
 
     return (
-      <form className="m-0" method="post" action="/download/" target="blank">
+      <form className="m-0" method="post" action="/download/" target="_blank">
         <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
         {files.map(file => {
           return <input type="hidden" name="paths" value={file.path} key={file.id} />

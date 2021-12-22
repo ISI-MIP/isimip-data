@@ -12,6 +12,8 @@ import Path from './Path'
 import Country from './Country'
 import BBox from './BBox'
 import Landonly from './Landonly'
+import Range from './Range'
+import Point from './Point'
 
 
 class App extends Component {
@@ -21,7 +23,10 @@ class App extends Component {
     this.state = {
       job: null,
       settings: {},
-      paths: [...props.paths],
+      mode: 'range',
+      rangeDomain: [1600, 2100],
+      rangeValues: [1600, 2100],
+      paths: [...props.files.map(file => file.path)],
       pathsError: [],
       task: '',
       taskError: '',
@@ -29,12 +34,18 @@ class App extends Component {
       countryError: '',
       bbox: ['', '', '', ''],
       bboxError: '',
+      point: ['', '', '', ''],
+      pointError: '',
       serverError: ''
     }
+
+    this.handleModeChange =this.handleModeChange.bind(this)
+    this.handleRangeChange = this.handleRangeChange.bind(this)
     this.handlePathChange = this.handlePathChange.bind(this)
     this.handleSelectChange = this.handleSelectChange.bind(this)
     this.handleCountryChange = this.handleCountryChange.bind(this)
     this.handleBBoxChange = this.handleBBoxChange.bind(this)
+    this.handlePointChange = this.handlePointChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.togglePath = this.togglePath.bind(this)
   }
@@ -44,9 +55,54 @@ class App extends Component {
       this.fetch(this.props.url)
     }
 
+    if (this.props.files) {
+      // compute the start_year/end_year of the files in this.props.files
+      const range = this.props.files.reduce((acc, cur) => {
+        let [start_year, end_year] = acc
+
+        if (cur.specifiers.start_year && cur.specifiers.start_year < start_year) {
+          start_year = cur.specifiers.start_year
+        }
+        if (cur.specifiers.end_year && cur.specifiers.end_year > end_year) {
+          end_year = cur.specifiers.end_year
+        } else if (cur.specifiers.start_year && cur.specifiers.start_year > end_year) {
+          // workaround for files with a start_year, but no end_year
+          end_year = cur.specifiers.start_year
+        }
+
+        return [start_year, end_year]
+      }, [3000, 0])
+
+      this.setState({
+        rangeDomain: [...range],
+        rangeValues: [...range]
+      })
+    }
+
     CoreApi.fetchSettings().then(settings => {
       this.setState({ settings })
     })
+  }
+
+  handleModeChange(mode) {
+    this.setState({ mode })
+  }
+
+  handleRangeChange(specifier, value) {
+    let [ startYear, endYear ] = this.state.rangeValues
+
+    if (specifier == 'start_year') {
+      startYear = (value < endYear) ? value : startYear
+    } else if (specifier == 'end_year') {
+      endYear = (value > startYear) ? value : endYear
+    }
+
+    const paths = this.props.files.filter(file => {
+      return (file.specifiers.start_year === undefined) ||
+             (file.specifiers.start_year >= startYear && file.specifiers.start_year <= endYear)
+    }).map(file => file.path)
+
+    this.setState({ rangeValues: [startYear, endYear], paths })
   }
 
   handlePathChange(value) {
@@ -65,27 +121,38 @@ class App extends Component {
     this.setState({ bbox: value })
   }
 
+  handlePointChange(value) {
+    this.setState({ point: value })
+  }
+
   handleSubmit(e) {
     e.preventDefault()
 
-    const { settings, paths, task, country, bbox } = this.state
+    const { settings, paths, task, country, bbox, point } = this.state
     let pathsError = [],
         taskError = '',
         countryError = '',
-        bboxError = ''
+        bboxError = '',
+        pointError = ''
 
     if (task) {
-      if (['mask_country'].includes(task)) {
+      if (['mask_country', 'select_country'].includes(task)) {
         if (country) {
           this.submit(settings.FILES_API_URL, { paths, task, country })
         } else {
           countryError = 'Please select a country.'
         }
-      } else if (['cutout_bbox', 'mask_bbox'].includes(task)) {
+      } else if (['cutout_bbox', 'mask_bbox', 'select_bbox'].includes(task)) {
         if (bbox && bbox[0] !== '' && bbox[1] !== '' && bbox[2] !== '' && bbox[3] !== '') {
           this.submit(settings.FILES_API_URL, { paths, task, bbox })
         } else {
           bboxError = 'Please give a valid bounding box.'
+        }
+      } else if (['select_point'].includes(task)) {
+        if (point && point[0] !== '' && point[1] !== '') {
+          this.submit(settings.FILES_API_URL, { paths, task, point })
+        } else {
+          pointError = 'Please give a valid point.'
         }
       } else {
           this.submit(settings.FILES_API_URL, { paths, task })
@@ -94,7 +161,7 @@ class App extends Component {
       taskError = 'Please select one of the options.'
     }
 
-    this.setState({ pathsError, taskError, countryError, bboxError })
+    this.setState({ pathsError, taskError, countryError, bboxError, pointError })
   }
 
   submit(url, data) {
@@ -103,7 +170,8 @@ class App extends Component {
         const pathsError = response.errors.paths || []
         const countryError = response.errors.country || '';
         const bboxError = response.errors.bbox || '';
-        this.setState({ job: null, pathsError, countryError, bboxError })
+        const pointError = response.errors.point || '';
+        this.setState({ job: null, pathsError, countryError, bboxError, pointError })
       } else {
         setTimeout(() => this.fetch(response.job_url), 2000)
 
@@ -141,11 +209,11 @@ class App extends Component {
   }
 
   toggleAll(e) {
-    const allChecked = (this.state.paths.length == this.props.paths.length)
+    const allChecked = (this.state.paths.length == this.props.files.length)
     if (allChecked) {
       this.setState({ paths: [] })
     } else {
-      this.setState({ paths: this.props.paths })
+      this.setState({ paths: this.props.files.map(file => file.path) })
     }
   }
 
@@ -171,9 +239,14 @@ class App extends Component {
             }
             {
               job.status == 'finished' &&
-              <p className="text-success">
-                The files were successfully created on the server, the download should start now.
-              </p>
+              <>
+                <p className="text-success">
+                  The files were successfully created on the server, the download should start now.
+                </p>
+                <p>
+                  Alternatively, you can use the following link: <a href={job.file_url} target="_blank">{job.file_url}</a>.
+                </p>
+              </>
             }
             {
               job.status == 'failed' &&
@@ -183,9 +256,14 @@ class App extends Component {
             }
             {
               job.id &&
-              <p>
-                If you need to close the browser, you can check the status of this download later. You can bookmark this page or store its URL otherwise: <a href={document.location.toString()} target="blank">{document.location.toString()}</a>. After completion, the files will be stored on the server for {job.ttl/60.0/60.0} hours.
-              </p>
+              <>
+                <p>
+                  If you need to close the browser, you can bookmark this page or store its URL otherwise: <a href={document.location.toString()} target="_blank">{document.location.toString()}</a>.
+                </p>
+                <p>
+                  After completion, the files will be stored on the server for {job.ttl/60.0/60.0} hours.
+                </p>
+              </>
             }
             {
               !job.id &&
@@ -200,35 +278,77 @@ class App extends Component {
   }
 
   renderForm() {
-    const { settings, paths, pathsError, task, taskError, country, countryError, bbox, bboxError, serverError } = this.state
-    const allChecked = (paths.length == this.props.paths.length)
+    const { settings, mode, rangeDomain, rangeValues, paths, pathsError, task, taskError,
+            country, countryError, bbox, bboxError, point, pointError, serverError } = this.state
+    const allChecked = (paths.length == this.props.files.length)
+    const [startYear, endYear] = rangeValues
+
+    const cutout = this.props.files.every(file => {
+      return [undefined, '30arcsec', 'halfdeg'].includes(file.specifiers.resolution)
+    })
+    const mask = this.props.files.every(file => {
+      return [undefined, 'halfdeg'].includes(file.specifiers.resolution)
+    })
+    const select = mask;
 
     return (
       <form onSubmit={this.handleSubmit} noValidate>
-        <h3>Selected files</h3>
+        <h3>Selection</h3>
+        <div className="card mb-2">
+          <div className="card-header">
+            <div className="form-check form-check-inline mb-0">
+              <input className="form-check-input" type="radio" id="range-radio"
+                     onChange={e => this.handleModeChange('range')} checked={mode == 'range'} />
+              <label className="form-check-label font-weight-normal" htmlFor="range-radio">
+                Select time range
+              </label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input className="form-check-input" type="radio" id="files-radio"
+                     onChange={e => this.handleModeChange('files')} checked={mode == 'files'} />
+              <label className="form-check-label font-weight-normal" htmlFor="files-radio">
+                Select individual files
+              </label>
+            </div>
+          </div>
+        </div>
         <div className="card">
           <div className="card-body">
             {
-              this.props.paths.length > 3 && <div className="form-check">
-                <input className="form-check-input" type="checkbox" id="check-all"
-                       checked={allChecked}
-                       onChange={e => this.toggleAll(e)} />
-                <label className="form-check-label text-muted" htmlFor="check-all">
-                  {allChecked ? <span>Uncheck all</span> : <span>Check all</span>}
-                </label>
+              mode == 'range' && <div>
+                <Range domain={rangeDomain} values={rangeValues} onChange={this.handleRangeChange} />
+                <div className="text-center">
+                  <span className="mr-2"><strong>Start year:</strong> {startYear}</span>
+                  <span className="mr-2"><strong>End year:</strong> {endYear}</span>
+                  <span><strong>Number of files:</strong> {paths.length}</span>
+                </div>
               </div>
             }
             {
-              this.props.paths.map((path, index) => {
-                return (
-                  <div className="form-check" key={index}>
-                    <input className="form-check-input" type="checkbox" id={index}
-                           checked={paths.includes(path)}
-                           onChange={e => this.togglePath(e, path)} />
-                    <label className="form-check-label" htmlFor={index}>{path}</label>
+              mode == 'files' && <div>
+                {
+                  this.props.files.length > 3 && <div className="form-check">
+                    <input className="form-check-input" type="checkbox" id="check-all"
+                           checked={allChecked}
+                           onChange={e => this.toggleAll(e)} />
+                    <label className="form-check-label text-muted" htmlFor="check-all">
+                      {allChecked ? <span>Uncheck all</span> : <span>Check all</span>}
+                    </label>
                   </div>
-                )
-              })
+                }
+                {
+                  this.props.files.map((file, index) => {
+                    return (
+                      <div className="form-check" key={index}>
+                        <input className="form-check-input" type="checkbox" id={index}
+                               checked={paths.includes(file.path)}
+                               onChange={e => this.togglePath(e, file.path)} />
+                        <label className="form-check-label" htmlFor={index}>{file.path}</label>
+                      </div>
+                    )
+                  })
+                }
+              </div>
             }
             {
               pathsError && pathsError.map((error, index) => {
@@ -238,50 +358,79 @@ class App extends Component {
           </div>
         </div>
 
-        <h3>Cut out area</h3>
-        <div className="card">
-          <div className="card-body">
-            <p>
-              You can cutout a specific bounding box given by its south, north, west, and east border. This is done using the <code>ncks</code> command which is part of the <a href="http://nco.sourceforge.net" target="_blank">NCO toolkit</a>.
-            </p>
+        {
+          cutout && <div>
+            <h3>Cut out area</h3>
+            <div className="card">
+              <div className="card-body">
+                <p dangerouslySetInnerHTML={{__html: settings.DOWNLOAD_HELP_CUTOUT}}></p>
 
-            <div className="mt-2">
-              <BBox name="cutout_bbox" task={task} bbox={bbox} bboxError={bboxError}
-                  onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
-                  label="Cut out bounding box" help={settings.DOWNLOAD_HELP_CUTOUT_BBOX} />
+                <div className="mt-2">
+                  <BBox name="cutout_bbox" task={task} bbox={bbox} bboxError={bboxError}
+                      onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
+                      label={settings.DOWNLOAD_LABEL_CUTOUT_BBOX} help={settings.DOWNLOAD_HELP_CUTOUT_BBOX} />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        }
 
-        <h3>Mask area</h3>
-        <div className="card">
-          <div className="card-body">
-            <p>
-              You can also mask all data outside of a certain country, bounding box or by applying a land-sea-mask. The compression of the NetCDF file will then reduce the file size considerably. The resulting file will still have the same dimensions and metadata as the original.
-            </p>
+        {
+          mask && <div>
+            <h3>Mask area</h3>
+            <div className="card">
+              <div className="card-body">
+                <p dangerouslySetInnerHTML={{__html: settings.DOWNLOAD_HELP_MASK}}></p>
 
-            <p>
-              <strong>Masking will only work on global files using a 0.5° grid.</strong>
-            </p>
+                <div className="mt-2">
+                  <Country name="mask_country" task={task} country={country} countryError={countryError}
+                      onChange={this.handleCountryChange} onSelect={this.handleSelectChange}
+                      label={settings.DOWNLOAD_LABEL_MASK_COUNTRY} help={settings.DOWNLOAD_HELP_MASK_COUNTRY} />
+                </div>
 
-            <div className="mt-2">
-              <Country name="mask_country" task={task} country={country} countryError={countryError}
-                  onChange={this.handleCountryChange} onSelect={this.handleSelectChange}
-                  label="Mask by country" help={settings.DOWNLOAD_HELP_MASK_COUNTRY} />
-            </div>
+                <div className="mt-2">
+                  <BBox name="mask_bbox" task={task} bbox={bbox} bboxError={bboxError}
+                      onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
+                      label={settings.DOWNLOAD_LABEL_MASK_BBOX} help={settings.DOWNLOAD_HELP_MASK_BBOX} />
+                </div>
 
-            <div className="mt-2">
-              <BBox name="mask_bbox" task={task} bbox={bbox} bboxError={bboxError}
-                  onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
-                  label="Mask by bounding box" help={settings.DOWNLOAD_HELP_MASK_BBOX} />
-            </div>
-
-            <div className="mt-2">
-              <Landonly name="mask_landonly" task={task} onSelect={this.handleSelectChange}
-                        label="Mask only land data" help={settings.DOWNLOAD_HELP_MASK_LANDONLY} />
+                <div className="mt-2">
+                  <Landonly name="mask_landonly" task={task} onSelect={this.handleSelectChange}
+                      label={settings.DOWNLOAD_LABEL_MASK_LANDONLY} help={settings.DOWNLOAD_HELP_MASK_LANDONLY} />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        }
+
+        {
+          select && <div>
+            <h3>Select time series</h3>
+            <div className="card">
+              <div className="card-body">
+                <p dangerouslySetInnerHTML={{__html: settings.DOWNLOAD_HELP_SELECT}}></p>
+
+                <div className="mt-2">
+                  <Country name="select_country" task={task} country={country} countryError={countryError}
+                      onChange={this.handleCountryChange} onSelect={this.handleSelectChange}
+                      label={settings.DOWNLOAD_LABEL_SELECT_COUNTRY} help={settings.DOWNLOAD_HELP_SELECT_COUNTRY} />
+                </div>
+
+                <div className="mt-2">
+                  <BBox name="select_bbox" task={task} bbox={bbox} bboxError={bboxError}
+                      onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
+                      label={settings.DOWNLOAD_LABEL_SELECT_BBOX} help={settings.DOWNLOAD_HELP_SELECT_BBOX} />
+                </div>
+
+                <div className="mt-2">
+                  <Point name="select_point" task={task} point={point} pointError={pointError}
+                      onChange={this.handlePointChange} onSelect={this.handleSelectChange}
+                      label={settings.DOWNLOAD_LABEL_SELECT_POINT} help={settings.DOWNLOAD_HELP_SELECT_POINT} />
+                </div>
+              </div>
+            </div>
+          </div>
+        }
 
         {
           taskError && <div className="card">
@@ -312,7 +461,7 @@ class App extends Component {
   render() {
     if (this.state.job) {
       return this.renderJob()
-    } else if (this.props.paths.length > 0) {
+    } else if (this.props.files.length > 0) {
       return this.renderForm()
     } else if (this.state.serverError) {
       return <p className="text-center text-danger mt-4">{this.state.serverError}</p>
@@ -324,7 +473,7 @@ class App extends Component {
 
 App.propTypes = {
   url: PropTypes.string,
-  paths: PropTypes.array.isRequired
+  files: PropTypes.array.isRequired
 }
 
 export default App

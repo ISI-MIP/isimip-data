@@ -21,7 +21,10 @@
                   Download file sizes can be reduced by either cutting out an area of a large file or by masking all data outside of a certain country, bounding box or by applying a land-sea-mask. This process is performed on the server and the download starts when the files are ready.
                 </p>
                 <p>
-                  Please note that this process can take a considerable amount of time. Depending on the size of the dataset, it can take tens of minutes to create the download. It is only possible to cut out global files.
+                    Alternatively, if you are interested in a time series of a variable at a single point or avaraged over a country or bounding box, a CSV file can be created.
+                </p>
+                <p>
+                  Please note that this process can take a considerable amount of time. Depending on the size of the dataset, it can take tens of minutes to create the download. It is only possible to cut out global NetCDF files.
                 </p>
             </header>
         </div>
@@ -33,11 +36,11 @@
          data-url="{{ job_url }}">
     </div>
 
-    {% elif paths %}
+    {% elif files %}
 
-    <div id="app" {% for path in paths %}
-         data-path-{{ forloop.counter0 }}="{{ path }}"{% endfor %}>
-    </div>
+    <div id="app"></div>
+
+    {{ files|json_script:"files" }}
 
     {% else %}
 
