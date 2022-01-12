@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.messages import INFO
 from django.core.exceptions import ValidationError
@@ -55,7 +56,8 @@ class AnnouncementAdminForm(forms.Form):
     recipients = forms.CharField(widget=forms.Textarea(attrs={
         'class': 'vLargeTextField',
         'rows': 4
-    }), required=True, help_text=_('You can add multiple recipients line by line.'))
+    }), required=True, help_text=_('You can add multiple recipients line by line.'),
+        initial='\n'.join(settings.CAVEATS_DEFAULT_RECIPIENTS))
 
     def __init__(self, *args, **kwargs):
         self.object = kwargs.pop('object')
