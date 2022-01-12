@@ -15,7 +15,7 @@
         <h1>{{ caveat.title }} <span class="text-muted">#{{ caveat.id }}</span></h1>
 
         <p class="text-center mb-2">
-            {{ caveat.get_creator_display }} opened this caveat {{ caveat.created|timesince }} ago.
+            <strong>{{ caveat.get_creator_display }}</strong> opened this caveat on {{ caveat.created|date }}.
         </p>
 
         <p class="text-center mb-2">

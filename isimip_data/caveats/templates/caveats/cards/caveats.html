@@ -22,7 +22,7 @@
                 <li class="list-inline-item">{% trans 'Affected versions' %}: {% include 'caveats/snippets/versions.html' %}</li>
             </ul>
             <p>
-                {{ caveat.get_creator_display }} opened this caveat {{ caveat.created|timesince }} ago.
+                {{ caveat.get_creator_display }} opened this caveat on {{ caveat.created|date }}.
                 {% if caveat.created != caveat.updated %}It was last updated on {{ caveat.updated|date }}.{% endif %}
             </p>
         </li>
