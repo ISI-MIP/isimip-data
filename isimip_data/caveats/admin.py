@@ -11,6 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from isimip_data.annotations.models import Download, Figure
 from isimip_data.annotations.utils import format_affected_datasets
 from isimip_data.annotations.widgets import SpecifierWidget
+from isimip_data.metadata.models import Dataset
 
 from .mail import (get_caveat_announcement_mail, get_comment_announcement_mail,
                    send_caveat_announcement_mail,
@@ -109,7 +110,9 @@ class CaveatAdmin(admin.ModelAdmin):
     def caveats_caveat_send(self, request, pk):
         caveat = get_object_or_404(Caveat, id=pk)
 
-        subject, message = get_caveat_announcement_mail(request, caveat)
+        datasets = Dataset.objects.using('metadata').filter(target=None, id__in=caveat.datasets)
+
+        subject, message = get_caveat_announcement_mail(request, caveat, datasets)
 
         form = AnnouncementAdminForm(request.POST or None, object=caveat, initial={
             'subject': subject,

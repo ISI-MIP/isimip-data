@@ -22,10 +22,11 @@ def send_caveat_notifications_mail(request, caveat):
     send_mail(subject, message, from_email=from_email, to=to)
 
 
-def get_caveat_announcement_mail(request, caveat):
+def get_caveat_announcement_mail(request, caveat, datasets):
     context = {
         'caveat': caveat,
         'caveat_url': request.build_absolute_uri(caveat.get_absolute_url()),
+        'datasets': datasets,
         'site': Site.objects.get_current()
     }
 
