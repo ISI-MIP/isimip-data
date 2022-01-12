@@ -256,6 +256,9 @@ HOME = {
 FILES_BASE_URL = os.getenv('FILES_BASE_URL')
 FILES_API_URL = os.getenv('FILES_API_URL')
 
+CAVEATS_REPLY_TO = (
+    'ISIMIP data <isimip-data@isimip.org>',
+)
 CAVEATS_DEFAULT_RECIPIENTS = (
     'ISIMIP caveats <isimip-caveats@listserv.dfn.de>',
 )
