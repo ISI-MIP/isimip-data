@@ -2,7 +2,7 @@
 
 <div class="row">
     {% for figure in figures %}
-    <div class="{% if col %}col-md-{{ col }}{% else %}col-md-12{% endif %}">
+    <div class="col-md-{{ figure.width }}">
         <div class="card {% if mb %}mb-{{ mb }}{% endif %}">
             <div class="card-body">
                 <div class="card-text text-center">
