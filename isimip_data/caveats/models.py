@@ -79,7 +79,7 @@ class Caveat(models.Model):
 
     @property
     def severity_level(self):
-        {
+        return {
             self.SEVERITY_LOW: 1,
             self.SEVERITY_MEDIUM: 2,
             self.SEVERITY_HIGH: 3,

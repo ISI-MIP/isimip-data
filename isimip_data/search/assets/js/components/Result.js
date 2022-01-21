@@ -79,7 +79,7 @@ class Result extends Component {
         } else {
           return acc
         }
-      }, [0, 'text-info'])
+      }, [0, 'info'])
 
       return color
     }
@@ -93,7 +93,7 @@ class Result extends Component {
             dataset.caveats.length > 0 &&
             <div className={'float-right text-' + get_caveats_color(dataset.caveats)}>
               <FontAwesomeIcon className="result-caveat-icon"
-                               title="There are caveats for this dataset"
+                               title="There are caveats for this dataset."
                                icon={faExclamationTriangle}
                                onClick={this.toggleCaveats} />
             </div>
@@ -291,6 +291,7 @@ class Result extends Component {
                   </div>
                   <a href={caveat.url} target="_blank">{caveat.title}</a>
                   <span className="text-muted"> #{caveat.id}</span>
+                  {caveat.severity_level > 2 && <span className={'text-' + caveat.severity_color}> {caveat.severity_message}</span>}
                 </li>
               )
             })
