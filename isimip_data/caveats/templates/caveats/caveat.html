@@ -43,8 +43,11 @@
 
     <div class="row">
         <div class="col-md-9">
-            <h3>{% trans 'Description' %}</h3>
-            <div class="card">
+            <h3>{% trans 'Discussion' %}</h3>
+            <div class="card mb-2">
+                <div class="card-header">
+                    <strong>{{ caveat.get_creator_display }}</strong> reported on {{ caveat.created|date }}.
+                </div>
                 <div class="card-body">
                     {% if request.user.is_staff %}
                     <a class="d-block float-right" href="{% url 'admin:caveats_caveat_change' caveat.id %}">
@@ -57,11 +60,9 @@
             </div>
 
             {% if caveat.has_figures %}
-            <h3 id="figures">{% trans 'Figures' %}</h3>
-            {% include 'annotations/cards/figures.html' with figures=caveat.figures.all col=6 %}
+            {% include 'annotations/cards/figures.html' with figures=caveat.figures.all col=12 mb=2 %}
             {% endif %}
 
-            <h3 id="comments">{% trans 'Comments' %}</h3>
             {% include 'caveats/cards/comments.html' %}
         </div>
 
@@ -78,7 +79,12 @@
                     <dl>
                         <dt>{% trans 'Severity' %}</dt>
                         <dd>
-                            {% include 'caveats/snippets/severity.html' %}
+                            <div>
+                                {% include 'caveats/snippets/severity.html' %}
+                            </div>
+                            <div class="mt-1">
+                                {% include 'caveats/snippets/severity_message.html' %}
+                            </div>
                         </dd>
                         <dt>{% trans 'Status' %}</dt>
                         <dd>

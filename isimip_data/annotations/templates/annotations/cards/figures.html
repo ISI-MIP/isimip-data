@@ -3,7 +3,7 @@
 <div class="row">
     {% for figure in figures %}
     <div class="{% if col %}col-md-{{ col }}{% else %}col-md-12{% endif %}">
-        <div class="card">
+        <div class="card {% if mb %}mb-{{ mb }}{% endif %}">
             <div class="card-body">
                 <div class="card-text text-center">
                     <a href="{{ figure.image.url }}" data-toggle="modal" data-target="#figure-modal-{{ forloop.counter }}">

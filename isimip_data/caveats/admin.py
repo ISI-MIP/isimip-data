@@ -23,6 +23,7 @@ class CaveatAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['description'].help_text = 'Please describe only the initial problem. Subsequent updates should be added as comments. For the information on whether the data should be used for simulations or research, use the severity field.'
         self.fields['specifiers'].widget = SpecifierWidget()
         self.fields['specifiers'].required = False
 
