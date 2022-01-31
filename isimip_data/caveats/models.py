@@ -27,15 +27,11 @@ class Caveat(models.Model):
     )
 
     SEVERITY_LOW = 'low'
-    SEVERITY_MEDIUM = 'medium'
     SEVERITY_HIGH = 'high'
-    SEVERITY_CRITICAL = 'critical'
     SEVERITY_REPLACED = 'replaced'
     SEVERITY_CHOICES = (
         (SEVERITY_LOW, _('low')),
-        (SEVERITY_MEDIUM, _('medium')),
         (SEVERITY_HIGH, _('high')),
-        (SEVERITY_CRITICAL, _('critical')),
         (SEVERITY_REPLACED, _('replaced')),
     )
 
@@ -81,30 +77,24 @@ class Caveat(models.Model):
     def severity_level(self):
         return {
             self.SEVERITY_LOW: 1,
-            self.SEVERITY_MEDIUM: 2,
-            self.SEVERITY_HIGH: 3,
-            self.SEVERITY_CRITICAL: 4,
-            self.SEVERITY_REPLACED: 5
+            self.SEVERITY_HIGH: 2,
+            self.SEVERITY_REPLACED: 3
         }.get(self.severity)
 
     @property
     def severity_color(self):
         return {
             self.SEVERITY_LOW: 'info',
-            self.SEVERITY_MEDIUM: 'warning',
             self.SEVERITY_HIGH: 'danger',
-            self.SEVERITY_CRITICAL: 'dark',
             self.SEVERITY_REPLACED: 'success'
         }.get(self.severity)
 
     @property
     def severity_message(self):
         if self.severity == self.SEVERITY_LOW:
-            return 'The affected datasets can still be used.'
-        elif self.severity == self.SEVERITY_MEDIUM:
-            return 'The affected datasets can still be used. Please note the limitations described in the caveat.'
-        elif self.severity in [self.SEVERITY_HIGH, self.SEVERITY_CRITICAL]:
-            return 'This dataset should not be used until this caveat is resolved.'
+            return 'The datasets can still be used.'
+        elif self.severity in [self.SEVERITY_HIGH]:
+            return 'The datasets should not be used until this caveat is resolved.'
         elif self.severity in [self.SEVERITY_REPLACED]:
             return 'Please use the replaced datasets for new simulations or research.'
 
