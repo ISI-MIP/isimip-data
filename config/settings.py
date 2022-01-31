@@ -224,10 +224,6 @@ TERMS_OF_USE_URL = 'https://www.isimip.org/gettingstarted/terms-of-use/#general-
 
 NAVIGATION = [
     {
-        'title': 'About the project',
-        'href': 'https://www.isimip.org'
-    },
-    {
         'title': 'Documentation',
         'href': 'https://www.isimip.org/outputdata/isimip-repository/'
     },
