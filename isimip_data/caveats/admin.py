@@ -98,7 +98,11 @@ class CaveatAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
             'fields': ('version_after', 'version_before'),
         }),
-        ('Datasets', {
+        ('Include/Exclude', {
+            'classes': ('collapse',),
+            'fields': ('include', 'exclude'),
+        }),
+        ('Affected datasets', {
             'classes': ('collapse',),
             'fields': ('affected_datasets', ),
         })

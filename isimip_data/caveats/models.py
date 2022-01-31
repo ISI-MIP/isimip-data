@@ -53,6 +53,14 @@ class Caveat(models.Model):
     severity = models.TextField(choices=SEVERITY_CHOICES)
     status = models.TextField(choices=STATUS_CHOICES)
     specifiers = models.JSONField(default=dict)
+    include = models.TextField(
+        blank=True,
+        help_text='You can add multiple paths line by line. If paths are provided, datasets will '
+                  'only be included if their path starts with one of the paths given.')
+    exclude = models.TextField(
+        blank=True,
+        help_text='You can add multiple paths line by line. Datasets will be excluded '
+                  'if their path starts with one of the paths given.')
     datasets = ArrayField(models.UUIDField(), blank=True, default=list)
     version_after = models.CharField(max_length=8, blank=True)
     version_before = models.CharField(max_length=8, blank=True)
@@ -67,7 +75,8 @@ class Caveat(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        self.datasets = query_datasets(self.specifiers, self.version_after, self.version_before)
+        self.datasets = query_datasets(self.specifiers, self.version_after, self.version_before,
+                                       self.include, self.exclude)
         super().save(*args, **kwargs)
 
     def get_creator_display(self):

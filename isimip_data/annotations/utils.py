@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 from isimip_data.metadata.models import Dataset
 
 
-def query_datasets(specifiers_dict, version_after, version_before):
+def query_datasets(specifiers_dict, version_after, version_before, include=None, exclude=None):
     if specifiers_dict:
         queryset = Dataset.objects.using('metadata')
         for identifier, specifiers in specifiers_dict.items():
@@ -19,6 +19,18 @@ def query_datasets(specifiers_dict, version_after, version_before):
 
         if version_before:
             queryset = queryset.filter(version__lte=version_before)
+
+        if include:
+            q = Q()
+            for include_path in include.strip().splitlines():
+                q |= Q(path__startswith=include_path)
+            queryset = queryset.filter(q)
+
+        if exclude:
+            q = Q()
+            for exclude_path in exclude.strip().splitlines():
+                q |= Q(path__startswith=exclude_path)
+            queryset = queryset.exclude(q)
 
         # return datasets as list
         return list(queryset.values_list('id', flat=True))
