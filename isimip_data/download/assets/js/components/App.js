@@ -304,7 +304,7 @@ class App extends Component {
               <input className="form-check-input" type="radio" id="range-radio"
                      onChange={e => this.handleModeChange('range')} checked={mode == 'range'} />
               <label className="form-check-label font-weight-normal" htmlFor="range-radio">
-                Select time range
+                Select files by time range
               </label>
             </div>
             <div className="form-check form-check-inline">
@@ -322,9 +322,9 @@ class App extends Component {
               mode == 'range' && <div>
                 <Range domain={rangeDomain} values={rangeValues} onChange={this.handleRangeChange} />
                 <div className="text-center">
-                  <span className="mr-2"><strong>Start year:</strong> {startYear}</span>
-                  <span className="mr-2"><strong>End year:</strong> {endYear}</span>
-                  <span><strong>Number of files:</strong> {paths.length}</span>
+                  <span className="mr-3"><strong>Number of files:</strong> {paths.length}</span>
+                  <span className="mr-3"><strong>Start year:</strong> {startYear}</span>
+                  <span><strong>End year:</strong> {endYear}</span>
                 </div>
               </div>
             }

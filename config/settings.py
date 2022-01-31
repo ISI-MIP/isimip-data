@@ -276,7 +276,7 @@ DOWNLOAD = {
     },
     'mask_country': {
         'label': 'Mask by country',
-        'help': 'The files are masked using the countrymask of the ISIPEDIA project (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc" target="_blank">available on GitHub</a>) and the command: <code>cdo -div IFILE -setctomiss,0 -selname,m_COUNTRY COUNTRYMASK OFILE</code>.',
+        'help': 'The files are masked using the countrymask of the ISIPEDIA project (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc" target="_blank">available on GitHub</a>) and the command: <code>cdo -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK OFILE</code>.',
         'resolutions': ['halfdeg']
     },
     'mask_bbox': {
@@ -286,7 +286,7 @@ DOWNLOAD = {
     },
     'mask_landonly': {
         'label': 'Mask only land data',
-        'help': 'The files are masked using the ISIMIP3 landseamask without Antarctica (<a href="https://doi.org/10.48364/ISIMIP.822294" target="_blank">https://data.isimip.org/10.48364/ISIMIP.822294</a>) and the command: <code>cdo -div IFILE -setctomiss,0 -selname,mask LANDSEAMASK OFILE</code>.',
+        'help': 'The files are masked using the ISIMIP3 landseamask without Antarctica (<a href="https://doi.org/10.48364/ISIMIP.822294" target="_blank">https://data.isimip.org/10.48364/ISIMIP.822294</a>) and the command: <code>cdo -ifthen IFILE -selname,mask LANDSEAMASK OFILE</code>.',
         'resolutions': ['halfdeg']
     },
     'select': {
@@ -294,7 +294,7 @@ DOWNLOAD = {
     },
     'select_country': {
         'label': 'Select by country',
-        'help': 'The time series is extracted using the countrymask of the ISIPEDIA project (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc" target="_blank">available on GitHub</a>) and the command: <code>cdo -s outputtab,date,value,nohead -fldmean -div IFILE -setctomiss,0 -selname,m_COUNTRY COUNTRYMASK</code>.',
+        'help': 'The time series is extracted using the countrymask of the ISIPEDIA project (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc" target="_blank">available on GitHub</a>) and the command: <code>cdo -s outputtab,date,value,nohead -fldmean -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK</code>.',
         'resolutions': ['halfdeg']
     },
     'select_bbox': {
@@ -304,7 +304,7 @@ DOWNLOAD = {
     },
     'select_point': {
         'label': 'Select by point',
-        'help': 'The time series is extracted by calculating the grid index for the point given by you (e.g. 52.39, 13.06) and the command: <code>cdo -s outputtab,date,value,nohead -fldmean -selindexbox,IX,IX,IY,IY IFILE</code>.',
+        'help': 'The time series is extracted by calculating the grid index for the point given by you (e.g. 52.39, 13.06) and the command: <code>cdo -s outputtab,date,value,nohead -selindexbox,IX,IX,IY,IY IFILE</code>.',
         'resolutions': ['halfdeg', 'onedeg', 'twodeg']
     }
 }
