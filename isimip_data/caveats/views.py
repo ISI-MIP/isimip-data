@@ -27,7 +27,7 @@ def caveat(request, pk=None):
     queryset = Caveat.objects.public(request.user)
     caveat = get_object_or_404(queryset, id=pk)
     comments = caveat.comments.public(request.user)
-    datasets = Dataset.objects.using('metadata').filter(target=None, id__in=caveat.datasets)
+    datasets = Dataset.objects.using('metadata').filter(target=None, id__in=caveat.datasets).prefetch_related('links')
 
     return render(request, 'caveats/caveat.html', {
         'title': caveat.title,
