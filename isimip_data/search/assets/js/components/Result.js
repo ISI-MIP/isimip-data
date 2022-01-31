@@ -117,7 +117,7 @@ class Result extends Component {
 
           {dataset.public &&
             <div className="float-md-right">
-              {dataset.is_global && dataset.is_global &&
+              {dataset.is_global && dataset.is_netcdf &&
                 <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
                   {this.renderConfigureDownloadForm(dataset.files)}
                 </div>

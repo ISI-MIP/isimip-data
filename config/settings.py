@@ -262,32 +262,52 @@ PROXY_FILES_API_URL = os.getenv('PROXY_FILES_API_URL')
 
 PROTOCOL_LOCATIONS = os.getenv('PROTOCOL_LOCATIONS', '').split()
 
-DOWNLOAD_HELP_CUTOUT = 'You can cutout a specific bounding box given by its south, north, west, and east border. This is done on the server using the <code>ncks</code> command which is part of the <a href="http://nco.sourceforge.net" target="_blank">NCO toolkit</a>.'
-
-DOWNLOAD_LABEL_CUTOUT_BBOX = 'Cut out bounding box'
-DOWNLOAD_HELP_CUTOUT_BBOX = 'The files are cut out using the bounding box given by you (e.g. -23.43651, 23.43651, -180, 180) and the command: <code>ncks -O -h -d lat,SOUTH,NORTH -d lon,WEST,EAST IFILE OFILE</code>.'
-
-DOWNLOAD_HELP_MASK = 'You can also mask all data outside of a certain country, bounding box, or by applying a land-sea-mask. The compression of the NetCDF file will then reduce the file size considerably. The resulting file will still have the same dimensions and metadata as the original. The extraction is done on the server using the <a href="https://code.mpimet.mpg.de/projects/cdo/" target="_blank">CDO toolkit</a>.'
-
-DOWNLOAD_LABEL_MASK_COUNTRY = 'Mask by country'
-DOWNLOAD_HELP_MASK_COUNTRY = 'The files are masked using the countrymask of the ISIPEDIA project (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc" target="_blank">available on GitHub</a>) and the command: <code>cdo -div IFILE -setctomiss,0 -selname,m_COUNTRY COUNTRYMASK OFILE</code>.'
-
-DOWNLOAD_LABEL_MASK_BBOX = 'Mask by bounding box'
-DOWNLOAD_HELP_MASK_BBOX = 'The files are masked using the bounding box given by you (e.g. -23.43651, 23.43651, -180, 180) and the command:  <code>cdo -masklonlatbox,WEST,EAST,SOUTH,NORTH IFILE OFILE</code>.'
-
-DOWNLOAD_LABEL_MASK_LANDONLY = 'Mask only land data'
-DOWNLOAD_HELP_MASK_LANDONLY = 'The files are masked using the ISIMIP3 landseamask without Antarctica (<a href="https://doi.org/10.48364/ISIMIP.822294" target="_blank">https://data.isimip.org/10.48364/ISIMIP.822294</a>) and the command: <code>cdo -div IFILE -setctomiss,0 -selname,mask LANDSEAMASK OFILE</code>.'
-
-DOWNLOAD_HELP_SELECT = 'If you are interested in a time series for a certain region, you can extract the data for one point, for a country, or for a bounding box. The values are averaged over the selected area and CSV files containing dates and values is returned. The extraction is done on the server using the <a href="https://code.mpimet.mpg.de/projects/cdo/" target="_blank">CDO toolkit</a>.'
-
-DOWNLOAD_LABEL_SELECT_COUNTRY = 'Select by country'
-DOWNLOAD_HELP_SELECT_COUNTRY = 'The time series is extracted using the countrymask of the ISIPEDIA project (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc" target="_blank">available on GitHub</a>) and the command: <code>cdo -s outputtab,date,value,nohead -fldmean -div IFILE -setctomiss,0 -selname,m_COUNTRY COUNTRYMASK</code>.'
-
-DOWNLOAD_LABEL_SELECT_BBOX = 'Select by bounding box'
-DOWNLOAD_HELP_SELECT_BBOX = 'The time series is extracted using the bounding box given by you (e.g. -23.43651, 23.43651, -180, 180) and the command: <code>cdo -s outputtab,date,value,nohead -fldmean -sellonlatbox,WEST,EAST,SOUTH,NORTH IFILE</code>.'
-
-DOWNLOAD_LABEL_SELECT_POINT = 'Select by point'
-DOWNLOAD_HELP_SELECT_POINT = 'The time series is extracted by calculating the grid index for the point given by you (e.g. 52.39, 13.06) and the command: <code>cdo -s outputtab,date,value,nohead -fldmean -selindexbox,IX,IX,IY,IY IFILE</code>.'
+DOWNLOAD = {
+    'cutout': {
+        'help': 'You can cutout a specific bounding box given by its south, north, west, and east border. This is done on the server using the <code>ncks</code> command which is part of the <a href="http://nco.sourceforge.net" target="_blank">NCO toolkit</a>.'
+    },
+    'cutout_bbox': {
+        'label': 'Cut out bounding box',
+        'help': 'The files are cut out using the bounding box given by you (e.g. -23.43651, 23.43651, -180, 180) and the command: <code>ncks -O -h -d lat,SOUTH,NORTH -d lon,WEST,EAST IFILE OFILE</code>.',
+        'resolutions': ['30arcsec', '90arcsec', '360arcsec', '1800arcsec', 'halfdeg', 'onedeg', 'twodeg']
+    },
+    'mask': {
+        'help': 'You can also mask all data outside of a certain country, bounding box, or by applying a land-sea-mask. The compression of the NetCDF file will then reduce the file size considerably. The resulting file will still have the same dimensions and metadata as the original. The extraction is done on the server using the <a href="https://code.mpimet.mpg.de/projects/cdo/" target="_blank">CDO toolkit</a>.'
+    },
+    'mask_country': {
+        'label': 'Mask by country',
+        'help': 'The files are masked using the countrymask of the ISIPEDIA project (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc" target="_blank">available on GitHub</a>) and the command: <code>cdo -div IFILE -setctomiss,0 -selname,m_COUNTRY COUNTRYMASK OFILE</code>.',
+        'resolutions': ['halfdeg']
+    },
+    'mask_bbox': {
+        'label': 'Mask by bounding box',
+        'help': 'The files are masked using the bounding box given by you (e.g. -23.43651, 23.43651, -180, 180) and the command:  <code>cdo -masklonlatbox,WEST,EAST,SOUTH,NORTH IFILE OFILE</code>.',
+        'resolutions': ['halfdeg', 'onedeg', 'twodeg']
+    },
+    'mask_landonly': {
+        'label': 'Mask only land data',
+        'help': 'The files are masked using the ISIMIP3 landseamask without Antarctica (<a href="https://doi.org/10.48364/ISIMIP.822294" target="_blank">https://data.isimip.org/10.48364/ISIMIP.822294</a>) and the command: <code>cdo -div IFILE -setctomiss,0 -selname,mask LANDSEAMASK OFILE</code>.',
+        'resolutions': ['halfdeg']
+    },
+    'select': {
+        'help': 'If you are interested in a time series for a certain region, you can extract the data for one point, for a country, or for a bounding box. The values are averaged over the selected area and CSV files containing dates and values is returned. The extraction is done on the server using the <a href="https://code.mpimet.mpg.de/projects/cdo/" target="_blank">CDO toolkit</a>.'
+    },
+    'select_country': {
+        'label': 'Select by country',
+        'help': 'The time series is extracted using the countrymask of the ISIPEDIA project (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc" target="_blank">available on GitHub</a>) and the command: <code>cdo -s outputtab,date,value,nohead -fldmean -div IFILE -setctomiss,0 -selname,m_COUNTRY COUNTRYMASK</code>.',
+        'resolutions': ['halfdeg']
+    },
+    'select_bbox': {
+        'label': 'Select by bounding box',
+        'help': 'The time series is extracted using the bounding box given by you (e.g. -23.43651, 23.43651, -180, 180) and the command: <code>cdo -s outputtab,date,value,nohead -fldmean -sellonlatbox,WEST,EAST,SOUTH,NORTH IFILE</code>.',
+        'resolutions': ['halfdeg', 'onedeg', 'twodeg']
+    },
+    'select_point': {
+        'label': 'Select by point',
+        'help': 'The time series is extracted by calculating the grid index for the point given by you (e.g. 52.39, 13.06) and the command: <code>cdo -s outputtab,date,value,nohead -fldmean -selindexbox,IX,IX,IY,IY IFILE</code>.',
+        'resolutions': ['halfdeg', 'onedeg', 'twodeg']
+    }
+}
 
 DOI_PREFIX = '10.48364'
 

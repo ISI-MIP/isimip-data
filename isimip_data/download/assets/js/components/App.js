@@ -283,13 +283,17 @@ class App extends Component {
     const allChecked = (paths.length == this.props.files.length)
     const [startYear, endYear] = rangeValues
 
-    const cutout = this.props.files.every(file => {
-      return [undefined, '30arcsec', 'halfdeg'].includes(file.specifiers.resolution)
-    })
-    const mask = this.props.files.every(file => {
-      return [undefined, 'halfdeg'].includes(file.specifiers.resolution)
-    })
-    const select = mask;
+    if (Object.keys(settings).length == 0) {
+      return null
+    }
+
+    const active = Object.entries(settings.DOWNLOAD).reduce((acc, [type, config]) => {
+      if (config.resolutions) {
+        acc[type] = this.props.files.every(file => config.resolutions.concat(undefined)
+                                                                     .includes(file.specifiers.resolution))
+      }
+      return acc
+    }, {})
 
     return (
       <form onSubmit={this.handleSubmit} noValidate>
@@ -359,74 +363,75 @@ class App extends Component {
         </div>
 
         {
-          cutout && <div>
+          active.cutout_bbox && <div>
             <h3>Cut out area</h3>
             <div className="card">
               <div className="card-body">
-                <p dangerouslySetInnerHTML={{__html: settings.DOWNLOAD_HELP_CUTOUT}}></p>
+                <p dangerouslySetInnerHTML={{__html: settings.DOWNLOAD.cutout.help}}></p>
 
-                <div className="mt-2">
+                {active.cutout_bbox && <div className="mt-2">
                   <BBox name="cutout_bbox" task={task} bbox={bbox} bboxError={bboxError}
                       onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
-                      label={settings.DOWNLOAD_LABEL_CUTOUT_BBOX} help={settings.DOWNLOAD_HELP_CUTOUT_BBOX} />
-                </div>
+                      label={settings.DOWNLOAD.cutout_bbox.label} help={settings.DOWNLOAD.cutout_bbox.help} />
+                </div>}
               </div>
             </div>
           </div>
         }
 
         {
-          mask && <div>
+          (active.mask_country || active.mask_bbox || active.mask_landonly) && <div>
             <h3>Mask area</h3>
             <div className="card">
               <div className="card-body">
-                <p dangerouslySetInnerHTML={{__html: settings.DOWNLOAD_HELP_MASK}}></p>
+                <p dangerouslySetInnerHTML={{__html: settings.DOWNLOAD.mask.help}}></p>
 
-                <div className="mt-2">
+                {active.mask_country && <div className="mt-2">
                   <Country name="mask_country" task={task} country={country} countryError={countryError}
                       onChange={this.handleCountryChange} onSelect={this.handleSelectChange}
-                      label={settings.DOWNLOAD_LABEL_MASK_COUNTRY} help={settings.DOWNLOAD_HELP_MASK_COUNTRY} />
-                </div>
+                      label={settings.DOWNLOAD.mask_country.label} help={settings.DOWNLOAD.mask_country.help} />
+                </div>}
 
-                <div className="mt-2">
+                {active.mask_bbox && <div className="mt-2">
                   <BBox name="mask_bbox" task={task} bbox={bbox} bboxError={bboxError}
                       onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
-                      label={settings.DOWNLOAD_LABEL_MASK_BBOX} help={settings.DOWNLOAD_HELP_MASK_BBOX} />
-                </div>
+                      label={settings.DOWNLOAD.mask_bbox.label} help={settings.DOWNLOAD.mask_bbox.help} />
+                </div>}
 
-                <div className="mt-2">
+                {active.mask_landonly && <div className="mt-2">
                   <Landonly name="mask_landonly" task={task} onSelect={this.handleSelectChange}
-                      label={settings.DOWNLOAD_LABEL_MASK_LANDONLY} help={settings.DOWNLOAD_HELP_MASK_LANDONLY} />
-                </div>
+                      label={settings.DOWNLOAD.mask_landonly.label} help={settings.DOWNLOAD.mask_landonly.help} />
+                </div>}
               </div>
             </div>
           </div>
         }
 
         {
-          select && <div>
+          (active.select_country || active.select_bbox || active.select_point) && <div>
             <h3>Select time series</h3>
             <div className="card">
               <div className="card-body">
-                <p dangerouslySetInnerHTML={{__html: settings.DOWNLOAD_HELP_SELECT}}></p>
+                <p dangerouslySetInnerHTML={{__html: settings.DOWNLOAD.select.help}}></p>
 
-                <div className="mt-2">
+
+                {active.select_country && <div className="mt-2">
                   <Country name="select_country" task={task} country={country} countryError={countryError}
                       onChange={this.handleCountryChange} onSelect={this.handleSelectChange}
-                      label={settings.DOWNLOAD_LABEL_SELECT_COUNTRY} help={settings.DOWNLOAD_HELP_SELECT_COUNTRY} />
-                </div>
+                      label={settings.DOWNLOAD.select_country.label} help={settings.DOWNLOAD.select_country.help} />
+                </div>}
 
-                <div className="mt-2">
+                {active.select_bbox && <div className="mt-2">
                   <BBox name="select_bbox" task={task} bbox={bbox} bboxError={bboxError}
                       onChange={this.handleBBoxChange} onSelect={this.handleSelectChange}
-                      label={settings.DOWNLOAD_LABEL_SELECT_BBOX} help={settings.DOWNLOAD_HELP_SELECT_BBOX} />
-                </div>
+                      label={settings.DOWNLOAD.select_bbox.label} help={settings.DOWNLOAD.select_bbox.help} />
+                </div>}
 
-                <div className="mt-2">
+                {active.select_point && <div className="mt-2">
                   <Point name="select_point" task={task} point={point} pointError={pointError}
                       onChange={this.handlePointChange} onSelect={this.handleSelectChange}
-                      label={settings.DOWNLOAD_LABEL_SELECT_POINT} help={settings.DOWNLOAD_HELP_SELECT_POINT} />
-                </div>
+                      label={settings.DOWNLOAD.select_point.label} help={settings.DOWNLOAD.select_point.help} />
+                </div>}
               </div>
             </div>
           </div>
