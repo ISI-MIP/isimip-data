@@ -15,7 +15,9 @@ from .models import Caveat
 
 
 def caveats(request):
-    caveats = Caveat.objects.public(request.user)
+    caveats = Caveat.objects.public(request.user) \
+                            .select_related('creator') \
+                            .prefetch_related('subscribers')
 
     return render(request, 'caveats/caveats.html', {
         'title': 'Caveats',

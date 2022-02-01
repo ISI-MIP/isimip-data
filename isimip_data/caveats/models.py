@@ -101,10 +101,10 @@ class Caveat(models.Model):
     @property
     def severity_message(self):
         if self.severity == self.SEVERITY_LOW:
-            return 'The datasets can still be used.'
-        elif self.severity in [self.SEVERITY_HIGH]:
-            return 'The datasets should not be used until this caveat is resolved.'
-        elif self.severity in [self.SEVERITY_REPLACED]:
+            return 'Affected datasets can still be used for simulations or research.'
+        elif self.severity == self.SEVERITY_HIGH:
+            return 'Affected datasets should not be used until this caveat is resolved.'
+        elif self.severity == self.SEVERITY_REPLACED:
             return 'Please use the replaced datasets for new simulations or research.'
 
     @property
