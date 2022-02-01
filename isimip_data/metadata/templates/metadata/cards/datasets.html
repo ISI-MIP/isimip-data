@@ -65,6 +65,9 @@
             <a href="{% url 'dataset' dataset.id %}" target="_blank">
                 {{ dataset.name }}
             </a>
+            {% if dataset == current_version %}
+            <span class="mr-3 badge badge-light">this version</span>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>

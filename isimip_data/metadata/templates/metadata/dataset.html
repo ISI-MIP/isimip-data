@@ -18,6 +18,10 @@
         </a>
     </header>
 
+    {% if public_version %}
+    {% include 'metadata/cards/public_version.html' with resource='dataset' %}
+    {% endif %}
+
     <div class="row">
         <div class="col-lg-8">
             {% if figures %}
@@ -76,13 +80,10 @@
                         This dataset is archived and currently not available for download. Please contact support if you need this version of the dataset.
                     </p>
 
-                    {% for version in versions %}
-                    {% if version.public %}
-                    <p>
-                        A different version of this dateset is available <a href="{% url 'dataset' version.id %}">here</a>.
+                    {% if public_version %}
+                        A different version of this dateset is available <a href="{% url 'dataset' public_version.id %}">here</a>.
                     </p>
                     {% endif %}
-                    {% endfor %}
                 </div>
             </div>
 
@@ -114,8 +115,8 @@
     {% include 'metadata/cards/files.html' with files=dataset.files.all %}
 
     {% if versions %}
-    <h3>{% trans 'Other versions of this dataset' %}</h3>
-    {% include 'metadata/cards/datasets.html' with datasets=versions %}
+    <h3>{% trans 'All versions of this dataset' %}</h3>
+    {% include 'metadata/cards/datasets.html' with datasets=versions current_version=dataset %}
     {% endif %}
 
 </div>

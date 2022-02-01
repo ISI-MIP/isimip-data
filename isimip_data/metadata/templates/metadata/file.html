@@ -15,6 +15,10 @@
         <h2>{{ file.name }}</h2>
     </header>
 
+    {% if public_version %}
+    {% include 'metadata/cards/public_version.html' with resource='file' %}
+    {% endif %}
+
     <div class="row">
         <div class="col-sm-8">
             <h3>{% trans 'Cite as' %}</h3>
@@ -93,12 +97,12 @@
 
     {% if file.dataset.files.count > 1 %}
     <h3>{% trans 'Other files in the dataset' %}</h3>
-    {% include 'metadata/cards/files.html' with files=file.dataset.files.all file_exclude=file %}
+    {% include 'metadata/cards/files.html' with files=file.dataset.files.all current_file=file %}
     {% endif %}
 
     {% if versions %}
-    <h3>{% trans 'Other versions of this file' %}</h3>
-    {% include 'metadata/cards/files.html' with files=versions %}
+    <h3>{% trans 'All versions of this file' %}</h3>
+    {% include 'metadata/cards/files.html' with files=versions current_version=file %}
     {% endif %}
 </div>
 

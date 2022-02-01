@@ -54,7 +54,6 @@ def dataset(request, pk=None, path=None):
         pass
 
     versions = Dataset.objects.using('metadata').filter(path=obj.path) \
-                                                .exclude(id=obj.id) \
                                                 .order_by('-version')
 
     caveats = Caveat.objects.filter(datasets__contains=[obj.id]).public(request.user)
@@ -68,6 +67,7 @@ def dataset(request, pk=None, path=None):
         'title': 'Dataset {}'.format(obj.name),
         'dataset': obj,
         'versions': versions,
+        'public_version': versions.exclude(id=obj.id).filter(public=True).first(),
         'figures': Figure.objects.filter(annotations__datasets__contains=[obj.id]),
         'downloads': Download.objects.filter(annotations__datasets__contains=[obj.id]),
         'references': Reference.objects.filter(annotations__datasets__contains=[obj.id]),
@@ -91,14 +91,13 @@ def file(request, pk=None, path=None):
     except File.DoesNotExist:
         pass
 
-    versions = File.objects.using('metadata').filter(path=obj.path) \
-                                             .exclude(id=obj.id) \
-                                             .order_by('-version')
+    versions = File.objects.using('metadata').filter(path=obj.path).order_by('-version')
 
-    caveats = Caveat.objects.filter(datasets__contains=[obj.dataset_id]).public(request.user)
+    caveats = Caveat.objects.filter(datasets__overlap=[obj.dataset_id]).public(request.user)
 
     if versions:
-        caveats_versions = Caveat.objects.filter(datasets__contains=list(versions.values_list('dataset_id', flat=True)))
+        caveats_datasets = list(versions.exclude(id=obj.id).values_list('dataset_id', flat=True))
+        caveats_versions = Caveat.objects.filter(datasets__overlap=caveats_datasets)
     else:
         caveats_versions = None
 
@@ -108,6 +107,7 @@ def file(request, pk=None, path=None):
         'file_base_url': get_file_base_url(request),
         'parents': [obj.dataset],
         'versions': versions,
+        'public_version': versions.exclude(id=obj.id).filter(dataset__public=True).first(),
         'caveats': caveats,
         'caveats_versions': caveats_versions
     })
