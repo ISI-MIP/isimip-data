@@ -276,17 +276,17 @@ DOWNLOAD = {
     },
     'mask_country': {
         'label': 'Mask by country',
-        'help': 'The files are masked using the countrymask of the ISIPEDIA project (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc" target="_blank">available on GitHub</a>) and the command: <code>cdo -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK OFILE</code>.',
+        'help': 'The files are masked using the countrymask of the ISIPEDIA project (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc" target="_blank">available on GitHub</a>) and the command: <code>cdo -f nc4c -z zip_5 -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK OFILE</code>.',
         'resolutions': ['halfdeg']
     },
     'mask_bbox': {
         'label': 'Mask by bounding box',
-        'help': 'The files are masked using the bounding box given by you (e.g. -23.43651, 23.43651, -180, 180) and the command:  <code>cdo -masklonlatbox,WEST,EAST,SOUTH,NORTH IFILE OFILE</code>.',
+        'help': 'The files are masked using the bounding box given by you (e.g. -23.43651, 23.43651, -180, 180) and the command:  <code>cdo -f nc4c -z zip_5 -masklonlatbox,WEST,EAST,SOUTH,NORTH IFILE OFILE</code>.',
         'resolutions': ['halfdeg', 'onedeg', 'twodeg']
     },
     'mask_landonly': {
         'label': 'Mask only land data',
-        'help': 'The files are masked using the ISIMIP3 landseamask without Antarctica (<a href="https://doi.org/10.48364/ISIMIP.822294" target="_blank">https://data.isimip.org/10.48364/ISIMIP.822294</a>) and the command: <code>cdo -ifthen IFILE -selname,mask LANDSEAMASK OFILE</code>.',
+        'help': 'The files are masked using the ISIMIP3 landseamask without Antarctica (<a href="https://doi.org/10.48364/ISIMIP.822294" target="_blank">https://data.isimip.org/10.48364/ISIMIP.822294</a>) and the command: <code>cdo -f nc4c -z zip_5 -ifthen IFILE -selname,mask LANDSEAMASK OFILE</code>.',
         'resolutions': ['halfdeg']
     },
     'select': {
