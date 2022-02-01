@@ -71,7 +71,7 @@
                     {% for version in versions %}
                     {% if version.dataset.public %}
                     <p>
-                        A different version of this file is available <a href="{% url 'file' version.id %}">here</a>.
+                        A newer version of this file is available <a href="{% url 'file' version.id %}">here</a>.
                     </p>
                     {% endif %}
                     {% endfor %}
