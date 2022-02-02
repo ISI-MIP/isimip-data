@@ -10,8 +10,7 @@
             {% include 'caveats/snippets/not_public.html' %}
         </div>
         {% endif %}
-        <strong>{{ comment.get_creator_display }}</strong>
-        commented {{ comment.created|timesince }} ago.
+        <strong>{{ comment.get_creator_display }}</strong> commented on {{ comment.created|date }}.
     </div>
     <div class="card-body">
         {% if request.user.is_staff %}

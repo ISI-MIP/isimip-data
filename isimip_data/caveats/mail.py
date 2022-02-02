@@ -22,10 +22,11 @@ def send_caveat_notifications_mail(request, caveat):
     send_mail(subject, message, from_email=from_email, to=to)
 
 
-def get_caveat_announcement_mail(request, caveat):
+def get_caveat_announcement_mail(request, caveat, datasets):
     context = {
         'caveat': caveat,
         'caveat_url': request.build_absolute_uri(caveat.get_absolute_url()),
+        'datasets': datasets,
         'site': Site.objects.get_current()
     }
 
@@ -37,7 +38,7 @@ def get_caveat_announcement_mail(request, caveat):
 
 def send_caveat_announcement_mail(subject, message, recipients):
     for recipient in recipients:
-        send_mail(subject, message, to=[recipient])
+        send_mail(subject, message, to=[recipient], reply_to=settings.CAVEATS_REPLY_TO)
 
 
 def send_comment_notifications_mail(request, comment):
@@ -53,7 +54,7 @@ def send_comment_notifications_mail(request, comment):
     message = render_to_string('caveats/email/comment_notification_message.txt', context, request=request)
 
     for subscriber in comment.caveat.subscribers.exclude(id=comment.creator.id):
-        send_mail(subject, message, from_email=from_email, to=[subscriber.email])
+        send_mail(subject, message, from_email=from_email, to=[subscriber.email], reply_to=settings.CAVEATS_REPLY_TO)
 
 
 def get_comment_announcement_mail(request, comment):
@@ -71,4 +72,4 @@ def get_comment_announcement_mail(request, comment):
 
 def send_comment_announcement_mail(subject, message, recipients):
     for recipient in recipients:
-        send_mail(subject, message, to=[recipient])
+        send_mail(subject, message, to=[recipient], reply_to=settings.CAVEATS_REPLY_TO)

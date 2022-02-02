@@ -27,14 +27,12 @@ class Caveat(models.Model):
     )
 
     SEVERITY_LOW = 'low'
-    SEVERITY_MEDIUM = 'medium'
     SEVERITY_HIGH = 'high'
-    SEVERITY_CRITICAL = 'critical'
+    SEVERITY_REPLACED = 'replaced'
     SEVERITY_CHOICES = (
         (SEVERITY_LOW, _('low')),
-        (SEVERITY_MEDIUM, _('medium')),
         (SEVERITY_HIGH, _('high')),
-        (SEVERITY_CRITICAL, _('critical')),
+        (SEVERITY_REPLACED, _('replaced')),
     )
 
     objects = ModerationManager()
@@ -55,6 +53,14 @@ class Caveat(models.Model):
     severity = models.TextField(choices=SEVERITY_CHOICES)
     status = models.TextField(choices=STATUS_CHOICES)
     specifiers = models.JSONField(default=dict)
+    include = models.TextField(
+        blank=True,
+        help_text='You can add multiple paths line by line. If paths are provided, datasets will '
+                  'only be included if their path starts with one of the paths given.')
+    exclude = models.TextField(
+        blank=True,
+        help_text='You can add multiple paths line by line. Datasets will be excluded '
+                  'if their path starts with one of the paths given.')
     datasets = ArrayField(models.UUIDField(), blank=True, default=list)
     version_after = models.CharField(max_length=8, blank=True)
     version_before = models.CharField(max_length=8, blank=True)
@@ -63,13 +69,14 @@ class Caveat(models.Model):
     downloads = models.ManyToManyField(Download, related_name='caveats')
 
     class Meta:
-        ordering = ('-updated', )
+        ordering = ('-created', )
 
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
-        self.datasets = query_datasets(self.specifiers, self.version_after, self.version_before)
+        self.datasets = query_datasets(self.specifiers, self.version_after, self.version_before,
+                                       self.include, self.exclude)
         super().save(*args, **kwargs)
 
     def get_creator_display(self):
@@ -77,21 +84,28 @@ class Caveat(models.Model):
 
     @property
     def severity_level(self):
-        {
+        return {
             self.SEVERITY_LOW: 1,
-            self.SEVERITY_MEDIUM: 2,
-            self.SEVERITY_HIGH: 3,
-            self.SEVERITY_CRITICAL: 4
+            self.SEVERITY_HIGH: 2,
+            self.SEVERITY_REPLACED: 3
         }.get(self.severity)
 
     @property
     def severity_color(self):
         return {
             self.SEVERITY_LOW: 'info',
-            self.SEVERITY_MEDIUM: 'warning',
             self.SEVERITY_HIGH: 'danger',
-            self.SEVERITY_CRITICAL: 'dark'
+            self.SEVERITY_REPLACED: 'success'
         }.get(self.severity)
+
+    @property
+    def severity_message(self):
+        if self.severity == self.SEVERITY_LOW:
+            return 'Affected datasets can still be used for simulations or research.'
+        elif self.severity == self.SEVERITY_HIGH:
+            return 'Affected datasets should not be used until this caveat is resolved.'
+        elif self.severity == self.SEVERITY_REPLACED:
+            return 'Please use the replaced datasets for new simulations or research.'
 
     @property
     def status_color(self):

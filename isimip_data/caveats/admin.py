@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.messages import INFO
 from django.core.exceptions import ValidationError
@@ -10,6 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from isimip_data.annotations.models import Download, Figure
 from isimip_data.annotations.utils import format_affected_datasets
 from isimip_data.annotations.widgets import SpecifierWidget
+from isimip_data.metadata.models import Dataset
 
 from .mail import (get_caveat_announcement_mail, get_comment_announcement_mail,
                    send_caveat_announcement_mail,
@@ -21,6 +23,7 @@ class CaveatAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['description'].help_text = 'Please describe only the initial problem. Subsequent updates should be added as comments. For the information on whether the data should be used for simulations or research, use the severity field.'
         self.fields['specifiers'].widget = SpecifierWidget()
         self.fields['specifiers'].required = False
 
@@ -55,7 +58,8 @@ class AnnouncementAdminForm(forms.Form):
     recipients = forms.CharField(widget=forms.Textarea(attrs={
         'class': 'vLargeTextField',
         'rows': 4
-    }), required=True, help_text=_('You can add multiple recipients line by line.'))
+    }), required=True, help_text=_('You can add multiple recipients line by line.'),
+        initial='\n'.join(settings.CAVEATS_DEFAULT_RECIPIENTS))
 
     def __init__(self, *args, **kwargs):
         self.object = kwargs.pop('object')
@@ -94,7 +98,11 @@ class CaveatAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
             'fields': ('version_after', 'version_before'),
         }),
-        ('Datasets', {
+        ('Include/Exclude', {
+            'classes': ('collapse',),
+            'fields': ('include', 'exclude'),
+        }),
+        ('Affected datasets', {
             'classes': ('collapse',),
             'fields': ('affected_datasets', ),
         })
@@ -107,7 +115,9 @@ class CaveatAdmin(admin.ModelAdmin):
     def caveats_caveat_send(self, request, pk):
         caveat = get_object_or_404(Caveat, id=pk)
 
-        subject, message = get_caveat_announcement_mail(request, caveat)
+        datasets = Dataset.objects.using('metadata').filter(target=None, id__in=caveat.datasets)
+
+        subject, message = get_caveat_announcement_mail(request, caveat, datasets)
 
         form = AnnouncementAdminForm(request.POST or None, object=caveat, initial={
             'subject': subject,

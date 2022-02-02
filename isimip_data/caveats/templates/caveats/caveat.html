@@ -15,7 +15,7 @@
         <h1>{{ caveat.title }} <span class="text-muted">#{{ caveat.id }}</span></h1>
 
         <p class="text-center mb-2">
-            {{ caveat.get_creator_display }} opened this caveat {{ caveat.created|timesince }} ago.
+            <strong>{{ caveat.get_creator_display }}</strong> opened this caveat on {{ caveat.created|date }}.
         </p>
 
         <p class="text-center mb-2">
@@ -42,7 +42,31 @@
     </header>
 
     <div class="row">
-        <div class="{% if caveat.has_downloads %}col-md-9{% else %}col-md-12{% endif %}">
+        <div class="col-md-9">
+            <h3>{% trans 'Discussion' %}</h3>
+            <div class="card mb-2">
+                <div class="card-header">
+                    <strong>{{ caveat.get_creator_display }}</strong> reported on {{ caveat.created|date }}.
+                </div>
+                <div class="card-body">
+                    {% if request.user.is_staff %}
+                    <a class="d-block float-right" href="{% url 'admin:caveats_caveat_change' caveat.id %}">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                    {% endif %}
+
+                    {{ caveat.description|linebreaksbr|urlize }}
+                </div>
+            </div>
+
+            {% if caveat.has_figures %}
+            {% include 'annotations/cards/figures.html' with figures=caveat.figures.all col=12 mb=2 %}
+            {% endif %}
+
+            {% include 'caveats/cards/comments.html' %}
+        </div>
+
+        <div class="col-md-3">
             <h3>{% trans 'Details' %}</h3>
             <div class="card">
                 <div class="card-body">
@@ -52,49 +76,40 @@
                     </a>
                     {% endif %}
 
-                    <dl class="row">
-                        <dt class="col-sm-3">{% trans 'Title' %}</dt>
-                        <dd class="col-sm-9">{{ caveat.title }}</dd>
-                        <dt class="col-sm-3">{% trans 'Description' %}</dt>
-                        <dd class="col-sm-9">{{ caveat.description|linebreaksbr|urlize }}</dd>
-                        <dt class="col-sm-3">{% trans 'Severity' %}</dt>
-                        <dd class="col-sm-9">
-                            {% include 'caveats/snippets/severity.html' %}
+                    <dl>
+                        <dt>{% trans 'Severity' %}</dt>
+                        <dd>
+                            <div>
+                                {% include 'caveats/snippets/severity.html' %}
+                            </div>
+                            <div class="mt-1">
+                                {% include 'caveats/snippets/severity_message.html' %}
+                            </div>
                         </dd>
-                        <dt class="col-sm-3">{% trans 'Status' %}</dt>
-                        <dd class="col-sm-9">
+                        <dt>{% trans 'Status' %}</dt>
+                        <dd>
                             {% include 'caveats/snippets/status.html' %}
                         </dd>
-                        <dt class="col-sm-3">{% trans 'Versions' %}</dt>
-                        <dd class="col-sm-9">
+                        <dt>{% trans 'Versions' %}</dt>
+                        <dd>
                             {% include 'caveats/snippets/versions.html' %}
                         </dd>
                         {% for identifier, specifiers in caveat.pretty_specifiers.items %}
-                        <dt class="col-sm-3">{{ identifier }}</dt>
-                        <dd class="col-sm-9">
+                        <dt>{{ identifier }}</dt>
+                        <dd>
                             {{specifiers|join:', '}}
                         </dd>
                         {% endfor %}
                     </dl>
                 </div>
             </div>
-        </div>
 
-        {% if caveat.has_downloads %}
-        <div class="col-md-3">
+            {% if caveat.has_downloads %}
             <h3 id="downloads">{% trans 'Downloads' %}</h3>
             {% include 'annotations/cards/downloads.html' with downloads=caveat.downloads.all %}
+            {% endif %}
         </div>
-        {% endif %}
     </div>
-
-    {% if caveat.has_figures %}
-    <h3 id="figures">{% trans 'Figures' %}</h3>
-    {% include 'annotations/cards/figures.html' with figures=caveat.figures.all col=6 %}
-    {% endif %}
-
-    <h3 id="comments">{% trans 'Comments' %}</h3>
-    {% include 'caveats/cards/comments.html' %}
 
     {% if datasets %}
     <h3>{% trans 'Affected datasets' %}</h3>

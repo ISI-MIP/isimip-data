@@ -34,6 +34,7 @@ class Figure(models.Model):
     image = models.ImageField(upload_to='figures')
     caption = models.TextField(blank=True)
     credits = models.TextField(blank=True)
+    width = models.IntegerField(default=12, help_text='Width in columns (12 is full width).')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

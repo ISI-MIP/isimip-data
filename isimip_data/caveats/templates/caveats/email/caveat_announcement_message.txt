@@ -10,5 +10,9 @@
 
 {% blocktrans %}On this page, you can also subscribe to future updates.{% endblocktrans %}
 
+{% if datasets %}The following datasets are affected:
+{% for dataset in datasets %}
+{{ dataset }}{% endfor %}{% endif %}
+
 Best wishes,
 The ISIMIP data team

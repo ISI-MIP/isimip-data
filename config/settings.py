@@ -224,10 +224,6 @@ TERMS_OF_USE_URL = 'https://www.isimip.org/gettingstarted/terms-of-use/#general-
 
 NAVIGATION = [
     {
-        'title': 'About the project',
-        'href': 'https://www.isimip.org'
-    },
-    {
         'title': 'Documentation',
         'href': 'https://www.isimip.org/outputdata/isimip-repository/'
     },
@@ -255,6 +251,13 @@ HOME = {
 
 FILES_BASE_URL = os.getenv('FILES_BASE_URL')
 FILES_API_URL = os.getenv('FILES_API_URL')
+
+CAVEATS_REPLY_TO = (
+    'ISIMIP data <isimip-data@isimip.org>',
+)
+CAVEATS_DEFAULT_RECIPIENTS = (
+    'ISIMIP caveats <isimip-caveats@listserv.dfn.de>',
+)
 
 PROXY = os.getenv('PROXY', '').split()
 PROXY_FILES_BASE_URL = os.getenv('PROXY_FILES_BASE_URL')

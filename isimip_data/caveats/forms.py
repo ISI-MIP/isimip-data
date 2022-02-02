@@ -25,7 +25,7 @@ class CaveatForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         self.instance.creator = self.creator
-        self.instance.severity = self.instance.SEVERITY_MEDIUM
+        self.instance.severity = self.instance.SEVERITY_LOW
         self.instance.status = self.instance.STATUS_NEW
         self.instance.public = self.creator.is_staff
 
