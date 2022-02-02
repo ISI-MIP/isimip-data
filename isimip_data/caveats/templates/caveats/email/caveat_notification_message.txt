@@ -1,4 +1,4 @@
-{% load i18n %}{% load account %}{% user_display caveat.creator as creator_display %}{% blocktrans %}A new caveat had been submitted by {{ creator_display }}:{% endblocktrans %}
+{% load i18n %}{% load account %}{% user_display caveat.creator as creator_display %}{% blocktrans with caveat.creator.email as creator_email %}A new caveat had been submitted by {{ creator_display }} <{{ creator_email }}>:{% endblocktrans %}
 
 {{ caveat.title|safe }}
 
