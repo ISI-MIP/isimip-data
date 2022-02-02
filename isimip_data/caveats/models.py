@@ -69,7 +69,7 @@ class Caveat(models.Model):
     downloads = models.ManyToManyField(Download, related_name='caveats')
 
     class Meta:
-        ordering = ('-updated', )
+        ordering = ('-created', )
 
     def __str__(self):
         return self.title
