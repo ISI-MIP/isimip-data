@@ -256,7 +256,7 @@ CAVEATS_REPLY_TO = (
     'ISIMIP data <isimip-data@isimip.org>',
 )
 CAVEATS_DEFAULT_RECIPIENTS = (
-    'ISIMIP caveats <isimip-caveats@listserv.dfn.de>',
+    'isimip-caveats@listserv.dfn.de',
 )
 
 PROXY = os.getenv('PROXY', '').split()
