@@ -59,7 +59,8 @@ def dataset(request, pk=None, path=None):
     caveats = Caveat.objects.filter(datasets__contains=[obj.id]).public(request.user)
 
     if versions:
-        caveats_versions = Caveat.objects.filter(datasets__contains=list(versions.values_list('id', flat=True)))
+        caveats_datasets = list(versions.exclude(id=obj.id).values_list('id', flat=True))
+        caveats_versions = Caveat.objects.filter(datasets__overlap=caveats_datasets)
     else:
         caveats_versions = None
 
