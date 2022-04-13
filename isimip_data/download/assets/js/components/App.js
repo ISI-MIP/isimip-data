@@ -71,12 +71,14 @@ class App extends Component {
         }
 
         return [start_year, end_year]
-      }, [3000, 0])
+      }, [2100, 1600])
 
-      this.setState({
-        rangeDomain: [...range],
-        rangeValues: [...range]
-      })
+      if (range[0] < range[1]) {
+        this.setState({
+          rangeDomain: [...range],
+          rangeValues: [...range]
+        })
+      }
     }
 
     CoreApi.fetchSettings().then(settings => {
