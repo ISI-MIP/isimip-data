@@ -3,6 +3,7 @@ import logging
 from django.conf import settings
 from django.contrib.postgres.search import (SearchQuery, SearchRank,
                                             TrigramSimilarity)
+from django.core.exceptions import FieldError
 from django.db.models import Q
 from rest_framework.filters import BaseFilterBackend
 
@@ -104,7 +105,12 @@ class VersionFilterBackend(BaseFilterBackend):
             return queryset
 
         if request.GET.get('all') != 'true':
-            queryset = queryset.filter(public=True)
+            try:
+                # datasets have a public field
+                queryset = queryset.filter(public=True)
+            except FieldError:
+                # files need to check the public field of the corresponding dataset
+                queryset = queryset.filter(dataset__public=True)
 
         after = request.GET.get('after')
         if after:

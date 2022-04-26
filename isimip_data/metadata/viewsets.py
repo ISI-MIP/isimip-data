@@ -39,10 +39,10 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     filter_backends = (
         IdFilterBackend,
         NameFilterBackend,
+        PathFilterBackend,
         SearchFilterBackend,
         VersionFilterBackend,
         AttributeFilterBackend,
-        PathFilterBackend,
         TreeFilterBackend
     )
     attribute_filter_exclude = None
@@ -91,6 +91,7 @@ class FileViewSet(ReadOnlyModelViewSet):
         NameFilterBackend,
         PathFilterBackend,
         SearchFilterBackend,
+        VersionFilterBackend,
         AttributeFilterBackend
     )
     filterset_fields = (
