@@ -61,12 +61,12 @@ class DataCiteRenderer(object):
             if creator.get('familyName'):
                 self.render_node('familyName', {}, creator.get('familyName'))
 
-            if creator.get('nameIdentifier'):
-                scheme = creator.get('nameIdentifierScheme', 'ORCID')
+            for name_identifier in creator.get('nameIdentifiers', []):
+                scheme = name_identifier.get('nameIdentifierScheme', 'ORCID')
                 self.render_node('nameIdentifier', {
                     'nameIdentifierScheme': scheme,
                     'schemeURI': self.scheme_uri_choices.get(scheme)
-                }, creator.get('nameIdentifier'))
+                }, name_identifier.get('nameIdentifier'))
 
             for affiliation in creator.get('affiliations', []):
                 if affiliation.get('affiliationIdentifier'):
@@ -130,12 +130,12 @@ class DataCiteRenderer(object):
                 if contributor.get('familyName'):
                     self.render_node('familyName', {}, contributor.get('familyName'))
 
-                if contributor.get('nameIdentifier'):
-                    scheme = creator.get('nameIdentifierScheme', 'ORCID')
+                for name_identifier in contributor.get('nameIdentifiers', []):
+                    scheme = name_identifier.get('nameIdentifierScheme', 'ORCID')
                     self.render_node('nameIdentifier', {
                         'nameIdentifierScheme': scheme,
                         'schemeURI': self.scheme_uri_choices.get(scheme)
-                    }, contributor.get('nameIdentifier'))
+                    }, name_identifier.get('nameIdentifier'))
 
                 for affiliation in contributor.get('affiliations', []):
                     scheme = affiliation.get('affiliationIdentifierScheme', 'ROR')

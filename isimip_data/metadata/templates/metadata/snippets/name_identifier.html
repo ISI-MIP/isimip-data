@@ -1,13 +1,13 @@
-{% if name.nameIdentifier %}
-    {% if name.nameIdentifierScheme == 'ORCID' %}
-    <a class="orcid-link" href="https://orcid.org/{{ name.nameIdentifier }}">
-        {{ name.nameIdentifier }}
+{% for nameIdentifier in name.nameIdentifiers %}
+    {% if nameIdentifier.nameIdentifierScheme == 'ORCID' %}
+    <a class="orcid-link" href="https://orcid.org/{{ nameIdentifier.nameIdentifier }}">
+        {{ nameIdentifier.nameIdentifier }}
     </a>
-    {% elif name.nameIdentifierScheme == 'ROR' %}
-    <a class="ror-link" href="https://ror.org/{{ name.nameIdentifier }}">
-        {{ name.nameIdentifier }}
+    {% elif nameIdentifier.nameIdentifierScheme == 'ROR' %}
+    <a class="ror-link" href="https://ror.org/{{ nameIdentifier.nameIdentifier }}">
+        {{ nameIdentifier.nameIdentifier }}
     </a>
     {% else %}
-    <i>({{ name.nameIdentifierScheme }}: {{ name.nameIdentifier }})</i>
+    <i>({{ nameIdentifier.nameIdentifierScheme }}: {{ nameIdentifier.nameIdentifier }})</i>
     {% endif %}
-{% endif %}
+{% endfor %}
