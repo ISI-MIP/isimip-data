@@ -103,14 +103,14 @@ class Version extends Component {
                   <label className="form-check-label">Version range:</label>
                 </div>
                 <div className="col-12 col-md mb-2 mb-md-0">
-                  <input type="text" className="form-control form-control-sm" placeholder="After YYYMMDD" value={after}
+                  <input type="text" className="form-control form-control-sm" placeholder="After YYYYMMDD" value={after}
                          onChange={this.handleAfterChange} />
                 </div>
                 <div className="col-12 col-md-auto mb-2 mb-md-0">
                   <label className="form-check-label">≤ Dataset version ≤</label>
                 </div>
                 <div className="col-12 col-md mb-2 mb-md-0">
-                  <input type="text" className="form-control form-control-sm" placeholder="Before YYYMMDD" value={before}
+                  <input type="text" className="form-control form-control-sm" placeholder="Before YYYYMMDD" value={before}
                          onChange={this.handleBeforeChange} />
                 </div>
                 <div className="col-12 col-md-auto">
