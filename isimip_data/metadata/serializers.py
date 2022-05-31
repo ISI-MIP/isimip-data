@@ -224,7 +224,8 @@ class DatasetSerializer(serializers.ModelSerializer):
 
     def get_caveats(self, obj):
         if self.context.get('request').GET.get('caveats'):
-            queryset = Caveat.objects.filter(datasets__contains=[obj.id])
+            user = self.context['request'].user
+            queryset = Caveat.objects.filter(datasets__contains=[obj.id]).public(user)
             serializer = DatasetCaveatSerializer(queryset, many=True)
             return serializer.data
 
