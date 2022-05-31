@@ -67,6 +67,7 @@ def dataset(request, pk=None, path=None):
     return render(request, 'metadata/dataset.html', {
         'title': 'Dataset {}'.format(obj.name),
         'dataset': obj,
+        'file_base_url': get_file_base_url(request),
         'versions': versions,
         'public_version': versions.exclude(id=obj.id).filter(public=True).first(),
         'figures': Figure.objects.filter(annotations__datasets__contains=[obj.id]),
