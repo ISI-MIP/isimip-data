@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_cleanup',
+    'django_elasticsearch_dsl',
     'django_extensions',
     'django_filters',
     'adminsortable2',
@@ -96,6 +97,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': dj_database_url.parse(os.getenv('DATABASE')),
     'metadata': dj_database_url.parse(os.getenv('DATABASE_METADATA'))
+}
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': os.getenv('ELASTICSEARCH_HOST', 'localhost:9200'),
+        'use_ssl': (os.getenv('ELASTICSEARCH_USE_SSL', 'False').upper() == 'TRUE'),
+        'ca_certs': os.getenv('ELASTICSEARCH_CA_CERTS', False)
+    },
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
