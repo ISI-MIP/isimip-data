@@ -1,29 +1,12 @@
 {% load i18n %}
+{% load metadata_tags %}
 
 <div class="card">
     <ul class="list-group list-group-flush">
         {% for related_identifier in related_identifiers %}
-
-        {% if related_identifier.relatedIdentifierType == 'DOI' %}
         <li class="list-group-item related-identifier">
-            {{ related_identifier.citation }}&nbsp;
-            <a class="doi-link" href="{{ related_identifier.relatedIdentifier }}" target="_blank">
-                {{ related_identifier.relatedIdentifier }}
-            </a>
+            {% citation related_identifier.citation related_identifier.relatedIdentifier related_identifier.relatedIdentifierType %}
         </li>
-        {% elif related_identifier.relatedIdentifierType == 'URL' %}
-        <li class="list-group-item related-identifier">
-            {{ related_identifier.citation }}&nbsp;&rarr;
-            <a href="{{ related_identifier.relatedIdentifier }}" target="_blank">
-                {{ related_identifier.relatedIdentifier }}
-            </a>
-        </li>
-        {% else %}
-        <li class="list-group-item related-identifier">
-            {{ related_identifier.citation }}
-        </li>
-        {% endif %}
-
         {% endfor %}
     </ul>
 </div>
