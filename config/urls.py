@@ -1,10 +1,15 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.sitemaps import Sitemap, views as sitemaps_views
+from django.contrib.sitemaps import Sitemap
+from django.contrib.sitemaps import views as sitemaps_views
 from django.urls import include, path, re_path, reverse
 from django.views.generic.base import TemplateView
 from rest_framework import routers
+
+from django_datacite.views import resource as datacite_resource
+from django_datacite.views import resource_json as datacite_resource_json
+from django_datacite.views import resource_xml as datacite_resource_xml
 from isimip_data.accounts.views import (profile_delete, profile_delete_success,
                                         profile_update)
 from isimip_data.caveats.sitemaps import CaveatSitemap
@@ -14,8 +19,9 @@ from isimip_data.caveats.views import (caveat, caveat_create, caveat_subscribe,
 from isimip_data.core.viewsets import SettingsViewSet
 from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
-from isimip_data.indicators.views import indicators, indicator
-from isimip_data.metadata.sitemaps import DatasetSitemap, FileSitemap, ResourceSitemap
+from isimip_data.indicators.views import indicator, indicators
+from isimip_data.metadata.sitemaps import (DatasetSitemap, FileSitemap,
+                                           ResourceSitemap)
 from isimip_data.metadata.views import (attributes, dataset, file, metadata,
                                         resource, resource_bibtex,
                                         resource_datacite_json,
@@ -70,6 +76,10 @@ urlpatterns = [
 
     path('files/<uuid:pk>/', file, name='file'),
     path('files/<path:path>/', file, name='file'),
+
+    re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)xml', datacite_resource_xml, name='datacite_resource_xml'),
+    re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).json', datacite_resource_json, name='datacite_resource_json'),
+    re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)', datacite_resource, name='datacite_resource'),
 
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).bib', resource_bibtex, name='resource_bibtex'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).datacite.xml', resource_datacite_xml, name='resource_datacite_xml'),

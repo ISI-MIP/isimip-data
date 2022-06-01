@@ -43,11 +43,12 @@ INSTALLED_APPS = [
     'django_cleanup',
     'django_extensions',
     'django_filters',
+    'django_datacite',
     'adminsortable2',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.orcid',
+    'allauth.socialaccount.providers.orcid'
 ]
 
 if DEBUG_TOOLBAR:
@@ -316,70 +317,100 @@ DOWNLOAD = {
 
 DOI_PREFIX = '10.48364'
 
-LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
+DATACITE_INCLUDE_CITATION = True
+DATACITE_DEFAULT_PUBLISHER = 'ISIMIP Repository'
+
+LOG_LEVEL = os.getenv('LOG_LEVEL', 'WARNING')
 LOG_DIR = os.getenv('LOG_DIR')
-if LOG_DIR:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'filters': {
-            'require_debug_false': {
-                '()': 'django.utils.log.RequireDebugFalse'
-            },
-            'require_debug_true': {
-                '()': 'django.utils.log.RequireDebugTrue'
-            }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
         },
-        'formatters': {
-            'default': {
-                'format': '[%(asctime)s] %(levelname)s: %(message)s'
-            },
-            'name': {
-                'format': '[%(asctime)s] %(levelname)s %(name)s: %(message)s'
-            },
-            'console': {
-                'format': '[%(asctime)s] %(message)s'
-            }
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue'
+        }
+    },
+    'formatters': {
+        'default': {
+            'format': '[%(asctime)s] %(levelname)s: %(message)s'
         },
-        'handlers': {
-            'mail_admins': {
-                'level': 'ERROR',
-                'filters': ['require_debug_false'],
-                'class': 'django.utils.log.AdminEmailHandler'
-            },
-            'error_log': {
-                'level': 'ERROR',
-                'class': 'logging.FileHandler',
-                'filename': os.path.join(LOG_DIR, 'error.log'),
-                'formatter': 'default'
-            },
-            'isimip_data_log': {
-                'level': 'DEBUG',
-                'class': 'logging.FileHandler',
-                'filename': os.path.join(LOG_DIR, 'isimip_data.log'),
-                'formatter': 'name'
-            },
-            'console': {
-                'level': 'INFO',
-                'filters': ['require_debug_true'],
-                'class': 'logging.StreamHandler',
-                'formatter': 'console'
-            }
+        'name': {
+            'format': '[%(asctime)s] %(levelname)s %(name)s: %(message)s'
         },
-        'loggers': {
-            'django': {
-                'handlers': ['console'],
-                'level': LOG_LEVEL,
-            },
-            'django.request': {
-                'handlers': ['mail_admins', 'error_log'],
-                'level': 'ERROR',
-                'propagate': True
-            },
-            'isimip_data': {
-                'handlers': ['isimip_data_log'],
-                'level': LOG_LEVEL,
-                'propagate': False
-            }
+        'console': {
+            'format': '[%(asctime)s] %(message)s'
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'error_log': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'error.log'),
+            'formatter': 'default'
+        },
+        'django_log': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'django.log'),
+            'formatter': 'default'
+        },
+        'isimip_data_log': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'isimip_data.log'),
+            'formatter': 'name'
+        },
+        'django_datacite_log': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'django_datacite.log'),
+            'formatter': 'name'
+        },
+        'general_log': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'general.log'),
+            'formatter': 'name'
+        },
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'django_log'],
+            'level': LOG_LEVEL,
+            'propagate': False
+        },
+        'django.request': {
+            'handlers': ['mail_admins', 'error_log'],
+            'level': 'ERROR',
+            'propagate': True
+        },
+        'isimip_data': {
+            'handlers': ['console', 'isimip_data_log'],
+            'level': LOG_LEVEL,
+            'propagate': False
+        },
+        'django_datacite': {
+            'handlers': ['console', 'django_datacite_log'],
+            'level': LOG_LEVEL,
+            'propagate': False
+        },
+        '': {
+            'handlers': ['console', 'general_log'],
+            'level': LOG_LEVEL,
         }
     }
+}

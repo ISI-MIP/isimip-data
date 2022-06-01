@@ -1,0 +1,6 @@
+{% for creator in resource.creator_set.all %}{{ creator.name.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+({{ resource.publication_year }}):
+{{ resource.title }}.
+{% if resource.cite_version %}Version {{ resource.version }}.{% endif %}
+{% if resource.cite_publisher %}{{ resource.publisher }}.{% endif %}
+{% if resource.identifier.identifier_type == 'DOI' %}https://doi.org/{{ resource.identifier.identifier }}{% else %}{{ resource.identifier.identifier }}{% endif %}.

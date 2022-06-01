@@ -1,0 +1,149 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+{% load static %}
+{% load core_tags %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'metadata.css' %}" />
+{% endblock %}
+
+{% block main %}
+
+<div class="container">`
+    <header>
+        <h3>Draft</h3>
+        <h1 class="mt-3">{{ resource.title }}</h1>
+        <p>
+            <a href="{% url 'datacite_resource' resource.identifier.identifier %}">HTML</a>&nbsp;
+            <a href="{% url 'datacite_resource_xml' resource.identifier.identifier %}">XML</a>&nbsp;
+            <a href="{% url 'datacite_resource_json' resource.identifier.identifier %}">JSON</a>
+        </p>
+    </header>
+
+    <div class="card">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-2 text-right">Identifier:</dt>
+                <dd class="col-sm-10">
+                    {{ resource.identifier }}
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-sm-2 text-right">Title:</dt>
+                <dd class="col-sm-10">{{ resource.title }}</dd>
+            </dl>
+            {% if resource.version %}
+            <dl class="row">
+                <dt class="col-sm-2 text-right">Version:</dt>
+                <dd class="col-sm-10">{{ resource.version }}</dd>
+            </dl>
+            {% endif %}
+            <dl class="row">
+                <dt class="col-sm-2 text-right">Creators:</dt>
+                <dd class="col-sm-10">
+                    <table class="table table-bordered table-sm mb-0">
+                        {% for creator in resource.creators.all %}
+                        <tr>
+                            <td>{{ creator }}</td>
+                            <td>
+                            {% for name_identifier in creator.name_identifiers.all %}
+                                {{ name_identifier }}
+                            {% endfor %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </dd>
+            </dl>
+            {% for description in resource.descriptions.all %}
+            <dl class="row">
+                <dt class="col-sm-2 text-right">{{ description.description_type }}:</dt>
+                <dd class="col-sm-10">
+                {% for paragraph in description.escaped_description|split_br %}
+                    <p>{{ paragraph }}</p>
+                {% endfor %}
+                </dd>
+            </dl>
+            {% endfor %}
+            <dl class="row">
+                <dt class="col-sm-2 text-right">Publication year:</dt>
+                <dd class="col-sm-10">{{ resource.publication_year }}</dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-sm-2 text-right">Dates:</dt>
+                <dd class="col-sm-10">
+                    <ul class="list-unstyled mb-0">
+                    {% for date in resource.dates.all %}
+                    <li>({{ date.date_type }}) {{ date.date }}</li>
+                    {% endfor %}
+                    </ul>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="col-sm-2 text-right">Publisher:</dt>
+                <dd class="col-sm-10">{{ resource.publisher }}</dd>
+            </dl>
+            <dl class="row mb-2">
+                <dt class="col-sm-2 text-right">Rights:</dt>
+                <dd class="col-sm-10">
+                    <ul class="list-unstyled mb-0">
+                        {% for rights in resource.rights_list.all %}
+                        <li class="mb-1">
+                            {{ rights.rights_identifier }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </dd>
+            </dl>
+            <dl class="row mb-2">
+                <dt class="col-sm-2 text-right">Contributors:</dt>
+                <dd class="col-sm-10">
+                    <table class="table table-bordered table-sm mb-0">
+                        {% for contributor in resource.contributor_set.all %}
+                        <tr>
+                            <td>{{ contributor.name }}</td>
+                            <td>
+                            {% for name_identifier in contributor.name.name_identifiers.all %}
+                                {{ name_identifier }}
+                            {% endfor %}
+                            </td>
+                            <td>{{ contributor.contributor_type }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </dd>
+            </dl>
+            <dl class="row mb-2">
+                <dt class="col-sm-2 text-right">Subjects:</dt>
+                <dd class="col-sm-10">
+                    <table class="table table-bordered table-sm mb-0">
+                        {% for subject in resource.subjects.all %}
+                        <tr>
+                            <td>{{ subject.subject }}</td>
+                            <td>{{ subject.value_uri }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </dd>
+            </dl>
+            <dl class="row mb-2">
+                <dt class="col-sm-2 text-right">Related identifiers:</dt>
+                <dd class="col-sm-10">
+                    <table class="table table-bordered table-sm mb-0">
+                        {% for related_identifier in resource.relatedidentifier_set.all %}
+                        <tr>
+                            <td>{{ related_identifier.identifier.citation }}</td>
+                            <td>{{ related_identifier.identifier }}</td>
+                            <td>{{ related_identifier.relation_type }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
