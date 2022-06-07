@@ -101,7 +101,7 @@
                         </dd>
                     </dl>
                     {% endif %}
-                    {% for description in resource.datacite.descriptions %}
+                    {% for description in resource.datacite.descriptions|dictsort:'descriptionType' %}
                     <dl class="row">
                         <dt class="col-sm-3 text-right">{{ description.descriptionType }}:</dt>
                         <dd class="col-sm-9">
