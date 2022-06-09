@@ -61,9 +61,7 @@ class Result extends Component {
 
   handleDownload(e, files) {
     e.preventDefault()
-    files.map(file => {
-      DatasetApi.downloadFile(file)
-    })
+    DatasetApi.downloadFiles(files)
   }
 
   renderDataset(dataset) {

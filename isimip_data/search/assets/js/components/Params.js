@@ -17,7 +17,9 @@ class Params extends Component {
 
   handleDownload(e, params) {
     e.preventDefault()
-    DatasetApi.downloadFiles(params)
+    DatasetApi.fetchDatasets(params).then(response => {
+      DatasetApi.downloadFiles(response.results.reduce((acc, cur) => acc.concat(cur.files), []))
+    })
   }
 
   render() {

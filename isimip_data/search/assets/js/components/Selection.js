@@ -30,7 +30,9 @@ class Selection extends Component {
 
   handleDownload(e, ids) {
     e.preventDefault()
-    DatasetApi.downloadFiles(ids)
+    DatasetApi.fetchDatasets(ids).then(response => {
+      DatasetApi.downloadFiles(response.results.reduce((acc, cur) => acc.concat(cur.files), []))
+    })
   }
 
   renderSelection() {

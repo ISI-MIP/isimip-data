@@ -41,7 +41,11 @@ class Results extends Component {
   }
 
   fetch() {
-    const params = Object.assign({}, this.props.params)
+    const params = Object.assign({
+      annotations: true,
+      caveats: true,
+      indicators: true
+    }, this.props.params)
 
     // increase the page_size, if page is set, but no results are present
     if (params.page > 1 && this.state.results.length == 0) {
