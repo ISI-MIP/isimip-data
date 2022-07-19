@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from isimip_data.accounts.utils import get_full_name
 from isimip_data.annotations.models import Download, Figure
-from isimip_data.annotations.utils import query_datasets
+from isimip_data.annotations.utils import query_datasets, query_resources
 from isimip_data.metadata.utils import prettify_specifiers
 
 from .managers import ModerationManager
@@ -62,6 +62,7 @@ class Caveat(models.Model):
         help_text='You can add multiple paths line by line. Datasets will be excluded '
                   'if their path starts with one of the paths given.')
     datasets = ArrayField(models.UUIDField(), blank=True, default=list)
+    resources = ArrayField(models.UUIDField(), blank=True, default=list)
     version_after = models.CharField(max_length=8, blank=True)
     version_before = models.CharField(max_length=8, blank=True)
     subscribers = models.ManyToManyField(User, blank=True)
@@ -77,6 +78,7 @@ class Caveat(models.Model):
     def save(self, *args, **kwargs):
         self.datasets = query_datasets(self.specifiers, self.version_after, self.version_before,
                                        self.include, self.exclude)
+        self.resources = query_resources(self.datasets)
         super().save(*args, **kwargs)
 
     def get_creator_display(self):
