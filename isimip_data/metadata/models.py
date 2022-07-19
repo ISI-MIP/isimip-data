@@ -9,7 +9,8 @@ from django.utils.functional import cached_property
 
 from .constants import RIGHTS
 from .managers import AttributeManager, DatasetManager
-from .utils import get_terms_of_use, merge_identifiers, merge_specifiers, prettify_specifiers
+from .utils import (get_terms_of_use, merge_identifiers, merge_specifiers,
+                    prettify_specifiers)
 
 
 class Dataset(models.Model):
@@ -26,7 +27,6 @@ class Dataset(models.Model):
     specifiers = models.JSONField()
     rights = models.TextField()
     identifiers = ArrayField(models.TextField())
-    search_vector = SearchVectorField(null=True)
     public = models.BooleanField(null=True)
     tree_path = models.TextField()
 
@@ -100,7 +100,6 @@ class File(models.Model):
     netcdf_header = models.JSONField()
     specifiers = models.JSONField()
     identifiers = ArrayField(models.TextField())
-    search_vector = SearchVectorField(null=True)
 
     created = models.DateTimeField()
     updated = models.DateTimeField()
@@ -298,3 +297,13 @@ class Attribute(models.Model):
 
     def __str__(self):
         return self.identifier
+
+
+class Search(models.Model):
+
+    dataset = models.ForeignKey('Dataset', on_delete=models.CASCADE, related_name='search')
+    vector = SearchVectorField()
+
+    class Meta:
+        db_table = 'search'
+        managed = False
