@@ -73,18 +73,16 @@ urlpatterns = [
     path('metadata/', metadata, name='metadata'),
 
     path('datasets/<uuid:pk>/', dataset, name='dataset'),
-    path('datasets/<path:path>/', dataset, name='dataset'),
-
     path('files/<uuid:pk>/', file, name='file'),
-    path('files/<path:path>/', file, name='file'),
+    path('resources/<uuid:pk>/', resource, name='resource'),
 
-    re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)xml', datacite_resource_xml, name='datacite_resource_xml'),
+    re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).xml', datacite_resource_xml, name='datacite_resource_xml'),
     re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).json', datacite_resource_json, name='datacite_resource_json'),
     re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)', datacite_resource, name='datacite_resource'),
 
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).bib', resource_bibtex, name='resource_bibtex'),
-    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).datacite.xml', resource_datacite_xml, name='resource_datacite_xml'),
-    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).datacite.json', resource_datacite_json, name='resource_datacite_json'),
+    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).xml', resource_xml, name='resource_xml'),
+    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).json', resource_json, name='resource_json'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)', resource, name='resource'),
     re_path(r'^(?P<prefix>\d{2}\.\d+)\/$', resources, name='resources'),
 

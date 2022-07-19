@@ -160,10 +160,10 @@
                         <a href="{% url 'resource_bibtex' resource.doi %}">{% trans 'BibTeX' %}</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="{% url 'resource_datacite_xml' resource.doi %}">{% trans 'DataCite XML' %}</a>
+                        <a href="{% url 'resource_xml' resource.doi %}">{% trans 'DataCite XML' %}</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="{% url 'resource_datacite_json' resource.doi %}">{% trans 'DataCite JSON' %}</a>
+                        <a href="{% url 'resource_json' resource.doi %}">{% trans 'DataCite JSON' %}</a>
                     </li>
                 </ul>
             </div>
@@ -172,7 +172,28 @@
             <div class="card">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <a href="{% url 'resource-detail-filelist' resource.id %}">{% trans 'Download file list' %}</a>
+                        <a href="{% url 'resource-detail-datasets' resource.id %}">{% trans 'Download dataset list as JSON' %}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'resource-detail-files' resource.id %}">{% trans 'Download file list as JSON' %}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'resource-detail-filelist' resource.id %}">{% trans 'Download file list for Wget' %}</a>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>{% trans 'API' %}</h3>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{% url 'resource-detail' resource.id %}">{% trans 'Resource for this DOI' %}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'dataset-list' %}?doi={{ resource.doi }}">{% trans 'Datasets for this DOI' %}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'file-list' %}?doi={{ resource.doi }}">{% trans 'Files for this DOI' %}</a>
                     </li>
                 </ul>
             </div>
@@ -221,9 +242,22 @@
     {% include 'caveats/cards/caveats.html' %}
     {% endif %}
 
-    {% if resource.datasets.exists %}
-    <h3>{% trans 'Datasets for this DOI' %}</h3>
-    {% include 'metadata/cards/datasets.html' with datasets=resource.datasets.all %}
+    {% if datasets %}
+    <div id="datasets" class="resources-datasets">
+        <h3>{% trans 'Datasets for this DOI' %}</h3>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card mb-1">
+                    <div class="card-body">
+                        There are {{ count }} datasets for this DOI. {% if count > settings.METADATA_RESOURCE_MAX_DATASETS %}Here we only display the first {{ settings.METADATA_RESOURCE_MAX_DATASETS }} datasets.{% endif %} You can use the <a href="{% url 'search' %}doi/{{ resource.doi }}" target="_blank">Search</a> interface to further restrict your query.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'metadata/cards/datasets.html' %}
     {% endif %}
 </div>
 

@@ -2,16 +2,19 @@ import json
 from collections import defaultdict
 from uuid import UUID
 
+from django.conf import settings
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render, reverse
 
+from datacite import schema43
+
 from isimip_data.annotations.models import Download, Figure, Reference
-from isimip_data.core.utils import get_file_base_url
 from isimip_data.caveats.models import Caveat
+from isimip_data.core.utils import get_file_base_url
 
 from .models import Attribute, Dataset, File, Resource
-from .renderers import BibTexRenderer, DataCiteRenderer
+from .utils import render_bibtex
 
 
 def metadata(request):
@@ -123,10 +126,13 @@ def resources(request, prefix):
     })
 
 
-def resource(request, doi=None):
-    queryset = Resource.objects.using('metadata').prefetch_related('datasets__links')
+def resource(request, pk=None, doi=None):
+    queryset = Resource.objects.using('metadata')
 
-    resource = get_object_or_404(queryset, doi=doi)
+    if pk is not None:
+        resource = get_object_or_404(queryset, pk=pk)
+    elif doi is not None:
+        resource = get_object_or_404(queryset, doi=doi)
 
     references = defaultdict(list)
     if resource.datacite is not None:
@@ -136,45 +142,47 @@ def resource(request, doi=None):
                 'IsPreviousVersionOf',
                 'IsDocumentedBy',
                 'Cites',
-                'IsDerivedFrom',
-                'HasPart'
+                'IsDerivedFrom'
             ]:
                 references[identifier.get('relationType')].append(identifier)
             else:
                 references['Other'].append(identifier)
 
-    dataset_ids = [str(dataset_id) for dataset_id in resource.datasets.values_list('id', flat=True)]
-    caveats = Caveat.objects.filter(datasets__contains=dataset_ids).public(request.user) if dataset_ids else []
+    caveats = Caveat.objects.filter(resources__contains=[str(resource.id)]).public(request.user)
+    count = resource.datasets.count()
+    datasets = resource.datasets.prefetch_related('links').order_by('path')[:settings.METADATA_RESOURCE_MAX_DATASETS]
 
     return render(request, 'metadata/resource.html', {
         'title': 'DOI {}'.format(resource.doi),
         'resource': resource,
         'references': references,
-        'caveats': caveats
+        'caveats': caveats,
+        'datasets': datasets,
+        'count': count
     })
 
 
 def resource_bibtex(request, doi=None):
-    obj = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
-    bibtex = BibTexRenderer().render(obj)
+    resource = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
+    bibtex = render_bibtex(resource)
     response = HttpResponse(bibtex, content_type="application/x-bibtex")
     response['Content-Disposition'] = 'filename="{}.bib"'.format(doi)
     return response
 
 
-def resource_datacite_json(request, doi=None):
-    obj = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
-    json_string = json.dumps(obj.datacite, indent=2)
-    response = HttpResponse(json_string, content_type="application/json")
-    response['Content-Disposition'] = 'filename="{}.json"'.format(doi)
+def resource_xml(request, doi=None):
+    resource = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
+    xml_string = schema43.tostring(resource.datacite)
+    response = HttpResponse(xml_string, content_type='application/xml')
+    response['Content-Disposition'] = 'filename="{}.xml"'.format(doi)
     return response
 
 
-def resource_datacite_xml(request, doi=None):
-    obj = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
-    xml = DataCiteRenderer().render(obj)
-    response = HttpResponse(xml, content_type="application/xml")
-    response['Content-Disposition'] = 'filename="{}.xml"'.format(doi)
+def resource_json(request, doi=None):
+    resource = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
+    json_string = json.dumps(resource.datacite, indent=2)
+    response = HttpResponse(json_string, content_type='application/json')
+    response['Content-Disposition'] = 'filename="{}.json"'.format(doi)
     return response
 
 

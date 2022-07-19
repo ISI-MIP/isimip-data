@@ -1,12 +1,11 @@
 import json
 import logging
 from collections import OrderedDict
-
-from urllib.parse import urlparse, quote
+from urllib.parse import quote, urlparse
 from urllib.request import HTTPError, urlopen
 
-from django.core.cache import cache
 from django.conf import settings
+from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
@@ -129,3 +128,27 @@ def get_terms_of_use():
         'terms_of_use': settings.TERMS_OF_USE,
         'terms_of_use_url': settings.TERMS_OF_USE_URL
     }
+
+
+def render_bibtex(resource):
+    authors = ' and '.join([creator.get('name') for creator in resource.datacite.get('creators', []) if creator.get('name')])
+
+    return '''
+@misc{{{doi},
+    authors = {{{authors}}},
+    year = {{{year}}},
+    title = {{{title}}},
+    version = {{{version}}},
+    publisher = {{{publisher}}},
+    doi = {{{doi}}},
+    url = {{{doi_url}}}
+}}
+'''.format(
+            authors=authors,
+            year=resource.datacite.get('publicationYear'),
+            title=resource.title,
+            version=resource.major_version,
+            publisher=resource.datacite.get('publisher'),
+            doi=resource.doi,
+            doi_url=resource.doi_url
+        ).strip()
