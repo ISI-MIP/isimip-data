@@ -5,11 +5,12 @@ from django.contrib.sitemaps import Sitemap
 from django.contrib.sitemaps import views as sitemaps_views
 from django.urls import include, path, re_path, reverse
 from django.views.generic.base import TemplateView
-from rest_framework import routers
 
 from django_datacite.views import resource as datacite_resource
 from django_datacite.views import resource_json as datacite_resource_json
 from django_datacite.views import resource_xml as datacite_resource_xml
+from rest_framework import routers
+
 from isimip_data.accounts.views import (profile_delete, profile_delete_success,
                                         profile_update)
 from isimip_data.caveats.sitemaps import CaveatSitemap
@@ -24,11 +25,10 @@ from isimip_data.metadata.sitemaps import (DatasetSitemap, FileSitemap,
                                            ResourceSitemap)
 from isimip_data.metadata.views import (attributes, dataset, file, metadata,
                                         resource, resource_bibtex,
-                                        resource_datacite_json,
-                                        resource_datacite_xml, resources)
-from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
-                                           GlossaryViewSet, ResourceViewSet,
-                                           TreeViewSet)
+                                        resource_json, resource_xml, resources)
+from isimip_data.metadata.viewsets import (AttributeViewSet, DatasetViewSet,
+                                           FileViewSet, GlossaryViewSet,
+                                           ResourceViewSet, TreeViewSet)
 from isimip_data.search.views import search
 from isimip_data.search.viewsets import FacetViewSet
 
@@ -39,6 +39,7 @@ router.register(r'glossary', GlossaryViewSet, basename='glossary')
 router.register(r'tree', TreeViewSet, basename='tree')
 router.register(r'files', FileViewSet, basename='file')
 router.register(r'resources', ResourceViewSet, basename='resource')
+router.register(r'attributes', AttributeViewSet, basename='attribute')
 router.register(r'facets', FacetViewSet, basename='facet')
 router.register(r'settings', SettingsViewSet, basename='setting')
 

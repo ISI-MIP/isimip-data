@@ -23,8 +23,9 @@ class App extends Component {
     this.state = {
       params: {},
       facets: [],
-      glossary: {},
       settings: {},
+      attributes: [],
+      glossary: {},
       sidebar: null
     }
     this.handleReset = this.handleReset.bind(this)
@@ -39,12 +40,14 @@ class App extends Component {
   componentDidMount() {
     const { location } = this.props
 
-    CoreApi.fetchSettings().then(settings => {
-      this.setState({ settings })
-    })
-
-    DatasetApi.fetchGlossary().then(glossary => {
-      this.setState({ glossary })
+    Promise.all([
+      CoreApi.fetchSettings(),
+      DatasetApi.fetchAttributes(),
+      DatasetApi.fetchGlossary()
+    ]).then(results => {
+      const [ settings, attributes, glossary ] = results
+      const params = Object.assign({ page: 1 }, getLocationParams('/search/', location, attributes.map(a => a.identifier)))
+      this.setState({ params, attributes, glossary, settings })
     })
 
     let sidebar = ls.get('sidebar')
@@ -52,9 +55,6 @@ class App extends Component {
       sidebar = 'tree'
     }
     this.handleSidebarChange(sidebar)
-
-    const params = Object.assign({ page: 1 }, getLocationParams('/search/', location))
-    this.setState({ params })
   }
 
   componentDidUpdate(prevProps, prevState) {

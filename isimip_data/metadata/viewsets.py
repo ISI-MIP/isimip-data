@@ -16,7 +16,8 @@ from .filters import (AttributeFilterBackend, IdFilterBackend,
                       SearchFilterBackend, TreeFilterBackend,
                       VersionFilterBackend)
 from .models import Attribute, Dataset, File, Resource, Tree
-from .serializers import DatasetSerializer, FileSerializer, ResourceSerializer
+from .serializers import (AttributeSerializer, DatasetSerializer,
+                          FileSerializer, ResourceSerializer)
 from .utils import fetch_glossary
 
 
@@ -214,6 +215,12 @@ class TreeViewSet(ViewSet):
                 current_response_list = response_node['items']
 
         return Response(response_list)
+
+
+class AttributeViewSet(ReadOnlyModelViewSet):
+
+    serializer_class = AttributeSerializer
+    queryset = Attribute.objects.using('metadata')
 
 
 class GlossaryViewSet(ViewSet):

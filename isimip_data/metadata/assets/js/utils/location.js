@@ -1,4 +1,22 @@
-const getLocationParams = (path, location) => {
+const updateParams = (params, key, value) => {
+  if (key !== null && value !== null) {
+    if (key == 'page') {
+      params['page'] = parseInt(value)
+    } else if (['all', 'after', 'before', 'query'].indexOf(key) > -1) {
+      params[key] = value
+    } else {
+      if (params[key] == undefined) {
+        params[key] = [value]
+      } else {
+        params[key].push(value)
+      }
+    }
+  }
+}
+
+const getLocationParams = (path, location, identifiers) => {
+  const keys = ['page', 'tree', 'all', 'after', 'before', 'query'].concat(identifiers)
+
   // remove the base path
   const string = location.pathname.replace(path, '')
 
@@ -11,26 +29,24 @@ const getLocationParams = (path, location) => {
   }, [])
 
   const params = {}
+  let key = null, value = null
   for (let i = 0; i < tokens.length; i++) {
-    // look at every odd token, thats a value!
-    if (i % 2 == 1) {
-      const key = tokens[i-1],
-            value = decodeURIComponent(tokens[i])
+    const token = decodeURIComponent(tokens[i])
 
-      if (key == 'page') {
-        params['page'] = parseInt(value)
-      } else if (['all', 'after', 'before', 'query'].indexOf(key) > -1) {
-        params[key] = value
+    if (keys.includes(token)) {
+      updateParams(params, key, value)
+      key = token
+      value = null
+    } else {
+      if (value === null) {
+        value = token
       } else {
-        if (params[key] == undefined) {
-          params[key] = [value]
-        } else {
-          params[key].push(value)
-        }
+        value += '/' + token
       }
     }
   }
 
+  updateParams(params, key, value)
   return params
 }
 
@@ -43,10 +59,11 @@ const getLocationString = (path, params) => {
         string += 'page/' + params['page'] + '/'
       }
     } else if (['all', 'after', 'before', 'query'].indexOf(key) > -1) {
-      string += key + '/' + params[key] + '/'
+      string += key + '/' + encodeURIComponent(params[key]) + '/'
     } else {
       params[key].forEach(value => {
-        string += key + '/' + encodeURIComponent(value) + '/'
+        // encode everything but the slashes
+        string += key + '/' + value.split('/').map(v => encodeURIComponent(v)).join('/') + '/'
       })
     }
   })
