@@ -17,7 +17,7 @@ from .filters import (AttributeFilterBackend, IdFilterBackend,
                       VersionFilterBackend)
 from .models import Attribute, Dataset, File, Resource, Tree
 from .serializers import (AttributeSerializer, DatasetSerializer,
-                          FileSerializer, ResourceSerializer)
+                          FileSerializer, ResourceSerializer, ResourceIndexSerializer)
 from .utils import fetch_glossary
 
 
@@ -115,6 +115,12 @@ class ResourceViewSet(ReadOnlyModelViewSet):
         PathFilterBackend,
         SearchFilterBackend
     )
+
+    @action(detail=False)
+    def index(self, request):
+        queryset = self.get_queryset()
+        serializer = ResourceIndexSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
 
     @action(detail=True, url_path='datasets', renderer_classes=[JSONRenderer])
     def detail_datasets(self, request, pk):

@@ -71,6 +71,7 @@ urlpatterns = [
     path('account/', include('allauth.urls')),
 
     path('metadata/', metadata, name='metadata'),
+    path('doi/', resources, name='resources'),
 
     path('datasets/<uuid:pk>/', dataset, name='dataset'),
     path('files/<uuid:pk>/', file, name='file'),
@@ -84,7 +85,6 @@ urlpatterns = [
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).xml', resource_xml, name='resource_xml'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).json', resource_json, name='resource_json'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)', resource, name='resource'),
-    re_path(r'^(?P<prefix>\d{2}\.\d+)\/$', resources, name='resources'),
 
     path('attributes/', attributes, name='attributes'),
 

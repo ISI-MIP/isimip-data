@@ -195,6 +195,24 @@ class Resource(models.Model):
             return '.'.join(version.split('.')[:2])
 
     @cached_property
+    def previous_version(self):
+        try:
+            related_identifier = next(i for i in self.datacite.get('relatedIdentifiers', [])
+                                      if i.get('relationType') == 'IsNewVersionOf')
+            return related_identifier.get('relatedIdentifier').replace('https://doi.org/', '')
+        except StopIteration:
+            return None
+
+    @cached_property
+    def new_version(self):
+        try:
+            related_identifier = next(i for i in self.datacite.get('relatedIdentifiers', [])
+                                      if i.get('relationType') == 'IsPreviousVersionOf')
+            return related_identifier.get('relatedIdentifier').replace('https://doi.org/', '')
+        except StopIteration:
+            return None
+
+    @cached_property
     def doi_url(self):
         return 'https://doi.org/{}'.format(self.doi)
 
@@ -248,6 +266,10 @@ class Resource(models.Model):
     @cached_property
     def terms_of_use(self):
         return get_terms_of_use()
+
+    @cached_property
+    def is_external(self):
+        return self.datacite is not None
 
     def get_absolute_url(self):
         return reverse('resource', kwargs={'doi': self.doi})

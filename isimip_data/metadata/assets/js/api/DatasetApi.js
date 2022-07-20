@@ -24,6 +24,17 @@ class DatasetApi {
       })
   }
 
+  static fetchResources() {
+    const fetchParams = {}
+    return fetch('/api/v1/resources/index/', fetchParams).then(response => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        throw new Error(response.statusText)
+      }
+    })
+  }
+
   static fetchAttributes(fetchParams = {}) {
     return fetch('/api/v1/attributes/', fetchParams).then(response => {
         if (response.ok) {
