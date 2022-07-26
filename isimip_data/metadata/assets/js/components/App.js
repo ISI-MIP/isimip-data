@@ -65,7 +65,7 @@ class App extends Component {
       <div>
         <Filter value={filterString} onChange={this.updateFilterString} />
         <Version value={showAll} onChange={this.updateShowAll} />
-        <div className="mt-4">
+        <div className="mt-3">
           <Resources resources={resources} filterString={filterString} showAll={showAll} />
         </div>
       </div>
