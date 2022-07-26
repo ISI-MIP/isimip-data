@@ -157,7 +157,8 @@ def resource(request, pk=None, doi=None):
         'references': references,
         'caveats': caveats,
         'datasets': datasets,
-        'count': count
+        'count': count,
+        'search_url': request.build_absolute_uri(reverse('search')) + 'query/' + resource.doi + '/'
     })
 
 

@@ -59,7 +59,7 @@ const getLocationString = (path, params) => {
         string += 'page/' + params['page'] + '/'
       }
     } else if (['all', 'after', 'before', 'query'].indexOf(key) > -1) {
-      string += key + '/' + encodeURIComponent(params[key]) + '/'
+      string += key + '/' + params[key] + '/'
     } else {
       params[key].forEach(value => {
         // encode everything but the slashes

@@ -250,7 +250,7 @@
             <div class="col-sm-12">
                 <div class="card mb-1">
                     <div class="card-body">
-                        There are {{ count }} datasets for this DOI. {% if count > settings.METADATA_RESOURCE_MAX_DATASETS %}Here we only display the first {{ settings.METADATA_RESOURCE_MAX_DATASETS }} datasets.{% endif %} You can use the <a href="{% url 'search' %}doi/{{ resource.doi }}" target="_blank">Search</a> interface to further restrict your query.
+                        There are {{ count }} datasets for this DOI. {% if count > settings.METADATA_RESOURCE_MAX_DATASETS %}Here we only display the first {{ settings.METADATA_RESOURCE_MAX_DATASETS }} datasets.{% endif %} You can use the search interface to further restrict your query: <a href="{{ search_url }}" target="_blank">{{ search_url }}</a>
                     </div>
                 </div>
             </div>
