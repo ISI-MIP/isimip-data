@@ -5,13 +5,11 @@ import PropTypes from 'prop-types'
 class Filter extends React.Component {
 
   render() {
-    const { filterString, onChange } = this.props
+    const { value, onChange } = this.props
 
     return (
-      <div className="filter mt-2 mb-2">
-        <input className="form-control form-control-lg" type="text" placeholder="Filter DOI / Title"
-               onChange={onChange} value={filterString} />
-      </div>
+      <input className="form-control form-control-lg" type="text" placeholder="Filter by DOI, title, creator, or path"
+             onChange={e => onChange(e.target.value)} value={value} />
     )
   }
 }

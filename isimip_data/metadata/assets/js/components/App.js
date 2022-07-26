@@ -1,10 +1,12 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
+import ls from 'local-storage'
 
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 import Filter from './Filter'
 import Resources from './Resources'
+import Version from './Version'
 
 class App extends Component {
 
@@ -12,11 +14,34 @@ class App extends Component {
     super(props)
     this.state = {
       resources: [],
-      filterString: ''
+      filterString: '',
+      showAll: false
     }
 
     this.toggleResource = this.toggleResource.bind(this)
     this.updateFilterString = this.updateFilterString.bind(this)
+    this.updateShowAll = this.updateShowAll.bind(this)
+  }
+
+  componentDidMount() {
+    DatasetApi.fetchResources().then(resources => {
+      this.setState({
+        resources,
+        filterString: ls.get('filterString'),
+        showAll: ls.get('showAll')
+      })
+    })
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { filterString, showAll } = this.state
+
+    if (prevState.filterString != filterString) {
+      ls.set('filterString', filterString)
+    }
+    if (prevState.showAll != showAll) {
+      ls.set('showAll', showAll)
+    }
   }
 
   toggleResource(resource) {
@@ -25,23 +50,24 @@ class App extends Component {
     this.setState(resources)
   }
 
-  updateFilterString(event) {
-    this.setState({ filterString: event.target.value })
+  updateFilterString(filterString) {
+    this.setState({ filterString })
   }
 
-  componentDidMount() {
-    DatasetApi.fetchResources().then(resources => {
-      this.setState({ resources })
-    })
+  updateShowAll(showAll) {
+    this.setState({ showAll })
   }
 
   render() {
-    const { resources, filterString } = this.state
+    const { resources, filterString, showAll } = this.state
 
     return (
       <div>
-        <Filter onChange={this.updateFilterString} filterString={filterString} />
-        <Resources resources={resources} filterString={filterString} />
+        <Filter value={filterString} onChange={this.updateFilterString} />
+        <Version value={showAll} onChange={this.updateShowAll} />
+        <div className="mt-4">
+          <Resources resources={resources} filterString={filterString} showAll={showAll} />
+        </div>
       </div>
     )
   }

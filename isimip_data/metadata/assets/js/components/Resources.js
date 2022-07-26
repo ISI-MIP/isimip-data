@@ -12,13 +12,22 @@ class Resources extends React.Component {
   }
 
   filterResources(resource) {
-    const { filterString } = this.props
-    const tokens = filterString.split(/(\s+)/).filter( e => e.trim().length > 0)
+    const { filterString, showAll } = this.props
 
-    return tokens.map(string => {
-      if (resource.doi.includes(string) || resource.title.includes(string)) {
-        return true
-      }
+    // filter for the showAll flag
+    if (resource.new_version && !showAll) {
+      return false
+    }
+
+    // filter for the filter string
+    const tokens = filterString.toLowerCase().split(/(\s+)/).filter( e => e.trim().length > 0)
+    const string = [
+      resource.doi,
+      resource.title,
+      resource.creators_str
+    ].concat(resource.paths).join(' ').toLowerCase()
+    return tokens.map(token => {
+      return string.includes(token)
     }).every(element => element === true)
   }
 

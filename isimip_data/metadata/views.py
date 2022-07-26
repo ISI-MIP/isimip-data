@@ -120,7 +120,8 @@ def file(request, pk=None, path=None):
 
 def resources(request):
     return render(request, 'metadata/resources.html', {
-        'title': 'DOI'
+        'title': 'DOI',
+        'count': Resource.objects.using('metadata').count()
     })
 
 
