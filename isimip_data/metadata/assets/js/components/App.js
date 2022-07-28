@@ -27,8 +27,8 @@ class App extends Component {
     DatasetApi.fetchResources().then(resources => {
       this.setState({
         resources,
-        filterString: ls.get('filterString'),
-        showAll: ls.get('showAll')
+        filterString: ls.get('filterString') || '',
+        showAll: ls.get('showAll') || false
       })
     })
   }
