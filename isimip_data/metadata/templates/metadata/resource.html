@@ -148,9 +148,9 @@
         </div>
 
         <div class="col-sm-4">
-            {% if resource.rights %}
+            {% if resource.rights_list %}
             <h3>{% trans 'Rights' %}</h3>
-            {% include 'metadata/cards/rights.html' with rights=resource.rights %}
+            {% include 'metadata/cards/rights.html' with rights_list=resource.rights_list %}
             {% endif %}
 
             <h3>{% trans 'Export' %}</h3>

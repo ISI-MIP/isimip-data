@@ -1,7 +1,6 @@
 from datetime import datetime
 from pathlib import Path
 
-from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.postgres.search import SearchVectorField
 from django.db import models
@@ -186,35 +185,35 @@ class Resource(models.Model):
     def __str__(self):
         return self.doi
 
-    @property
+    @cached_property
     def major_version(self):
         version = self.datacite.get('version')
         if version:
             return '.'.join(version.split('.')[:2])
 
-    @property
+    @cached_property
     def doi_url(self):
         return 'https://doi.org/{}'.format(self.doi)
 
-    @property
+    @cached_property
     def title_with_version(self):
         if not self.version or self.title.endswith(')') or self.title[-1].isdigit():
             return self.title
         else:
             return f'{self.title} (v{self.version})'
 
-    @property
+    @cached_property
     def creators_str(self):
         return ', '.join([creator.get('name', '') for creator in self.datacite.get('creators', [])])
 
-    @property
+    @cached_property
     def contact_persons(self):
         return [
             contributor for contributor in self.datacite.get('contributors', [])
             if contributor.get('contributorType') == 'ContactPerson'
         ]
 
-    @property
+    @cached_property
     def publication_date(self):
         date_string = None
         for item in self.datacite.get('dates', []):
@@ -230,18 +229,20 @@ class Resource(models.Model):
             except ValueError:
                 return datetime.strptime(date_string, '%Y')
 
-    @property
-    def rights(self):
+    @cached_property
+    def rights_list(self):
+        rights_list = []
         for rights in self.datacite.get('rightsList', []):
             rights_uri = rights.get('rightsURI')
             if rights_uri:
                 rights = filter(lambda item: item.get('rights_uri') == rights_uri, RIGHTS.values())
                 try:
-                    return next(rights)
+                    rights_list.append(next(rights))
                 except StopIteration:
                     pass
+        return rights_list
 
-    @property
+    @cached_property
     def terms_of_use(self):
         return get_terms_of_use()
 

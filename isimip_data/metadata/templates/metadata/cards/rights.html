@@ -3,27 +3,34 @@
 
 <div class="card">
     <div class="card-body">
-        {% if rights.image_wide %}
-        <div class="mb-2 rights-image">
-            <img src="{% static rights.image %}" alt="{{ rights.rights }}"/>
+        {% if rights_list|length > 1 %}
+        <div class="text-muted mb-2">
+            The datasets for this DOI are published under different usage rights, please check the license statement for each dataset:
         </div>
-        <div class="mb-2">
-            <a href="{{ rights.rights_uri }}">
-                {{ rights.rights }} <span class="text-nowrap">({{ rights.short }})</span>
-            </a>
-        </div>
-        {% else %}
-        <div class="row align-items-center mb-2">
-            <div class="col-md-3 text-center mb-2 mb-md-0 rights-image">
+        {% endif %}
+        {% for rights in rights_list %}
+            {% if rights.image_wide %}
+            <div class="mb-2 rights-image">
                 <img src="{% static rights.image %}" alt="{{ rights.rights }}"/>
             </div>
-            <div class="col-md-9 text-center text-md-left">
+            <div class="mb-2">
                 <a href="{{ rights.rights_uri }}">
                     {{ rights.rights }} <span class="text-nowrap">({{ rights.short }})</span>
                 </a>
             </div>
-        </div>
-        {% endif %}
+            {% else %}
+            <div class="row align-items-center mb-2">
+                <div class="col-md-3 text-center mb-2 mb-md-0 rights-image">
+                    <img src="{% static rights.image %}" alt="{{ rights.rights }}"/>
+                </div>
+                <div class="col-md-9 text-center text-md-left">
+                    <a href="{{ rights.rights_uri }}">
+                        {{ rights.rights }} <span class="text-nowrap">({{ rights.short }})</span>
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
 
         <div class="text-muted">
             {{ settings.TERMS_OF_USE }} Further information can be found in our <a href="{{ settings.TERMS_OF_USE_URL }}">terms of use</a>.
