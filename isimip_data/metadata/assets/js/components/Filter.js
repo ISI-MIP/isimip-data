@@ -10,7 +10,7 @@ class Filter extends React.Component {
     const { filterString, showAll, onFilterStringChange, onShowAllChange } = this.props
 
     return (
-      <div className="card mb-2">
+      <div className="filter card mb-2">
         <div className="card-body">
           <div className="form-row">
             <div className="col-12 mb-2 col-md mb-md-0">
