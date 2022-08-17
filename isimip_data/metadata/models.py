@@ -72,8 +72,10 @@ class Dataset(models.Model):
         return merge_identifiers(self)
 
     @cached_property
-    def rights_dict(self):
-        return RIGHTS.get(self.rights, {})
+    def rights_list(self):
+        return [
+            RIGHTS.get(self.rights, {})
+        ]
 
     @cached_property
     def terms_of_use(self):
@@ -152,8 +154,10 @@ class File(models.Model):
         return merge_identifiers(self)
 
     @cached_property
-    def rights_dict(self):
-        return RIGHTS.get(self.dataset.rights, {})
+    def rights_list(self):
+        return [
+            RIGHTS.get(self.dataset.rights, {})
+        ]
 
     @cached_property
     def terms_of_use(self):

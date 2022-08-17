@@ -31,9 +31,9 @@
             {% include 'metadata/cards/specifiers.html' with obj=file %}
         </div>
         <div class="col-sm-4">
-            {% if file.dataset.rights_dict %}
+            {% if file.dataset.rights_list %}
             <h3>{% trans 'Rights' %}</h3>
-            {% include 'metadata/cards/rights.html' with rights=file.rights_dict %}
+            {% include 'metadata/cards/rights.html' with rights_list=file.rights_list %}
             {% endif %}
 
             {% if file.dataset.public %}
