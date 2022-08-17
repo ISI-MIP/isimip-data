@@ -1,10 +1,11 @@
 from pathlib import PurePath
 
 from django.conf import settings
+
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 
@@ -15,7 +16,8 @@ from .filters import (AttributeFilterBackend, IdFilterBackend,
                       SearchFilterBackend, TreeFilterBackend,
                       VersionFilterBackend)
 from .models import Attribute, Dataset, File, Resource, Tree
-from .serializers import DatasetSerializer, FileSerializer, ResourceSerializer
+from .serializers import (AttributeSerializer, DatasetSerializer,
+                          FileSerializer, ResourceSerializer, ResourceIndexSerializer)
 from .utils import fetch_glossary
 
 
@@ -114,6 +116,45 @@ class ResourceViewSet(ReadOnlyModelViewSet):
         SearchFilterBackend
     )
 
+    @action(detail=False)
+    def index(self, request):
+        queryset = self.get_queryset()
+        serializer = ResourceIndexSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    @action(detail=True, url_path='datasets', renderer_classes=[JSONRenderer])
+    def detail_datasets(self, request, pk):
+        resource = self.get_object()
+        metadata_url_template = request.build_absolute_uri('/datasets/') + '{}/'
+        datasets = [
+            dict(**dataset, metadata_url=metadata_url_template.format(dataset['id']))
+            for dataset in Dataset.objects.using('metadata').filter(resources=resource)
+                                                            .values('id', 'path', 'version', 'public')
+        ]
+
+        response = Response(datasets)
+        response['Content-Disposition'] = 'attachment; filename=%s.datasets.json' % resource.doi
+        return response
+
+    @action(detail=True, url_path='files', renderer_classes=[JSONRenderer])
+    def detail_files(self, request, pk):
+        resource = self.get_object()
+        metadata_url_template = request.build_absolute_uri('/files/') + '{}/'
+        file_url_template = get_file_base_url(request)
+        datasets = [
+            dict(
+                **file,
+                metadata_url=metadata_url_template.format(file['id']),
+                file_url=file_url_template + file['path']
+            )
+            for file in File.objects.using('metadata').filter(dataset__resources=resource)
+                                                      .values('id', 'dataset_id', 'path', 'version')
+        ]
+
+        response = Response(datasets)
+        response['Content-Disposition'] = 'attachment; filename=%s.files.json' % resource.doi
+        return response
+
     @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])
     def detail_filelist(self, request, pk):
         resource = self.get_object()
@@ -180,6 +221,12 @@ class TreeViewSet(ViewSet):
                 current_response_list = response_node['items']
 
         return Response(response_list)
+
+
+class AttributeViewSet(ReadOnlyModelViewSet):
+
+    serializer_class = AttributeSerializer
+    queryset = Attribute.objects.using('metadata')
 
 
 class GlossaryViewSet(ViewSet):

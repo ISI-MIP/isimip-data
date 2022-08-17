@@ -1,7 +1,8 @@
 import os
 
-import dj_database_url
 from django.utils.translation import gettext_lazy as _
+
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -184,7 +185,8 @@ SETTINGS_EXPORT = [
     'LOGIN_URL',
     'LOGOUT_URL',
     'DOI_PREFIX',
-    'HOME'
+    'HOME',
+    'METADATA_RESOURCE_MAX_DATASETS'
 ]
 
 if os.getenv('CACHE') == 'dummy':
@@ -217,6 +219,7 @@ SEARCH_SIMILARITY_LIMIT = 3
 
 METADATA_PAGE_SIZE = os.getenv('METADATA_PAGE_SIZE', 10)
 METADATA_MAX_PAGE_SIZE = os.getenv('METADATA_MAX_PAGE_SIZE', 1000)
+METADATA_RESOURCE_MAX_DATASETS = os.getenv('METADATA_RESOURCE_MAX_DATASETS', 100)
 
 LABEL = os.getenv('LABEL')
 ALERT = os.getenv('ALERT')

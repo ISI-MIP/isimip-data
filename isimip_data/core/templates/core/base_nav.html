@@ -21,7 +21,10 @@
                 <li class="nav-item {% if request.resolver_match.url_name == 'search' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'search' %}">Search</a>
                 </li>
-                <li class="nav-item {% if request.resolver_match.url_name in 'metadata,dataset,file' %}active{% endif %}">
+                <li class="nav-item {% if request.resolver_match.url_name == 'resources' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'resources' %}">DOI</a>
+                </li>
+                <li class="nav-item {% if request.resolver_match.url_name in 'metadata' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'metadata' %}">Metadata</a>
                 </li>
                 <li class="nav-item {% if request.resolver_match.url_name in 'caveats,caveat' %}active{% endif %}">
@@ -61,9 +64,6 @@
                         </a>
                         {% if user.is_staff %}
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'resources' settings.DOI_PREFIX %}">
-                            {% trans 'List of registered DOIs' %}
-                        </a>
                         <a class="dropdown-item" href="{% url 'attributes' %}">
                             {% trans 'Attribute statistics' %}
                         </a>

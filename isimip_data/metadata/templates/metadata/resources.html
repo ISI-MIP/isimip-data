@@ -2,38 +2,41 @@
 {% load static %}
 
 {% block style %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{% static 'metadata.css' %}" />
+    <link rel="stylesheet" href="{% static 'resources.css' %}" />
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'resources.js' %}"></script>
 {% endblock %}
 
 {% block main %}
 
 <div class="container">
-    <div class="row justify-content-md-center">
+    <div class="row justify-content-md-center mb-4">
         <div class="col-md-8">
             <header>
                 <h1>Digital Object Identifier</h1>
 
                 <p>
-                    In order to make our data uniquely identifiable and citable in scolarly publications, we use Digital Object Identifiers. While for output data, we register one DOI per sector, for input data, we create one DOI per subcategory, e.g. socioeconomic/landuse. The DOI metadata contains references to each included dataset. The DOI are registered using the DOI service of <a href="https://datacite.org/" target="_blank">DataCite</a>.
+                    In order to make our data uniquely identifiable and citable in scolarly publications, we use Digital Object Identifiers. While for output data, we register one DOI per sector, for input data, we create one DOI per subcategory, e.g. socioeconomic/landuse. The DOI are registered using the DOI service of <a href="https://datacite.org/" target="_blank">DataCite</a>.
                 </p>
 
                 <p>
-                    If you use ISIMIP data in your research, we kindly ask you to cite the used dataset using the DOI listed here. More information can be found in our <a href="https://www.isimip.org/gettingstarted/terms-of-use/" target="_blank">Terms of Use</a>.
+                    If you use ISIMIP data in your research, we kindly ask you to cite the DOI for corresponding dataset. The DOI can also be found in the <a href="{% url 'search' %}">search interface</a> with each dataset. More information can be found in our <a href="https://www.isimip.org/gettingstarted/terms-of-use/" target="_blank">Terms of Use</a>.
+                </p>
+
+                <p>
+                    Whenever we need to replace datasets, we will create a new version of the DOI, marked by a version number (e.g. <code>.1</code>) at the end. This ensures that every DOI references exactly the datasets, which where public at the time of registration. De-published datasets are archived on tape and can be made available on request.
+                </p>
+
+                <p>
+                    Currently, there we have {{ count }} DOI in our database. While most of the DOI are registered by us, sometimes we reference datasets registered by other parties. In this case, please follow the policies of the original data provider.
                 </p>
             </header>
         </div>
     </div>
 
-    {% if resources %}
-    <h3>ISIMIP DOI</h3>
-    {% include 'metadata/cards/resources.html' %}
-    {% endif %}
-
-    {% if resources_external %}
-    <h3>External DOI</h3>
-    {% include 'metadata/cards/resources.html' with resources=resources_external %}
-    {% endif %}
+    <div id="app"></div>
 </div>
 
 {% endblock %}

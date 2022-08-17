@@ -1,0 +1,16 @@
+@import 'isimip_data/core/assets/scss/colors';
+@import 'isimip_data/core/assets/scss/base';
+
+.btn-link {
+    font-size: small;
+}
+
+.btn-outline-secondary {
+    background-color: white;
+}
+
+.filter {
+    .card-body {
+        padding-bottom: 0.5rem;
+    }
+}

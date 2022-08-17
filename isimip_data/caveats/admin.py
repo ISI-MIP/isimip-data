@@ -9,7 +9,8 @@ from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
 from isimip_data.annotations.models import Download, Figure
-from isimip_data.annotations.utils import format_affected_datasets
+from isimip_data.annotations.utils import (format_affected_datasets,
+                                           format_affected_resources)
 from isimip_data.annotations.widgets import SpecifierWidget
 from isimip_data.metadata.models import Dataset
 
@@ -83,7 +84,7 @@ class CaveatAdmin(admin.ModelAdmin):
     search_fields = ('title', 'description')
     list_display = ('title', 'created', 'updated', 'severity', 'status', 'public')
     list_filter = ('severity', 'status', 'public')
-    readonly_fields = ('created', 'updated', 'affected_datasets')
+    readonly_fields = ('created', 'updated', 'affected_datasets', 'affected_resources')
     exclude = ('datasets', 'figures', 'downloads')
 
     fieldsets = (
@@ -105,6 +106,10 @@ class CaveatAdmin(admin.ModelAdmin):
         ('Affected datasets', {
             'classes': ('collapse',),
             'fields': ('affected_datasets', ),
+        }),
+        ('Affected resources', {
+            'classes': ('collapse',),
+            'fields': ('affected_resources', ),
         })
     )
 
@@ -144,6 +149,9 @@ class CaveatAdmin(admin.ModelAdmin):
 
     def affected_datasets(self, instance):
         return format_affected_datasets(instance.datasets)
+
+    def affected_resources(self, instance):
+        return format_affected_resources(instance.resources)
 
 
 class CommentAdmin(admin.ModelAdmin):

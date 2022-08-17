@@ -109,11 +109,11 @@ def test_resource_bibtex(db, client):
 
 def test_resource_json(db, client):
     resource = Resource.objects.using('metadata').first()
-    response = client.get(reverse('resource_datacite_json', args=[resource.doi]))
+    response = client.get(reverse('resource_json', args=[resource.doi]))
     assert response.status_code == 200
 
 
 def test_resource_xml(db, client):
     resource = Resource.objects.using('metadata').first()
-    response = client.get(reverse('resource_datacite_xml', args=[resource.doi]))
+    response = client.get(reverse('resource_xml', args=[resource.doi]))
     assert response.status_code == 200

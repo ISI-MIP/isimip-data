@@ -9,7 +9,8 @@ from django.utils.functional import cached_property
 
 from .constants import RIGHTS
 from .managers import AttributeManager, DatasetManager
-from .utils import get_terms_of_use, merge_identifiers, merge_specifiers, prettify_specifiers
+from .utils import (get_terms_of_use, merge_identifiers, merge_specifiers,
+                    prettify_specifiers)
 
 
 class Dataset(models.Model):
@@ -26,7 +27,6 @@ class Dataset(models.Model):
     specifiers = models.JSONField()
     rights = models.TextField()
     identifiers = ArrayField(models.TextField())
-    search_vector = SearchVectorField(null=True)
     public = models.BooleanField(null=True)
     tree_path = models.TextField()
 
@@ -72,10 +72,12 @@ class Dataset(models.Model):
         return merge_identifiers(self)
 
     @cached_property
+    def rights_dict(self):
+        return RIGHTS.get(self.rights, {})
+
+    @cached_property
     def rights_list(self):
-        return [
-            RIGHTS.get(self.rights, {})
-        ]
+        return [self.rights_dict]
 
     @cached_property
     def terms_of_use(self):
@@ -100,7 +102,6 @@ class File(models.Model):
     netcdf_header = models.JSONField()
     specifiers = models.JSONField()
     identifiers = ArrayField(models.TextField())
-    search_vector = SearchVectorField(null=True)
 
     created = models.DateTimeField()
     updated = models.DateTimeField()
@@ -154,10 +155,12 @@ class File(models.Model):
         return merge_identifiers(self)
 
     @cached_property
+    def rights_dict(self):
+        return RIGHTS.get(self.dataset.rights, {})
+
+    @cached_property
     def rights_list(self):
-        return [
-            RIGHTS.get(self.dataset.rights, {})
-        ]
+        return [self.rights_dict]
 
     @cached_property
     def terms_of_use(self):
@@ -194,6 +197,24 @@ class Resource(models.Model):
         version = self.datacite.get('version')
         if version:
             return '.'.join(version.split('.')[:2])
+
+    @cached_property
+    def previous_version(self):
+        try:
+            related_identifier = next(i for i in self.datacite.get('relatedIdentifiers', [])
+                                      if i.get('relationType') == 'IsNewVersionOf')
+            return related_identifier.get('relatedIdentifier').replace('https://doi.org/', '')
+        except StopIteration:
+            return None
+
+    @cached_property
+    def new_version(self):
+        try:
+            related_identifier = next(i for i in self.datacite.get('relatedIdentifiers', [])
+                                      if i.get('relationType') == 'IsPreviousVersionOf')
+            return related_identifier.get('relatedIdentifier').replace('https://doi.org/', '')
+        except StopIteration:
+            return None
 
     @cached_property
     def doi_url(self):
@@ -250,6 +271,10 @@ class Resource(models.Model):
     def terms_of_use(self):
         return get_terms_of_use()
 
+    @cached_property
+    def is_external(self):
+        return self.datacite is not None
+
     def get_absolute_url(self):
         return reverse('resource', kwargs={'doi': self.doi})
 
@@ -298,3 +323,13 @@ class Attribute(models.Model):
 
     def __str__(self):
         return self.identifier
+
+
+class Search(models.Model):
+
+    dataset = models.ForeignKey('Dataset', on_delete=models.CASCADE, related_name='search')
+    vector = SearchVectorField()
+
+    class Meta:
+        db_table = 'search'
+        managed = False

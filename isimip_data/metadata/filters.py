@@ -1,13 +1,12 @@
 import logging
 
-from django.conf import settings
-from django.contrib.postgres.search import (SearchQuery, SearchRank,
-                                            TrigramSimilarity)
+from django.contrib.postgres.search import SearchQuery
 from django.core.exceptions import FieldError
 from django.db.models import Q
+
 from rest_framework.filters import BaseFilterBackend
 
-from isimip_data.metadata.models import Attribute, Word
+from isimip_data.metadata.models import Attribute
 
 logger = logging.getLogger(__name__)
 
@@ -65,35 +64,18 @@ class SearchFilterBackend(BaseFilterBackend):
         # and http://rachbelaid.com/postgres-full-text-search-is-good-enough/
         query = request.GET.get('query')
         if query:
-            # first, split the search string along _ and whitespace into words
-            search_words = query.replace('_', ' ').replace('-', ' ').replace('/', ' ').split()
-
-            # second, lookup similar words in the "words" table and join them with OR
-            search_strings = []
-            for search_word in search_words:
-                words = Word.objects.using('metadata') \
-                                    .annotate(similarity=TrigramSimilarity('word', search_word)) \
-                                    .filter(similarity__gt=settings.SEARCH_SIMILARITY) \
-                                    .order_by('-similarity') \
-                                    .values_list('word', flat=True)[:settings.SEARCH_SIMILARITY_LIMIT]
-
-                if words:
-                    search_strings.append('(%s)' % ' | '.join(words))
+            # first, split the search string whitespace into words
+            search_strings = query.split()
 
             # next, join the search_strings for the different search_words with an AND
             search_string = ' & '.join(search_strings)
             logger.debug('search_string = %s', search_string)
 
-            # get the search_query and the search_rank objects
+            # get the search_query
             search_query = SearchQuery(search_string, search_type='raw')
-            search_rank = SearchRank('search_vector', search_query)
 
-            # last, perform a full text search with ranking on the search_vector field
-            queryset = queryset.filter(
-                search_vector=search_query
-            ).annotate(
-                search_rank=search_rank
-            ).order_by('-search_rank', 'name')
+            # last, perform a full text search on the search_vector field
+            queryset = queryset.filter(search__vector=search_query)
 
         return queryset
 

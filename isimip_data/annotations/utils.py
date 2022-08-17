@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
 
-from isimip_data.metadata.models import Dataset
+from isimip_data.metadata.models import Dataset, Resource
 
 
 def query_datasets(specifiers_dict, version_after, version_before, include=None, exclude=None):
@@ -38,10 +38,24 @@ def query_datasets(specifiers_dict, version_after, version_before, include=None,
         return []
 
 
+def query_resources(datasets):
+    queryset = Resource.objects.using('metadata').filter(datasets__in=datasets)
+    return list(queryset.values_list('id', flat=True))
+
+
 def format_affected_datasets(datasets):
     datasets = Dataset.objects.using('metadata').filter(target=None, id__in=datasets)
     return format_html_join(
         mark_safe('<br>'),
         '{}#{}',
         ((dataset.path, dataset.version) for dataset in datasets)
+    )
+
+
+def format_affected_resources(resources):
+    resources = Resource.objects.using('metadata').filter(id__in=resources)
+    return format_html_join(
+        mark_safe('<br>'),
+        '{}',
+        ((resource.doi, ) for resource in resources)
     )

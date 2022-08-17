@@ -5,11 +5,12 @@ from django.contrib.sitemaps import Sitemap
 from django.contrib.sitemaps import views as sitemaps_views
 from django.urls import include, path, re_path, reverse
 from django.views.generic.base import TemplateView
-from rest_framework import routers
 
 from django_datacite.views import resource as datacite_resource
 from django_datacite.views import resource_json as datacite_resource_json
 from django_datacite.views import resource_xml as datacite_resource_xml
+from rest_framework import routers
+
 from isimip_data.accounts.views import (profile_delete, profile_delete_success,
                                         profile_update)
 from isimip_data.caveats.sitemaps import CaveatSitemap
@@ -24,11 +25,10 @@ from isimip_data.metadata.sitemaps import (DatasetSitemap, FileSitemap,
                                            ResourceSitemap)
 from isimip_data.metadata.views import (attributes, dataset, file, metadata,
                                         resource, resource_bibtex,
-                                        resource_datacite_json,
-                                        resource_datacite_xml, resources)
-from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
-                                           GlossaryViewSet, ResourceViewSet,
-                                           TreeViewSet)
+                                        resource_json, resource_xml, resources)
+from isimip_data.metadata.viewsets import (AttributeViewSet, DatasetViewSet,
+                                           FileViewSet, GlossaryViewSet,
+                                           ResourceViewSet, TreeViewSet)
 from isimip_data.search.views import search
 from isimip_data.search.viewsets import FacetViewSet
 
@@ -39,6 +39,7 @@ router.register(r'glossary', GlossaryViewSet, basename='glossary')
 router.register(r'tree', TreeViewSet, basename='tree')
 router.register(r'files', FileViewSet, basename='file')
 router.register(r'resources', ResourceViewSet, basename='resource')
+router.register(r'attributes', AttributeViewSet, basename='attribute')
 router.register(r'facets', FacetViewSet, basename='facet')
 router.register(r'settings', SettingsViewSet, basename='setting')
 
@@ -70,22 +71,20 @@ urlpatterns = [
     path('account/', include('allauth.urls')),
 
     path('metadata/', metadata, name='metadata'),
+    path('doi/', resources, name='resources'),
 
     path('datasets/<uuid:pk>/', dataset, name='dataset'),
-    path('datasets/<path:path>/', dataset, name='dataset'),
-
     path('files/<uuid:pk>/', file, name='file'),
-    path('files/<path:path>/', file, name='file'),
+    path('resources/<uuid:pk>/', resource, name='resource'),
 
-    re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)xml', datacite_resource_xml, name='datacite_resource_xml'),
+    re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).xml', datacite_resource_xml, name='datacite_resource_xml'),
     re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).json', datacite_resource_json, name='datacite_resource_json'),
     re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)', datacite_resource, name='datacite_resource'),
 
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).bib', resource_bibtex, name='resource_bibtex'),
-    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).datacite.xml', resource_datacite_xml, name='resource_datacite_xml'),
-    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).datacite.json', resource_datacite_json, name='resource_datacite_json'),
+    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).xml', resource_xml, name='resource_xml'),
+    re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).json', resource_json, name='resource_json'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)', resource, name='resource'),
-    re_path(r'^(?P<prefix>\d{2}\.\d+)\/$', resources, name='resources'),
 
     path('attributes/', attributes, name='attributes'),
 

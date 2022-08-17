@@ -7,7 +7,7 @@ from isimip_data.caveats.models import Caveat
 from isimip_data.core.utils import get_file_base_url
 from isimip_data.indicators.models import IndicatorValue
 
-from .models import Dataset, File, Resource
+from .models import Attribute, Dataset, File, Resource
 
 
 class DatasetFileSerializer(serializers.ModelSerializer):
@@ -301,6 +301,31 @@ class FileSerializer(serializers.ModelSerializer):
             return get_file_base_url(self.context['request']) + obj.json_path
 
 
+class ResourceIndexSerializer(serializers.ModelSerializer):
+
+    resource_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Resource
+        fields = (
+            'id',
+            'doi',
+            'title',
+            'title_with_version',
+            'version',
+            'paths',
+            'doi_url',
+            'previous_version',
+            'new_version',
+            'is_external',
+            'resource_url',
+            'creators_str'
+        )
+
+    def get_resource_url(self, obj):
+        return reverse('resource', args=[str(obj.doi)], request=self.context['request'])
+
+
 class ResourceSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -308,9 +333,22 @@ class ResourceSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'doi',
-            'datacite',
             'title',
-            'major_version',
+            'title_with_version',
+            'version',
+            'paths',
+            'datacite',
             'doi_url',
-            'creators_str'
+            'previous_version',
+            'new_version'
+        )
+
+
+class AttributeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Attribute
+        fields = (
+            'identifier',
+            'specifiers'
         )
