@@ -6,7 +6,6 @@ import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 import Filter from './Filter'
 import Resources from './Resources'
-import Version from './Version'
 
 class App extends Component {
 
@@ -63,11 +62,9 @@ class App extends Component {
 
     return (
       <div>
-        <Filter value={filterString} onChange={this.updateFilterString} />
-        <Version value={showAll} onChange={this.updateShowAll} />
-        <div className="mt-3">
-          <Resources resources={resources} filterString={filterString} showAll={showAll} />
-        </div>
+        <Filter filterString={filterString} onFilterStringChange={this.updateFilterString}
+                showAll={showAll} onShowAllChange={this.updateShowAll} />
+        <Resources resources={resources} filterString={filterString} showAll={showAll} />
       </div>
     )
   }
