@@ -299,12 +299,24 @@ class Resource(models.Model):
         if self.datacite is not None:
             data.update({
                 'description': self.abstract,
+                'version': self.datacite.get('version'),
                 'keywords': [
                     subject['subject']
                     for subject in self.datacite.get('subjects', [])
                     if subject.get('subject')
                 ],
-                'license': [rights['rights'] for rights in self.rights_list],
+                'publisher': {
+                    '@type': 'Organization',
+                    'name': self.datacite.get('publisher')
+                },
+                'datePublished': self.publication_date.date().isoformat(),
+                'license': [
+                    {
+                        '@type': 'CreativeWork',
+                        'name': rights.get('rights'),
+                        'url': rights.get('rights_uri')
+                    } for rights in self.rights_list
+                ],
                 'isAccessibleForFree': True,
                 'creator': [
                     get_json_ld_name(creator)
@@ -313,10 +325,7 @@ class Resource(models.Model):
                 'contributor': [
                     get_json_ld_name(contributor)
                     for contributor in self.datacite.get('contributors', [])
-                ],
-                'version': self.datacite.get('version'),
-                'publisher': self.datacite.get('publisher'),
-                'datePublished': self.publication_date.date().isoformat()
+                ]
             })
 
         return data
