@@ -9,7 +9,7 @@ from django.utils.functional import cached_property
 
 from .constants import RIGHTS
 from .managers import AttributeManager, DatasetManager
-from .utils import (get_terms_of_use, merge_identifiers, merge_specifiers,
+from .utils import (get_json_ld_name, get_terms_of_use, merge_identifiers, merge_specifiers,
                     prettify_specifiers)
 
 
@@ -239,6 +239,15 @@ class Resource(models.Model):
         ]
 
     @cached_property
+    def abstract(self):
+        for item in self.datacite.get('descriptions', []):
+            try:
+                if item['descriptionType'] == 'Abstract':
+                    return item['description']
+            except (TypeError, KeyError):
+                pass
+
+    @cached_property
     def publication_date(self):
         date_string = None
         for item in self.datacite.get('dates', []):
@@ -277,6 +286,40 @@ class Resource(models.Model):
 
     def get_absolute_url(self):
         return reverse('resource', kwargs={'doi': self.doi})
+
+    @cached_property
+    def json_ld(self):
+        data = {
+            '@context': 'https://schema.org/',
+            '@type': 'Dataset',
+            'name': self.title,
+            'identifier': self.doi_url,
+        }
+
+        if self.datacite is not None:
+            data.update({
+                'description': self.abstract,
+                'keywords': [
+                    subject['subject']
+                    for subject in self.datacite.get('subjects', [])
+                    if subject.get('subject')
+                ],
+                'license': [rights['rights'] for rights in self.rights_list],
+                'isAccessibleForFree': True,
+                'creator': [
+                    get_json_ld_name(creator)
+                    for creator in self.datacite.get('creators', [])
+                ],
+                'contributor': [
+                    get_json_ld_name(contributor)
+                    for contributor in self.datacite.get('contributors', [])
+                ],
+                'version': self.datacite.get('version'),
+                'publisher': self.datacite.get('publisher'),
+                'datePublished': self.publication_date.date().isoformat()
+            })
+
+        return data
 
 
 class Tree(models.Model):

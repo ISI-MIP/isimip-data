@@ -1,9 +1,18 @@
+import json as python_json
+import os
+
 from django import template
 from django.conf import settings
 from django.template.defaultfilters import stringfilter
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 register = template.Library()
+
+
+@register.simple_tag()
+def json(data):
+    return mark_safe(os.linesep + python_json.dumps(data, indent=2) + os.linesep)
 
 
 @register.inclusion_tag('core/tags/home_list.html')

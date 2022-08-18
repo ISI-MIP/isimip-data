@@ -152,3 +152,20 @@ def render_bibtex(resource):
             doi=resource.doi,
             doi_url=resource.doi_url
         ).strip()
+
+
+def get_json_ld_name(name):
+    json_ld_name = {
+        '@type': 'Organization' if name.get('nameType') == 'Organizational' else 'Person'
+    }
+
+    try:
+        json_ld_name['@id'] = name['nameIdentifiers'][0]['nameIdentifiers']
+    except (KeyError, IndexError):
+        pass
+
+    for key in ['name', 'givenName', 'familyName']:
+        if key in name:
+            json_ld_name[key] = name[key]
+
+    return json_ld_name

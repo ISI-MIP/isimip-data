@@ -1,8 +1,14 @@
 {% load static %}
+{% load core_tags %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>ISIMIP Repository{% if title %} - {{ title }}{% endif %}</title>
+
+        {% if json_ld %}
+        <script type="application/ld+json">{% json json_ld %}
+        </script>
+        {% endif %}
 
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
