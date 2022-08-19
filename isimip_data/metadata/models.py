@@ -83,6 +83,20 @@ class Dataset(models.Model):
     def terms_of_use(self):
         return get_terms_of_use()
 
+    @cached_property
+    def json_ld(self):
+        data = {
+            '@context': 'https://schema.org/',
+            '@type': 'Dataset',
+            'name': self.path
+        }
+
+        resources = self.resources.order_by('-doi')
+        if resources:
+            data['isPartOf'] = [resource.json_ld for resource in resources]
+
+        return data
+
     def get_absolute_url(self):
         return reverse('dataset', kwargs={'pk': self.pk})
 
@@ -165,6 +179,15 @@ class File(models.Model):
     @cached_property
     def terms_of_use(self):
         return get_terms_of_use()
+
+    @cached_property
+    def json_ld(self):
+        return {
+            '@context': 'https://schema.org/',
+            '@type': 'Dataset',
+            'name': self.path,
+            'isPartOf': self.dataset.json_ld
+        }
 
     def get_absolute_url(self):
         return reverse('file', kwargs={'pk': self.pk})

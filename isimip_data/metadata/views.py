@@ -77,7 +77,8 @@ def dataset(request, pk=None, path=None):
         'downloads': Download.objects.filter(annotations__datasets__contains=[obj.id]),
         'references': Reference.objects.filter(annotations__datasets__contains=[obj.id]),
         'caveats': caveats,
-        'caveats_versions': caveats_versions
+        'caveats_versions': caveats_versions,
+        'json_ld': obj.json_ld
     })
 
 
@@ -114,7 +115,8 @@ def file(request, pk=None, path=None):
         'versions': versions,
         'public_version': versions.exclude(id=obj.id).filter(dataset__public=True).first(),
         'caveats': caveats,
-        'caveats_versions': caveats_versions
+        'caveats_versions': caveats_versions,
+        'json_ld': obj.json_ld
     })
 
 

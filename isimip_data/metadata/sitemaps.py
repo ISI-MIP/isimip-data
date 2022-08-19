@@ -3,7 +3,7 @@ from .models import Dataset, File, Resource
 
 
 class DatasetSitemap(Sitemap):
-    changefreq = 'monthly'
+    changefreq = 'weekly'
     limit = 1000
 
     def items(self):
@@ -15,7 +15,7 @@ class DatasetSitemap(Sitemap):
 
 
 class FileSitemap(Sitemap):
-    changefreq = 'monthly'
+    changefreq = 'weekly'
     limit = 1000
 
     def items(self):
@@ -27,7 +27,7 @@ class FileSitemap(Sitemap):
 
 
 class ResourceSitemap(Sitemap):
-    changefreq = 'monthly'
+    changefreq = 'weekly'
 
     def items(self):
         return Resource.objects.using('metadata').all()
