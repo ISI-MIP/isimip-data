@@ -28,7 +28,7 @@ class Filter extends React.Component {
               </div>
             </div>
             <div className="col-6 col-md-auto">
-              <button className="btn btn-outline-secondary btn-lg w-100" type="button" onClick={e => onChange('')}>
+              <button className="btn btn-outline-secondary btn-lg w-100" type="button" onClick={e => onFilterStringChange('')}>
                 Reset <FontAwesomeIcon className="fa-fw" icon={faTimes} />
               </button>
             </div>
