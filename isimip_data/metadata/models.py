@@ -210,7 +210,7 @@ class Resource(models.Model):
     class Meta:
         db_table = 'resources'
         managed = False
-        ordering = ('doi', )
+        ordering = ('paths', )
 
     def __str__(self):
         return self.doi
