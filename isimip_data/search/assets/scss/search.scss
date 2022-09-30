@@ -248,3 +248,11 @@ main {
         cursor: default;
     }
 }
+
+.tooltip-inner {
+    text-align: left;
+
+    p {
+        margin: 0;
+    }
+}

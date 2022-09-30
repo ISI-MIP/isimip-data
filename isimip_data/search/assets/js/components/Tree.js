@@ -112,17 +112,19 @@ class Tree extends Component {
       item.title = properties.title
       item.long_name = properties.long_name
       item.description = properties.description
+      item.warning = properties.warning
     }
 
     return item
   }
 
   renderTooltip(item) {
-    if (item.long_name || item.description) {
+    if (item.long_name || item.description || item.warning) {
       return (
         <Tooltip>
-          {item.long_name}
-          {item.description}
+          {item.long_name && (<strong>{item.long_name}</strong>)}
+          {item.description && (<p>{item.description}</p>)}
+          {item.warning && (<p>Warning: {item.warning}</p>)}
         </Tooltip>
       )
     }

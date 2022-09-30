@@ -15,7 +15,9 @@ class Badges extends Component {
     return (
       <Tooltip>
         {properties && properties.title && <strong>{properties.title}</strong>}
+        {properties && properties.long_name && <strong>{properties.long_name}</strong>}
         {properties && properties.description && <div>{properties.description}</div>}
+        {properties && properties.warning && <div>Warning: {properties.warning}</div>}
       </Tooltip>
     )
   }
@@ -80,6 +82,13 @@ class Badges extends Component {
           specifiers.model && specifiers.model.map((model, index) =>
             <OverlayTrigger key={index} placement="bottom" overlay={<Tooltip><strong>Model</strong></Tooltip>}>
               <span className="badge badge-primary">{model}</span>
+            </OverlayTrigger>
+          )
+        }
+        {
+          specifiers.variable && specifiers.variable.map((variable, index) =>
+            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('variable', variable)}>
+              <span className="badge badge-dark">{variable}</span>
             </OverlayTrigger>
           )
         }
