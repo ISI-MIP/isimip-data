@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronUp, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronUp, faExclamationTriangle, faLink } from '@fortawesome/free-solid-svg-icons'
 import jQuery from 'jquery'
 import bytes from 'bytes'
 import Cookies from 'js-cookie'
-import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
+import OverlayTrigger from "react-bootstrap/OverlayTrigger"
+import Tooltip from "react-bootstrap/Tooltip"
 
+import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 import Scale from 'isimip_data/indicators/assets/js/components/Scale'
 import Badges from './Badges'
 
@@ -82,6 +85,16 @@ class Result extends Component {
       return color
     }
 
+    const referenceType = dataset.annotations.reduce((acc, cur) => {
+      if (acc == 'ISIPEDIA') {
+        return acc
+      } else if (cur.references.length > 0) {
+        return cur.references.some(r => (r.reference_type == 'ISIPEDIA')) ? 'ISIPEDIA' : 'OTHER'
+      } else {
+        return acc
+      }
+    }, null)
+
     return (
       <li className="list-group-item">
         <Badges glossary={glossary} dataset={dataset} />
@@ -90,11 +103,33 @@ class Result extends Component {
           {
             dataset.caveats.length > 0 &&
             <div className={'float-right text-' + get_caveats_color(dataset.caveats)}>
-              <FontAwesomeIcon className="result-caveat-icon"
+              <FontAwesomeIcon className="result-icon"
                                title="There are caveats for this dataset."
                                icon={faExclamationTriangle}
                                onClick={this.toggleCaveats} />
             </div>
+          }
+          {
+            referenceType !== null &&
+            <OverlayTrigger placement="bottom" overlay={
+              referenceType == 'ISIPEDIA' ?
+              <Tooltip>
+                There are articles on ISIpedia available for this dataset.
+              </Tooltip> :
+              <Tooltip>
+                There are references to other publications for this dataset.
+              </Tooltip>
+            }>
+              <a className="float-right result-reference" href={`${dataset.metadata_url}#references`} target="_blank">
+                {
+                  referenceType == 'ISIPEDIA' &&
+                  <img className="isipedia-logo" src="/static/images/isipedia.png" alt="ISIpedia logo" />
+                }
+                {
+                  referenceType == 'OTHER' && <FontAwesomeIcon className="result-icon" icon={faLink} />
+                }
+              </a>
+            </OverlayTrigger>
           }
 
           <h4 className="card-title mt-3 mb-3">

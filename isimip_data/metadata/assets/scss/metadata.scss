@@ -6,6 +6,16 @@ header {
     text-align: center;
 }
 
+h2::before,
+h3::before,
+h4::before {
+    content: '';
+    display: block;
+    height:      100px;
+    margin-top: -100px;
+    visibility: hidden;
+}
+
 .btn.btn-link {
     font-size: inherit;
     vertical-align: baseline;

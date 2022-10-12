@@ -217,7 +217,7 @@ main {
             }
         }
 
-        .result-caveat-icon {
+        .result-icon {
             font-size: 1.2rem;
             line-height: 1.2rem;
             margin-top: 2px;
@@ -232,8 +232,15 @@ main {
             a {
                 display: block;
                 padding-top: 12px;
-                // padding-bottom: 12px;
                 line-height: 16px;
+            }
+        }
+
+        .result-reference {
+            display: block;
+
+            .isipedia-logo {
+                height: 20px;
             }
         }
 
