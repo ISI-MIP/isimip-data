@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faChevronUp, faChevronDown, faFilePowerpoint } from '@fortawesome/free-solid-svg-icons'
 import OverlayTrigger from "react-bootstrap/OverlayTrigger"
 import Tooltip from "react-bootstrap/Tooltip"
 
@@ -109,10 +109,9 @@ class Tree extends Component {
     const properties = getValueOrNull(glossary, item.identifier, item.specifier)
 
     if (properties) {
-      item.title = properties.title
-      item.long_name = properties.long_name
-      item.description = properties.description
-      item.warning = properties.warning
+      Object.keys(properties).forEach(key => {
+        item[key] = properties[key]
+      })
     }
 
     return item
@@ -130,6 +129,26 @@ class Tree extends Component {
     }
   }
 
+  renderUrl(item) {
+    return Object.keys(item.urls).map(key => {
+      if (item.tree.includes(key)) {
+        return (
+          <a href={item.urls[key]} target="_blank">
+            <OverlayTrigger placement="bottom" overlay={
+              <Tooltip>
+                More information is available in the ISIMIP protocol.
+              </Tooltip>
+            }>
+              <FontAwesomeIcon icon={faFilePowerpoint} />
+            </OverlayTrigger>
+          </a>
+        )
+      } else {
+        return null
+      }
+    })
+  }
+
   renderItem(item) {
     return (
       <div className="tree-item d-flex align-items-center"
@@ -137,6 +156,7 @@ class Tree extends Component {
         <input className="mr-2" type="checkbox" checked={item.items || false} readOnly />
         <span>{item.title || item.specifier}</span>
         {item.hasItems && <FontAwesomeIcon icon={faChevronUp} />}
+        {item.urls && <span className="ml-auto">{this.renderUrl(item)}</span>}
       </div>
     )
   }

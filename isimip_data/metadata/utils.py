@@ -39,11 +39,21 @@ def fetch_glossary():
             glossary_json = fetch_json(glossary_location)
             if glossary_json is not None:
                 try:
-                    for identifier, values in glossary_json.get('terms', {}).items():
+                    for identifier, identifier_values in glossary_json.get('terms', {}).items():
                         if identifier not in glossary:
-                            glossary[identifier] = values
+                            glossary[identifier] = identifier_values
                         else:
-                            glossary[identifier].update(values)
+                            for specifier, specifier_values in identifier_values.items():
+                                if specifier not in glossary[identifier]:
+                                    glossary[identifier][specifier] = specifier_values
+                                else:
+                                    for key, value in specifier_values.items():
+                                        if key not in glossary[identifier][specifier]:
+                                            glossary[identifier][specifier][key] = value
+                                        elif isinstance(value, dict):
+                                            glossary[identifier][specifier][key].update(value)
+                                        else:
+                                            glossary[identifier][specifier][key] = value
 
                 except TypeError:
                     logger.error('TypeError for {}'.format(location))

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ls from 'local-storage'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp, faChevronDown, faSpinner, faCheckSquare, faBan } from '@fortawesome/free-solid-svg-icons'
+import { faChevronUp, faChevronDown, faSpinner, faCheckSquare, faBan, faFilePowerpoint } from '@fortawesome/free-solid-svg-icons'
 import OverlayTrigger from "react-bootstrap/OverlayTrigger"
 import Tooltip from "react-bootstrap/Tooltip"
 
@@ -84,18 +84,32 @@ class Facet extends Component {
     }
   }
 
-  renderListItem(attribute, specifier, title, isChecked, count) {
+  renderListItem(attribute, specifier, title, isChecked, urls, count) {
     const id = 'facet-' + attribute + '-' + specifier
 
     return (
-      <li key={specifier} className="list-group-item facet-item d-flex justify-content-between align-items-center">
+      <li key={specifier} className="list-group-item facet-item d-flex align-items-center">
         <label className="form-check-label" htmlFor={id}>
           <input type="checkbox" className="form-check-input" id={id}
                  checked={isChecked} onChange={e => this.handleChange(specifier, e)} />
             {title || specifier}
         </label>
-        <span className="badge badge-secondary badge-pill pull-right">
-          {count}
+        <span className="ml-auto">
+          {
+            urls &&
+            <a className="mr-2" href={urls[Object.keys(urls).sort().at(-1)]} target="_blank">
+              <OverlayTrigger placement="bottom" overlay={
+                <Tooltip>
+                  More information is available in the ISIMIP protocol.
+                </Tooltip>
+              }>
+                <FontAwesomeIcon icon={faFilePowerpoint} />
+              </OverlayTrigger>
+            </a>
+          }
+          <span className="badge badge-secondary badge-pill pull-right">
+            {count}
+          </span>
         </span>
       </li>
     )
@@ -111,6 +125,7 @@ class Facet extends Component {
             const [specifier, count] = item
             const properties = getValueOrNull(glossary, attribute, specifier)
             const title = properties ? properties.title : null
+            const urls = properties ? properties.urls : null
 
             if (specifier !== null) {
               const isChecked = (checked.indexOf(specifier) > -1)
@@ -119,11 +134,11 @@ class Facet extends Component {
               if (tooltip) {
                 return (
                   <OverlayTrigger key={specifier} placement="right" overlay={tooltip}>
-                    {this.renderListItem(attribute, specifier, title, isChecked, count)}
+                    {this.renderListItem(attribute, specifier, title, isChecked, urls, count)}
                   </OverlayTrigger>
                 )
               } else {
-                return this.renderListItem(attribute, specifier, title, isChecked, count)
+                return this.renderListItem(attribute, specifier, title, isChecked, urls, count)
               }
             }
           })
