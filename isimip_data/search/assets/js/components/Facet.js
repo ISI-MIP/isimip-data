@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ls from 'local-storage'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp, faChevronDown, faSpinner, faCheckSquare, faBan, faFilePowerpoint } from '@fortawesome/free-solid-svg-icons'
+import { faChevronUp, faChevronDown, faSpinner, faCheckSquare, faBan, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { faFilePowerpoint } from '@fortawesome/free-regular-svg-icons'
+
 import OverlayTrigger from "react-bootstrap/OverlayTrigger"
 import Tooltip from "react-bootstrap/Tooltip"
 
@@ -84,8 +86,25 @@ class Facet extends Component {
     }
   }
 
+  filterUrls(urls) {
+    let filteredUrls = []
+    if (urls !== undefined) {
+      Object.keys(urls).forEach(key => {
+        if (window.location.href.includes(key)) {
+          filteredUrls.push(key)
+        }
+      })
+      if (filteredUrls.length == 0) {
+        filteredUrls.push(Object.keys(urls).sort().at(-1))
+      }
+    }
+
+    return filteredUrls
+  }
+
   renderListItem(attribute, specifier, title, isChecked, urls, count) {
     const id = 'facet-' + attribute + '-' + specifier
+    const filteredUrls = this.filterUrls(urls)
 
     return (
       <li key={specifier} className="list-group-item facet-item d-flex align-items-center">
@@ -94,22 +113,18 @@ class Facet extends Component {
                  checked={isChecked} onChange={e => this.handleChange(specifier, e)} />
             {title || specifier}
         </label>
-        <span className="ml-auto">
-          {
-            urls &&
-            <a className="mr-2" href={urls[Object.keys(urls).sort().at(-1)]} target="_blank">
-              <OverlayTrigger placement="bottom" overlay={
-                <Tooltip>
-                  More information is available in the ISIMIP protocol.
-                </Tooltip>
-              }>
+        {filteredUrls.map((key, index) => {
+          return (
+            <a key={index} className={'ml-1'.concat(index == 0 ? ' ml-auto' : '')} href={urls[key]} target="_blank"
+               onClick={e => e.stopPropagation()}>
+              <OverlayTrigger placement="bottom" overlay={<Tooltip>More information is available in the {key} protocol.</Tooltip>}>
                 <FontAwesomeIcon icon={faFilePowerpoint} />
               </OverlayTrigger>
             </a>
-          }
-          <span className="badge badge-secondary badge-pill pull-right">
-            {count}
-          </span>
+          )
+        })}
+        <span className={'badge badge-secondary badge-pill '.concat(filteredUrls.length > 0 ? 'ml-1' : 'ml-auto')}>
+          {count}
         </span>
       </li>
     )

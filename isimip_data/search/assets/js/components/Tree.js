@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp, faChevronDown, faFilePowerpoint } from '@fortawesome/free-solid-svg-icons'
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faFilePowerpoint } from '@fortawesome/free-regular-svg-icons'
 import OverlayTrigger from "react-bootstrap/OverlayTrigger"
 import Tooltip from "react-bootstrap/Tooltip"
 
@@ -135,11 +136,7 @@ class Tree extends Component {
         return (
           <a key={index} className="ml-auto" href={item.urls[key]} target="_blank"
              onClick={e => e.stopPropagation()}>
-            <OverlayTrigger placement="bottom" overlay={
-              <Tooltip>
-                More information is available in the ISIMIP protocol.
-              </Tooltip>
-            }>
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>More information is available in the {key} protocol.</Tooltip>}>
               <FontAwesomeIcon icon={faFilePowerpoint} />
             </OverlayTrigger>
           </a>
