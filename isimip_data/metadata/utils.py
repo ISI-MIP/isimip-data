@@ -34,35 +34,36 @@ def fetch_glossary():
     glossary = cache.get('glossary')
     if glossary is None:
         glossary = {}
-        for location in settings.PROTOCOL_LOCATIONS:
-            glossary_location = location.rstrip('/') + '/glossary.json'
-            glossary_json = fetch_json(glossary_location)
-            if glossary_json is not None:
-                try:
-                    for identifier, identifier_values in glossary_json.get('terms', {}).items():
-                        if identifier not in glossary:
-                            glossary[identifier] = identifier_values
-                        else:
-                            for specifier, specifier_values in identifier_values.items():
-                                if specifier not in glossary[identifier]:
-                                    glossary[identifier][specifier] = specifier_values
-                                else:
-                                    for key, value in specifier_values.items():
-                                        if key not in glossary[identifier][specifier]:
-                                            glossary[identifier][specifier][key] = value
-                                        elif isinstance(value, dict):
-                                            glossary[identifier][specifier][key].update(value)
-                                        else:
-                                            glossary[identifier][specifier][key] = value
-
-                except TypeError:
-                    logger.error('TypeError for {}'.format(location))
-                except AttributeError:
-                    logger.error('AttributeError for {}'.format(location))
-
+        build_glossary(glossary, settings.PROTOCOL_LOCATIONS)
         cache.set('glossary', glossary)
 
     return glossary
+
+
+def build_glossary(glossary, locations):
+    for location in locations:
+        glossary_location = location.rstrip('/') + '/glossary.json'
+        glossary_json = fetch_json(glossary_location)
+        if glossary_json is not None:
+            try:
+                for identifier, identifier_values in glossary_json.get('terms', {}).items():
+                    if identifier not in glossary:
+                        glossary[identifier] = {}
+
+                    for specifier, specifier_values in identifier_values.items():
+                        if specifier not in glossary[identifier]:
+                            glossary[identifier][specifier] = {}
+
+                        for key, value in specifier_values.items():
+                            if key in settings.METADATA_GLOSSARY_KEYS:
+                                if key not in glossary[identifier][specifier]:
+                                    glossary[identifier][specifier][key] = value
+                                elif isinstance(glossary[identifier][specifier][key], dict) and isinstance(value, dict):
+                                    glossary[identifier][specifier][key].update(value)
+            except TypeError:
+                logger.error('TypeError for {}'.format(location))
+            except AttributeError:
+                logger.error('AttributeError for {}'.format(location))
 
 
 def prettify_identifiers(identifiers):

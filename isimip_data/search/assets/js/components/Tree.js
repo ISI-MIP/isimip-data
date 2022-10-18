@@ -130,10 +130,11 @@ class Tree extends Component {
   }
 
   renderUrl(item) {
-    return Object.keys(item.urls).map(key => {
+    return Object.keys(item.urls).map((key, index) => {
       if (item.tree.includes(key)) {
         return (
-          <a href={item.urls[key]} target="_blank">
+          <a key={index} className="ml-auto" href={item.urls[key]} target="_blank"
+             onClick={e => e.stopPropagation()}>
             <OverlayTrigger placement="bottom" overlay={
               <Tooltip>
                 More information is available in the ISIMIP protocol.
@@ -156,7 +157,7 @@ class Tree extends Component {
         <input className="mr-2" type="checkbox" checked={item.items || false} readOnly />
         <span>{item.title || item.specifier}</span>
         {item.hasItems && <FontAwesomeIcon icon={faChevronUp} />}
-        {item.urls && <span className="ml-auto">{this.renderUrl(item)}</span>}
+        {item.urls && this.renderUrl(item)}
       </div>
     )
   }

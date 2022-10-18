@@ -220,6 +220,7 @@ SEARCH_SIMILARITY_LIMIT = 3
 METADATA_PAGE_SIZE = os.getenv('METADATA_PAGE_SIZE', 10)
 METADATA_MAX_PAGE_SIZE = os.getenv('METADATA_MAX_PAGE_SIZE', 1000)
 METADATA_RESOURCE_MAX_DATASETS = os.getenv('METADATA_RESOURCE_MAX_DATASETS', 100)
+METADATA_GLOSSARY_KEYS = ['title', 'description', 'warning', 'long_name', 'units', 'urls']
 
 LABEL = os.getenv('LABEL')
 ALERT = os.getenv('ALERT')
