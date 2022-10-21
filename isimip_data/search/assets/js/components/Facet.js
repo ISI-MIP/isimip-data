@@ -88,7 +88,7 @@ class Facet extends Component {
 
   filterUrls(urls) {
     let filteredUrls = []
-    if (urls !== undefined) {
+    if (urls) {
       Object.keys(urls).forEach(key => {
         if (window.location.href.includes(key)) {
           filteredUrls.push(key)
