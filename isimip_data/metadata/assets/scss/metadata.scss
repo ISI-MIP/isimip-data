@@ -6,13 +6,8 @@ header {
     text-align: center;
 }
 
-h2::before,
-h3::before {
-    content: '';
-    display: block;
-    height:      100px;
-    margin-top: -100px;
-    visibility: hidden;
+h3 {
+    scroll-margin-top: 120px;
 }
 
 .btn.btn-link {
