@@ -137,7 +137,7 @@ def resource(request, pk=None, doi=None):
 
     references = defaultdict(list)
     if resource.datacite is not None:
-        for identifier in resource.datacite.get('relatedIdentifiers'):
+        for identifier in resource.datacite.get('relatedIdentifiers', []):
             if identifier.get('relationType') in [
                 'IsNewVersionOf',
                 'IsPreviousVersionOf',

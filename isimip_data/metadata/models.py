@@ -319,7 +319,7 @@ class Resource(models.Model):
             'identifier': self.doi_url,
         }
 
-        if self.datacite is not None:
+        if self.datacite:
             data.update({
                 'description': self.abstract,
                 'version': self.datacite.get('version'),
