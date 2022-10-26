@@ -13,7 +13,8 @@ import Tooltip from "react-bootstrap/Tooltip"
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 import Scale from 'isimip_data/indicators/assets/js/components/Scale'
 import Badges from './Badges'
-import Reference from './Reference'
+import References from './References'
+import Caveats from './Caveats'
 
 
 const get_size = size => bytes(size, {unitSeparator: ' '})
@@ -74,34 +75,13 @@ class Result extends Component {
     const { showAttributes, showFiles, showCaveats, showIndicators } = this.state
     const inputId = `${dataset.id}-input`
 
-    const get_caveats_color = caveats => {
-      const [level, color] = caveats.reduce((acc, cur) => {
-        const [acc_level, acc_color] = acc
-        if (cur.severity_level > acc_level) {
-          return [cur.severity_level, cur.severity_color]
-        } else {
-          return acc
-        }
-      }, [0, 'info'])
-
-      return color
-    }
-
     return (
       <li className="list-group-item">
         <Badges glossary={glossary} dataset={dataset} />
 
         <div>
-          {
-            dataset.caveats.length > 0 &&
-            <div className={'float-right text-' + get_caveats_color(dataset.caveats)}>
-              <FontAwesomeIcon className="result-icon"
-                               title="There are caveats for this dataset."
-                               icon={faExclamationTriangle}
-                               onClick={this.toggleCaveats} />
-            </div>
-          }
-          <Reference dataset={dataset} />
+          <References dataset={dataset} />
+          <Caveats dataset={dataset} toggleCaveats={this.toggleCaveats} />
           <h4 className="card-title mt-3 mb-3">
             <a className="result-title" href={dataset.metadata_url} target="_blank">{dataset.name}</a>
           </h4>

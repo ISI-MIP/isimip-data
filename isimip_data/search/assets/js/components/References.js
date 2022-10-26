@@ -9,7 +9,7 @@ import { faCheckCircle } from '@fortawesome/free-regular-svg-icons'
 
 const referenceTypes = ['OTHER', 'EVALUATION', 'ISIPEDIA']
 
-class Reference extends Component {
+class References extends Component {
 
   render() {
     const { dataset } = this.props
@@ -18,11 +18,11 @@ class Reference extends Component {
         const index = cur.references.reduce((a, c) => {
             const i = referenceTypes.indexOf(c.reference_type)
             return (i > a) ? i : a
-        }, 0)
+        }, -1)
         return (index > acc) ? index : acc
-    }, 0)
-    const referenceType = referenceTypes[referenceTypeIndex]
+    }, -1)
 
+    const referenceType = referenceTypes[referenceTypeIndex]
     if (referenceType == 'ISIPEDIA') {
       return (
         <OverlayTrigger placement="bottom" overlay={
@@ -47,7 +47,7 @@ class Reference extends Component {
           </a>
         </OverlayTrigger>
       )
-    } else {
+    } else if (referenceType == 'OTHER') {
       return (
         <OverlayTrigger placement="bottom" overlay={
           <Tooltip>
@@ -59,12 +59,14 @@ class Reference extends Component {
           </a>
         </OverlayTrigger>
       )
+    } else {
+      return null
     }
   }
 }
 
-Reference.propTypes = {
+References.propTypes = {
   dataset: PropTypes.object.isRequired,
 }
 
-export default Reference
+export default References
