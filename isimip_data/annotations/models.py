@@ -79,9 +79,11 @@ class Reference(models.Model):
     )
 
     REFERENCE_TYPE_ISIPEDIA = 'ISIPEDIA'
+    REFERENCE_TYPE_EVALUATION = 'EVALUATION'
     REFERENCE_TYPE_OTHER = 'OTHER'
     REFERENCE_TYPE_CHOICES = (
         (REFERENCE_TYPE_ISIPEDIA, _('ISIpedia')),
+        (REFERENCE_TYPE_EVALUATION, _('Evaluation')),
         (REFERENCE_TYPE_OTHER, _('Other'))
     )
 
