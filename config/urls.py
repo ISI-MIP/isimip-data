@@ -17,6 +17,7 @@ from isimip_data.caveats.sitemaps import CaveatSitemap
 from isimip_data.caveats.views import (caveat, caveat_create, caveat_subscribe,
                                        caveat_unsubscribe, caveats,
                                        comment_create, subscriptions)
+from isimip_data.caveats.viewsets import CaveatViewSet
 from isimip_data.core.viewsets import SettingsViewSet
 from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
@@ -41,6 +42,7 @@ router.register(r'files', FileViewSet, basename='file')
 router.register(r'resources', ResourceViewSet, basename='resource')
 router.register(r'attributes', AttributeViewSet, basename='attribute')
 router.register(r'facets', FacetViewSet, basename='facet')
+router.register(r'caveats', CaveatViewSet, basename='caveat')
 router.register(r'settings', SettingsViewSet, basename='setting')
 
 
