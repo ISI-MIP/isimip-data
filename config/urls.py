@@ -6,9 +6,6 @@ from django.contrib.sitemaps import views as sitemaps_views
 from django.urls import include, path, re_path, reverse
 from django.views.generic.base import TemplateView
 
-from django_datacite.views import resource as datacite_resource
-from django_datacite.views import resource_json as datacite_resource_json
-from django_datacite.views import resource_xml as datacite_resource_xml
 from rest_framework import routers
 
 from isimip_data.accounts.views import (profile_delete, profile_delete_success,
@@ -78,10 +75,6 @@ urlpatterns = [
     path('datasets/<uuid:pk>/', dataset, name='dataset'),
     path('files/<uuid:pk>/', file, name='file'),
     path('resources/<uuid:pk>/', resource, name='resource'),
-
-    re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).xml', datacite_resource_xml, name='datacite_resource_xml'),
-    re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).json', datacite_resource_json, name='datacite_resource_json'),
-    re_path(r'^datacite/(?P<identifier>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)', datacite_resource, name='datacite_resource'),
 
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).bib', resource_bibtex, name='resource_bibtex'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).xml', resource_xml, name='resource_xml'),

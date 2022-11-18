@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django_cleanup',
     'django_extensions',
     'django_filters',
-    'django_datacite',
     'adminsortable2',
     'allauth',
     'allauth.account',
@@ -321,10 +320,6 @@ DOWNLOAD = {
 
 DOI_PREFIX = '10.48364'
 
-DATACITE_INCLUDE_CITATION = True
-DATACITE_DEFAULT_PUBLIC = True
-DATACITE_DEFAULT_PUBLISHER = 'ISIMIP Repository'
-
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'WARNING')
 LOG_DIR = os.getenv('LOG_DIR')
 LOGGING = {
@@ -373,12 +368,6 @@ LOGGING = {
             'filename': os.path.join(LOG_DIR, 'isimip_data.log'),
             'formatter': 'name'
         },
-        'django_datacite_log': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(LOG_DIR, 'django_datacite.log'),
-            'formatter': 'name'
-        },
         'general_log': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
@@ -405,11 +394,6 @@ LOGGING = {
         },
         'isimip_data': {
             'handlers': ['console', 'isimip_data_log'],
-            'level': LOG_LEVEL,
-            'propagate': False
-        },
-        'django_datacite': {
-            'handlers': ['console', 'django_datacite_log'],
             'level': LOG_LEVEL,
             'propagate': False
         },
