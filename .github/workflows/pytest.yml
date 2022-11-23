@@ -1,0 +1,70 @@
+name: pytest
+
+on: [push, pull_request]
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ['3.6', '3.10']
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: postgres_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install package
+      run: |
+        python3 -m pip install --upgrade pip setuptools
+        python3 -m pip install coveralls
+        python3 -m pip install -r requirements/dev.txt
+    - name: Prepare database
+      run: |
+        psql postgres://postgres:postgres_password@localhost -c 'CREATE DATABASE test_isimip_data;'
+        psql postgres://postgres:postgres_password@localhost -c 'CREATE DATABASE test_isimip_metadata;'
+        psql postgres://postgres:postgres_password@localhost/test_isimip_metadata -f testing/sql/test_isimip_metadata.sql
+    - name: Setup environment file
+      run: |
+        echo "SECRET_KEY=thisisnotaverysecretkey" >> $GITHUB_ENV
+        echo "CACHE=dummy" >> $GITHUB_ENV
+        echo "DATABASE=postgresql://postgres:postgres_password@localhost/isimip_data" >> $GITHUB_ENV
+        echo "DATABASE_METADATA=postgresql://postgres:postgres_password@localhost/isimip_metadata" >> $GITHUB_ENV
+        echo "FILES_BASE_URL=http://isimip/" >> $GITHUB_ENV
+        echo "PROTOCOL_LOCATION=testing/protocol" >> $GITHUB_ENV
+    - name: Run pytest
+      run: |
+        pytest --reuse-db --cov=isimip_data
+        coveralls --service=github
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
+        COVERALLS_PARALLEL: true
+
+  coveralls:
+    needs: pytest
+    runs-on: ubuntu-latest
+    container: python:3-slim
+    steps:
+    - name: Run coveralls finish
+      run: |
+        pip install coveralls
+        coveralls --service=github --finish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

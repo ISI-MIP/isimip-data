@@ -1,7 +1,0 @@
-[run]
-omit=
-    config/*
-    env/*
-[report]
-exclude_lines =
-    raise RuntimeError

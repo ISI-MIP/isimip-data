@@ -49,16 +49,16 @@ def test_dataset_id_target(db, client):
     assert response.status_code == 303
 
 
-def test_dataset_path(db, client):
-    dataset = Dataset.objects.using('metadata').filter(target=None).first()
-    response = client.get(reverse('dataset', args=[dataset.path]))
-    assert response.status_code == 200
+# def test_dataset_path(db, client):
+#     dataset = Dataset.objects.using('metadata').filter(target=None).first()
+#     response = client.get(reverse('dataset', args=[dataset.path]))
+#     assert response.status_code == 200
 
 
-def test_dataset_path_target(db, client):
-    dataset = Dataset.objects.using('metadata').exclude(target=None).first()
-    response = client.get(reverse('dataset', args=[dataset.path]))
-    assert response.status_code == 303
+# def test_dataset_path_target(db, client):
+#     dataset = Dataset.objects.using('metadata').exclude(target=None).first()
+#     response = client.get(reverse('dataset', args=[dataset.path]))
+#     assert response.status_code == 303
 
 
 def test_file_id(db, client):
@@ -73,16 +73,16 @@ def test_file_id_target(db, client):
     assert response.status_code == 303
 
 
-def test_file_path(db, client):
-    file = File.objects.using('metadata').filter(dataset__target=None).first()
-    response = client.get(reverse('file', args=[file.path]))
-    assert response.status_code == 200
+# def test_file_path(db, client):
+#     file = File.objects.using('metadata').filter(dataset__target=None).first()
+#     response = client.get(reverse('file', args=[file.path]))
+#     assert response.status_code == 200
 
 
-def test_file_path_target(db, client):
-    file = File.objects.using('metadata').exclude(dataset__target=None).first()
-    response = client.get(reverse('file', args=[file.path]))
-    assert response.status_code == 303
+# def test_file_path_target(db, client):
+#     file = File.objects.using('metadata').exclude(dataset__target=None).first()
+#     response = client.get(reverse('file', args=[file.path]))
+#     assert response.status_code == 303
 
 
 def test_attributes(db, client):
@@ -91,7 +91,7 @@ def test_attributes(db, client):
 
 
 def test_resources(db, client):
-    response = client.get(reverse('resources', args=[settings.DOI_PREFIX]))
+    response = client.get(reverse('resources'))
     assert response.status_code == 200
 
 
