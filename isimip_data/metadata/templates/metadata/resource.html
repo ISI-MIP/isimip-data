@@ -190,10 +190,10 @@
                         <a href="{% url 'resource-detail' resource.id %}">{% trans 'Resource for this DOI' %}</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="{% url 'dataset-list' %}?doi={{ resource.doi }}">{% trans 'Datasets for this DOI' %}</a>
+                        <a href="{% url 'dataset-list' %}?query={{ resource.doi }}">{% trans 'Datasets for this DOI' %}</a>
                     </li>
                     <li class="list-group-item">
-                        <a href="{% url 'file-list' %}?doi={{ resource.doi }}">{% trans 'Files for this DOI' %}</a>
+                        <a href="{% url 'file-list' %}?query={{ resource.doi }}">{% trans 'Files for this DOI' %}</a>
                     </li>
                 </ul>
             </div>

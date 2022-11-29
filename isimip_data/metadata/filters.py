@@ -75,7 +75,10 @@ class SearchFilterBackend(BaseFilterBackend):
             search_query = SearchQuery(search_string, search_type='raw')
 
             # last, perform a full text search on the search_vector field
-            queryset = queryset.filter(search__vector=search_query)
+            try:
+                queryset = queryset.filter(search__vector=search_query)
+            except FieldError:
+                queryset = queryset.filter(dataset__search__vector=search_query)
 
         return queryset
 
