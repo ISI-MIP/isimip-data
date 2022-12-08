@@ -1,5 +1,6 @@
 from urllib.parse import urlparse
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest
@@ -29,13 +30,17 @@ def caveat(request, pk=None):
     queryset = Caveat.objects.public(request.user)
     caveat = get_object_or_404(queryset, id=pk)
     comments = caveat.comments.public(request.user)
-    datasets = Dataset.objects.using('metadata').filter(target=None, id__in=caveat.datasets).prefetch_related('links')
+    datasets = Dataset.objects.using('metadata') \
+                              .filter(target=None, id__in=caveat.datasets[:settings.CAVEATS_MAX_DATASETS]) \
+                              .prefetch_related('links')
 
     return render(request, 'caveats/caveat.html', {
         'title': caveat.title,
         'caveat': caveat,
         'comments': comments,
+        'count': len(caveat.datasets),
         'datasets': datasets,
+        'search_url': request.build_absolute_uri(caveat.get_search_url()),
         'comment_form': CommentForm(caveat=caveat, creator=request.user)
     })
 

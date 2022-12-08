@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import Q
 from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
@@ -43,13 +44,19 @@ def query_resources(datasets):
     return list(queryset.values_list('id', flat=True))
 
 
-def format_affected_datasets(datasets):
-    datasets = Dataset.objects.using('metadata').filter(target=None, id__in=datasets)
-    return format_html_join(
+def format_affected_datasets(dataset_ids):
+    datasets = Dataset.objects.using('metadata').filter(target=None, id__in=dataset_ids[:settings.CAVEATS_MAX_DATASETS])
+    lines = format_html_join(
         mark_safe('<br>'),
         '{}#{}',
         ((dataset.path, dataset.version) for dataset in datasets)
     )
+
+    count = len(dataset_ids)
+    if count > settings.CAVEATS_MAX_DATASETS:
+        lines += mark_safe('<br>&#8230;<br><br>({} datasets are affected by this caveat)'.format(count))
+
+    return lines
 
 
 def format_affected_resources(resources):

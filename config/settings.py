@@ -184,7 +184,8 @@ SETTINGS_EXPORT = [
     'LOGIN_URL',
     'LOGOUT_URL',
     'HOME',
-    'METADATA_RESOURCE_MAX_DATASETS'
+    'CAVEATS_MAX_DATASETS',
+    'METADATA_RESOURCE_MAX_DATASETS',
 ]
 
 if os.getenv('CACHE') == 'dummy':
@@ -263,6 +264,7 @@ CAVEATS_REPLY_TO = (
 CAVEATS_DEFAULT_RECIPIENTS = (
     'isimip-data_updates@listserv.dfn.de',
 )
+CAVEATS_MAX_DATASETS = os.getenv('METADATA_MAX_PAGE_SIZE', 100)
 
 PROXY = os.getenv('PROXY', '').split()
 PROXY_FILES_BASE_URL = os.getenv('PROXY_FILES_BASE_URL')

@@ -142,6 +142,21 @@ class Caveat(models.Model):
     def get_admin_url(self):
         return reverse('admin:caveats_caveat_change', kwargs={'object_id': self.pk})
 
+    def get_search_url(self):
+        query = 'all/true/'
+
+        if self.version_before:
+            query += f'before/{self.version_before}/'
+
+        if self.version_after:
+            query += f'after/{self.version_after}/'
+
+        for key, values in self.specifiers.items():
+            for value in values:
+                query += f'{key}/{value}/'
+
+        return reverse('search') + query
+
 
 class Comment(models.Model):
 
