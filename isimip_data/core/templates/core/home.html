@@ -159,6 +159,24 @@
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
+                        <img src="{% static 'images/home/fire.png' %}"alt="Fire sector">
+                        <div>
+                            <p>Please select a simulation round:</p>
+                            <ul>
+                                {% home_list 'OutputData' 'fire' %}
+                            </ul>
+                            <p>
+                                Photo by <a href="https://unsplash.com/@egor_vikhrev">Egor Vikhrev</a> on <a href="https://unsplash.com/photos/-E6jqIGzgOY">Unsplash</a>
+                            </p>
+                        </div>
+                    </div>
+                    <h5>Fire sector</h5>
+                    <p>
+                        Output data from the {% home_inline_list 'OutputData' 'fire' %} simulation round.
+                    </p>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="home-img-wrapper mb-3">
                         <img src="{% static 'images/home/lakes_global.jpg' %}" alt="Lakes (global) sector">
                         <div>
                             <p>Please select a simulation round:</p>

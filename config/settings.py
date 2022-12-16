@@ -245,13 +245,14 @@ HOME = {
     'geo_conditions': ['ISIMIP2a', 'ISIMIP2b', 'ISIMIP3a', 'ISIMIP3b'],
     'agriculture': ['ISIMIP2a', 'ISIMIP2b'],
     'biodiversity': ['ISIMIP2a', 'ISIMIP2b'],
-    'biomes': ['ISIMIP2a', 'ISIMIP2b'],
+    'biomes': ['ISIMIP2a', 'ISIMIP2b', 'ISIMIP3a'],
+    'fire': ['ISIMIP3a'],
     'lakes_global': ['ISIMIP2a', 'ISIMIP2b'],
     'lakes_local': ['ISIMIP2a', 'ISIMIP2b'],
-    'marine-fishery_global': ['ISIMIP3b'],
+    'marine-fishery_global': ['ISIMIP3b', 'ISIMIP3b'],
     'marine-fishery_regional': ['ISIMIP3b'],
     'permafrost': ['ISIMIP2a', 'ISIMIP2b'],
-    'water_global': ['ISIMIP2a', 'ISIMIP2b'],
+    'water_global': ['ISIMIP2a', 'ISIMIP2b', 'ISIMIP3b'],
     'water_regional': ['ISIMIP2a', 'ISIMIP2b']
 }
 
