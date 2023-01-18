@@ -205,34 +205,34 @@
         </div>
     </div>
 
-    {% if references.IsPreviousVersionOf %}
-    <h3>{% trans 'Is previous version of' %}</h3>
-    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsPreviousVersionOf %}
-    {% endif %}
-
-    {% if references.IsNewVersionOf %}
-    <h3>{% trans 'Is new version of' %}</h3>
-    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsNewVersionOf %}
-    {% endif %}
-
-    {% if references.IsDocumentedBy %}
-    <h3>{% trans 'Is documented by' %}</h3>
-    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsDocumentedBy %}
+    {% if references.Cites %}
+    <h3>{% trans 'References' %}</h3>
+    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.Cites %}
     {% endif %}
 
     {% if references.IsDerivedFrom %}
-    <h3>{% trans 'Is derived from' %}</h3>
+    <h3>{% trans 'Source datasets' %}</h3>
     {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsDerivedFrom %}
     {% endif %}
 
-    {% if references.Cites %}
-    <h3>{% trans 'Cites' %}</h3>
-    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.Cites %}
+    {% if references.IsDocumentedBy %}
+    <h3>{% trans 'Additional documentation' %}</h3>
+    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsDocumentedBy %}
     {% endif %}
 
     {% if references.Other %}
     <h3>{% trans 'Other references' %}</h3>
     {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.Other %}
+    {% endif %}
+
+    {% if references.IsPreviousVersionOf %}
+    <h3>{% trans 'This DOI is the previous version of' %}</h3>
+    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsPreviousVersionOf %}
+    {% endif %}
+
+    {% if references.IsNewVersionOf %}
+    <h3>{% trans 'This DOI is a new version of' %}</h3>
+    {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsNewVersionOf %}
     {% endif %}
 
     {% endif %}
