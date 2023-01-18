@@ -272,9 +272,11 @@ class Result extends Component {
                       {caveat.status_display}
                     </span>
                   </div>
-                  <a href={caveat.url} target="_blank">{caveat.title}</a>
-                  <span className="text-muted"> #{caveat.id}</span>
-                  {caveat.severity_level > 2 && <span className={'text-' + caveat.severity_color}> {caveat.severity_message}</span>}
+                  <p className="mb-0">
+                    <a href={caveat.url} target="_blank">{caveat.title}</a>
+                    <span className="text-muted"> #{caveat.id}</span>
+                  </p>
+                  <p className={'mb-0 text-' + caveat.severity_color}> {caveat.severity_message}</p>
                 </li>
               )
             })

@@ -19,7 +19,7 @@ class Caveats extends Component {
         } else {
           return acc
         }
-      }, [0, 'info'])
+      }, [-1, 'muted'])
 
       return color
     }

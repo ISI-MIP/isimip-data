@@ -18,11 +18,9 @@
                 <a href="{% url 'caveat' caveat.id %}">{{ caveat.title }}</a>
                 <span class="text-muted">#{{ caveat.id }}</span>
             </h4>
-            {% if caveat.severity_level > 1 %}
             <div class="mb-2">
                 {% include 'caveats/snippets/severity_message.html' %}
             </div>
-            {% endif %}
             <ul class="list-inline float-right">
                 <li class="list-inline-item">{% trans 'Affected versions' %}: {% include 'caveats/snippets/versions.html' %}</li>
             </ul>
