@@ -22,6 +22,17 @@ class Badges extends Component {
     )
   }
 
+  renderTitle(identifier, specifier) {
+    const { glossary } = this.props
+    const properties = getValueOrNull(glossary, identifier, specifier)
+
+    if (properties) {
+      return properties.title
+    } else {
+      return specifier
+    }
+  }
+
   render() {
     const { dataset } = this.props
     const resource = dataset.resources[dataset.resources.length - 1]
@@ -67,7 +78,7 @@ class Badges extends Component {
         {
           specifiers.climate_forcing && specifiers.climate_forcing.map((climate_forcing, index) =>
             <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('climate_forcing', climate_forcing)}>
-              <span className="badge badge-info">{climate_forcing}</span>
+              <span className="badge badge-info">{this.renderTitle('climate_forcing', climate_forcing)}</span>
             </OverlayTrigger>
           )
         }
@@ -81,7 +92,7 @@ class Badges extends Component {
         {
           specifiers.model && specifiers.model.map((model, index) =>
             <OverlayTrigger key={index} placement="bottom" overlay={<Tooltip><strong>Model</strong></Tooltip>}>
-              <span className="badge badge-primary">{model}</span>
+              <span className="badge badge-primary">{this.renderTitle('model', model)}</span>
             </OverlayTrigger>
           )
         }
