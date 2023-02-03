@@ -82,7 +82,7 @@ class Result extends Component {
         <div>
           <References dataset={dataset} />
           <Caveats dataset={dataset} toggleCaveats={this.toggleCaveats} />
-          <h4 className="card-title mt-3 mb-3">
+          <h4 className="card-title mt-0 mb-3">
             <a className="result-title" href={dataset.metadata_url} target="_blank">{dataset.name}</a>
           </h4>
         </div>

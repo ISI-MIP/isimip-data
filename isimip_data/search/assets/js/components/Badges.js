@@ -11,11 +11,13 @@ class Badges extends Component {
   renderTooltip(identifier, specifier) {
     const { glossary } = this.props
     const properties = getValueOrNull(glossary, identifier, specifier)
+    const identfier_title = (identifier[0].toUpperCase() + identifier.slice(1)).replace('_', ' ')
 
     return (
       <Tooltip>
-        {properties && properties.title && <strong>{properties.title}</strong>}
-        {properties && properties.long_name && <strong>{properties.long_name}</strong>}
+        <strong>{identfier_title}:</strong>&nbsp;
+        {properties && properties.title && <span>{properties.title}</span>}
+        {properties && properties.long_name && <span>{properties.long_name}</span>}
         {properties && properties.description && <div>{properties.description}</div>}
         {properties && properties.warning && <div>Warning: {properties.warning}</div>}
       </Tooltip>
@@ -35,115 +37,127 @@ class Badges extends Component {
 
   render() {
     const { dataset } = this.props
-    const resource = dataset.resources[dataset.resources.length - 1]
     const specifiers = dataset.merged_specifiers
+    const hasResources = (dataset.resources.length > 0)
 
     return (
-      <div className="d-lg-flex badges mb-2">
-        {
-          specifiers.simulation_round && specifiers.simulation_round.map((simulation_round, index) =>
-            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('simulation_round', simulation_round)}>
-              <span className="badge badge-isimip">{simulation_round}</span>
-            </OverlayTrigger>
-          )
-        }
-        {
-          specifiers.product && specifiers.product.map((product, index) =>
-            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('product', product)}>
-              <span className="badge badge-secondary">{product}</span>
-            </OverlayTrigger>
-          )
-        }
-        {
-          specifiers.category && specifiers.category.map((category, index) =>
-            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('category', category)}>
-              <span className="badge badge-success">{category}</span>
-            </OverlayTrigger>
-          )
-        }
-        {
-          specifiers.sector && specifiers.sector.map((sector, index) =>
-            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('sector', sector)}>
-              <span className="badge badge-success">{sector}</span>
-            </OverlayTrigger>
-          )
-        }
-        {
-          specifiers.publication && specifiers.publication.map((publication, index) =>
-            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('publication', publication)}>
-              <span className="badge badge-success">{publication}</span>
-            </OverlayTrigger>
-          )
-        }
-        {
-          specifiers.climate_forcing && specifiers.climate_forcing.map((climate_forcing, index) =>
-            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('climate_forcing', climate_forcing)}>
-              <span className="badge badge-info">{this.renderTitle('climate_forcing', climate_forcing)}</span>
-            </OverlayTrigger>
-          )
-        }
-        {
-          specifiers.period && specifiers.period.map((period, index) =>
-            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('period', period)}>
-              <span className="badge badge-light">{period}</span>
-            </OverlayTrigger>
-          )
-        }
-        {
-          specifiers.model && specifiers.model.map((model, index) =>
-            <OverlayTrigger key={index} placement="bottom" overlay={<Tooltip><strong>Model</strong></Tooltip>}>
-              <span className="badge badge-primary">{this.renderTitle('model', model)}</span>
-            </OverlayTrigger>
-          )
-        }
-        {
-          specifiers.variable && specifiers.variable.map((variable, index) =>
-            <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('variable', variable)}>
-              <span className="badge badge-dark">{variable}</span>
-            </OverlayTrigger>
-          )
-        }
+      <React.Fragment>
+        <div className={'d-lg-flex badges ' + (hasResources ? 'mb-1' : 'mb-3')}>
+          {
+            specifiers.simulation_round && specifiers.simulation_round.map((simulation_round, index) =>
+              <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('simulation_round', simulation_round)}>
+                <span className="badge badge-isimip">{simulation_round}</span>
+              </OverlayTrigger>
+            )
+          }
+          {
+            specifiers.product && specifiers.product.map((product, index) =>
+              <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('product', product)}>
+                <span className="badge badge-secondary">{product}</span>
+              </OverlayTrigger>
+            )
+          }
+          {
+            specifiers.category && specifiers.category.map((category, index) =>
+              <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('category', category)}>
+                <span className="badge badge-success">{category}</span>
+              </OverlayTrigger>
+            )
+          }
+          {
+            specifiers.sector && specifiers.sector.map((sector, index) =>
+              <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('sector', sector)}>
+                <span className="badge badge-success">{sector}</span>
+              </OverlayTrigger>
+            )
+          }
+          {
+            specifiers.publication && specifiers.publication.map((publication, index) =>
+              <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('publication', publication)}>
+                <span className="badge badge-success">{publication}</span>
+              </OverlayTrigger>
+            )
+          }
+          {
+            specifiers.climate_forcing && specifiers.climate_forcing.map((climate_forcing, index) =>
+              <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('climate_forcing', climate_forcing)}>
+                <span className="badge badge-info">{this.renderTitle('climate_forcing', climate_forcing)}</span>
+              </OverlayTrigger>
+            )
+          }
+          {
+            specifiers.period && specifiers.period.map((period, index) =>
+              <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('period', period)}>
+                <span className="badge badge-light">{period}</span>
+              </OverlayTrigger>
+            )
+          }
+          {
+            specifiers.model && specifiers.model.map((model, index) =>
+              <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('model', model)}>
+                <span className="badge badge-primary">{this.renderTitle('model', model)}</span>
+              </OverlayTrigger>
+            )
+          }
+          {
+            specifiers.variable && specifiers.variable.map((variable, index) =>
+              <OverlayTrigger key={index} placement="bottom" overlay={this.renderTooltip('variable', variable)}>
+                <span className="badge badge-dark">{variable}</span>
+              </OverlayTrigger>
+            )
+          }
 
-        <span className="ml-auto invisible"></span>
+          <span className="ml-auto invisible"></span>
 
-        {resource &&
-          <OverlayTrigger placement="bottom" overlay={<Tooltip>This dataset can be cited using the Digital Object Identifier: <i>{resource.doi_url}</i>.</Tooltip>}>
-            <a className="badge badge-light" href={resource.doi_url} target="_blank">
-              {resource.doi}
-            </a>
-          </OverlayTrigger>
-        }
+          {dataset.terms_of_use &&
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>{ dataset.terms_of_use.terms_of_use }</Tooltip>}>
+              <a className="badge badge-secondary" href={dataset.terms_of_use.terms_of_use_url} target="_blank">
+                Terms of use
+              </a>
+            </OverlayTrigger>
+          }
 
-        {dataset.terms_of_use &&
-          <OverlayTrigger placement="bottom" overlay={<Tooltip>{ dataset.terms_of_use.terms_of_use }</Tooltip>}>
-            <a className="badge badge-secondary" href={dataset.terms_of_use.terms_of_use_url} target="_blank">
-              ToU
-            </a>
-          </OverlayTrigger>
-        }
+          {dataset.rights &&
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>This dataset is published under the <i>{dataset.rights.rights}</i>.</Tooltip>}>
+              <span className={`badge badge-${dataset.rights.color || 'light'}`}>
+                {dataset.rights.short}
+              </span>
+            </OverlayTrigger>
+          }
 
-        {dataset.rights &&
-          <OverlayTrigger placement="bottom" overlay={<Tooltip>This dataset is published under the <i>{dataset.rights.rights}</i>.</Tooltip>}>
-            <span className={`badge badge-${dataset.rights.color || 'light'}`}>
-              {dataset.rights.short}
+          {!dataset.public &&
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>This dataset is archived and currently not available for download. Please contact support if you need this version of the dataset.</Tooltip>}>
+              <span className="badge badge-danger">
+                Archived
+              </span>
+            </OverlayTrigger>
+          }
+
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>The version for this dataset (YYYYMMDD).</Tooltip>}>
+            <span className="badge badge-dark">
+              {dataset.version}
             </span>
           </OverlayTrigger>
+        </div>
+        {
+          dataset.resources.length > 0 &&
+          <div className="badges mb-2">
+            {
+              dataset.resources.map((resource, index) => (
+                resource.is_current_version ?
+                <OverlayTrigger key={index} placement="bottom" overlay={<Tooltip>
+                  <p className="mb-1">The dataset can be cited using a Digital Object Identifier (DOI):</p>
+                  <p class="font-italic">{resource.citation}.</p>
+                </Tooltip>}>
+                  <a className="badge badge-light" href={resource.doi_url} target="_blank">
+                    {resource.doi_url}
+                  </a>
+                </OverlayTrigger> : null
+              ))
+            }
+          </div>
         }
-
-        {!dataset.public &&
-          <OverlayTrigger placement="bottom" overlay={<Tooltip>This dataset is archived and currently not available for download. Please contact support if you need this version of the dataset.</Tooltip>}>
-            <span className="badge badge-danger">
-              Archived
-            </span>
-          </OverlayTrigger>
-        }
-
-        <OverlayTrigger placement="bottom" overlay={<Tooltip>The version for this dataset (YYYYMMDD).</Tooltip>}>
-          <span className="badge badge-dark">
-            {dataset.version}
-          </span>
-        </OverlayTrigger>
-      </div>
+      </React.Fragment>
     )
   }
 }

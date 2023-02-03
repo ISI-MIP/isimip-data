@@ -10,11 +10,11 @@
             {% if resource.datacite %}
             <button class="btn btn-link btn-copy-to-clipboard float-right ml-1" title="Copy to clipboard">
                 <i class="far fa-clipboard"></i>
-                <code class="d-none">{{ resource.creators_str }} ({{ resource.datacite.publicationYear }}): {{ resource.title_with_version }}. {{ resource.datacite.publisher }}. {{ resource.doi_url }}</code>
+                <code class="d-none">{{ resource.citation }}</code>
             </button>
             </i>
-            <b>{{ resource.creators_str }} ({{ resource.datacite.publicationYear }}):</b>
-            <i>{{ resource.title_with_version }}</i>. {{ resource.datacite.publisher }}.
+            <b>{{ resource.creators_str }} ({{ resource.publication_year }}):</b>
+            <i>{{ resource.title_with_version }}</i>. {{ resource.publisher }}.
             {% else %}
             {% trans 'Please follow the policies of the original data provider:' %}
             {% endif %}

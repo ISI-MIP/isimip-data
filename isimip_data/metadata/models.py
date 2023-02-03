@@ -240,8 +240,20 @@ class Resource(models.Model):
             return None
 
     @cached_property
-    def doi_url(self):
-        return 'https://doi.org/{}'.format(self.doi)
+    def is_current_version(self):
+        return self.new_version is None
+
+    @cached_property
+    def citation(self):
+        return f'{self.creators_str} ({self.publication_year}): {self.title_with_version}. {self.publisher}. {self.doi_url}'
+
+    @cached_property
+    def creators_str(self):
+        return ', '.join([creator.get('name', '') for creator in self.datacite.get('creators', [])])
+
+    @cached_property
+    def publication_year(self):
+        return self.datacite.get('publicationYear', '')
 
     @cached_property
     def title_with_version(self):
@@ -251,8 +263,12 @@ class Resource(models.Model):
             return f'{self.title} (v{self.version})'
 
     @cached_property
-    def creators_str(self):
-        return ', '.join([creator.get('name', '') for creator in self.datacite.get('creators', [])])
+    def doi_url(self):
+        return 'https://doi.org/{}'.format(self.doi)
+
+    @cached_property
+    def publisher(self):
+        return self.datacite.get('publisher', '')
 
     @cached_property
     def contact_persons(self):
