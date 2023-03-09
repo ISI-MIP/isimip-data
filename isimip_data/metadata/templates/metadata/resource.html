@@ -197,11 +197,6 @@
                     </li>
                 </ul>
             </div>
-
-            {% if resource.datacite.subjects %}
-            <h3>{% trans 'GCMD Keywords' %}</h3>
-            {% include 'metadata/cards/keywords.html' with subjects=resource.datacite.subjects %}
-            {% endif %}
         </div>
     </div>
 
@@ -233,6 +228,11 @@
     {% if references.IsNewVersionOf %}
     <h3>{% trans 'This DOI is a new version of' %}</h3>
     {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsNewVersionOf %}
+    {% endif %}
+
+    {% if resource.datacite.subjects %}
+    <h3>{% trans 'GCMD Keywords' %}</h3>
+    {% include 'metadata/cards/keywords.html' with subjects=resource.datacite.subjects %}
     {% endif %}
 
     {% endif %}
