@@ -13,7 +13,7 @@ from isimip_data.annotations.models import Download, Figure, Reference
 from isimip_data.caveats.models import Caveat
 from isimip_data.core.utils import get_file_base_url
 
-from .models import Attribute, Dataset, File, Resource
+from .models import Dataset, File, Identifier, Resource
 from .utils import render_bibtex
 
 
@@ -189,12 +189,12 @@ def resource_json(request, doi=None):
     return response
 
 
-def attributes(request):
-    attributes_list = []
-    for identifier in Attribute.objects.using('metadata').identifiers():
-        attributes_list.append((identifier, Dataset.objects.using('metadata').histogram(identifier)))
+def identifiers(request):
+    identifiers_list = []
+    for identifier in Identifier.objects.using('metadata').identifiers():
+        identifiers_list.append((identifier, Dataset.objects.using('metadata').histogram(identifier)))
 
-    return render(request, 'metadata/attributes.html', {
-        'title': 'Attributes',
-        'attributes': attributes_list
+    return render(request, 'metadata/identifiers.html', {
+        'title': 'Identifiers',
+        'identifiers': identifiers_list
     })

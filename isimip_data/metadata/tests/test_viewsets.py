@@ -1,6 +1,6 @@
 from django.urls import reverse
 
-from isimip_data.metadata.models import Dataset, File, Attribute, Resource
+from isimip_data.metadata.models import Dataset, File, Identifier, Resource
 
 
 def test_dataset_list(db, client):
@@ -13,14 +13,14 @@ def test_dataset_list_version_filter(db, client):
     assert response.status_code == 200
 
 
-def test_dataset_list_attribute_filter(db, client):
+def test_dataset_list_identifier_filter(db, client):
     response = client.get(reverse('dataset-list') + '?round=round')
     assert response.status_code == 200
 
 
 def test_dataset_histogram(db, client):
-    attribute = Attribute.objects.using('metadata').first()
-    response = client.get(reverse('dataset-histogram', args=[attribute.identifier]))
+    identifier = Identifier.objects.using('metadata').first()
+    response = client.get(reverse('dataset-histogram', args=[identifier.identifier]))
     assert response.status_code == 200
 
 

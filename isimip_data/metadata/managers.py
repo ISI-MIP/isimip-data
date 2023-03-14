@@ -14,13 +14,13 @@ class DatasetManager(models.Manager):
         return DatasetQuerySet(self.model, using=self._db)
 
 
-class AttributeQuerySet(models.QuerySet):
+class IdentifierQuerySet(models.QuerySet):
 
     def identifiers(self):
         return self.distinct().values_list('identifier', flat=True)
 
 
-class AttributeManager(models.Manager):
+class IdentifierManager(models.Manager):
 
     def get_queryset(self):
-        return AttributeQuerySet(self.model, using=self._db)
+        return IdentifierQuerySet(self.model, using=self._db)

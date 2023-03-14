@@ -85,8 +85,8 @@ def test_file_id_target(db, client):
 #     assert response.status_code == 303
 
 
-def test_attributes(db, client):
-    response = client.get(reverse('attributes'))
+def test_identifiers(db, client):
+    response = client.get(reverse('identifiers'))
     assert response.status_code == 200
 
 

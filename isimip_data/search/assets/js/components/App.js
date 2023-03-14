@@ -24,7 +24,7 @@ class App extends Component {
       params: {},
       facets: [],
       settings: {},
-      attributes: [],
+      identifiers: [],
       glossary: {},
       sidebar: null
     }
@@ -33,7 +33,7 @@ class App extends Component {
     this.handleSidebarChange = this.handleSidebarChange.bind(this)
     this.handleParamsRemove = this.handleParamsRemove.bind(this)
     this.handleLoadMore = this.handleLoadMore.bind(this)
-    this.handleAttributeChange = this.handleAttributeChange.bind(this)
+    this.handleIdentifierChange = this.handleIdentifierChange.bind(this)
     this.handleVersionChange = this.handleVersionChange.bind(this)
   }
 
@@ -42,12 +42,12 @@ class App extends Component {
 
     Promise.all([
       CoreApi.fetchSettings(),
-      DatasetApi.fetchAttributes(),
+      DatasetApi.fetchIdentifiers(),
       DatasetApi.fetchGlossary()
     ]).then(results => {
-      const [ settings, attributes, glossary ] = results
-      const params = Object.assign({ page: 1 }, getLocationParams('/search/', location, attributes.map(a => a.identifier)))
-      this.setState({ params, attributes, glossary, settings })
+      const [ settings, identifiers, glossary ] = results
+      const params = Object.assign({ page: 1 }, getLocationParams('/search/', location, identifiers.map(i => i.identifier)))
+      this.setState({ params, identifiers, glossary, settings })
     })
 
     let sidebar = ls.get('sidebar')
@@ -109,23 +109,23 @@ class App extends Component {
     this.setState({ params })
   }
 
-  handleAttributeChange(attribute, key, value) {
+  handleIdentifierChange(identifier, key, value) {
     const params = Object.assign({}, this.state.params, { page: 1 })
 
     // create the array in params if it not already exists
-    if (params[attribute] == undefined) {
-      params[attribute] = []
+    if (params[identifier] == undefined) {
+      params[identifier] = []
     }
 
     // find the current index of key
-    const index = params[attribute].indexOf(key)
+    const index = params[identifier].indexOf(key)
 
     if (index == -1 && value) {
       // the key does not exist but should -> push
-      params[attribute].push(key)
+      params[identifier].push(key)
     } else if (index > -1 && !value) {
       // the key exists, but shouln't -> splice
-      params[attribute].splice(index, 1)
+      params[identifier].splice(index, 1)
     }
 
     this.setState({ params })
@@ -139,7 +139,7 @@ class App extends Component {
         [key]: false
       })
     } else {
-      this.handleAttributeChange(key, value, false)
+      this.handleIdentifierChange(key, value, false)
     }
   }
 
@@ -168,8 +168,8 @@ class App extends Component {
               </div>
             </div>
           </div>
-          {sidebar == 'tree' && <Tree params={params} glossary={glossary} onTreeChange={this.handleAttributeChange}/>}
-          {sidebar == 'facets' && <Facets params={params} glossary={glossary} onFacetChange={this.handleAttributeChange}/>}
+          {sidebar == 'tree' && <Tree params={params} glossary={glossary} onTreeChange={this.handleIdentifierChange}/>}
+          {sidebar == 'facets' && <Facets params={params} glossary={glossary} onFacetChange={this.handleIdentifierChange}/>}
         </div>
         <div className="col-lg-9">
           <Version params={params} onChange={this.handleVersionChange}/>

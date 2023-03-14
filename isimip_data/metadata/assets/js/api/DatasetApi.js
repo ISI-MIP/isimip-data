@@ -13,8 +13,8 @@ class DatasetApi {
     })
   }
 
-  static fetchDatasetsHistogram(attribute, urlParams, fetchParams = {}) {
-    return fetch('/api/v1/datasets/histogram/' + attribute + '/?' + encodeParams(urlParams), fetchParams)
+  static fetchDatasetsHistogram(identifier, urlParams, fetchParams = {}) {
+    return fetch('/api/v1/datasets/histogram/' + identifier + '/?' + encodeParams(urlParams), fetchParams)
       .then(response => {
         if (response.ok) {
           return response.json()
@@ -35,8 +35,8 @@ class DatasetApi {
     })
   }
 
-  static fetchAttributes(fetchParams = {}) {
-    return fetch('/api/v1/attributes/', fetchParams).then(response => {
+  static fetchIdentifiers(fetchParams = {}) {
+    return fetch('/api/v1/identifiers/', fetchParams).then(response => {
         if (response.ok) {
           return response.json()
         } else {

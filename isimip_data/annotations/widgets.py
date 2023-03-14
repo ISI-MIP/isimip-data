@@ -2,7 +2,7 @@ import json
 
 from django import forms
 
-from isimip_data.metadata.models import Attribute
+from isimip_data.metadata.models import Identifier
 
 
 class SpecifierWidget(forms.Widget):
@@ -10,7 +10,7 @@ class SpecifierWidget(forms.Widget):
 
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
-        context['widget']['attributes'] = Attribute.objects.using('metadata').all()
+        context['widget']['identifiers'] = Identifier.objects.using('metadata').all()
         return context
 
     def value_from_datadict(self, data, files, name):

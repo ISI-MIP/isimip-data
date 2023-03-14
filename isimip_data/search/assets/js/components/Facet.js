@@ -29,7 +29,7 @@ class Facet extends Component {
 
   componentDidMount() {
     const { facet } = this.props
-    const isOpen = ls.get(`facet.${facet.attribute}.isOpen`)
+    const isOpen = ls.get(`facet.${facet.identifier}.isOpen`)
 
     if (isOpen) {
       this.toggleFacet()
@@ -52,7 +52,7 @@ class Facet extends Component {
 
     if (isOpen) {
       this.setState({ isLoading: true })
-      DatasetApi.fetchDatasetsHistogram(facet.attribute, params, {
+      DatasetApi.fetchDatasetsHistogram(facet.identifier, params, {
         signal: this.abortController.signal
       }).then(items => {
         this.setState({
@@ -65,13 +65,13 @@ class Facet extends Component {
 
   handleChange(key, e) {
     const { facet, onChange } = this.props
-    onChange(facet.attribute, key, e.target.checked)
+    onChange(facet.identifier, key, e.target.checked)
   }
 
   toggleFacet() {
     const { facet } = this.props
     const { isOpen } = this.state
-    ls.set(`facet.${facet.attribute}.isOpen`, !isOpen)
+    ls.set(`facet.${facet.identifier}.isOpen`, !isOpen)
     this.setState({ isOpen: !isOpen }, this.fetch)
   }
 
@@ -102,8 +102,8 @@ class Facet extends Component {
     return filteredUrls
   }
 
-  renderListItem(attribute, specifier, title, isChecked, urls, count) {
-    const id = 'facet-' + attribute + '-' + specifier
+  renderListItem(identifier, specifier, title, isChecked, urls, count) {
+    const id = 'facet-' + identifier + '-' + specifier
     const filteredUrls = this.filterUrls(urls)
 
     return (
@@ -130,7 +130,7 @@ class Facet extends Component {
     )
   }
 
-  renderListGroup(attribute, items, checked) {
+  renderListGroup(identifier, items, checked) {
     const { glossary } = this.props
 
     return (
@@ -138,7 +138,7 @@ class Facet extends Component {
         {
           items.map((item, index) => {
             const [specifier, count] = item
-            const properties = getValueOrNull(glossary, attribute, specifier)
+            const properties = getValueOrNull(glossary, identifier, specifier)
             const title = properties ? properties.title : null
             const urls = properties ? properties.urls : null
 
@@ -149,11 +149,11 @@ class Facet extends Component {
               if (tooltip) {
                 return (
                   <OverlayTrigger key={specifier} placement="right" overlay={tooltip}>
-                    {this.renderListItem(attribute, specifier, title, isChecked, urls, count)}
+                    {this.renderListItem(identifier, specifier, title, isChecked, urls, count)}
                   </OverlayTrigger>
                 )
               } else {
-                return this.renderListItem(attribute, specifier, title, isChecked, urls, count)
+                return this.renderListItem(identifier, specifier, title, isChecked, urls, count)
               }
             }
           })
@@ -181,7 +181,7 @@ class Facet extends Component {
   render() {
     const { params, facet, glossary } = this.props
     const { isOpen, isLoading, items } = this.state
-    const checked = params[facet.attribute] || []
+    const checked = params[facet.identifier] || []
     const isChecked = checked.length > 0
     const isEmpty = (items.length == 0) || (items.length == 1 && items[0][0] == null)
 
@@ -194,7 +194,7 @@ class Facet extends Component {
             {isOpen ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
           </div>
         </div>
-        {isOpen && !isEmpty && this.renderListGroup(facet.attribute, items, checked)}
+        {isOpen && !isEmpty && this.renderListGroup(facet.identifier, items, checked)}
         {isOpen && isEmpty && !isLoading && this.renderEmpty()}
         {isOpen && isEmpty && isLoading && this.renderSpinner()}
       </div>

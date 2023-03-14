@@ -1,9 +1,10 @@
-from isimip_data.metadata.models import Attribute, Dataset, File, Resource, Tree, Word
+from isimip_data.metadata.models import (Dataset, File, Identifier, Resource,
+                                         Tree, Word)
 
 
-def test_attribute_str(db, client):
-    attribute = Attribute.objects.using('metadata').first()
-    assert str(attribute) == attribute.identifier
+def test_identifier_str(db, client):
+    identifier = Identifier.objects.using('metadata').first()
+    assert str(identifier) == identifier.identifier
 
 
 def test_dataset_str(db, client):

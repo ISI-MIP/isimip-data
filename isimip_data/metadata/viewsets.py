@@ -11,13 +11,14 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 
 from isimip_data.core.utils import get_file_base_url
 
-from .filters import (AttributeFilterBackend, IdFilterBackend,
+from .filters import (IdentifierFilterBackend, IdFilterBackend,
                       NameFilterBackend, PathFilterBackend,
                       SearchFilterBackend, TreeFilterBackend,
                       VersionFilterBackend)
-from .models import Attribute, Dataset, File, Resource, Tree
-from .serializers import (AttributeSerializer, DatasetSerializer,
-                          FileSerializer, ResourceSerializer, ResourceIndexSerializer)
+from .models import Dataset, File, Identifier, Resource, Tree
+from .serializers import (DatasetSerializer, FileSerializer,
+                          IdentifierSerializer, ResourceIndexSerializer,
+                          ResourceSerializer)
 from .utils import fetch_glossary
 
 
@@ -44,18 +45,18 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         PathFilterBackend,
         SearchFilterBackend,
         VersionFilterBackend,
-        AttributeFilterBackend,
+        IdentifierFilterBackend,
         TreeFilterBackend
     )
-    attribute_filter_exclude = None
+    identifier_filter_exclude = None
 
-    @action(detail=False, url_path='histogram/(?P<attribute>[A-Za-z0-9_]+)')
-    def histogram(self, request, attribute):
-        if Attribute.objects.using('metadata').filter(identifier=attribute).exists():
-            # exclude the attribute from AttributeFilterBackend
-            self.attribute_filter_exclude = attribute
+    @action(detail=False, url_path='histogram/(?P<identifier>[A-Za-z0-9_]+)')
+    def histogram(self, request, identifier):
+        if Identifier.objects.using('metadata').filter(identifier=identifier).exists():
+            # exclude the identifier from IdentifierFilterBackend
+            self.identifier_filter_exclude = identifier
             queryset = self.filter_queryset(Dataset.objects.using('metadata'))
-            values = queryset.histogram(attribute)
+            values = queryset.histogram(identifier)
             return Response(values)
         else:
             raise NotFound
@@ -94,7 +95,7 @@ class FileViewSet(ReadOnlyModelViewSet):
         PathFilterBackend,
         SearchFilterBackend,
         VersionFilterBackend,
-        AttributeFilterBackend
+        IdentifierFilterBackend
     )
     filterset_fields = (
         'name',
@@ -223,10 +224,10 @@ class TreeViewSet(ViewSet):
         return Response(response_list)
 
 
-class AttributeViewSet(ReadOnlyModelViewSet):
+class IdentifierViewSet(ReadOnlyModelViewSet):
 
-    serializer_class = AttributeSerializer
-    queryset = Attribute.objects.using('metadata')
+    serializer_class = IdentifierSerializer
+    queryset = Identifier.objects.using('metadata')
 
 
 class GlossaryViewSet(ViewSet):

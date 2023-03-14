@@ -7,7 +7,7 @@ from isimip_data.caveats.models import Caveat
 from isimip_data.core.utils import get_file_base_url
 from isimip_data.indicators.models import IndicatorValue
 
-from .models import Attribute, Dataset, File, Resource
+from .models import Identifier, Dataset, File, Resource
 
 
 class DatasetFileSerializer(serializers.ModelSerializer):
@@ -346,10 +346,10 @@ class ResourceSerializer(serializers.ModelSerializer):
         )
 
 
-class AttributeSerializer(serializers.ModelSerializer):
+class IdentifierSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Attribute
+        model = Identifier
         fields = (
             'identifier',
             'specifiers'

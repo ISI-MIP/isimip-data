@@ -8,9 +8,9 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 
 from .constants import RIGHTS
-from .managers import AttributeManager, DatasetManager
-from .utils import (get_json_ld_name, get_terms_of_use, merge_identifiers, merge_specifiers,
-                    prettify_specifiers)
+from .managers import DatasetManager, IdentifierManager
+from .utils import (get_json_ld_name, get_terms_of_use, merge_identifiers,
+                    merge_specifiers, prettify_specifiers)
 
 
 class Dataset(models.Model):
@@ -400,15 +400,15 @@ class Word(models.Model):
         return self.word
 
 
-class Attribute(models.Model):
+class Identifier(models.Model):
 
-    objects = AttributeManager()
+    objects = IdentifierManager()
 
     identifier = models.TextField(primary_key=True)
     specifiers = ArrayField(models.TextField())
 
     class Meta:
-        db_table = 'attributes'
+        db_table = 'identifiers'
         managed = False
         ordering = ('identifier', )
 

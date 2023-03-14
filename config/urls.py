@@ -21,11 +21,11 @@ from isimip_data.download.viewsets import CountryViewSet
 from isimip_data.indicators.views import indicator, indicators
 from isimip_data.metadata.sitemaps import (DatasetSitemap, FileSitemap,
                                            ResourceSitemap)
-from isimip_data.metadata.views import (attributes, dataset, file, metadata,
+from isimip_data.metadata.views import (dataset, file, identifiers, metadata,
                                         resource, resource_bibtex,
                                         resource_json, resource_xml, resources)
-from isimip_data.metadata.viewsets import (AttributeViewSet, DatasetViewSet,
-                                           FileViewSet, GlossaryViewSet,
+from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
+                                           GlossaryViewSet, IdentifierViewSet,
                                            ResourceViewSet, TreeViewSet)
 from isimip_data.search.views import search
 from isimip_data.search.viewsets import FacetViewSet
@@ -37,7 +37,7 @@ router.register(r'glossary', GlossaryViewSet, basename='glossary')
 router.register(r'tree', TreeViewSet, basename='tree')
 router.register(r'files', FileViewSet, basename='file')
 router.register(r'resources', ResourceViewSet, basename='resource')
-router.register(r'attributes', AttributeViewSet, basename='attribute')
+router.register(r'identifiers', IdentifierViewSet, basename='identifier')
 router.register(r'facets', FacetViewSet, basename='facet')
 router.register(r'caveats', CaveatViewSet, basename='caveat')
 router.register(r'settings', SettingsViewSet, basename='setting')
@@ -81,7 +81,7 @@ urlpatterns = [
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).json', resource_json, name='resource_json'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)', resource, name='resource'),
 
-    path('attributes/', attributes, name='attributes'),
+    path('identifiers/', identifiers, name='identifiers'),
 
     path('search/', search, name='search'),
     path('search/<path:path>/', search, name='search'),

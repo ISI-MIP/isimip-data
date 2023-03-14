@@ -2,19 +2,19 @@ from django import forms
 from django.contrib import admin
 
 from adminsortable2.admin import SortableAdminMixin
-from isimip_data.metadata.models import Attribute
+from isimip_data.metadata.models import Identifier
 
 from .models import Facet
 
 
 class FacetModelForm(forms.ModelForm):
 
-    attribute = forms.ModelChoiceField(queryset=Attribute.objects.using('metadata').distinct()
-                                                                 .values_list('identifier', flat=True))
+    identifier = forms.ModelChoiceField(queryset=Identifier.objects.using('metadata').distinct()
+                                                                   .values_list('identifier', flat=True))
 
     class Meta:
         model = Facet
-        fields = ('title', 'attribute')
+        fields = ('title', 'identifier')
 
 
 @admin.register(Facet)

@@ -6,7 +6,7 @@ from django.db.models import Q
 
 from rest_framework.filters import BaseFilterBackend
 
-from isimip_data.metadata.models import Attribute
+from isimip_data.metadata.models import Identifier
 
 logger = logging.getLogger(__name__)
 
@@ -108,7 +108,7 @@ class VersionFilterBackend(BaseFilterBackend):
         return queryset
 
 
-class AttributeFilterBackend(BaseFilterBackend):
+class IdentifierFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
         if view.detail:
@@ -117,8 +117,8 @@ class AttributeFilterBackend(BaseFilterBackend):
         # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#std:fieldlookup-hstorefield.contains
         # and https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#containment-and-key-operations
         # for optimal jsonb lookups: queryset.filter(field={'foo': 'bar', 'egg': 'spam'})
-        for identifier in Attribute.objects.using('metadata').identifiers():
-            if identifier != getattr(view, 'attribute_filter_exclude', None):
+        for identifier in Identifier.objects.using('metadata').identifiers():
+            if identifier != getattr(view, 'identifier_filter_exclude', None):
                 q = Q()
                 for value in request.GET.getlist(identifier):
                     if value:

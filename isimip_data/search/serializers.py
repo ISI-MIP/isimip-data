@@ -10,6 +10,6 @@ class FacetSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'attribute',
+            'identifier',
             'order'
         )
