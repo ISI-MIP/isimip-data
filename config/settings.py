@@ -66,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'isimip_data.metadata.middleware.MetadataCacheMiddleware'
 ]
 
 if DEBUG_TOOLBAR:
@@ -208,10 +209,12 @@ else:
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'isimip-data',
-            'TIMEOUT': 5
+            'LOCATION': 'isimip-data'
         }
     }
+
+CACHE_MIDDLEWARE_SECONDS = 60 * 60 * 24 * 7  # one week
+CACHE_MIDDLEWARE_KEY_PREFIX = 'metadata'
 
 SEARCH_SIMILARITY = 0.5
 SEARCH_SIMILARITY_LIMIT = 3
