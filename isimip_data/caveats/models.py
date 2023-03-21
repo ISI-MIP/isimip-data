@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
+from django.core.cache import cache
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -87,7 +88,12 @@ class Caveat(models.Model):
         self.datasets = query_datasets(self.specifiers, self.version_after, self.version_before,
                                        self.include, self.exclude)
         self.resources = query_resources(self.datasets)
+        cache.clear()
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # cache.clear()
+        super().delete(*args, **kwargs)
 
     def get_creator_display(self):
         return get_full_name(self.creator)

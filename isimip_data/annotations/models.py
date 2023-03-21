@@ -2,6 +2,7 @@ import mimetypes
 from pathlib import Path
 
 from django.contrib.postgres.fields import ArrayField
+from django.core.cache import cache
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -26,7 +27,12 @@ class Annotation(models.Model):
 
     def save(self, *args, **kwargs):
         self.datasets = query_datasets(self.specifiers, self.version_after, self.version_before)
+        cache.clear()
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        cache.clear()
+        super().delete(*args, **kwargs)
 
 
 class Figure(models.Model):

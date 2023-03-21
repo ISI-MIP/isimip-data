@@ -1,4 +1,5 @@
 from django.contrib.postgres.fields import ArrayField
+from django.core.cache import cache
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -34,6 +35,14 @@ class Indicator(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        cache.clear()
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        cache.clear()
+        super().delete(*args, **kwargs)
 
     @cached_property
     def table(self):
