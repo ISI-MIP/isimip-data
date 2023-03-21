@@ -60,6 +60,7 @@ class DatasetCaveatSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     severity_display = serializers.CharField(source='get_severity_display')
     status_display = serializers.CharField(source='get_status_display')
+    message_display = serializers.CharField(source='get_message_display')
 
     class Meta:
         model = Caveat
@@ -71,10 +72,12 @@ class DatasetCaveatSerializer(serializers.ModelSerializer):
             'severity_display',
             'severity_level',
             'severity_color',
-            'severity_message',
             'status',
             'status_display',
-            'status_color'
+            'status_color',
+            'message',
+            'message_display',
+            'message_color'
         )
 
     def get_url(self, obj):

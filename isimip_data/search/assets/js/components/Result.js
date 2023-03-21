@@ -274,7 +274,7 @@ class Result extends Component {
           <a href={caveat.url} target="_blank">{caveat.title}</a>
           <span className="text-muted"> #{caveat.id}</span>
         </p>
-        <p className={'mb-0 text-' + caveat.severity_color}> {caveat.severity_message}</p>
+        <p className={'mb-0 text-' + caveat.message_color}> {caveat.message_display}</p>
       </li>
     )
   }

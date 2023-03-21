@@ -76,20 +76,21 @@
                     </a>
                     {% endif %}
 
+                    {% if caveat.message %}
+                    <p class="mb-2">
+                        {% include 'caveats/snippets/severity_message.html' %}
+                    </p>
+                    {% endif %}
+
+                    <p class="mb-2">
+                        <strong class="mr-2">{% trans 'Severity' %}</strong>{% include 'caveats/snippets/severity.html' %}
+                    </p>
+
+                    <p class="mb-2">
+                        <strong class="mr-2">{% trans 'Status' %}</strong>{% include 'caveats/snippets/status.html' %}
+                    </p>
+
                     <dl>
-                        <dt>{% trans 'Severity' %}</dt>
-                        <dd>
-                            <div>
-                                {% include 'caveats/snippets/severity.html' %}
-                            </div>
-                            <div class="mt-1">
-                                {% include 'caveats/snippets/severity_message.html' %}
-                            </div>
-                        </dd>
-                        <dt>{% trans 'Status' %}</dt>
-                        <dd>
-                            {% include 'caveats/snippets/status.html' %}
-                        </dd>
                         <dt>{% trans 'Versions' %}</dt>
                         <dd>
                             {% include 'caveats/snippets/versions.html' %}

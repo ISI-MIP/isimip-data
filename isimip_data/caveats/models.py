@@ -28,11 +28,18 @@ class Caveat(models.Model):
 
     SEVERITY_LOW = 'low'
     SEVERITY_HIGH = 'high'
-    SEVERITY_REPLACED = 'replaced'
     SEVERITY_CHOICES = (
         (SEVERITY_LOW, _('low')),
-        (SEVERITY_HIGH, _('high')),
-        (SEVERITY_REPLACED, _('replaced')),
+        (SEVERITY_HIGH, _('high'))
+    )
+
+    MESSAGE_CAN_BE_USED = 'can_be_used'
+    MESSAGE_DO_NOT_USE = 'do_not_use'
+    MESSAGE_REPLACED = 'replaced'
+    MESSAGE_CHOICES = (
+        (MESSAGE_CAN_BE_USED, _('Affected datasets can still be used for simulations or research.')),
+        (MESSAGE_DO_NOT_USE, _('Affected datasets should not be used until this caveat is resolved.')),
+        (MESSAGE_REPLACED, _('Please use the replaced datasets for new simulations or research.'))
     )
 
     objects = ModerationManager()
@@ -52,6 +59,7 @@ class Caveat(models.Model):
     updated = models.DateTimeField(auto_now=True)
     severity = models.TextField(choices=SEVERITY_CHOICES)
     status = models.TextField(choices=STATUS_CHOICES)
+    message = models.TextField(blank=True, choices=MESSAGE_CHOICES)
     specifiers = models.JSONField(default=dict)
     include = models.TextField(
         blank=True,
@@ -88,26 +96,15 @@ class Caveat(models.Model):
     def severity_level(self):
         return {
             self.SEVERITY_LOW: 1,
-            self.SEVERITY_HIGH: 2,
-            self.SEVERITY_REPLACED: 3
+            self.SEVERITY_HIGH: 2
         }.get(self.severity)
 
     @property
     def severity_color(self):
         return {
             self.SEVERITY_LOW: 'info',
-            self.SEVERITY_HIGH: 'danger',
-            self.SEVERITY_REPLACED: 'success'
+            self.SEVERITY_HIGH: 'danger'
         }.get(self.severity)
-
-    @property
-    def severity_message(self):
-        if self.severity == self.SEVERITY_LOW:
-            return 'Affected datasets can still be used for simulations or research.'
-        elif self.severity == self.SEVERITY_HIGH:
-            return 'Affected datasets should not be used until this caveat is resolved.'
-        elif self.severity == self.SEVERITY_REPLACED:
-            return 'Please use the replaced datasets for new simulations or research.'
 
     @property
     def status_color(self):
@@ -117,6 +114,10 @@ class Caveat(models.Model):
             self.STATUS_RESOLVED: 'success',
             self.STATUS_WONT_FIX: 'secondary'
         }.get(self.status)
+
+    @property
+    def message_color(self):
+        return self.severity_color
 
     @cached_property
     def has_downloads(self):

@@ -35,7 +35,7 @@ class Caveats extends Component {
       )
     } else if (dataset.caveats_versions.length > 0) {
       return (
-        <div className={'float-right text-muted'}>
+        <div className={'float-right text-primary'}>
           <FontAwesomeIcon className="result-icon"
                            title="There are caveats for other versions of this dataset."
                            icon={faExclamationTriangle}
