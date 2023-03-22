@@ -65,7 +65,7 @@ class SearchFilterBackend(BaseFilterBackend):
         query = request.GET.get('query')
         if query:
             # first, split the search string whitespace into words
-            search_strings = query.split()
+            search_strings = query.replace('/', ' ').replace('_', ' ').replace('-', ' ').split()
 
             # next, join the search_strings for the different search_words with an AND
             search_string = ' & '.join(search_strings)
