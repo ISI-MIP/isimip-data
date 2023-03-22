@@ -77,7 +77,7 @@ class Dataset(models.Model):
 
     @cached_property
     def rights_list(self):
-        return [self.rights_dict]
+        return [self.rights_dict] if self.rights_dict else []
 
     @cached_property
     def terms_of_use(self):
@@ -174,7 +174,7 @@ class File(models.Model):
 
     @cached_property
     def rights_list(self):
-        return [self.rights_dict]
+        return [self.rights_dict] if self.rights_dict else []
 
     @cached_property
     def terms_of_use(self):
