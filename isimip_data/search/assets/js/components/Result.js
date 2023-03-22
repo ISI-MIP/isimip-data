@@ -144,16 +144,19 @@ class Result extends Component {
             </button>
           </div>
 
-          {dataset.caveats.length > 0 && <div className="d-inline">
-            <button className="btn btn-link" onClick={this.toggleCaveats}>
-              {showCaveats && <span>
-                Caveats <FontAwesomeIcon icon={faChevronUp} />
-              </span>}
-              {!showCaveats && <span>
-                Caveats <FontAwesomeIcon icon={faChevronDown} />
-              </span>}
-            </button>
-          </div>}
+          {
+            (dataset.caveats.length > 0 || dataset.caveats_versions.length > 0) &&
+            <div className="d-inline">
+              <button className="btn btn-link" onClick={this.toggleCaveats}>
+                {showCaveats && <span>
+                  Caveats <FontAwesomeIcon icon={faChevronUp} />
+                </span>}
+                {!showCaveats && <span>
+                  Caveats <FontAwesomeIcon icon={faChevronDown} />
+                </span>}
+              </button>
+            </div>
+          }
 
           {dataset.indicators.length > 0 && <div className="d-inline">
             <button className="btn btn-link" onClick={this.toggleIndicators}>
@@ -256,33 +259,55 @@ class Result extends Component {
     )
   }
 
+  renderCaveat(caveat) {
+    return (
+      <li className="result-caveat" key={caveat.id}>
+        <div className="float-right">
+          <span className={'badge badge-pill badge-' + caveat.severity_color + ' mr-2'}>
+            {caveat.severity_display}
+          </span>
+          <span className={'badge badge-pill badge-' + caveat.status_color}>
+            {caveat.status_display}
+          </span>
+        </div>
+        <p className="mb-0">
+          <a href={caveat.url} target="_blank">{caveat.title}</a>
+          <span className="text-muted"> #{caveat.id}</span>
+        </p>
+        <p className={'mb-0 text-' + caveat.message_color}> {caveat.message_display}</p>
+      </li>
+    )
+  }
+
   renderCaveats(dataset) {
     return (
-      <li className="list-group-item">
-        <ul className="list-unstyled">
-          {
-            dataset.caveats.map(caveat => {
-              return (
-                <li className="result-caveat" key={caveat.id}>
-                  <div className="float-right">
-                    <span className={'badge badge-pill badge-' + caveat.severity_color + ' mr-2'}>
-                      {caveat.severity_display}
-                    </span>
-                    <span className={'badge badge-pill badge-' + caveat.status_color}>
-                      {caveat.status_display}
-                    </span>
-                  </div>
-                  <p className="mb-0">
-                    <a href={caveat.url} target="_blank">{caveat.title}</a>
-                    <span className="text-muted"> #{caveat.id}</span>
-                  </p>
-                  <p className={'mb-0 text-' + caveat.severity_color}> {caveat.severity_message}</p>
-                </li>
-              )
-            })
-          }
-        </ul>
-      </li>
+      <React.Fragment>
+        {
+          dataset.caveats.length > 0 &&
+          <li className="list-group-item">
+            <ul className="list-unstyled">
+              {
+                dataset.caveats.map(caveat => {
+                  return this.renderCaveat(caveat)
+                })
+              }
+            </ul>
+          </li>
+        }
+        {
+          dataset.caveats_versions.length > 0 &&
+          <li className="list-group-item">
+            <p className="mb-2 text-muted">Caveats for other versions of this dataset:</p>
+            <ul className="list-unstyled">
+              {
+                dataset.caveats_versions.map(caveat => {
+                  return this.renderCaveat(caveat)
+                })
+              }
+            </ul>
+          </li>
+        }
+      </React.Fragment>
     )
   }
 

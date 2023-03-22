@@ -60,6 +60,7 @@ class DatasetCaveatSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     severity_display = serializers.CharField(source='get_severity_display')
     status_display = serializers.CharField(source='get_status_display')
+    message_display = serializers.CharField(source='get_message_display')
 
     class Meta:
         model = Caveat
@@ -71,10 +72,12 @@ class DatasetCaveatSerializer(serializers.ModelSerializer):
             'severity_display',
             'severity_level',
             'severity_color',
-            'severity_message',
             'status',
             'status_display',
-            'status_color'
+            'status_color',
+            'message',
+            'message_display',
+            'message_color'
         )
 
     def get_url(self, obj):
@@ -180,6 +183,7 @@ class DatasetSerializer(serializers.ModelSerializer):
     links = DatasetLinkSerializer(many=True)
     resources = DatasetResourceSerializer(many=True)
     caveats = serializers.SerializerMethodField()
+    caveats_versions = serializers.SerializerMethodField()
     annotations = serializers.SerializerMethodField()
     indicators = serializers.SerializerMethodField()
     search_rank = serializers.FloatField(required=False, default=0.0)
@@ -210,6 +214,7 @@ class DatasetSerializer(serializers.ModelSerializer):
             'links',
             'resources',
             'caveats',
+            'caveats_versions',
             'annotations',
             'indicators',
             'terms_of_use',
@@ -228,6 +233,14 @@ class DatasetSerializer(serializers.ModelSerializer):
         if self.context.get('request').GET.get('caveats'):
             user = self.context['request'].user
             queryset = Caveat.objects.filter(datasets__contains=[obj.id]).public(user)
+            serializer = DatasetCaveatSerializer(queryset, many=True)
+            return serializer.data
+
+    def get_caveats_versions(self, obj):
+        if self.context.get('request').GET.get('caveats'):
+            user = self.context['request'].user
+            versions = Dataset.objects.using('metadata').filter(path=obj.path).exclude(id=obj.id)
+            queryset = Caveat.objects.filter(datasets__overlap=[version.id for version in versions]).public(user)
             serializer = DatasetCaveatSerializer(queryset, many=True)
             return serializer.data
 

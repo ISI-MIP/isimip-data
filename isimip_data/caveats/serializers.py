@@ -20,6 +20,7 @@ class CaveatSerializer(serializers.ModelSerializer):
             'updated',
             'severity',
             'status',
+            'message',
             'specifiers',
             'include',
             'exclude',

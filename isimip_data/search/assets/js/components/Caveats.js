@@ -33,6 +33,15 @@ class Caveats extends Component {
                            onClick={toggleCaveats} />
         </div>
       )
+    } else if (dataset.caveats_versions.length > 0) {
+      return (
+        <div className={'float-right text-primary'}>
+          <FontAwesomeIcon className="result-icon"
+                           title="There are caveats for other versions of this dataset."
+                           icon={faExclamationTriangle}
+                           onClick={toggleCaveats} />
+        </div>
+      )
     } else {
       return null
     }

@@ -86,10 +86,15 @@ class CaveatAdmin(admin.ModelAdmin):
     list_filter = ('severity', 'status', 'public')
     readonly_fields = ('created', 'updated', 'affected_datasets', 'affected_resources')
     exclude = ('datasets', 'figures', 'downloads')
+    filter_vertical = ('subscribers', )
 
     fieldsets = (
         (None, {
-            'fields': ('public', 'email', 'title', 'description', 'creator', 'severity', 'status', 'subscribers')
+            'fields': ('public', 'email', 'title', 'description', 'creator', 'severity', 'status', 'message')
+        }),
+        ('Subscribers', {
+            'classes': ('collapse',),
+            'fields': ('subscribers', ),
         }),
         ('Specifiers', {
             'classes': ('collapse',),

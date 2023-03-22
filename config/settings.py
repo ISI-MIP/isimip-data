@@ -196,20 +196,22 @@ if os.getenv('CACHE') == 'dummy':
         }
     }
 elif os.getenv('CACHE') == 'redis':
+    CACHE_DB = os.getenv('CACHE_DB', '1')
     CACHES = {
         "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": "redis://127.0.0.1:6379/1",
+            "BACKEND": 'django_redis.cache.RedisCache',
+            "LOCATION": f'redis://127.0.0.1:6379/{CACHE_DB}',
             "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+                "CLIENT_CLASS": 'django_redis.client.DefaultClient',
             }
         }
     }
 else:
+    CACHE_LOCATION = os.getenv('CACHE_LOCATION', 'isimip-data')
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'isimip-data'
+            'LOCATION': CACHE_LOCATION
         }
     }
 
