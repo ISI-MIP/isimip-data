@@ -1,5 +1,6 @@
 from django.db.models import Max
 from django.middleware.cache import CacheMiddleware
+from django.utils.cache import learn_cache_key, get_max_age
 
 from .models import Dataset
 
@@ -21,9 +22,17 @@ class MetadataCacheMiddleware(CacheMiddleware):
 
     def process_response(self, request, response):
         if self.result:
-            return super().process_response(request, response)
-        else:
-            return response
+            # this is a limited version of process_response in UpdateCacheMiddleware
+            # which does not set the headers to let the client cache the response as well
+            if not self._should_update_cache(request, response):
+                return response
+
+            timeout = self.cache_timeout
+            if timeout and response.status_code == 200:
+                cache_key = learn_cache_key(request, response, timeout, self.key_prefix, cache=self.cache)
+                response.add_post_render_callback(lambda r: self.cache.set(cache_key, r, timeout))
+
+        return response
 
     def check_path_info(self, path_info):
         return any(path_info.startswith(path) for path in self.paths)
