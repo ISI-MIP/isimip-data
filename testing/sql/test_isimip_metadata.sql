@@ -61,10 +61,10 @@ CREATE TABLE public.datasets (
 ALTER TABLE public.datasets OWNER TO isimip_metadata;
 
 --
--- Name: attributes; Type: MATERIALIZED VIEW; Schema: public; Owner: isimip_metadata
+-- Name: identifiers; Type: MATERIALIZED VIEW; Schema: public; Owner: isimip_metadata
 --
 
-CREATE MATERIALIZED VIEW public.attributes AS
+CREATE MATERIALIZED VIEW public.identifiers AS
  SELECT specifiers.key AS identifier,
     array_agg(DISTINCT specifiers.value) AS specifiers
    FROM public.datasets,
@@ -74,7 +74,7 @@ CREATE MATERIALIZED VIEW public.attributes AS
   WITH NO DATA;
 
 
-ALTER TABLE public.attributes OWNER TO isimip_metadata;
+ALTER TABLE public.identifiers OWNER TO isimip_metadata;
 
 --
 -- Name: files; Type: TABLE; Schema: public; Owner: isimip_metadata
@@ -261,7 +261,7 @@ ALTER TABLE ONLY public.trees
 -- Name: attributes_identifier_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
 --
 
-CREATE INDEX attributes_identifier_idx ON public.attributes USING btree (identifier);
+CREATE INDEX identifiers_identifier_idx ON public.identifiers USING btree (identifier);
 
 
 --
@@ -389,10 +389,10 @@ ALTER TABLE ONLY public.resources_datasets
 
 
 --
--- Name: attributes; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: isimip_metadata
+-- Name: identifiers; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: isimip_metadata
 --
 
-REFRESH MATERIALIZED VIEW public.attributes;
+REFRESH MATERIALIZED VIEW public.identifiers;
 
 
 --

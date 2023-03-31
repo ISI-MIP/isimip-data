@@ -25,5 +25,7 @@ def test_query_datasets_before(db):
 
 
 def test_format_affected_datasets(db):
-    affected_datasets = format_affected_datasets(Dataset.objects.filter(specifiers__contains={'model': 'model'}))
+    affected_datasets = format_affected_datasets(
+        Dataset.objects.using('metadata').filter(specifiers__contains={'model': 'model'})
+    )
     assert len(re.findall(r'<br>', affected_datasets)) == 1

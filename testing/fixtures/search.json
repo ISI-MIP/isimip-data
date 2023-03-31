@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
       "title": "Simulation round",
-      "attribute": "simulation_round",
+      "identifier": "simulation_round",
       "order": 1
     }
   },
@@ -13,7 +13,7 @@
     "pk": 2,
     "fields": {
       "title": "Product",
-      "attribute": "product",
+      "identifier": "product",
       "order": 2
     }
   },
@@ -22,7 +22,7 @@
     "pk": 3,
     "fields": {
       "title": "Sector",
-      "attribute": "sector",
+      "identifier": "sector",
       "order": 3
     }
   },
@@ -31,7 +31,7 @@
     "pk": 4,
     "fields": {
       "title": "Impact model",
-      "attribute": "model",
+      "identifier": "model",
       "order": 4
     }
   }
