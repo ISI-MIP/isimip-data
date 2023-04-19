@@ -76,11 +76,12 @@ class Facet extends Component {
   }
 
   renderTooltip(properties) {
-    if (properties && (properties.long_name || properties.description)) {
+    if (properties && (properties.long_name || properties.description || properties.warning)) {
       return (
         <Tooltip>
           {properties.long_name}
-          {properties.description}
+          {properties.description && (<p>{properties.description}</p>)}
+          {properties.warning && (<p>Warning: {properties.warning}</p>)}
         </Tooltip>
       )
     }
