@@ -27,7 +27,8 @@ class Dataset(models.Model):
     specifiers = models.JSONField()
     rights = models.TextField()
     identifiers = ArrayField(models.TextField())
-    public = models.BooleanField(null=True)
+    public = models.BooleanField()
+    restricted = models.BooleanField()
     tree_path = models.TextField()
 
     created = models.DateTimeField()

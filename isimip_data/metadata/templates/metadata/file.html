@@ -38,6 +38,17 @@
 
             {% if file.dataset.public %}
 
+            {% if file.dataset.restricted %}
+            <h3>{% trans 'Restricted' %}</h3>
+            <div class="card">
+                <div class="card-body">
+                    <p>
+                        Access to this file is restricted. Please contact support if you need this version of the file.
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+
             <h3>{% trans 'Download' %}</h3>
             <div class="card">
                 <ul class="list-group list-group-flush">

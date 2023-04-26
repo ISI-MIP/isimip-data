@@ -133,6 +133,14 @@ class Badges extends Component {
             </OverlayTrigger>
           }
 
+          {dataset.public && dataset.restricted &&
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>Access to this dataset is restricted. Please contact support if you need this version of the dataset.</Tooltip>}>
+              <span className="badge badge-danger">
+                Restricted
+              </span>
+            </OverlayTrigger>
+          }
+
           <OverlayTrigger placement="bottom" overlay={<Tooltip>The version for this dataset (YYYYMMDD).</Tooltip>}>
             <span className="badge badge-dark">
               {dataset.version}

@@ -204,6 +204,7 @@ class DatasetSerializer(serializers.ModelSerializer):
             'identifiers',
             'search_rank',
             'public',
+            'restricted',
             'merged_specifiers',
             'pretty_specifiers',
             'url',
