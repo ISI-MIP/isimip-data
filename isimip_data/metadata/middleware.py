@@ -41,8 +41,15 @@ class MetadataCacheMiddleware(CacheMiddleware):
         # get the cache_timestamp from the cache
         cache_timestamp = self.cache.get('timestamp')
 
-        # get the latest timestamp from the datasets table
+        # get the latest timestamp from the datasets and resources table
         timestamp_values = [
+            value for value in Dataset.objects.using('metadata').aggregate(
+                Max('created'),
+                Max('updated'),
+                Max('published'),
+                Max('archived')
+            ).values() if value is not None
+        ] + [
             value for value in Dataset.objects.using('metadata').aggregate(
                 Max('created'),
                 Max('updated'),
