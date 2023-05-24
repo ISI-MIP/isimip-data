@@ -2,7 +2,7 @@ from django.db.models import Max
 from django.middleware.cache import CacheMiddleware
 from django.utils.cache import learn_cache_key, get_max_age
 
-from .models import Dataset
+from .models import Dataset, Resource
 
 
 class MetadataCacheMiddleware(CacheMiddleware):
@@ -50,11 +50,9 @@ class MetadataCacheMiddleware(CacheMiddleware):
                 Max('archived')
             ).values() if value is not None
         ] + [
-            value for value in Dataset.objects.using('metadata').aggregate(
+            value for value in Resource.objects.using('metadata').aggregate(
                 Max('created'),
-                Max('updated'),
-                Max('published'),
-                Max('archived')
+                Max('updated')
             ).values() if value is not None
         ]
         timestamp = max(timestamp_values) if timestamp_values else None
