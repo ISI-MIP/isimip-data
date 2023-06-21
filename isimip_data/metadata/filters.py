@@ -1,4 +1,5 @@
 import logging
+import re
 
 from django.contrib.postgres.search import SearchQuery
 from django.core.exceptions import FieldError
@@ -9,6 +10,8 @@ from rest_framework.filters import BaseFilterBackend
 from isimip_data.metadata.models import Identifier
 
 logger = logging.getLogger(__name__)
+
+search_terms_split_pattern = re.compile(r'[\/\_\-\s]')
 
 
 class IdFilterBackend(BaseFilterBackend):
@@ -59,38 +62,27 @@ class SearchFilterBackend(BaseFilterBackend):
         if view.detail:
             return queryset
 
-        # this is the compicated part, we emply full text search here
+        # this is the compicated part, we use full text search here
         # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/search/
         # and http://rachbelaid.com/postgres-full-text-search-is-good-enough/
         query = request.GET.get('query')
         if query:
             # first, split the search string whitespace into words
-            search_strings = query.split()
+            # search_strings = query.replace('/', ' ').replace('_', ' ').replace('-', ' ').split()
+            search_strings = search_terms_split_pattern.split(query.strip())
 
-            # create a Q object for all AND queries
-            q = Q()
+            # next, join the search_strings for the different search_words with an AND
+            search_string = ' & '.join(search_strings)
+            logger.debug('search_string = %s', search_string)
 
-            for search_string in search_strings:
-                logger.debug('search_string = %s', search_string)
+            # get the search_query
+            search_query = SearchQuery(search_string, search_type='raw')
 
-                # create a Q object for all AND queries
-                qq = Q()
-
-                # get the search_query
-                search_query = SearchQuery(search_string, search_type='raw')
-
-                # perform a full text search on the search_vector field
-                try:
-                    qq |= Q(search__vector=search_query)
-                except FieldError:
-                    qq |= Q(dataset__search__vector=search_query)
-
-                # perform a search on the path
-                qq |= Q(path__icontains=search_string)
-
-                q &= qq
-
-            queryset = queryset.filter(q)
+            # last, perform a full text search on the search_vector field
+            try:
+                queryset = queryset.filter(search__vector=search_query)
+            except FieldError:
+                queryset = queryset.filter(dataset__search__vector=search_query)
 
         return queryset
 
