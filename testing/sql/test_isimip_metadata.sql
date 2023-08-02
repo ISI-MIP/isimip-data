@@ -49,6 +49,7 @@ CREATE TABLE public.datasets (
     identifiers text[] NOT NULL,
     search_vector tsvector NOT NULL,
     public boolean NOT NULL,
+    restricted boolean NOT NULL default false,
     tree_path text,
     rights text,
     created timestamp without time zone,
