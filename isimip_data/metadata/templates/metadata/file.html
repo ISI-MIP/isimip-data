@@ -22,7 +22,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h3>{% trans 'Cite as' %}</h3>
-            {% include 'metadata/cards/citation.html' with resource=file.dataset.resources.last citation_footer=True %}
+            {% include 'metadata/cards/citation.html' with resource=file.dataset.current_resource citation_footer=True %}
 
             <h3>{% trans 'Properties' %}</h3>
             {% include 'metadata/cards/properties.html' with obj=file %}

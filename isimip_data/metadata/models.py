@@ -85,6 +85,10 @@ class Dataset(models.Model):
         return get_terms_of_use()
 
     @cached_property
+    def current_resource(self):
+        return self.resources.order_by('doi').last()
+
+    @cached_property
     def json_ld(self):
         data = {
             '@context': 'https://schema.org/',
