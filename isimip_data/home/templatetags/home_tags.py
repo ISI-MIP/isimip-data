@@ -6,16 +6,14 @@ register = template.Library()
 
 
 @register.inclusion_tag('home/tags/home_list.html')
-def home_list(product, key):
+def home_list(product, category_sector_publication):
     return {
-        'links': get_home_links(product, key),
-        'inline': False
+        'links': get_home_links(product, category_sector_publication)
     }
 
 
-@register.inclusion_tag('home/tags/home_list.html')
-def home_inline_list(product, key):
+@register.inclusion_tag('home/tags/home_inline_list.html')
+def home_inline_list(product, category_sector_publication):
     return {
-        'links': get_home_links(product, key),
-        'inline': True
+        'links': get_home_links(product, category_sector_publication)
     }

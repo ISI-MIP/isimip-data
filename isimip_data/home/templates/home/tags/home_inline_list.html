@@ -1,0 +1,3 @@
+{% for text, href in links %}
+<a class="badge badge-light" href="{{ href }}">{{ text }}</a>{% if forloop.revcounter0 == 1 %}, and{% elif forloop.revcounter > 1 %}, {% endif %}
+{% endfor %}
