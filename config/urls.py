@@ -100,7 +100,7 @@ urlpatterns = [
     path('indicators/', indicators, name='indicators'),
     path('indicators/<int:pk>/', indicator, name='indicator'),
 
-    path('', TemplateView.as_view(template_name='core/home.html'), name='home'),
+    path('', TemplateView.as_view(template_name='home/home.html'), name='home'),
     path('robots.txt', TemplateView.as_view(template_name='core/robots.txt'), name='robots.txt'),
 
     path('sitemap.xml', sitemaps_views.index, {'sitemaps': sitemaps}),

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'isimip_data.core',
     'isimip_data.download',
     'isimip_data.indicators',
+    'isimip_data.home',
     'isimip_data.metadata',
     'isimip_data.search',
     # 3rd party apps
@@ -182,7 +183,6 @@ SETTINGS_EXPORT = [
     'TERMS_OF_USE_URL',
     'LOGIN_URL',
     'LOGOUT_URL',
-    'HOME',
     'CAVEATS_MAX_DATASETS',
     'METADATA_RESOURCE_MAX_DATASETS',
 ]
@@ -241,23 +241,6 @@ NAVIGATION = [
         'href': TERMS_OF_USE_URL
     }
 ]
-
-HOME = {
-    'climate': ['ISIMIP2a', 'ISIMIP2b', 'ISIMIP3a', 'ISIMIP3b'],
-    'socioeconomic': ['ISIMIP2a', 'ISIMIP2b', 'ISIMIP3a', 'ISIMIP3b'],
-    'geo_conditions': ['ISIMIP2a', 'ISIMIP2b', 'ISIMIP3a', 'ISIMIP3b'],
-    'agriculture': ['ISIMIP2a', 'ISIMIP2b'],
-    'biodiversity': ['ISIMIP2a', 'ISIMIP2b'],
-    'biomes': ['ISIMIP2a', 'ISIMIP2b', 'ISIMIP3a'],
-    'fire': ['ISIMIP3a'],
-    'lakes_global': ['ISIMIP2a', 'ISIMIP2b'],
-    'lakes_local': ['ISIMIP2a', 'ISIMIP2b'],
-    'marine-fishery_global': ['ISIMIP3b', 'ISIMIP3b'],
-    'marine-fishery_regional': ['ISIMIP3b'],
-    'permafrost': ['ISIMIP2a', 'ISIMIP2b'],
-    'water_global': ['ISIMIP2a', 'ISIMIP2b', 'ISIMIP3b'],
-    'water_regional': ['ISIMIP2a', 'ISIMIP2b']
-}
 
 FILES_BASE_URL = os.getenv('FILES_BASE_URL')
 FILES_API_URL = os.getenv('FILES_API_URL')

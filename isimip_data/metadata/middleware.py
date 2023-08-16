@@ -1,3 +1,5 @@
+import re
+
 from django.db.models import Max
 from django.middleware.cache import CacheMiddleware
 from django.utils.cache import learn_cache_key, get_max_age
@@ -7,9 +9,10 @@ from .models import Dataset, Resource
 
 class MetadataCacheMiddleware(CacheMiddleware):
 
-    paths = (
-        '/api/v1/datasets/',
-        '/api/v1/files/'
+    path_patterns = (
+        re.compile(r'^/$'),
+        re.compile(r'^/api/v1/datasets/'),
+        re.compile(r'^/api/v1/files/')
     )
 
     def process_request(self, request):
@@ -35,7 +38,7 @@ class MetadataCacheMiddleware(CacheMiddleware):
         return response
 
     def check_path_info(self, path_info):
-        return any(path_info.startswith(path) for path in self.paths)
+        return any(pattern.search(path_info) for pattern in self.path_patterns)
 
     def update_cache(self):
         # get the cache_timestamp from the cache
