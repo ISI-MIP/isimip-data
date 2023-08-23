@@ -1,5 +1,5 @@
 from isimip_data.metadata.models import (Dataset, File, Identifier, Resource,
-                                         Tree, Word)
+                                         Tree, Specifier)
 
 
 def test_identifier_str(db, client):
@@ -32,6 +32,6 @@ def test_tree_str(db, client):
     assert str(tree) == str(tree.id)
 
 
-def test_word_str(db, client):
-    word = Word.objects.using('metadata').first()
-    assert str(word) == word.word
+def test_specifier_str(db, client):
+    specifier = Specifier.objects.using('metadata').first()
+    assert str(specifier) == specifier.specifier

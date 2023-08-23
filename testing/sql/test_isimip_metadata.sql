@@ -69,7 +69,7 @@ CREATE MATERIALIZED VIEW public.identifiers AS
  SELECT specifiers.key AS identifier,
     array_agg(DISTINCT specifiers.value) AS specifiers
    FROM public.datasets,
-    LATERAL jsonb_each(datasets.specifiers) specifiers(key, value)
+    LATERAL jsonb_each_text(datasets.specifiers) specifiers(key, value)
   GROUP BY specifiers.key
   ORDER BY specifiers.key
   WITH NO DATA;
@@ -147,16 +147,18 @@ CREATE TABLE public.trees (
 ALTER TABLE public.trees OWNER TO isimip_metadata;
 
 --
--- Name: words; Type: MATERIALIZED VIEW; Schema: public; Owner: isimip_metadata
+-- Name: specifiers; Type: MATERIALIZED VIEW; Schema: public; Owner: jochen
 --
 
-CREATE MATERIALIZED VIEW public.words AS
- SELECT ts_stat.word
-   FROM ts_stat('SELECT search_vector FROM public.datasets'::text) ts_stat(word, ndoc, nentry)
+CREATE MATERIALIZED VIEW public.specifiers AS
+ SELECT DISTINCT specifiers.value AS specifier
+   FROM public.datasets,
+    LATERAL jsonb_each_text(datasets.specifiers) specifiers(key, value)
+  ORDER BY specifiers.value
   WITH NO DATA;
 
 
-ALTER TABLE public.words OWNER TO isimip_metadata;
+ALTER TABLE public.specifiers OWNER TO jochen;
 
 --
 -- Data for Name: datasets; Type: TABLE DATA; Schema: public; Owner: isimip_metadata
@@ -343,10 +345,10 @@ CREATE INDEX ix_resources_paths ON public.resources USING btree (paths);
 
 
 --
--- Name: words_word_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: specifiers_specifier_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
 --
 
-CREATE INDEX words_word_idx ON public.words USING gin (word public.gin_trgm_ops);
+CREATE INDEX specifiers_specifier_idx ON public.specifiers USING gin (specifier public.gin_trgm_ops);
 
 
 --
@@ -397,10 +399,10 @@ REFRESH MATERIALIZED VIEW public.identifiers;
 
 
 --
--- Name: words; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: isimip_metadata
+-- Name: specifiers; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: isimip_metadata
 --
 
-REFRESH MATERIALIZED VIEW public.words;
+REFRESH MATERIALIZED VIEW public.specifiers;
 
 
 --

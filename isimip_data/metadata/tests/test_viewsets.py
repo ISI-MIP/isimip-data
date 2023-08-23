@@ -18,6 +18,18 @@ def test_dataset_list_identifier_filter(db, client):
     assert response.status_code == 200
 
 
+def test_dataset_suggestions(db, client):
+    response = client.get(reverse('dataset-suggestions') + '?query=roun%20madel')
+    assert response.status_code == 200
+    assert response.json() == ['round model']
+
+
+def test_dataset_suggestions_empty(db, client):
+    response = client.get(reverse('dataset-suggestions'))
+    assert response.status_code == 200
+    assert response.json() == []
+
+
 def test_dataset_histogram(db, client):
     identifier = Identifier.objects.using('metadata').first()
     response = client.get(reverse('dataset-histogram', args=[identifier.identifier]))
