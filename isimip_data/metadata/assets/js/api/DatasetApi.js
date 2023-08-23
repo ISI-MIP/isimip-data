@@ -13,6 +13,16 @@ class DatasetApi {
     })
   }
 
+  static fetchDatasetSuggestions(params, fetchParams = {}) {
+    return fetch('/api/v1/datasets/suggestions/?' + encodeParams(params), fetchParams).then(response => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        throw new Error(response.statusText)
+      }
+    })
+  }
+
   static fetchDatasetsHistogram(identifier, urlParams, fetchParams = {}) {
     return fetch('/api/v1/datasets/histogram/' + identifier + '/?' + encodeParams(urlParams), fetchParams)
       .then(response => {

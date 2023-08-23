@@ -14,11 +14,11 @@ const updateParams = (params, key, value) => {
   }
 }
 
-const getLocationParams = (path, location, identifiers) => {
+const getLocationParams = (path, pathname, identifiers) => {
   const keys = ['page', 'tree', 'all', 'after', 'before', 'query'].concat(identifiers)
 
   // remove the base path
-  const string = location.pathname.replace(path, '')
+  const string = pathname.replace(path, '')
 
   // split into array and remove empty elements
   const tokens = string.split('/').reduce((array, currentElement) => {

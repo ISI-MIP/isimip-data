@@ -155,7 +155,7 @@ class Badges extends Component {
                 resource.is_current_version ?
                 <OverlayTrigger key={index} placement="bottom" overlay={<Tooltip>
                   <p className="mb-1">The dataset can be cited using a Digital Object Identifier (DOI):</p>
-                  <p class="font-italic">{resource.citation}.</p>
+                  <p className="font-italic">{resource.citation}.</p>
                 </Tooltip>}>
                   <a className="badge badge-light" href={resource.doi_url} target="_blank">
                     {resource.doi_url}

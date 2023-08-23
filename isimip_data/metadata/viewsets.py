@@ -54,7 +54,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     identifier_filter_exclude = None
 
     @action(detail=False)
-    def similarity(self, request):
+    def suggestions(self, request):
         query = request.GET.get('query')
         if query:
             query_strings = split_query_string(query)

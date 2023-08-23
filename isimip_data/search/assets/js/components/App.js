@@ -1,7 +1,6 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import ls from 'local-storage'
-import { withRouter } from 'react-router'
 
 import { getLocationParams, getLocationString } from 'isimip_data/metadata/assets/js/utils/location'
 
@@ -38,15 +37,14 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { location } = this.props
-
     Promise.all([
       CoreApi.fetchSettings(),
       DatasetApi.fetchIdentifiers(),
       DatasetApi.fetchGlossary()
     ]).then(results => {
       const [ settings, identifiers, glossary ] = results
-      const params = Object.assign({ page: 1 }, getLocationParams('/search/', location, identifiers.map(i => i.identifier)))
+      const params = Object.assign({ page: 1 }, getLocationParams('/search/', window.location.pathname,
+                                                                  identifiers.map(i => i.identifier)))
       this.setState({ params, identifiers, glossary, settings })
     })
 
@@ -55,6 +53,13 @@ class App extends Component {
       sidebar = 'tree'
     }
     this.handleSidebarChange(sidebar)
+
+    window.addEventListener('popstate', () => {
+      const { identifiers } = this.state
+      const params = Object.assign({ page: 1 }, getLocationParams('/search/', window.location.pathname,
+                                                                  identifiers.map(i => i.identifier)))
+      this.setState({ params })
+    })
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -65,10 +70,11 @@ class App extends Component {
   }
 
   setLocation() {
-    const { history } = this.props
     const { params } = this.state
-
-    history.push(getLocationString('/search/', params))
+    const pathname = getLocationString('/search/', params)
+    if (pathname != window.location.pathname) {
+      history.pushState(null, null, pathname)
+    }
   }
 
   handleReset() {
@@ -176,6 +182,7 @@ class App extends Component {
           <Results params={params}
                    pageSize={pageSize}
                    glossary={glossary}
+                   onSearch={this.handleSearch}
                    onParamsRemove={this.handleParamsRemove}
                    onLoadMore={this.handleLoadMore} />
         </div>
@@ -184,4 +191,4 @@ class App extends Component {
   }
 }
 
-export default withRouter(App)
+export default App

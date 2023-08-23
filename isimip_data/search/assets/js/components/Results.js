@@ -8,6 +8,7 @@ import Params from './Params'
 import Result from './Result'
 import Selection from './Selection'
 import LoadMore from './LoadMore'
+import Suggestions from './Suggestions'
 
 
 class Results extends Component {
@@ -19,7 +20,8 @@ class Results extends Component {
       loadMore: false,
       results: [],
       selected: [],
-      count: 0,
+      count: -1,
+      suggestions: null
     }
     this.handleLoadMore = this.handleLoadMore.bind(this)
     this.handleSelection = this.handleSelection.bind(this)
@@ -61,7 +63,16 @@ class Results extends Component {
         isLoading: false,
         loadMore: data.next ? true: false,
         count: data.count,
-        results: (params.page == 1) ? data.results : this.state.results.concat(data.results)
+        results: (params.page == 1) ? data.results : this.state.results.concat(data.results),
+        suggestions: null
+      }, () => {
+        if (data.count == 0) {
+          DatasetApi.fetchDatasetSuggestions(params).then(data => {
+            this.setState({
+              suggestions: data
+            })
+          })
+        }
       })
     })
   }
@@ -122,13 +133,14 @@ class Results extends Component {
   }
 
   render() {
-    const { params, glossary, onVersionChange, onParamsRemove } = this.props
-    const { isLoading, loadMore, results, selected, count } = this.state
+    const { params, glossary, onSearch, onVersionChange, onParamsRemove } = this.props
+    const { isLoading, loadMore, results, selected, count, suggestions } = this.state
 
     return (
       <div className="results">
         <Selection selected={selected} count={count} isLoading={isLoading} onReset={this.handleSelectionReset} />
         <Params params={params} count={count} onRemove={onParamsRemove} />
+        <Suggestions count={count} suggestions={suggestions} onClick={onSearch} />
         {
           results.map(dataset => {
             return <Result key={dataset.id} dataset={dataset} glossary={glossary}
@@ -145,6 +157,7 @@ Results.propTypes = {
   params: PropTypes.object.isRequired,
   pageSize: PropTypes.number.isRequired,
   glossary: PropTypes.object.isRequired,
+  onSearch: PropTypes.func.isRequired,
   onParamsRemove: PropTypes.func.isRequired,
   onLoadMore: PropTypes.func.isRequired
 }

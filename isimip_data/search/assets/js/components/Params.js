@@ -49,7 +49,7 @@ class Params extends Component {
     return (
       <div className="card params">
         <div className="card-body">
-          <div className=" mb-2">
+          <div>
             <div className="d-inline">
               <strong>Search constraints</strong>
             </div>
@@ -67,24 +67,24 @@ class Params extends Component {
             }
           </div>
 
-          <div className="float-md-right">
-            {count > 0 &&
-            <div className="d-sm-inline-block mb-2 mb-md-0">
-              <a href={`/api/v1/datasets/filelist/?${encodeParams(params)}`}
-                 title="Download file list for this search.">
-                Download file list
-              </a>
-            </div>
-            }
-            {count > 0 && count < 10 &&
-              <div className="d-sm-inline-block ml-2 mb-2 mb-md-0">
-                <button className="btn btn-link" onClick={e => this.handleDownload(e, params)}
-                   title="Download all files for this search at once.">
-                  Download all files
-                </button>
+          {
+            count > 0 && <div className="float-md-right mt-2">
+              <div className="d-sm-inline-block mb-2 mb-md-0">
+                <a href={`/api/v1/datasets/filelist/?${encodeParams(params)}`}
+                   title="Download file list for this search.">
+                  Download file list
+                </a>
               </div>
-            }
-          </div>
+              {
+                count < 10 && <div className="d-sm-inline-block ml-2 mb-2 mb-md-0">
+                  <button className="btn btn-link" onClick={e => this.handleDownload(e, params)}
+                     title="Download all files for this search at once.">
+                    Download all files
+                  </button>
+                </div>
+              }
+            </div>
+          }
         </div>
       </div>
     )
