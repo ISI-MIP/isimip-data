@@ -85,25 +85,25 @@
             display: flex;
         }
     }
+
+    @include media-breakpoint-only(md) {
+        p:first-child,
+        ul {
+            display: none;
+        }
+    }
+
+    @include media-breakpoint-only(lg) {
+        p:first-child,
+        ul {
+            display: none;
+        }
+    }
 }
 
 .col-md-3 .home-img-wrapper ul li {
     a, a:hover, a:focus, a:visited {
         font-size: 14px;
         padding: 2px 0;
-    }
-}
-
-@include media-breakpoint-only(md) {
-    p:first-child,
-    ul {
-        display: none;
-    }
-}
-
-@include media-breakpoint-only(lg) {
-    p:first-child,
-    ul {
-        display: none;
     }
 }
