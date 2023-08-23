@@ -1,6 +1,9 @@
+from itertools import product
 from pathlib import PurePath
 
 from django.conf import settings
+
+from django.contrib.postgres.search import TrigramSimilarity
 
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -15,11 +18,11 @@ from .filters import (IdentifierFilterBackend, IdFilterBackend,
                       NameFilterBackend, PathFilterBackend,
                       SearchFilterBackend, TreeFilterBackend,
                       VersionFilterBackend)
-from .models import Dataset, File, Identifier, Resource, Tree
+from .models import Dataset, File, Identifier, Resource, Tree, Specifier
 from .serializers import (DatasetSerializer, FileSerializer,
                           IdentifierSerializer, ResourceIndexSerializer,
                           ResourceSerializer)
-from .utils import fetch_glossary
+from .utils import fetch_glossary, split_query_string
 
 
 class Pagination(PageNumberPagination):
@@ -49,6 +52,30 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         TreeFilterBackend
     )
     identifier_filter_exclude = None
+
+    @action(detail=False)
+    def similarity(self, request):
+        query = request.GET.get('query')
+        if query:
+            query_strings = split_query_string(query)
+
+            specifiers = []
+            for query_string in query_strings:
+                query_string_specifiers = \
+                    Specifier.objects.using('metadata') \
+                                     .annotate(similarity=TrigramSimilarity('specifier', query_string)) \
+                                     .filter(similarity__gt=settings.SEARCH_SIMILARITY) \
+                                     .order_by('-similarity') \
+                                     .values_list('specifier', flat=True)[:settings.SEARCH_SIMILARITY_LIMIT]
+                if query_string_specifiers:
+                    specifiers.append(query_string_specifiers)
+
+            return Response([
+                ' '.join(permutation)
+                for permutation in list(product(*specifiers))
+            ])
+        else:
+            return Response([])
 
     @action(detail=False, url_path='histogram/(?P<identifier>[A-Za-z0-9_]+)')
     def histogram(self, request, identifier):

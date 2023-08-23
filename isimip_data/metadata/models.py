@@ -392,19 +392,6 @@ class Tree(models.Model):
         return str(self.id)
 
 
-class Word(models.Model):
-
-    word = models.TextField(primary_key=True)
-
-    class Meta:
-        db_table = 'words'
-        managed = False
-        ordering = ('word', )
-
-    def __str__(self):
-        return self.word
-
-
 class Identifier(models.Model):
 
     objects = IdentifierManager()
@@ -419,6 +406,19 @@ class Identifier(models.Model):
 
     def __str__(self):
         return self.identifier
+
+
+class Specifier(models.Model):
+
+    specifier = models.TextField(primary_key=True)
+
+    class Meta:
+        db_table = 'specifiers'
+        managed = False
+        ordering = ('specifier', )
+
+    def __str__(self):
+        return self.specifier
 
 
 class Search(models.Model):

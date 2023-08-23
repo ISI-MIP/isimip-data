@@ -1,5 +1,4 @@
 import logging
-import re
 
 from django.contrib.postgres.search import SearchQuery
 from django.core.exceptions import FieldError
@@ -7,11 +6,10 @@ from django.db.models import Q
 
 from rest_framework.filters import BaseFilterBackend
 
-from isimip_data.metadata.models import Identifier
+from .models import Identifier
+from .utils import split_query_string
 
 logger = logging.getLogger(__name__)
-
-search_terms_split_pattern = re.compile(r'[\/\_\-\s]')
 
 
 class IdFilterBackend(BaseFilterBackend):
@@ -68,11 +66,10 @@ class SearchFilterBackend(BaseFilterBackend):
         query = request.GET.get('query')
         if query:
             # first, split the search string whitespace into words
-            # search_strings = query.replace('/', ' ').replace('_', ' ').replace('-', ' ').split()
-            search_strings = search_terms_split_pattern.split(query.strip())
+            query_strings = split_query_string(query)
 
             # next, join the search_strings for the different search_words with an AND
-            search_string = ' & '.join(search_strings)
+            search_string = ' & '.join(query_strings)
             logger.debug('search_string = %s', search_string)
 
             # get the search_query

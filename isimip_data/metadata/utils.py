@@ -1,3 +1,4 @@
+import re
 import json
 import logging
 from collections import OrderedDict
@@ -8,6 +9,12 @@ from django.conf import settings
 from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
+
+search_terms_split_pattern = re.compile(r'[\/\_\-\s]')
+
+
+def split_query_string(query):
+    return search_terms_split_pattern.split(query.strip())
 
 
 def fetch_json(glossary_location):
