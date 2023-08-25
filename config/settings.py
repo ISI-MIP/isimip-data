@@ -266,7 +266,7 @@ DOWNLOAD = {
     'cutout_bbox': {
         'label': 'Cut out bounding box',
         'help': 'The files are cut out using the bounding box given by you (e.g. -23.43651, 23.43651, -180, 180) and the command: <code>ncks -O -h -d lat,SOUTH,NORTH -d lon,WEST,EAST IFILE OFILE</code>.',
-        'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec', '30arcmin', '60arcmin', '120arcmin']
+        'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec', '15arcmin', '30arcmin', '60arcmin', '120arcmin']
     },
     'mask': {
         'help': 'You can also mask all data outside of a certain country, bounding box, or by applying a land-sea-mask. The compression of the NetCDF file will then reduce the file size considerably. The resulting file will still have the same dimensions and metadata as the original. The extraction is done on the server using the <a href="https://code.mpimet.mpg.de/projects/cdo/" target="_blank">CDO toolkit</a>.'
@@ -279,7 +279,7 @@ DOWNLOAD = {
     'mask_bbox': {
         'label': 'Mask by bounding box',
         'help': 'The files are masked using the bounding box given by you (e.g. -23.43651, 23.43651, -180, 180) and the command:  <code>cdo -f nc4c -z zip_5 -masklonlatbox,WEST,EAST,SOUTH,NORTH IFILE OFILE</code>.',
-        'resolutions': ['30arcmin', '60arcmin', '120arcmin']
+        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin']
     },
     'mask_landonly': {
         'label': 'Mask only land data',
@@ -297,12 +297,12 @@ DOWNLOAD = {
     'select_bbox': {
         'label': 'Select by bounding box',
         'help': 'The time series is extracted using the bounding box given by you (e.g. -23.43651, 23.43651, -180, 180) and the command: <code>cdo -s outputtab,date,value,nohead -fldmean -sellonlatbox,WEST,EAST,SOUTH,NORTH IFILE</code>.',
-        'resolutions': ['30arcmin', '60arcmin', '120arcmin']
+        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin']
     },
     'select_point': {
         'label': 'Select by point',
         'help': 'The time series is extracted by calculating the grid index for the point given by you (e.g. 52.39, 13.06) and the command: <code>cdo -s outputtab,date,value,nohead -selindexbox,IX,IX,IY,IY IFILE</code>.',
-        'resolutions': ['30arcmin', '60arcmin', '120arcmin']
+        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin']
     }
 }
 
