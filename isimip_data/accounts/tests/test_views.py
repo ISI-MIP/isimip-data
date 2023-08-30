@@ -1,7 +1,7 @@
 import pytest
 
-from django.urls import reverse
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 def test_profile_update_get(db, client):

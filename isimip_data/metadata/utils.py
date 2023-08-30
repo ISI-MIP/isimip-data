@@ -1,6 +1,6 @@
-import re
 import json
 import logging
+import re
 from collections import OrderedDict
 from urllib.parse import quote, urlparse
 from urllib.request import HTTPError, urlopen
@@ -28,13 +28,13 @@ def fetch_json(glossary_location):
                 glossary_json = json.loads(f.read())
 
     except HTTPError as e:
-        logger.error('Could not open {} ({})'.format(glossary_location, e))
-    except IOError as e:
-        logger.error('Could not open {} ({})'.format(glossary_location, e))
+        logger.error(f'Could not open {glossary_location} ({e})')
+    except OSError as e:
+        logger.error(f'Could not open {glossary_location} ({e})')
     except json.decoder.JSONDecodeError:
-        logger.error('Could not decode {}'.format(glossary_location))
-    finally:
-        return glossary_json
+        logger.error(f'Could not decode {glossary_location}')
+
+    return glossary_json
 
 
 def fetch_glossary():
@@ -68,9 +68,9 @@ def build_glossary(glossary, locations):
                                 elif isinstance(glossary[identifier][specifier][key], dict) and isinstance(value, dict):
                                     glossary[identifier][specifier][key].update(value)
             except TypeError:
-                logger.error('TypeError for {}'.format(location))
+                logger.error(f'TypeError for {location}')
             except AttributeError:
-                logger.error('AttributeError for {}'.format(location))
+                logger.error(f'AttributeError for {location}')
 
 
 def prettify_identifiers(identifiers):
@@ -137,7 +137,7 @@ def get_search_url(specifiers, identifiers):
     url = '/search/'
     for key, values in [(identifier, specifiers.get(identifier)) for identifier in identifiers]:
         for value in values:
-            url += '{}/{}/'.format(quote(key), quote(value))
+            url += f'{quote(key)}/{quote(value)}/'
     return url
 
 
@@ -149,7 +149,9 @@ def get_terms_of_use():
 
 
 def render_bibtex(resource):
-    authors = ' and '.join([creator.get('name') for creator in resource.datacite.get('creators', []) if creator.get('name')])
+    authors = ' and '.join([creator.get('name')
+                            for creator in resource.datacite.get('creators', [])
+                            if creator.get('name')])
 
     return '''
 @misc{{{doi},

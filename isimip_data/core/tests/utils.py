@@ -1,7 +1,7 @@
 from urllib.request import HTTPError
 
 
-class MockResponse(object):
+class MockResponse:
 
     def __init__(self, read_data='', http_error=False):
         self.read_data = read_data

@@ -123,7 +123,8 @@ class IdentifierFilterBackend(BaseFilterBackend):
                 q = Q()
                 for value in request.GET.getlist(identifier):
                     if value:
-                        q |= Q(specifiers__contains={identifier: value}) | Q(links__specifiers__contains={identifier: value})
+                        q |= Q(specifiers__contains={identifier: value})
+                        q |= Q(links__specifiers__contains={identifier: value})
                 queryset = queryset.filter(q)
 
         return queryset

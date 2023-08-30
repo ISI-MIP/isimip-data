@@ -1,9 +1,10 @@
 from django.conf import settings
+
 from rest_framework.mixins import ListModelMixin
 from rest_framework.viewsets import GenericViewSet
 
 from .serializers import SettingsSerializer
-from .utils import get_file_base_url, get_file_api_url
+from .utils import get_file_api_url, get_file_base_url
 
 
 class SettingsViewSet(ListModelMixin, GenericViewSet):

@@ -1,7 +1,7 @@
 Running tests
 =============
 
-First, create test database using by running the tests of the [isimip-publisher](https://github.com/ISI-MIP/isimip-publisher). 
+First, create test database using by running the tests of the [isimip-publisher](https://github.com/ISI-MIP/isimip-publisher).
 
 Alternatively the database can be recreated from the included database dump:
 

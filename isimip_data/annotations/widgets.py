@@ -30,5 +30,5 @@ class SpecifierWidget(forms.Widget):
             data = json.loads(value)
             checked = []
             for key, values in data.items():
-                checked += ['id_specifiers_{}_{}'.format(key, value) for value in values]
+                checked += [f'id_specifiers_{key}_{value}' for value in values]
             return checked

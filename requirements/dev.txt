@@ -1,8 +1,12 @@
 -r common.txt
 
 # development only dependencies in aphabetical order
-django-debug-toolbar==4.1.0
+django-debug-toolbar
+pre-commit
+ruff
+
+pytest~=7.4.0
 pytest-cov~=4.1.0
-pytest-django==4.5.2
+pytest-django~=4.5.2
 pytest-dotenv~=0.5.2
-pytest-mock==3.11.1
+pytest-mock~=3.11.1

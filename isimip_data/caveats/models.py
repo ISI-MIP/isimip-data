@@ -187,10 +187,10 @@ class Comment(models.Model):
         ordering = ('created', )
 
     def __str__(self):
-        return '{} {} {}'.format(self.caveat, self.creator, self.created)
+        return f'{self.caveat} {self.creator} {self.created}'
 
     def get_creator_display(self):
         return get_full_name(self.creator)
 
     def get_absolute_url(self):
-        return reverse('caveat', args=[self.caveat.id]) + '#comment-{}'.format(self.id)
+        return reverse('caveat', args=[self.caveat.id]) + f'#comment-{self.id}'

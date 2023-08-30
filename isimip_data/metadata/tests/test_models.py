@@ -1,5 +1,4 @@
-from isimip_data.metadata.models import (Dataset, File, Identifier, Resource,
-                                         Tree, Specifier)
+from isimip_data.metadata.models import Dataset, File, Identifier, Resource, Specifier, Tree
 
 
 def test_identifier_str(db, client):

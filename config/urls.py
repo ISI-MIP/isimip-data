@@ -8,25 +8,42 @@ from django.views.generic.base import TemplateView
 
 from rest_framework import routers
 
-from isimip_data.accounts.views import (profile_delete, profile_delete_success,
-                                        profile_update)
+from isimip_data.accounts.views import profile_delete, profile_delete_success, profile_update
 from isimip_data.caveats.sitemaps import CaveatSitemap
-from isimip_data.caveats.views import (caveat, caveat_create, caveat_subscribe,
-                                       caveat_unsubscribe, caveats,
-                                       comment_create, subscriptions)
+from isimip_data.caveats.views import (
+    caveat,
+    caveat_create,
+    caveat_subscribe,
+    caveat_unsubscribe,
+    caveats,
+    comment_create,
+    subscriptions,
+)
 from isimip_data.caveats.viewsets import CaveatViewSet
 from isimip_data.core.viewsets import SettingsViewSet
 from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
 from isimip_data.indicators.views import indicator, indicators
-from isimip_data.metadata.sitemaps import (DatasetSitemap, FileSitemap,
-                                           ResourceSitemap)
-from isimip_data.metadata.views import (dataset, file, identifiers, metadata,
-                                        resource, resource_bibtex,
-                                        resource_json, resource_xml, resources)
-from isimip_data.metadata.viewsets import (DatasetViewSet, FileViewSet,
-                                           GlossaryViewSet, IdentifierViewSet,
-                                           ResourceViewSet, TreeViewSet)
+from isimip_data.metadata.sitemaps import DatasetSitemap, FileSitemap, ResourceSitemap
+from isimip_data.metadata.views import (
+    dataset,
+    file,
+    identifiers,
+    metadata,
+    resource,
+    resource_bibtex,
+    resource_json,
+    resource_xml,
+    resources,
+)
+from isimip_data.metadata.viewsets import (
+    DatasetViewSet,
+    FileViewSet,
+    GlossaryViewSet,
+    IdentifierViewSet,
+    ResourceViewSet,
+    TreeViewSet,
+)
 from isimip_data.search.views import search
 from isimip_data.search.viewsets import FacetViewSet
 
@@ -117,4 +134,6 @@ if settings.DEBUG_TOOLBAR:
     import debug_toolbar
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+        *urlpatterns,
+        *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ]

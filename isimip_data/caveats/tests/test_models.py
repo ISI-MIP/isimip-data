@@ -1,4 +1,4 @@
-from isimip_data.caveats.models import Comment, Caveat
+from isimip_data.caveats.models import Caveat, Comment
 
 
 def test_caveat_str(db):
@@ -7,4 +7,4 @@ def test_caveat_str(db):
 
 def test_comment_str(db):
     comment = Comment.objects.first()
-    assert str(comment) == '{} {} {}'.format(comment.caveat, comment.creator, comment.created)
+    assert str(comment) == f'{comment.caveat} {comment.creator} {comment.created}'

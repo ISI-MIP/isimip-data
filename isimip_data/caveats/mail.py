@@ -14,7 +14,7 @@ def send_caveat_notifications_mail(request, caveat):
         'site': Site.objects.get_current()
     }
 
-    from_email = '{} <{}>'.format(caveat.get_creator_display(), settings.DEFAULT_FROM_EMAIL)
+    from_email = f'{caveat.get_creator_display()} <{settings.DEFAULT_FROM_EMAIL}>'
     subject = render_to_string('caveats/email/caveat_notification_subject.txt', context, request=request)
     message = render_to_string('caveats/email/caveat_notification_message.txt', context, request=request)
 
@@ -49,7 +49,7 @@ def send_comment_notifications_mail(request, comment):
         'site': Site.objects.get_current()
     }
 
-    from_email = '{} <{}>'.format(comment.get_creator_display(), settings.DEFAULT_FROM_EMAIL)
+    from_email = f'{comment.get_creator_display()} <{settings.DEFAULT_FROM_EMAIL}>'
     subject = render_to_string('caveats/email/comment_notification_subject.txt', context, request=request)
     message = render_to_string('caveats/email/comment_notification_message.txt', context, request=request)
 

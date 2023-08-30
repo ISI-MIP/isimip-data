@@ -54,7 +54,7 @@ def format_affected_datasets(dataset_ids):
 
     count = len(dataset_ids)
     if count > settings.CAVEATS_MAX_DATASETS:
-        lines += mark_safe('<br>&#8230;<br><br>({} datasets are affected by this caveat)'.format(count))
+        lines += mark_safe(f'<br>&#8230;<br><br>({count} datasets are affected by this caveat)')
 
     return lines
 

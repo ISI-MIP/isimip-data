@@ -7,11 +7,11 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import resolve
 from django.utils.translation import gettext as _
+
 from isimip_data.metadata.models import Dataset
 
 from .forms import CaveatForm, CommentForm
-from .mail import (send_caveat_notifications_mail,
-                   send_comment_notifications_mail)
+from .mail import send_caveat_notifications_mail, send_comment_notifications_mail
 from .models import Caveat
 
 

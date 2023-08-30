@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.urls import reverse
 
 from isimip_data.metadata.models import Dataset, File, Resource
@@ -14,7 +13,7 @@ def test_metadata_dataset(db, client):
     url = reverse('metadata') + '?query=' + str(dataset.id)
     response = client.get(url)
     assert response.status_code == 302
-    assert response.url == '/datasets/{}/'.format(dataset.id)
+    assert response.url == f'/datasets/{dataset.id}/'
 
 
 def test_metadata_file(db, client):
@@ -22,7 +21,7 @@ def test_metadata_file(db, client):
     url = reverse('metadata') + '?query=' + str(file.id)
     response = client.get(url)
     assert response.status_code == 302
-    assert response.url == '/files/{}/'.format(file.id)
+    assert response.url == f'/files/{file.id}/'
 
 
 def test_metadata_not_found(db, client):

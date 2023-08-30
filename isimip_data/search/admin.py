@@ -2,6 +2,7 @@ from django import forms
 from django.contrib import admin
 
 from adminsortable2.admin import SortableAdminMixin
+
 from isimip_data.metadata.models import Identifier
 
 from .models import Facet

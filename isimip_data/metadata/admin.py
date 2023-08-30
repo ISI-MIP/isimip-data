@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 from .models import Dataset, File, Resource
 
 
-class ReadOnlyMixin(object):
+class ReadOnlyMixin:
     def has_add_permission(self, request, obj=None):
         return False
 
@@ -37,7 +37,7 @@ class DatasetAdmin(ReadOnlyMixin, admin.ModelAdmin):
 
     def specifiers_json(self, instance):
         lines = [
-            textwrap.fill(l, 80) for l in json.dumps(instance.specifiers, indent=2).splitlines()
+            textwrap.fill(line, 80) for line in json.dumps(instance.specifiers, indent=2).splitlines()
         ]
         return mark_safe('<pre>%s</pre>' % '\n'.join(lines))
 
@@ -59,13 +59,13 @@ class FilesAdmin(ReadOnlyMixin, admin.ModelAdmin):
 
     def specifiers_json(self, instance):
         lines = [
-            textwrap.fill(l, 80) for l in json.dumps(instance.specifiers, indent=2).splitlines()
+            textwrap.fill(line, 80) for line in json.dumps(instance.specifiers, indent=2).splitlines()
         ]
         return mark_safe('<pre>%s</pre>' % '\n'.join(lines))
 
     def netcdf_header_json(self, instance):
         lines = [
-            textwrap.fill(l, 80) for l in json.dumps(instance.netcdf_header, indent=2).splitlines()
+            textwrap.fill(line, 80) for line in json.dumps(instance.netcdf_header, indent=2).splitlines()
         ]
         return mark_safe('<pre>%s</pre>' % '\n'.join(lines))
 
@@ -82,7 +82,7 @@ class ResourceAdmin(ReadOnlyMixin, admin.ModelAdmin):
 
     def datacite_json(self, instance):
         lines = [
-            textwrap.fill(l, 80) for l in json.dumps(instance.datacite, indent=2).splitlines()
+            textwrap.fill(line, 80) for line in json.dumps(instance.datacite, indent=2).splitlines()
         ]
         return mark_safe('<pre>%s</pre>' % '\n'.join(lines))
 

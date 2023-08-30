@@ -5,8 +5,8 @@ from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
 from isimip_data.annotations.models import Download, Figure, Reference
-from isimip_data.annotations.widgets import SpecifierWidget
 from isimip_data.annotations.utils import format_affected_datasets
+from isimip_data.annotations.widgets import SpecifierWidget
 
 from .models import Indicator, IndicatorValue
 from .utils import import_indicator_values
@@ -63,7 +63,7 @@ class IndicatorAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         view = self.admin_site.admin_view(self.indicators_indicator_upload)
-        return [path('<int:pk>/upload/', view, name='indicators_indicator_upload')] + super().get_urls()
+        return [path('<int:pk>/upload/', view, name='indicators_indicator_upload'), *super().get_urls()]
 
     def indicators_indicator_upload(self, request, pk):
         indicator = get_object_or_404(Indicator, id=pk)

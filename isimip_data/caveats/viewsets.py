@@ -8,7 +8,7 @@ from isimip_data.core.utils import get_file_base_url
 from isimip_data.metadata.models import Dataset, File
 
 from .models import Caveat
-from .serializers import CaveatSerializer, CaveatIndexSerializer
+from .serializers import CaveatIndexSerializer, CaveatSerializer
 
 
 class CaveatViewSet(ReadOnlyModelViewSet):
@@ -38,7 +38,7 @@ class CaveatViewSet(ReadOnlyModelViewSet):
         ]
 
         response = Response(datasets)
-        response['Content-Disposition'] = 'attachment; filename=caveat-{}.datasets.json'.format(caveat.id)
+        response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.datasets.json'
         return response
 
     @action(detail=True, url_path='files', renderer_classes=[JSONRenderer])
@@ -57,7 +57,7 @@ class CaveatViewSet(ReadOnlyModelViewSet):
         ]
 
         response = Response(datasets)
-        response['Content-Disposition'] = 'attachment; filename=caveat-{}.files.json'.format(caveat.id)
+        response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.files.json'
         return response
 
     @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])
@@ -68,5 +68,5 @@ class CaveatViewSet(ReadOnlyModelViewSet):
             'file_base_url': get_file_base_url(request),
             'files': File.objects.using('metadata').filter(dataset__id__in=caveat.datasets)
         }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
-        response['Content-Disposition'] = 'attachment; filename=caveat-{}.txt'.format(caveat.id)
+        response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.txt'
         return response

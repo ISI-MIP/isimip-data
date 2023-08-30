@@ -9,7 +9,7 @@ def search(request, path=None):
         url = request.path.rstrip('/')
         for key in request.GET:
             for value in request.GET.getlist(key):
-                url += '/{}/{}'.format(key, value)
+                url += f'/{key}/{value}'
 
         return redirect(url)
 

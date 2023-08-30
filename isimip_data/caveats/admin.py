@@ -9,14 +9,16 @@ from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
 from isimip_data.annotations.models import Download, Figure
-from isimip_data.annotations.utils import (format_affected_datasets,
-                                           format_affected_resources)
+from isimip_data.annotations.utils import format_affected_datasets, format_affected_resources
 from isimip_data.annotations.widgets import SpecifierWidget
 from isimip_data.metadata.models import Dataset
 
-from .mail import (get_caveat_announcement_mail, get_comment_announcement_mail,
-                   send_caveat_announcement_mail,
-                   send_comment_announcement_mail)
+from .mail import (
+    get_caveat_announcement_mail,
+    get_comment_announcement_mail,
+    send_caveat_announcement_mail,
+    send_comment_announcement_mail,
+)
 from .models import Caveat, Comment
 
 
@@ -24,7 +26,10 @@ class CaveatAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['description'].help_text = 'Please describe only the initial problem. Subsequent updates should be added as comments. For the information on whether the data should be used for simulations or research, use the severity field.'
+        self.fields['description'].help_text = 'Please describe only the initial problem. Subsequent updates ' \
+                                               'should be added as comments. For the information on whether ' \
+                                               'the data should be used for simulations or research, use the ' \
+                                               'severity field.'
         self.fields['specifiers'].widget = SpecifierWidget()
         self.fields['specifiers'].required = False
 
@@ -120,7 +125,7 @@ class CaveatAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         view = self.admin_site.admin_view(self.caveats_caveat_send)
-        return [path('<int:pk>/send/', view, name='caveats_caveat_send')] + super().get_urls()
+        return [path('<int:pk>/send/', view, name='caveats_caveat_send'), *super().get_urls()]
 
     def caveats_caveat_send(self, request, pk):
         caveat = get_object_or_404(Caveat, id=pk)
@@ -167,7 +172,7 @@ class CommentAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         view = self.admin_site.admin_view(self.caveats_comment_send)
-        return [path('<int:pk>/send/', view, name='caveats_comment_send')] + super().get_urls()
+        return [path('<int:pk>/send/', view, name='caveats_comment_send'), *super().get_urls()]
 
     def caveats_comment_send(self, request, pk):
         comment = get_object_or_404(Comment, id=pk)

@@ -1,6 +1,6 @@
 import re
 
-from isimip_data.annotations.utils import query_datasets, format_affected_datasets
+from isimip_data.annotations.utils import format_affected_datasets, query_datasets
 from isimip_data.metadata.models import Dataset
 
 

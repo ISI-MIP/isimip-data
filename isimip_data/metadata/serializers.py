@@ -1,13 +1,12 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from isimip_data.annotations.models import (Annotation, Download, Figure,
-                                            Reference)
+from isimip_data.annotations.models import Annotation, Download, Figure, Reference
 from isimip_data.caveats.models import Caveat
 from isimip_data.core.utils import get_file_base_url
 from isimip_data.indicators.models import IndicatorValue
 
-from .models import Identifier, Dataset, File, Resource
+from .models import Dataset, File, Identifier, Resource
 
 
 class DatasetFileSerializer(serializers.ModelSerializer):

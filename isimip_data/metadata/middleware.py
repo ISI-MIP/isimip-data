@@ -2,7 +2,7 @@ import re
 
 from django.db.models import Max
 from django.middleware.cache import CacheMiddleware
-from django.utils.cache import learn_cache_key, get_max_age
+from django.utils.cache import learn_cache_key
 
 from .models import Dataset, Resource
 

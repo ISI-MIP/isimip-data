@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core import mail
 from django.urls import reverse
+
 from isimip_data.caveats.models import Caveat, Comment
 
 

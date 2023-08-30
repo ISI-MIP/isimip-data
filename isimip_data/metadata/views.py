@@ -68,7 +68,7 @@ def dataset(request, pk=None, path=None):
         caveats_versions = None
 
     return render(request, 'metadata/dataset.html', {
-        'title': 'Dataset {}'.format(obj.name),
+        'title': f'Dataset {obj.name}',
         'dataset': obj,
         'file_base_url': get_file_base_url(request),
         'versions': versions,
@@ -108,7 +108,7 @@ def file(request, pk=None, path=None):
         caveats_versions = None
 
     return render(request, 'metadata/file.html', {
-        'title': 'File {}'.format(obj.name),
+        'title': f'File {obj.name}',
         'file': obj,
         'file_base_url': get_file_base_url(request),
         'parents': [obj.dataset],
@@ -154,7 +154,7 @@ def resource(request, pk=None, doi=None):
     datasets = resource.datasets.prefetch_related('links').order_by('path')[:settings.METADATA_RESOURCE_MAX_DATASETS]
 
     return render(request, 'metadata/resource.html', {
-        'title': 'DOI {}'.format(resource.doi),
+        'title': f'DOI {resource.doi}',
         'resource': resource,
         'references': references,
         'caveats': caveats,
@@ -169,7 +169,7 @@ def resource_bibtex(request, doi=None):
     resource = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
     bibtex = render_bibtex(resource)
     response = HttpResponse(bibtex, content_type="application/x-bibtex")
-    response['Content-Disposition'] = 'filename="{}.bib"'.format(doi)
+    response['Content-Disposition'] = f'filename="{doi}.bib"'
     return response
 
 
@@ -177,7 +177,7 @@ def resource_xml(request, doi=None):
     resource = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
     xml_string = schema43.tostring(resource.datacite)
     response = HttpResponse(xml_string, content_type='application/xml')
-    response['Content-Disposition'] = 'filename="{}.xml"'.format(doi)
+    response['Content-Disposition'] = f'filename="{doi}.xml"'
     return response
 
 
@@ -185,7 +185,7 @@ def resource_json(request, doi=None):
     resource = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
     json_string = json.dumps(resource.datacite, indent=2)
     response = HttpResponse(json_string, content_type='application/json')
-    response['Content-Disposition'] = 'filename="{}.json"'.format(doi)
+    response['Content-Disposition'] = f'filename="{doi}.json"'
     return response
 
 

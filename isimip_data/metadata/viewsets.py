@@ -2,7 +2,6 @@ from itertools import product
 from pathlib import PurePath
 
 from django.conf import settings
-
 from django.contrib.postgres.search import TrigramSimilarity
 
 from rest_framework.decorators import action
@@ -14,14 +13,23 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 
 from isimip_data.core.utils import get_file_base_url
 
-from .filters import (IdentifierFilterBackend, IdFilterBackend,
-                      NameFilterBackend, PathFilterBackend,
-                      SearchFilterBackend, TreeFilterBackend,
-                      VersionFilterBackend)
-from .models import Dataset, File, Identifier, Resource, Tree, Specifier
-from .serializers import (DatasetSerializer, FileSerializer,
-                          IdentifierSerializer, ResourceIndexSerializer,
-                          ResourceSerializer)
+from .filters import (
+    IdentifierFilterBackend,
+    IdFilterBackend,
+    NameFilterBackend,
+    PathFilterBackend,
+    SearchFilterBackend,
+    TreeFilterBackend,
+    VersionFilterBackend,
+)
+from .models import Dataset, File, Identifier, Resource, Specifier, Tree
+from .serializers import (
+    DatasetSerializer,
+    FileSerializer,
+    IdentifierSerializer,
+    ResourceIndexSerializer,
+    ResourceSerializer,
+)
 from .utils import fetch_glossary, split_query_string
 
 
@@ -225,19 +233,19 @@ class TreeViewSet(ViewSet):
 
                 try:
                     response_node = next(item for item in current_response_list if item.get('specifier') == specifier)
-                except StopIteration:
-                    raise NotFound
+                except StopIteration as e:
+                    raise NotFound from e
 
                 if 'items' not in response_node:
                     placeholder = ', '.join(['%s' for element in current_tree_elements])
-                    raw_queryset = Tree.objects.using('metadata').raw('''
+                    raw_queryset = Tree.objects.using('metadata').raw(f'''
                         SELECT
                           id, obj.value->'identifier' as identifier, obj.value->'specifier' as specifier
                         FROM
                           trees,
-                          jsonb_extract_path(tree_dict, {}) as parent,
+                          jsonb_extract_path(tree_dict, {placeholder}) as parent,
                           jsonb_each(parent->'items')  as obj;
-                    '''.format(placeholder), current_tree_elements)
+                    ''', current_tree_elements)
 
                     response_node['items'] = [{
                         'identifier': row.identifier.strip('"'),

@@ -9,8 +9,7 @@ from django.utils.functional import cached_property
 
 from .constants import RIGHTS
 from .managers import DatasetManager, IdentifierManager
-from .utils import (get_json_ld_name, get_terms_of_use, merge_identifiers,
-                    merge_specifiers, prettify_specifiers)
+from .utils import get_json_ld_name, get_terms_of_use, merge_identifiers, merge_specifiers, prettify_specifiers
 
 
 class Dataset(models.Model):
@@ -54,7 +53,7 @@ class Dataset(models.Model):
 
     @cached_property
     def is_netcdf(self):
-        return all([Path(file.path).suffix.startswith('.nc') for file in self.files.all()])
+        return all(Path(file.path).suffix.startswith('.nc') for file in self.files.all())
 
     @cached_property
     def paths(self):
@@ -250,7 +249,8 @@ class Resource(models.Model):
 
     @cached_property
     def citation(self):
-        return f'{self.creators_str} ({self.publication_year}): {self.title_with_version}. {self.publisher}. {self.doi_url}'
+        return f'{self.creators_str} ({self.publication_year}): ' \
+               f'{self.title_with_version}. {self.publisher}. {self.doi_url}'
 
     @cached_property
     def creators_str(self):
@@ -269,7 +269,7 @@ class Resource(models.Model):
 
     @cached_property
     def doi_url(self):
-        return 'https://doi.org/{}'.format(self.doi)
+        return f'https://doi.org/{self.doi}'
 
     @cached_property
     def publisher(self):
