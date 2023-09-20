@@ -1,8 +1,10 @@
 {% extends 'core/base.html' %}
+{% load cache %}
 {% load static %}
 {% load home_tags %}
 
 {% block main %}
+{% cache settings.CACHE_MIDDLEWARE_SECONDS home %}
 
 <div class="container">
     <div class="row justify-content-sm-center text-center">
@@ -360,4 +362,5 @@
     </div>
 </div>
 
+{% endcache %}
 {% endblock %}

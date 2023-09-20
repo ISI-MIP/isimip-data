@@ -9,22 +9,31 @@ from .models import Dataset, Resource
 
 class MetadataCacheMiddleware(CacheMiddleware):
 
-    path_patterns = (
+    # paths where it only needs to be checked if the cache needs to be updated
+    update_patterns = (
         re.compile(r'^/$'),
+    )
+
+    # paths which are actually cached (completely)
+    path_patterns = (
         re.compile(r'^/api/v1/datasets/'),
         re.compile(r'^/api/v1/files/')
     )
 
     def process_request(self, request):
-        self.result = self.check_path_info(request.path_info)
-        if self.result:
+        self.update = self.check_path_info(request.path_info, self.update_patterns)
+        self.path = self.check_path_info(request.path_info, self.path_patterns)
+
+        if self.update or self.path:
             self.update_cache()
+
+        if self.path:
             return super().process_request(request)
         else:
             return None
 
     def process_response(self, request, response):
-        if self.result:
+        if self.path:
             # this is a limited version of process_response in UpdateCacheMiddleware
             # which does not set the headers to let the client cache the response as well
             if not self._should_update_cache(request, response):
@@ -37,8 +46,8 @@ class MetadataCacheMiddleware(CacheMiddleware):
 
         return response
 
-    def check_path_info(self, path_info):
-        return any(pattern.search(path_info) for pattern in self.path_patterns)
+    def check_path_info(self, path_info, patterns):
+        return any(pattern.search(path_info) for pattern in patterns)
 
     def update_cache(self):
         # get the cache_timestamp from the cache
