@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load i18n %}
 {% load static %}
+{% load metadata_tags %}
 
 {% block style %}
     {{ block.super }}
@@ -51,7 +52,7 @@
             <div class="card">
                 <div class="card-body">
                     <p>
-                        Access to this dataset is restricted. Please contact support if you need this version of the dataset.
+                        Access to this dataset is restricted. {% restricted_message dataset %}
                     </p>
                 </div>
             </div>

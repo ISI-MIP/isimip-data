@@ -339,6 +339,10 @@ DOWNLOAD = {
     }
 }
 
+RESTRICTED_MESSAGES = {}
+RESTRICTED_DEFAULT_MESSAGE = 'Please contact <a href="mailto:info@isimip.org">info@isimip.org</a>' \
+                             ' if you need access to the dataset.'
+
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'WARNING')
 LOG_DIR = os.getenv('LOG_DIR')
 if LOG_DIR:
