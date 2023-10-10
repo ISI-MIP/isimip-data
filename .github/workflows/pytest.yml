@@ -40,14 +40,10 @@ jobs:
         psql postgres://postgres:postgres_password@localhost -c 'CREATE DATABASE test_isimip_data;'
         psql postgres://postgres:postgres_password@localhost -c 'CREATE DATABASE test_isimip_metadata;'
         psql postgres://postgres:postgres_password@localhost/test_isimip_metadata -f testing/sql/test_isimip_metadata.sql
-    - name: Setup environment file
+    - name: Setup config file
       run: |
-        echo "SECRET_KEY=thisisnotaverysecretkey" >> $GITHUB_ENV
-        echo "CACHE=dummy" >> $GITHUB_ENV
-        echo "DATABASE=postgresql://postgres:postgres_password@localhost/isimip_data" >> $GITHUB_ENV
-        echo "DATABASE_METADATA=postgresql://postgres:postgres_password@localhost/isimip_metadata" >> $GITHUB_ENV
-        echo "FILES_BASE_URL=http://isimip/" >> $GITHUB_ENV
-        echo "PROTOCOL_LOCATION=testing/protocol" >> $GITHUB_ENV
+        echo "SECRET_KEY=thisisnotaverysecretkey" >> config/settings/local.py
+        echo "CACHE=dummy" >> config/settings/local.py
     - name: Run pytest
       run: |
         pytest --reuse-db --cov=isimip_data

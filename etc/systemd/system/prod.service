@@ -8,8 +8,8 @@ Group=isimip
 
 WorkingDirectory=/srv/www/prod
 
-LogsDirectory=gunicorn django
-RuntimeDirectory=gunicorn
+LogsDirectory=django/prod gunicorn/prod
+RuntimeDirectory=gunicorn/prod
 
 Environment=GUNICORN_BIN=/srv/www/prod/env/bin/gunicorn
 Environment=GUNICORN_WORKER=3
