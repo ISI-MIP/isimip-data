@@ -21,7 +21,7 @@ def get_home_links(product, category_sector_publication):
         (
             simulation_round,
             reverse('search', args=[
-                f'tree/{simulation_round}%2F{product}%2F{category_sector_publication}'
+                f'tree/{simulation_round}/{product}/{category_sector_publication}'
             ])
         )
         for simulation_round in queryset
