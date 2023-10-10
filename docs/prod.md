@@ -92,23 +92,15 @@ pip install --upgrade pip setuptools wheel
 pip install -r requirements/prod.txt
 ```
 
-Create the local configuration file `.env`:
+Create the local configuration file `config/settings/local.py`:
 
-```bash
-SECRET_KEY=<a secret random string>
-DEBUG=True
-ALLOWED_HOSTS=data.isimip.org
+```python
+DEBUG = True
+SECRET_KEY = <a secret random string>
+ALLOWED_HOSTS = data.isimip.org
 
-# database connection for the django database
-DATABASE=postgresql://<user>:<pass>@<host>/<db>
-
-# database connection for the django database
-DATABASE_METADATA=postgresql://<user>:<pass>@<host>/<db>
-
-FILES_BASE_URL=http://files.isimip.org/%(simulation_round)s/%(product)s/%(sector)s/%(model)s/
-
-LOG_LEVEL=INFO
-LOG_DIR=/var/log/django/isimip
+LOG_LEVEL = INFO
+LOG_DIR = '/var/log/django/isimip'
 ```
 
 Setup database tables and admin user:
@@ -140,42 +132,9 @@ npm install
 npm run build:prod
 ```
 
-#### Setup logs
-
-Two directories are needed to hold the log files. These can be created with `systemd-tmpfiles`. Create a file in `/etc/tempfiles.d/isimip-data.conf` with root/sudo permissions:
-
-```
-# /etc/tempfiles.d/isimip-data.conf
-d /var/log/django/isimip-data    750 isimip isimip
-d /var/log/gunicorn/isimip-data  750 isimip isimip
-```
-
-Then run:
-
-```bash
-systemd-tmpfiles --create
-```
-
 #### Gunicorn setup
 
-Systemd will launch the Gunicorn process on startup and keep running. Create a new systemd service file (you will need root/sudo permissions for that):
-
-```
-# /etc/systemd/system/isimip-data.service
-[Unit]
-Description=isimip-data gunicorn daemon
-After=network.target
-
-[Service]
-User=isimip
-Group=isimip
-WorkingDirectory=/home/isimip/isimip-data
-EnvironmentFile=/home/isimip/isimip-data/.env
-ExecStart=/home/isimip/isimip-data/env/bin/gunicorn --bind 127.0.0.1:9000 config.wsgi:application
-
-[Install]
-WantedBy=multi-user.target
-```
+Systemd will launch the Gunicorn process on startup and keep running. Copy the new systemd service file (you will need root/sudo permissions for that) from `etc/systemd/system/prod.service`.
 
 This service needs to be started and enabled like any other service:
 
@@ -189,28 +148,7 @@ systemctl status isimip-data
 
 #### NGINX
 
-Crate the Nginx configuration as follows (again with root/sudo permissions):
-
-```
-# /etc/nginx/vhosts.d/YOURDOMAIN
-server {
-    listen 80;
-    server_name YOURDOMAIN;
-
-    access_log /var/log/nginx/YOURDOMAIN.access.log;
-    error_log /var/log/nginx/YOURDOMAIN.error.log;
-
-    location / {
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header Host $http_host;
-        proxy_pass http://localhost:9000/;
-    }
-    location /static/ {
-        alias /home/isimip/isimip-data/static_root/;
-    }
-}
-```
+Create the Nginx configuration as follows (again with root/sudo permissions) from `etc/nginx/vhosts.d/data.isimip.org.conf`.
 
 Start nginx:
 

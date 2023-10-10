@@ -1,18 +1,10 @@
-import os
+from pathlib import Path
 
 from django.utils.translation import gettext_lazy as _
 
-import dj_database_url
+BASE_DIR = Path(__file__).parent.parent.parent
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-SECRET_KEY = os.getenv('SECRET_KEY')
-
-DEBUG = (os.getenv('DEBUG', 'False').upper() == 'TRUE')
-
-DEBUG_TOOLBAR = os.getenv('DEBUG_TOOLBAR', 'False').upper() == 'TRUE'
-
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost 127.0.0.1 ::1').split()
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '::1']
 
 INTERNAL_IPS = ['127.0.0.1']
 
@@ -52,11 +44,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.orcid'
 ]
 
-if DEBUG_TOOLBAR:
-    INSTALLED_APPS += [
-        'debug_toolbar',
-    ]
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -69,9 +56,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'isimip_data.metadata.middleware.MetadataCacheMiddleware'
 ]
-
-if DEBUG_TOOLBAR:
-    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware', *MIDDLEWARE]
 
 ROOT_URLCONF = 'config.urls'
 
@@ -95,8 +79,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
-    'default': dj_database_url.parse(os.getenv('DATABASE')),
-    'metadata': dj_database_url.parse(os.getenv('DATABASE_METADATA'))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'isimip_data'
+    },
+    'metadata': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'isimip_metadata'
+    }
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
@@ -114,13 +104,13 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root/')
+STATIC_ROOT = BASE_DIR / 'static_root/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static/')
+    BASE_DIR / 'static/'
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root/')
+MEDIA_ROOT = BASE_DIR / 'media_root/'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -128,7 +118,7 @@ STATICFILES_FINDERS = (
 )
 
 FIXTURE_DIRS = (
-   os.path.join(BASE_DIR, 'testing/fixtures'),
+   BASE_DIR / 'testing' / 'fixtures',
 )
 
 LOGIN_URL = '/account/login/'
@@ -150,20 +140,8 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 ACCOUNT_PASSWORD_MIN_LENGTH = 4
 
-if DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    EMAIL_FROM = 'noreply@isimip.org'
-
-else:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = os.getenv('EMAIL_HOST')
-    EMAIL_PORT = os.getenv('EMAIL_PORT', 25)
-    EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-    EMAIL_USE_TLS = (os.getenv('EMAIL_USE_TLS', 'False').upper() == 'TRUE')
-    EMAIL_USE_SSL = (os.getenv('EMAIL_USE_SSL', 'False').upper() == 'TRUE')
-    DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@isimip.org')
-
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_FROM = 'noreply@isimip.org'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -186,45 +164,27 @@ SETTINGS_EXPORT = [
     'METADATA_RESOURCE_MAX_DATASETS',
 ]
 
-if os.getenv('CACHE') == 'dummy':
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-        }
-    }
-elif os.getenv('CACHE') == 'redis':
-    CACHE_DB = os.getenv('CACHE_DB', '1')
-    CACHES = {
-        "default": {
-            "BACKEND": 'django_redis.cache.RedisCache',
-            "LOCATION": f'redis://127.0.0.1:6379/{CACHE_DB}',
-            "OPTIONS": {
-                "CLIENT_CLASS": 'django_redis.client.DefaultClient',
-            }
-        }
-    }
-else:
-    CACHE_LOCATION = os.getenv('CACHE_LOCATION', 'isimip-data')
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': CACHE_LOCATION
-        }
-    }
-
+CACHE = None
+CACHE_DB = 1
+CACHE_LOCATION = 'isimip-data'
 CACHE_MIDDLEWARE_SECONDS = 60 * 60 * 24 * 7  # one week
 CACHE_MIDDLEWARE_KEY_PREFIX = 'metadata'
+
+LOG_LEVEL = 'WARNING'
+LOG_PATH = None
+
+DEBUG_TOOLBAR = False
 
 SEARCH_SIMILARITY = 0.2
 SEARCH_SIMILARITY_LIMIT = 3
 
-METADATA_PAGE_SIZE = os.getenv('METADATA_PAGE_SIZE', 10)
-METADATA_MAX_PAGE_SIZE = os.getenv('METADATA_MAX_PAGE_SIZE', 1000)
-METADATA_RESOURCE_MAX_DATASETS = os.getenv('METADATA_RESOURCE_MAX_DATASETS', 100)
+METADATA_PAGE_SIZE = 10
+METADATA_MAX_PAGE_SIZE = 1000
+METADATA_RESOURCE_MAX_DATASETS = 100
 METADATA_GLOSSARY_KEYS = ['title', 'description', 'warning', 'long_name', 'units', 'urls']
 
-LABEL = os.getenv('LABEL')
-ALERT = os.getenv('ALERT')
+LABEL = None
+ALERT = None
 
 TERMS_OF_USE = 'When using ISIMIP data for your research, please appropriately credit ' \
                'the data providers, e.g. either by citing the DOI for the dataset, or ' \
@@ -245,8 +205,8 @@ NAVIGATION = [
     }
 ]
 
-FILES_BASE_URL = os.getenv('FILES_BASE_URL')
-FILES_API_URL = os.getenv('FILES_API_URL')
+FILES_BASE_URL = 'https://files.isimip.org'
+FILES_API_URL = 'https://files.isimip.org/api/v1'
 
 CAVEATS_REPLY_TO = (
     'ISIMIP data <isimip-data@isimip.org>',
@@ -254,13 +214,16 @@ CAVEATS_REPLY_TO = (
 CAVEATS_DEFAULT_RECIPIENTS = (
     'isimip-data_updates@listserv.dfn.de',
 )
-CAVEATS_MAX_DATASETS = os.getenv('METADATA_MAX_PAGE_SIZE', 100)
+CAVEATS_MAX_DATASETS = 100
 
-PROXY = os.getenv('PROXY', '').split()
-PROXY_FILES_BASE_URL = os.getenv('PROXY_FILES_BASE_URL')
-PROXY_FILES_API_URL = os.getenv('PROXY_FILES_API_URL')
+PROXY = None
+PROXY_FILES_BASE_URL = None
+PROXY_FILES_API_URL = None
 
-PROTOCOL_LOCATIONS = os.getenv('PROTOCOL_LOCATIONS', '').split()
+PROTOCOL_LOCATIONS = [
+    'https://protocol.isimip.org',
+    'https://protocol2.isimip.org'
+]
 
 DOWNLOAD = {
     'cutout': {
@@ -342,88 +305,3 @@ DOWNLOAD = {
 RESTRICTED_MESSAGES = {}
 RESTRICTED_DEFAULT_MESSAGE = 'Please contact <a href="mailto:info@isimip.org">info@isimip.org</a>' \
                              ' if you need access to the dataset.'
-
-LOG_LEVEL = os.getenv('LOG_LEVEL', 'WARNING')
-LOG_DIR = os.getenv('LOG_DIR')
-if LOG_DIR:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'filters': {
-            'require_debug_false': {
-                '()': 'django.utils.log.RequireDebugFalse'
-            },
-            'require_debug_true': {
-                '()': 'django.utils.log.RequireDebugTrue'
-            }
-        },
-        'formatters': {
-            'default': {
-                'format': '[%(asctime)s] %(levelname)s: %(message)s'
-            },
-            'name': {
-                'format': '[%(asctime)s] %(levelname)s %(name)s: %(message)s'
-            },
-            'console': {
-                'format': '[%(asctime)s] %(message)s'
-            }
-        },
-        'handlers': {
-            'mail_admins': {
-                'level': 'ERROR',
-                'filters': ['require_debug_false'],
-                'class': 'django.utils.log.AdminEmailHandler'
-            },
-            'error_log': {
-                'level': 'ERROR',
-                'class': 'logging.FileHandler',
-                'filename': os.path.join(LOG_DIR, 'error.log'),
-                'formatter': 'default'
-            },
-            'django_log': {
-                'level': 'INFO',
-                'class': 'logging.FileHandler',
-                'filename': os.path.join(LOG_DIR, 'django.log'),
-                'formatter': 'default'
-            },
-            'isimip_data_log': {
-                'level': 'INFO',
-                'class': 'logging.FileHandler',
-                'filename': os.path.join(LOG_DIR, 'isimip_data.log'),
-                'formatter': 'name'
-            },
-            'general_log': {
-                'level': 'INFO',
-                'class': 'logging.FileHandler',
-                'filename': os.path.join(LOG_DIR, 'general.log'),
-                'formatter': 'name'
-            },
-            'console': {
-                'level': 'INFO',
-                'filters': ['require_debug_true'],
-                'class': 'logging.StreamHandler',
-                'formatter': 'console'
-            }
-        },
-        'loggers': {
-            'django': {
-                'handlers': ['console', 'django_log'],
-                'level': LOG_LEVEL,
-                'propagate': False
-            },
-            'django.request': {
-                'handlers': ['mail_admins', 'error_log'],
-                'level': 'ERROR',
-                'propagate': True
-            },
-            'isimip_data': {
-                'handlers': ['console', 'isimip_data_log'],
-                'level': LOG_LEVEL,
-                'propagate': False
-            },
-            '': {
-                'handlers': ['console', 'general_log'],
-                'level': LOG_LEVEL,
-            }
-        }
-    }

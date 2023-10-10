@@ -24,19 +24,11 @@ npm install
 npm run build
 ```
 
-4. Create the local configuration file `.env`:
+4. Create the local configuration file `config/settings/local.py` with at least the following settings:
 
-```bash
-SECRET_KEY=<a secret random string>
-DEBUG=True
-
-# database connection for the django database
-DATABASE=postgresql://<user>:<pass>@<host>/<db>
-
-# database connection for the django database
-DATABASE_METADATA=postgresql://<user>:<pass>@<host>/<db>
-
-FILES_BASE_URL=http://isimip-files/%(simulation_round)s/%(product)s/%(sector)s/%(model)s/
+```python
+DEBUG = True
+SECRET_KEY = <a secret random string>
 ```
 
 5. Configure database (`./manage.py sqlcreate` shows the commands needed for your setup):

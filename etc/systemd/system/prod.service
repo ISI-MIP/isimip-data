@@ -7,7 +7,9 @@ User=isimip
 Group=isimip
 
 WorkingDirectory=/srv/www/prod
-EnvironmentFile=/srv/www/prod/.env
+
+LogsDirectory=gunicorn django
+RuntimeDirectory=gunicorn
 
 Environment=GUNICORN_BIN=/srv/www/prod/env/bin/gunicorn
 Environment=GUNICORN_WORKER=3
