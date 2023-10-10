@@ -42,8 +42,8 @@ jobs:
         psql postgres://postgres:postgres_password@localhost/test_isimip_metadata -f testing/sql/test_isimip_metadata.sql
     - name: Setup config file
       run: |
-        echo "SECRET_KEY=thisisnotaverysecretkey" >> config/settings/local.py
-        echo "CACHE=dummy" >> config/settings/local.py
+        echo "SECRET_KEY = 'thisisnotaverysecretkey'" >> config/settings/local.py
+        echo "CACHE = 'dummy'" >> config/settings/local.py
     - name: Run pytest
       run: |
         pytest --reuse-db --cov=isimip_data
