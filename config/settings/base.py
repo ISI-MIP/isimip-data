@@ -164,16 +164,19 @@ SETTINGS_EXPORT = [
     'METADATA_RESOURCE_MAX_DATASETS',
 ]
 
-CACHE = None
-CACHE_DB = 1
-CACHE_LOCATION = 'isimip-data'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
 CACHE_MIDDLEWARE_SECONDS = 60 * 60 * 24 * 7  # one week
 CACHE_MIDDLEWARE_KEY_PREFIX = 'metadata'
 
-LOG_LEVEL = 'WARNING'
-LOG_PATH = None
-
 DEBUG_TOOLBAR = False
+
+LOG_LEVEL = False
+LOG_PATH = False
 
 SEARCH_SIMILARITY = 0.2
 SEARCH_SIMILARITY_LIMIT = 3

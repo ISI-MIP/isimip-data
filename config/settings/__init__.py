@@ -1,8 +1,6 @@
-from split_settings.tools import include, optional
+from split_settings.tools import include
 
 include(
     'base.py',
-    'local.py',
-    'cache.py',
-    'logging.py'
+    'local.py'
 )
