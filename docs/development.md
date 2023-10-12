@@ -16,7 +16,7 @@ source env/bin/activate  # this needs to be done for each new terminal session
 pip install -r requirements/dev.txt
 ```
 
-3. Install and build front-end dependencies:
+3. Install and build front-end dependencies (assuming that [nvm.sh](https://github.com/nvm-sh/) is installed):
 
 ```bash
 nvm install
@@ -24,11 +24,10 @@ npm install
 npm run build
 ```
 
-4. Create the local configuration file `config/settings/local.py` with at least the following settings:
+4. Create the local configuration file `config/settings/local.py` from `config/settings/environments/development.py`:
 
-```python
-DEBUG = True
-SECRET_KEY = <a secret random string>
+```bash
+cp config/settings/environments/development.py config/settings/local.py
 ```
 
 5. Configure database (`./manage.py sqlcreate` shows the commands needed for your setup):

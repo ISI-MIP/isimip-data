@@ -1,9 +1,9 @@
 Running tests
 =============
 
-First, create test database using by running the tests of the [isimip-publisher](https://github.com/ISI-MIP/isimip-publisher).
+First, remove any `CACHES` entry from `config/settings/local.py` and add `PROTOCOL_LOCATIONS = 'testing/protocol'`.
 
-Alternatively the database can be recreated from the included database dump:
+Next, recreate the metadata database from the included database dump:
 
 ```bash
 createdb test_isimip_metadata

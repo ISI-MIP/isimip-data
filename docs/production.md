@@ -92,15 +92,10 @@ pip install --upgrade pip setuptools wheel
 pip install -r requirements/prod.txt
 ```
 
-Create the local configuration file `config/settings/local.py`:
+Create the local configuration file `config/settings/local.py` from `config/settings/environments/production.py`:
 
-```python
-DEBUG = True
-SECRET_KEY = <a secret random string>
-ALLOWED_HOSTS = data.isimip.org
-
-LOG_LEVEL = INFO
-LOG_DIR = '/var/log/django/isimip'
+```bash
+cp config/settings/environments/production.py config/settings/local.py
 ```
 
 Setup database tables and admin user:
@@ -134,7 +129,45 @@ npm run build:prod
 
 #### Gunicorn setup
 
-Systemd will launch the Gunicorn process on startup and keep running. Copy the new systemd service file (you will need root/sudo permissions for that) from `etc/systemd/system/prod.service`.
+Systemd will launch the Gunicorn process on startup and keep running. Create a systemd service file (you will need root/sudo permissions for that):
+
+```systemd
+[Unit]
+Description=data.isimip.org gunicorn daemon
+After=network.target
+
+[Service]
+User=isimip
+Group=isimip
+
+WorkingDirectory=/srv/www/prod
+
+LogsDirectory=django/prod gunicorn/prod
+RuntimeDirectory=gunicorn/prod
+
+Environment=GUNICORN_BIN=env/bin/gunicorn
+Environment=GUNICORN_WORKER=3
+Environment=GUNICORN_PORT=9000
+Environment=GUNICORN_TIMEOUT=120
+Environment=GUNICORN_PID_FILE=/run/gunicorn/prod/pid
+Environment=GUNICORN_ACCESS_LOG_FILE=/var/log/gunicorn/prod/access.log
+Environment=GUNICORN_ERROR_LOG_FILE=/var/log/gunicorn/prod/error.log
+
+ExecStart=/bin/sh -c '${GUNICORN_BIN} \
+  --workers ${GUNICORN_WORKER} \
+  --pid ${GUNICORN_PID_FILE} \
+  --bind localhost:${GUNICORN_PORT} \
+  --access-logfile ${GUNICORN_ACCESS_LOG_FILE} \
+  --error-logfile ${GUNICORN_ERROR_LOG_FILE} \
+  config.wsgi:application'
+
+ExecReload=/bin/sh -c '/usr/bin/pkill -HUP -F ${GUNICORN_PID_FILE}'
+
+ExecStop=/bin/sh -c '/usr/bin/pkill -TERM -F ${GUNICORN_PID_FILE}'
+
+[Install]
+WantedBy=multi-user.target
+```
 
 This service needs to be started and enabled like any other service:
 
@@ -148,11 +181,43 @@ systemctl status isimip-data
 
 #### NGINX
 
-Create the Nginx configuration as follows (again with root/sudo permissions) from `etc/nginx/vhosts.d/data.isimip.org.conf`.
-
-Start nginx:
+Assuming that the virtual host with a working certificate already exists, update the NGINX configuration as follows (again with root/sudo permissions):
 
 ```
-systemctl enable nginx
-systemctl start nginx
+server {
+    server_name data.isimip.org;
+
+    ...
+
+    root /srv/www/htdocs;
+    index index.html;
+
+    client_max_body_size 32M;
+
+    proxy_read_timeout 120;
+    proxy_connect_timeout 120;
+    proxy_send_timeout 120;
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $http_host;
+        proxy_pass http://localhost:9000/;
+    }
+    location /static/ {
+        add_header "Access-Control-Allow-Origin" *;
+        alias /home/isimip/prod/static_root/;
+    }
+    location /media/ {
+        alias /home/isimip/prod/media_root/;
+    }
+
+    ...
+}
+```
+
+Restart nginx:
+
+```
+systemctl restart nginx
 ```

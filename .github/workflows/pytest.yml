@@ -1,14 +1,22 @@
 name: pytest
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+    # run CI only if files in these whitelisted paths are changed
+    paths:
+      - '.github/workflows/**'
+      - 'config/**'
+      - 'isimip_data/**'
+      - 'testing/**'
+      - 'requirements/**'
+      - conftest.py
+  pull_request:
 
 jobs:
   pytest:
     runs-on: ubuntu-22.04
-
-    strategy:
-      matrix:
-        python-version: ['3.8', '3.11']
 
     services:
       postgres:
@@ -26,10 +34,10 @@ jobs:
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: '3.11'
     - name: Install package
       run: |
         python3 -m pip install --upgrade pip setuptools
@@ -49,7 +57,6 @@ jobs:
         coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
         COVERALLS_PARALLEL: true
 
   coveralls:

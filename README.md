@@ -9,14 +9,13 @@ ISIMIP data
 
 The [Django](https://www.djangoproject.com/) web app that powers the [ISIMIP repository](https://data.isimip.org).
 
-
 Setup
 -----
 
-* [Development setup](/docs/dev.md)
-* [Production setup](/docs/prod.md)
+The setup is described under [Production setup](/docs/production.md) and [Development setup](/docs/develoment.md).
+
 
 Tests
 -----
 
-* [Running tests](/docs/tests.md)
+How to run the tests is described under [Running tests](/docs/testing.md)
