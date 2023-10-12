@@ -42,7 +42,7 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip setuptools
         python3 -m pip install coveralls
-        python3 -m pip install -r requirements/dev.txt
+        python3 -m pip install -r requirements/development.txt
     - name: Prepare database
       run: |
         psql postgres://postgres:postgres_password@localhost -c 'CREATE DATABASE test_isimip_data;'
