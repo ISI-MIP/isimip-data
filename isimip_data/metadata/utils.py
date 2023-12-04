@@ -93,7 +93,7 @@ def prettify_specifiers(specifiers, identifiers):
         try:
             pretty_key = glossary['identifier'][key]['title']
         except (KeyError, TypeError):
-            pretty_key = key.replace('_', ' ').title()
+            pretty_key = key.replace('_', ' ')
 
         pretty_values = []
         if values:
