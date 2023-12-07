@@ -106,7 +106,7 @@
                         <dt class="col-sm-3 text-right">{{ description.descriptionType }}:</dt>
                         <dd class="col-sm-9">
                         {% for paragraph in description.description|split_br %}
-                            <p>{{ paragraph }}</p>
+                            <p>{{ paragraph|urlize }}</p>
                         {% endfor %}
                         </dd>
                     </dl>
