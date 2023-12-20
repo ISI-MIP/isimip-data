@@ -40,6 +40,9 @@ def fetch_json(glossary_location):
 def fetch_glossary():
     glossary = cache.get('glossary')
     if glossary is None:
+        if not isinstance(settings.PROTOCOL_LOCATIONS, list):
+            raise RuntimeError('settings.PROTOCOL_LOCATIONS has to be a list')
+
         glossary = {}
         build_glossary(glossary, settings.PROTOCOL_LOCATIONS)
         cache.set('glossary', glossary)
