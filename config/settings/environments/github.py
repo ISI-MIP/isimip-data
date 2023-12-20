@@ -21,4 +21,4 @@ DATABASES = {
 
 FILES_BASE_URL = 'http://isimip/'
 
-PROTOCOL_LOCATIONS = 'testing/protocol'
+PROTOCOL_LOCATIONS = ['testing/protocol']
