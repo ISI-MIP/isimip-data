@@ -3,13 +3,14 @@ Production setup
 
 ## Prerequisites
 
-First install the basic prerequisites from your linux distribution. For openSUSE Leap 15 use:
+First install the basic prerequisites. For openSUSE Leap 15 use:
 
 ```bash
 # as root
 zypper install python3 python3-devel
 zypper install postgresql10 postgresql10-server postgresql10-contrib postgresql10-devel
 zypper install nginx
+zypper install git git-crypt
 ```
 
 ## PostgreSQL
@@ -31,21 +32,21 @@ systemctl enable postgresql
 systemctl start postgresql
 ```
 
-Login to the database as `postgres` user and create a `isimip_data` and a `isimip_metadata` user:
+Login to the database as `postgres` user and create a `isimip_data_prod` and a `isimip_metadata_prod` user:
 
 ```sql
-CREATE USER isimip_data WITH ENCRYPTED PASSWORD 'ISIMIP_DATA_PASSWORD' CREATEDB;
-CREATE DATABASE isimip_data WITH ENCODING 'UTF-8' OWNER isimip_data;
+CREATE USER isimip_data_prod WITH ENCRYPTED PASSWORD 'SECRET_ISIMIP_DATA_PASSWORD' CREATEDB;
+CREATE DATABASE isimip_data_prod WITH ENCODING 'UTF-8' OWNER isimip_data_prod;
 
-CREATE USER isimip_metadata WITH ENCRYPTED PASSWORD 'ISIMIP_METADATA_PASSWORD' CREATEDB;
-CREATE DATABASE isimip_metadata WITH ENCODING 'UTF-8' OWNER isimip_metadata;
+CREATE USER isimip_metadata_prod WITH ENCRYPTED PASSWORD 'SECRET_ISIMIP_METADATA_PASSWORD' CREATEDB;
+CREATE DATABASE isimip_metadata_prod WITH ENCODING 'UTF-8' OWNER isimip_metadata_prod;
 ```
 
 Now the database is ready for this application as well as the [isimip-publisher](https://github.com/ISI-MIP/isimip-publisher). After the `datasets` and `files` tables are created in `isimip_metadata` run the following to let the `isimip_data` access the tables (read-only).
 
 ```bash
 # as postgres
-psql isimip_metadata -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO isimip_data;'
+psql isimip_metadata -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO isimip_data_prod;'
 ```
 
 ## Python environment
@@ -55,13 +56,6 @@ In production, you should create a dedicated user the application. All steps for
 ```bash
 # as root
 useradd -u 2000 -c 'ISIMIP' -s /bin/bash -m isimip
-```
-
-Create a directory for the logs:
-
-```bash
-mkdir -p /var/log/django/isimip
-chown isimip:isimip /var/log/django/isimip
 ```
 
 Using this user, create a virtual env in the home of this user:
@@ -87,15 +81,21 @@ Install production dependencies:
 
 ```bash
 # as isimip
-cd ~/isimip-
+cd ~/isimip-data
 pip install --upgrade pip setuptools wheel
-pip install -r requirements/prod.txt
+pip install -r requirements/production.txt
 ```
 
-Create the local configuration file `config/settings/local.py` from `config/settings/environments/production.py`:
+The production settings are protected using [git-crypt](https://www.agwa.name/projects/git-crypt/). Copy the secret `.gitkey` file to the repository directory on the server and unlock the files:
+
+```
+git-crypt unlock .gitkey
+```
+
+Link the unlocked production settings to `config/settings/local.py`.
 
 ```bash
-cp config/settings/environments/production.py config/settings/local.py
+ln -s environments/production.py config/settings/local.py
 ```
 
 Setup database tables and admin user:
@@ -107,8 +107,6 @@ Setup database tables and admin user:
 ```
 
 #### Front end
-
-If nodejs is not desired on the prodction system, you can also perform the following steps on a different machine and copy the `/static` directory to `~isimip/isimip-data/static` on the server.
 
 Install [nvm](https://github.com/nvm-sh/nvm) for the `isimip` user:
 

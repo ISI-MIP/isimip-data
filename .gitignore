@@ -17,5 +17,6 @@ __pycache__/
 /.pytest_cache
 /.ruff_cache
 /.coverage
+/.gitkey
 /htmlcov
 /log

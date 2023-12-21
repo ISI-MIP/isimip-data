@@ -1,0 +1,3 @@
+# encrypt these files
+config/settings/environments/prod.py filter=git-crypt diff=git-crypt
+config/settings/environments/dev.py filter=git-crypt diff=git-crypt

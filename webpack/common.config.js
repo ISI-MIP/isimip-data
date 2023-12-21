@@ -40,7 +40,6 @@ module.exports = {
     libraryTarget: 'this',
     library: '[name]',
     path: path.resolve('./static/'),
-    publicPath: '/static/',
     filename: '[name].js'
   },
   module: {

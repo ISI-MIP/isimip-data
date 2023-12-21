@@ -24,11 +24,14 @@ npm install
 npm run build
 ```
 
-4. Create the local configuration file `config/settings/local.py` from `config/settings/environments/development.py`:
+4. (optional) Create the local configuration file `config/settings/local.py` from `config/settings/environments/local.py` or link the file:
 
 ```bash
-cp config/settings/environments/development.py config/settings/local.py
+cp config/settings/environments/local.py config/settings/local.py
+ln -s environments/local.py config/settings/local.py               # alternatively
 ```
+
+The `config/settings/local.py` file can hold additional django configuration entries.
 
 5. Configure database (`./manage.py sqlcreate` shows the commands needed for your setup):
 
