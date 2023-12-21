@@ -1,6 +1,5 @@
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings"
-testpaths = ["django_datacite"]
 python_files = "test_*.py"
 pythonpath = "testing/"
 norecursedirs = "node_modules"
