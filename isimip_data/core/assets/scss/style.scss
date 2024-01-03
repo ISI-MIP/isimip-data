@@ -127,6 +127,12 @@ label {
     }
 }
 
+.cards {
+    .card:not(:last-child) {
+        margin-bottom: 4px;
+    }
+}
+
 .doi-link:before {
     display: inline-block;
     vertical-align: middle;

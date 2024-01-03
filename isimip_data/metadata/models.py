@@ -84,8 +84,9 @@ class Dataset(models.Model):
         return get_terms_of_use()
 
     @cached_property
-    def current_resource(self):
-        return self.resources.order_by('doi').last()
+    def current_resources(self):
+        return sorted([resource for resource in self.resources.all() if resource.is_current_version],
+                      key=lambda resource: resource.paths)
 
     @cached_property
     def json_ld(self):

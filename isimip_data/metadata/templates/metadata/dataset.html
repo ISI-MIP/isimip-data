@@ -31,7 +31,20 @@
             {% endif %}
 
             <h3>{% trans 'Cite as' %}</h3>
-            {% include 'metadata/cards/citation.html' with resource=dataset.current_resource citation_footer=True %}
+            <div class="cards">
+                {% for resource in dataset.current_resources %}
+                {% include 'metadata/cards/citation.html' with citation_footer=True %}
+                {% endfor %}
+
+                {% if dataset.current_resources|length > 1 %}
+                <div class="card">
+                    <div class="card-body text-muted">
+                        There are multiple DOI registered for this dataset, please use the
+                        citation that applies to your case.
+                    </div>
+                </div>
+                {% endif %}
+            </div>
 
             <h3>{% trans 'Properties' %}</h3>
             {% include 'metadata/cards/properties.html' with obj=dataset %}

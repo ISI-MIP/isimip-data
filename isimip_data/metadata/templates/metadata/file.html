@@ -23,7 +23,20 @@
     <div class="row">
         <div class="col-sm-8">
             <h3>{% trans 'Cite as' %}</h3>
-            {% include 'metadata/cards/citation.html' with resource=file.dataset.current_resource citation_footer=True %}
+            <div class="cards">
+                {% for resource in file.dataset.current_resources %}
+                {% include 'metadata/cards/citation.html' with citation_footer=True %}
+                {% endfor %}
+
+                {% if file.dataset.current_resources|length > 1 %}
+                <div class="card">
+                    <div class="card-body text-muted">
+                        There are multiple DOI registered for this file, please use the
+                        citation that applies to your case.
+                    </div>
+                </div>
+                {% endif %}
+            </div>
 
             <h3>{% trans 'Properties' %}</h3>
             {% include 'metadata/cards/properties.html' with obj=file %}
