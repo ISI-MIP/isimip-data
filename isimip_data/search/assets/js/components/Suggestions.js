@@ -19,9 +19,9 @@ class Suggestions extends Component {
 
   render() {
     const { count, suggestions, onClick } = this.props
-    const suggestionsList = suggestions === null ? [] :suggestions.reduce((cur, agg) => {
-      if (cur.length > 0) agg.push(cur)
-      return agg
+    const suggestionsList = (suggestions === null) ? [] : suggestions.reduce((acc, cur) => {
+      if (cur.length > 0) acc.push(cur)
+      return acc
     }, [])
 
     return (count == 0) && (
