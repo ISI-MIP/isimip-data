@@ -47,7 +47,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         'files__links',
         'links',
         'resources'
-    )
+    ).distinct('path')
     pagination_class = Pagination
 
     filter_backends = (
