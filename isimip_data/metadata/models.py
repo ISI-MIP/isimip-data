@@ -241,7 +241,7 @@ class Resource(models.Model):
             related_identifier = next(i for i in self.datacite.get('relatedIdentifiers', [])
                                       if i.get('relationType') == 'IsPreviousVersionOf')
             return related_identifier.get('relatedIdentifier').replace('https://doi.org/', '')
-        except StopIteration:
+        except (AttributeError, StopIteration):
             return None
 
     @cached_property
