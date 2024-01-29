@@ -233,7 +233,7 @@ class Result extends Component {
 
   renderFiles(dataset) {
     return (
-      <li className="list-group-item">
+      <li className="list-group-item result-files">
         <ul className="list-unstyled">
           {
             dataset.files.map(file => {

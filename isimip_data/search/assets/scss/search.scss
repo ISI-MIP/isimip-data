@@ -211,6 +211,11 @@ main {
             }
         }
 
+        .result-files {
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
         .result-file,
         .result-caveat {
             padding-bottom: 0.5rem;
