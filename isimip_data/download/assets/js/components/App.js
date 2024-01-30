@@ -1,7 +1,5 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import { getLocationParams, getLocationString } from 'isimip_data/metadata/assets/js/utils/location'
 
@@ -230,13 +228,15 @@ class App extends Component {
             {
               job.status == 'queued' &&
               <p className="text-success">
-                <FontAwesomeIcon icon={faSpinner} spin /> The download has been queued on the server.
+                <span className="material-symbols-rounded symbols-spin">progress_activity</span>
+                The download has been queued on the server.
               </p>
             }
             {
               job.status == 'started' &&
               <p className="text-success">
-                <FontAwesomeIcon icon={faSpinner} spin /> The files are created on the server ({job.meta.created_files} of {job.meta.total_files} created).
+                <span className="material-symbols-rounded symbols-spin">progress_activity</span>
+                The files are created on the server ({job.meta.created_files} of {job.meta.total_files} created).
               </p>
             }
             {

@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronUp, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
-
 import jQuery from 'jquery'
 import bytes from 'bytes'
 import Cookies from 'js-cookie'
@@ -125,10 +122,12 @@ class Result extends Component {
           <div className="d-inline mr-2">
             <button className="btn btn-link" onClick={this.toggleAttributes}>
               {showAttributes && <span>
-                Attributes <FontAwesomeIcon icon={faChevronUp} />
+                Attributes
+                <span className="material-symbols-rounded symbols-expand">expand_less</span>
               </span>}
               {!showAttributes && <span>
-                Attributes <FontAwesomeIcon icon={faChevronDown} />
+                Attributes
+                <span className="material-symbols-rounded symbols-expand">expand_more</span>
               </span>}
             </button>
           </div>
@@ -136,10 +135,12 @@ class Result extends Component {
           <div className="d-inline mr-2">
             <button className="btn btn-link" onClick={this.toggleFiles}>
               {showFiles && <span>
-                Files <FontAwesomeIcon icon={faChevronUp} />
+                Files
+                <span className="material-symbols-rounded symbols-expand">expand_less</span>
               </span>}
               {!showFiles && <span>
-                Files <FontAwesomeIcon icon={faChevronDown} />
+                Files
+                <span className="material-symbols-rounded symbols-expand">expand_more</span>
               </span>}
             </button>
           </div>
@@ -149,10 +150,12 @@ class Result extends Component {
             <div className="d-inline">
               <button className="btn btn-link" onClick={this.toggleCaveats}>
                 {showCaveats && <span>
-                  Caveats <FontAwesomeIcon icon={faChevronUp} />
+                  Caveats
+                  <span className="material-symbols-rounded symbols-expand">expand_less</span>
                 </span>}
                 {!showCaveats && <span>
-                  Caveats <FontAwesomeIcon icon={faChevronDown} />
+                  Caveats
+                  <span className="material-symbols-rounded symbols-expand">expand_more</span>
                 </span>}
               </button>
             </div>
@@ -161,10 +164,12 @@ class Result extends Component {
           {dataset.indicators.length > 0 && <div className="d-inline">
             <button className="btn btn-link" onClick={this.toggleIndicators}>
               {showIndicators && <span>
-                Indicators <FontAwesomeIcon icon={faChevronUp} />
+                Indicators
+                <span className="material-symbols-rounded symbols-expand">expand_less</span>
               </span>}
               {!showIndicators && <span>
-                Indicators <FontAwesomeIcon icon={faChevronDown} />
+                Indicators
+                <span className="material-symbols-rounded symbols-expand">expand_more</span>
               </span>}
             </button>
           </div>}

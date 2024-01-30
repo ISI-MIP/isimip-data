@@ -1,9 +1,8 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 import Scale from './Scale'
+
 
 class App extends Component {
 
@@ -56,9 +55,18 @@ class App extends Component {
 
     return (
       <span className="text-muted">
-        {direction == 1 && <FontAwesomeIcon icon={faChevronUp} />}
-        {direction == -1 && <FontAwesomeIcon icon={faChevronDown} />}
-        {direction == 0 && <FontAwesomeIcon icon={faChevronDown} style={{opacity: 0.2}}/>}
+        {
+          direction == 1 &&
+          <span className="material-symbols-rounded symbols-expand">expand_less</span>
+        }
+        {
+          direction == -1 &&
+          <span className="material-symbols-rounded symbols-expand">expand_more</span>
+        }
+        {
+          direction == 0 &&
+          <span className="material-symbols-rounded symbols-expand" style={{opacity: 0.2}}>expand_more</span>
+        }
       </span>
     )
   }

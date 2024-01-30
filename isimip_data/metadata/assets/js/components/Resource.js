@@ -1,8 +1,6 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
 class Resource extends React.Component {
 

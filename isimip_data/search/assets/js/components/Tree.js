@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { faFilePowerpoint } from '@fortawesome/free-regular-svg-icons'
+
 import OverlayTrigger from "react-bootstrap/OverlayTrigger"
 import Tooltip from "react-bootstrap/Tooltip"
 
@@ -137,7 +135,7 @@ class Tree extends Component {
           <a key={index} className="ml-auto" href={item.urls[key]} target="_blank"
              onClick={e => e.stopPropagation()}>
             <OverlayTrigger placement="bottom" overlay={<Tooltip>More information is available in the {key} protocol.</Tooltip>}>
-              <FontAwesomeIcon icon={faFilePowerpoint} />
+              <span className="material-symbols-rounded symbols-protocol">quick_reference_all</span>
             </OverlayTrigger>
           </a>
         )
@@ -153,7 +151,7 @@ class Tree extends Component {
            onClick={e => this.toogleItem(item)}>
         <input className="mr-2" type="checkbox" checked={item.items || false} readOnly />
         <span>{item.title || item.specifier}</span>
-        {item.hasItems && <FontAwesomeIcon icon={faChevronUp} />}
+        {item.hasItems && <span className="material-symbols-rounded symbols-expand">expand_more</span>}
         {item.urls && this.renderUrl(item)}
       </div>
     )

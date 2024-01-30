@@ -59,14 +59,14 @@ module.exports = {
         ]
       },
       {
-        test: /(fonts|files)\/.*\.(svg|woff2?|ttf|eot|otf)(\?.*)?$/,
+        test: /\.(woff2?|ttf|eot|otf)$/,
         loader: 'file-loader',
         options: {
           name: 'fonts/[name].[ext]'
         }
       },
       {
-        test: /\.svg$|\.png$|\.jpg$/,
+        test: /\.(svg|png|jpg)$/,
         loader: 'file-loader',
         options: {
           name: 'images/[name].[ext]'

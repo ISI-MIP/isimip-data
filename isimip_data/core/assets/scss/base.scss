@@ -10,11 +10,8 @@ $container-max-widths: (
 
 @import '~bootstrap/scss/bootstrap';
 
-$fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
-
-@import '~@fortawesome/fontawesome-free/scss/fontawesome';
-@import '~@fortawesome/fontawesome-free/scss/solid';
-@import '~@fortawesome/fontawesome-free/scss/regular';
+$material-symbols-font-path: '~material-symbols/';
+@import '~material-symbols/rounded';
 
 @import 'fonts';
 @import 'footer';
@@ -24,6 +21,7 @@ $fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
 @import 'nav';
 @import 'page';
 @import 'style';
+@import 'symbols';
 
 main {
     background-image: url('../../../core/assets/images/mountain-range.jpg');

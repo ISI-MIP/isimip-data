@@ -15,7 +15,7 @@
     <div class="card-body">
         {% if request.user.is_staff %}
         <a class="d-block float-right" href="{% url 'admin:caveats_comment_change' comment.id %}">
-            <i class="fas fa-pen"></i>
+            <span class="material-symbols-rounded">edit</span>
         </a>
         {% endif %}
 

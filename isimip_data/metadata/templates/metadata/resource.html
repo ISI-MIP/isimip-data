@@ -76,7 +76,6 @@
                                     {% else %}
                                         {{ creator.name }}
                                     {% endif %}
-                                    {% include 'metadata/snippets/name_credit.html' with name=creator %}
                                     {% include 'metadata/snippets/name_identifier.html' with name=creator %}
                                 </li>
                                 {% endfor %}
@@ -132,7 +131,6 @@
                                 {% else %}
                                 <li>
                                     {{ contributor.givenName }} {{ contributor.familyName }}
-                                    {% include 'metadata/snippets/name_credit.html' with name=contributor %}
                                     {% include 'metadata/snippets/name_identifier.html' with name=contributor %}
                                 </li>
                                 {% endif %}

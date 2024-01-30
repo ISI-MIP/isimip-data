@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ls from 'local-storage'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp, faChevronDown, faSpinner, faCheckSquare, faBan, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import { faFilePowerpoint } from '@fortawesome/free-regular-svg-icons'
 
 import OverlayTrigger from "react-bootstrap/OverlayTrigger"
 import Tooltip from "react-bootstrap/Tooltip"
@@ -119,7 +116,7 @@ class Facet extends Component {
             <a key={index} className={'ml-1'.concat(index == 0 ? ' ml-auto' : '')} href={urls[key]} target="_blank"
                onClick={e => e.stopPropagation()}>
               <OverlayTrigger placement="bottom" overlay={<Tooltip>More information is available in the {key} protocol.</Tooltip>}>
-                <FontAwesomeIcon icon={faFilePowerpoint} />
+                <span className="material-symbols-rounded">quick_reference_all</span>
               </OverlayTrigger>
             </a>
           )
@@ -166,7 +163,7 @@ class Facet extends Component {
   renderEmpty() {
     return (
       <div className="card-body text-center">
-        <FontAwesomeIcon icon={faBan} />
+        <span className="material-symbols-rounded">block</span>
       </div>
     )
   }
@@ -174,7 +171,7 @@ class Facet extends Component {
   renderSpinner() {
     return (
       <div className="card-body text-center">
-        <FontAwesomeIcon icon={faSpinner} spin />
+        <span className="material-symbols-rounded symbols-spin">progress_activity</span>
       </div>
     )
   }
@@ -191,8 +188,9 @@ class Facet extends Component {
         <div className="card-header d-flex justify-content-between align-items-center" onClick={this.toggleFacet}>
           {facet.title}
           <div>
-            {isChecked && <FontAwesomeIcon className="facet-check text-secondary" icon={faCheckSquare} />}
-            {isOpen ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
+            {isChecked && <span className="material-symbols-rounded symbols-check text-secondary">check_box</span>}
+            {isOpen ? <span className="material-symbols-rounded symbols-expand">expand_less</span>
+                    : <span className="material-symbols-rounded symbols-expand">expand_more</span>}
           </div>
         </div>
         {isOpen && !isEmpty && this.renderListGroup(facet.identifier, items, checked)}

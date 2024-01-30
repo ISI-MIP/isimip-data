@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronUp, faTimes, faSpinner  } from '@fortawesome/free-solid-svg-icons'
-
 
 class LoadMore extends Component {
 
@@ -12,9 +9,9 @@ class LoadMore extends Component {
     return (
       <div className="row justify-content-md-center">
         <div className="col col-lg-4">
-          <div className="card">
+          <div className="card load-more">
             <div className="card-header d-flex justify-content-center">
-              {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}
+              {isLoading && <span className="material-symbols-rounded symbols-spin">progress_activity</span>}
               {!isLoading && <button className="btn btn-link" onClick={e => onLoadMore()}>
                 Load more datasets
               </button>}
