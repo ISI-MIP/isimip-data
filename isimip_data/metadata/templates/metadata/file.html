@@ -30,9 +30,17 @@
 
                 {% if file.dataset.current_resources|length > 1 %}
                 <div class="card">
-                    <div class="card-body text-muted">
+                    <div class="card-body">
                         There are multiple DOI registered for this file, please use the
                         citation that applies to your case.
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if file.dataset.current_resources|length == 0 %}
+                <div class="card">
+                    <div class="card-body">
+                        No DOI was registered for file yet. Please follow our general <a href="https://www.isimip.org/gettingstarted/terms-of-use/">terms of use</a>.
                     </div>
                 </div>
                 {% endif %}

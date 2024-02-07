@@ -5,31 +5,28 @@
     <h5 class="card-header">{{ citation_header }}</h5>
     {% endif %}
     <div class="card-body">
-        {% if resource %}
+        {% if resource.datacite %}
         <p class="card-text cite-as">
-            {% if resource.datacite %}
             <button class="btn btn-link btn-copy-to-clipboard float-right ml-1" title="Copy to clipboard">
                 <i class="far fa-clipboard"></i>
                 <code class="d-none">{{ resource.citation }}</code>
             </button>
-            </i>
             <b>{{ resource.creators_str }} ({{ resource.publication_year }}):</b>
             <i>{{ resource.title_with_version }}</i>. {{ resource.publisher }}.
-            {% else %}
-            {% trans 'Please follow the policies of the original data provider:' %}
-            {% endif %}
-
             <a class="doi-link" href="{{ resource.doi_url }}" target="_blank">
                 {{ resource.doi_url }}
             </a>
         </p>
         {% else %}
         <p class="card-text">
-            No DOI was registered for file yet. Please follow our general <a href="https://www.isimip.org/gettingstarted/terms-of-use/">terms of use</a>.
+            <span>{% trans 'Please follow the policies of the original data provider:' %}</span>
+            <a class="doi-link" href="{{ resource.doi_url }}" target="_blank">
+                {{ resource.doi_url }}
+            </a>
         </p>
         {% endif %}
     </div>
-    {% if resource and citation_footer %}
+    {% if citation_footer %}
     <div class="card-footer">
         {% if resource.datacite %}
         <ul class="list-inline mb-0 float-right">
