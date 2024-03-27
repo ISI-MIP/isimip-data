@@ -3,9 +3,6 @@ import PropTypes from 'prop-types'
 import OverlayTrigger from "react-bootstrap/OverlayTrigger"
 import Tooltip from "react-bootstrap/Tooltip"
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
-
 class Caveats extends Component {
 
   render() {
@@ -27,19 +24,17 @@ class Caveats extends Component {
     if (dataset.caveats.length > 0) {
       return (
         <div className={'float-right text-' + get_caveats_color(dataset.caveats)}>
-          <FontAwesomeIcon className="result-icon"
-                           title="There are caveats for this dataset."
-                           icon={faExclamationTriangle}
-                           onClick={toggleCaveats} />
+          <span className="material-symbols-rounded symbols-caveat"
+                title="There are caveats for this dataset."
+                onClick={toggleCaveats}>warning_amber</span>
         </div>
       )
     } else if (dataset.caveats_versions.length > 0) {
       return (
         <div className={'float-right text-primary'}>
-          <FontAwesomeIcon className="result-icon"
-                           title="There are caveats for other versions of this dataset."
-                           icon={faExclamationTriangle}
-                           onClick={toggleCaveats} />
+          <span className="material-symbols-rounded symbols-caveat"
+                title="There are caveats for other versions of this dataset."
+                onClick={toggleCaveats}>warning_amber</span>
         </div>
       )
     } else {

@@ -13,17 +13,13 @@
     "url": "https://github.com/ISI-MIP/isimip-data"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.4",
-    "@fortawesome/fontawesome-svg-core": "^1.2.36",
-    "@fortawesome/free-regular-svg-icons": "^5.15.4",
-    "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@fortawesome/react-fontawesome": "^0.1.19",
     "bootstrap": "^4.6.2",
     "bytes": "^3.1.2",
     "jquery": "^3.6.2",
     "js-cookie": "^2.2.1",
     "js-sha512": "^0.8.0",
     "local-storage": "^2.0.0",
+    "material-symbols": "^0.14.6",
     "npm-font-open-sans": "^1.1.0",
     "popper.js": "^1.16.1",
     "prop-types": "^15.8.1",

@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
@@ -58,8 +56,8 @@ class Params extends Component {
                 const [key, value] = item
                 return (
                   <div key={index} className="d-inline ml-2">
-                    <button className="btn btn-link" onClick={() => onRemove(key, value)}>
-                      {key} = {value} <FontAwesomeIcon icon={faTimes} />
+                    <button className="btn btn-link close-link" onClick={() => onRemove(key, value)}>
+                      {key} = {value}<span className="material-symbols-rounded symbols-close">close</span>
                     </button>
                   </div>
                 )

@@ -1,9 +1,6 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes, faSearch } from '@fortawesome/free-solid-svg-icons'
-
 class Filter extends React.Component {
 
   render() {
@@ -29,7 +26,7 @@ class Filter extends React.Component {
             </div>
             <div className="col-6 col-md-auto">
               <button className="btn btn-outline-secondary btn-lg w-100" type="button" onClick={e => onFilterStringChange('')}>
-                Reset <FontAwesomeIcon className="fa-fw" icon={faTimes} />
+                Reset <span className="material-symbols-rounded symbols-reset">close</span>
               </button>
             </div>
           </div>
