@@ -23,7 +23,6 @@ from isimip_data.caveats.viewsets import CaveatViewSet
 from isimip_data.core.viewsets import SettingsViewSet
 from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
-from isimip_data.indicators.views import indicator, indicators
 from isimip_data.metadata.sitemaps import DatasetSitemap, FileSitemap, ResourceSitemap
 from isimip_data.metadata.views import (
     dataset,
@@ -113,9 +112,6 @@ urlpatterns = [
     path('caveats/create/', caveat_create, name='caveat_create'),
     path('caveats/comments/create/', comment_create, name='comment_create'),
     path('subscriptions/', subscriptions, name='subscriptions'),
-
-    path('indicators/', indicators, name='indicators'),
-    path('indicators/<int:pk>/', indicator, name='indicator'),
 
     path('', TemplateView.as_view(template_name='home/home.html'), name='home'),
     path('robots.txt', TemplateView.as_view(template_name='core/robots.txt'), name='robots.txt'),

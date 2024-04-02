@@ -1,6 +1,5 @@
 @import 'isimip_data/core/assets/scss/colors';
 @import 'isimip_data/core/assets/scss/base';
-@import 'isimip_data/indicators/assets/scss/indicators';
 
 main {
     font-size: 10pt;
@@ -240,18 +239,6 @@ main {
 
             cursor: pointer;
             user-select: none;
-        }
-
-        .result-indicators {
-            padding-top: 0;
-        }
-
-        .result-indicator {
-            a {
-                display: block;
-                padding-top: 12px;
-                line-height: 16px;
-            }
         }
 
         .result-reference {

@@ -4,10 +4,6 @@ from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).parent.parent.parent
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '::1']
-
-INTERNAL_IPS = ['127.0.0.1']
-
 SITE_ID = 1
 
 INSTALLED_APPS = [
@@ -27,7 +23,6 @@ INSTALLED_APPS = [
     'isimip_data.caveats',
     'isimip_data.core',
     'isimip_data.download',
-    'isimip_data.indicators',
     'isimip_data.home',
     'isimip_data.metadata',
     'isimip_data.search',
