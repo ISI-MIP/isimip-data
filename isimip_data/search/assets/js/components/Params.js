@@ -21,7 +21,7 @@ class Params extends Component {
   }
 
   render() {
-    const { params, count, isLoading, onRemove } = this.props
+    const { params, count, onRemove } = this.props
 
     const items = []
     Object.keys(params).map(key => {

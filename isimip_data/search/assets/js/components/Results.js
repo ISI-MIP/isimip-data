@@ -14,7 +14,7 @@ import Suggestions from './Suggestions'
 class Results extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isLoading: false,
       loadMore: false,
@@ -92,7 +92,7 @@ class Results extends Component {
     if (index === false) {
       selected.push(dataset)
     } else {
-      selected.splice(index, 1);
+      selected.splice(index, 1)
     }
 
     this.setState({ selected }, this.storeSelected)
@@ -132,7 +132,7 @@ class Results extends Component {
   }
 
   render() {
-    const { params, glossary, onSearch, onVersionChange, onParamsRemove } = this.props
+    const { params, glossary, onSearch, onParamsRemove } = this.props
     const { isLoading, loadMore, results, selected, count, suggestions } = this.state
 
     return (

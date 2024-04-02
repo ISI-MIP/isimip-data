@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+
 class LoadMore extends Component {
 
   render() {
@@ -12,7 +13,7 @@ class LoadMore extends Component {
           <div className="card load-more">
             <div className="card-header d-flex justify-content-center">
               {isLoading && <span className="material-symbols-rounded symbols-spin">progress_activity</span>}
-              {!isLoading && <button className="btn btn-link" onClick={e => onLoadMore()}>
+              {!isLoading && <button className="btn btn-link" onClick={() => onLoadMore()}>
                 Load more datasets
               </button>}
             </div>

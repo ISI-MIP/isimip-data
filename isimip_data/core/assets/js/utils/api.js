@@ -16,10 +16,10 @@ const getFileName = response => {
   const disposition = response.headers.get('Content-Disposition')
 
   if (disposition && disposition.indexOf('attachment') !== -1) {
-    let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-    let matches = filenameRegex.exec(disposition);
+    let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+    let matches = filenameRegex.exec(disposition)
     if (matches != null && matches[1]) {
-      return matches[1].replace(/['"]/g, '');
+      return matches[1].replace(/['"]/g, '')
     }
   } else {
     return response.url.split('/').pop()
@@ -28,8 +28,8 @@ const getFileName = response => {
 
 const downloadBlob = (blob, fileName) => {
   const url = window.URL.createObjectURL(blob)
-  const a = document.createElement('a');
-  a.href = url;
+  const a = document.createElement('a')
+  a.href = url
   a.download = fileName
   a.click()
   a.remove()

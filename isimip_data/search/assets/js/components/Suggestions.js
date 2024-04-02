@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+
 class Suggestions extends Component {
 
   constructor(props) {
@@ -10,11 +11,6 @@ class Suggestions extends Component {
   handleCLick(e) {
     e.preventDefault()
     this.props.onClick()
-  }
-
-  handleReset(e) {
-    this.setState({ value: '' })
-    this.props.onReset()
   }
 
   render() {
@@ -46,9 +42,9 @@ class Suggestions extends Component {
   }
 }
 
-Suggestions.Suggestions = {
+Suggestions.propTypes = {
   count: PropTypes.number.isRequired,
-  suggestions: PropTypes.array.isRequired,
+  suggestions: PropTypes.array,
   onClick: PropTypes.func.isRequired
 }
 

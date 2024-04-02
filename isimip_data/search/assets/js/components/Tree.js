@@ -12,7 +12,7 @@ import { getValueOrNull } from 'isimip_data/core/assets/js/utils/object'
 class Tree extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       tree: []
     }
@@ -33,7 +33,7 @@ class Tree extends Component {
   }
 
   componentWillUnmount(){
-    this.abortController.abort();
+    this.abortController.abort()
   }
 
   fetchTree() {
@@ -132,7 +132,7 @@ class Tree extends Component {
     return Object.keys(item.urls).map((key, index) => {
       if (item.tree.includes(key)) {
         return (
-          <a key={index} className="ml-auto" href={item.urls[key]} target="_blank"
+          <a key={index} className="ml-auto" href={item.urls[key]} target="_blank" rel="noreferrer"
              onClick={e => e.stopPropagation()}>
             <OverlayTrigger placement="bottom" overlay={<Tooltip>More information is available in the {key} protocol.</Tooltip>}>
               <span className="material-symbols-rounded symbols-protocol">quick_reference_all</span>
@@ -148,7 +148,7 @@ class Tree extends Component {
   renderItem(item) {
     return (
       <div className="tree-item d-flex align-items-center"
-           onClick={e => this.toogleItem(item)}>
+           onClick={() => this.toogleItem(item)}>
         <input className="mr-2" type="checkbox" checked={item.items || false} readOnly />
         <span>{item.title || item.specifier}</span>
         {item.hasItems && <span className="material-symbols-rounded symbols-expand">expand_more</span>}

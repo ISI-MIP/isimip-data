@@ -1,9 +1,10 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import Resource from './Resource'
 
-class Resources extends React.Component {
+
+class Resources extends Component {
 
   constructor(props) {
     super(props)
@@ -43,6 +44,12 @@ class Resources extends React.Component {
     )
   }
 
+}
+
+Resources.propTypes = {
+  resources: PropTypes.array.isRequired,
+  filterString: PropTypes.string.isRequired,
+  showAll: PropTypes.bool.isRequired
 }
 
 export default Resources

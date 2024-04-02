@@ -26,7 +26,8 @@ class References extends Component {
             There are articles on ISIpedia available for this dataset.
           </Tooltip>
         }>
-          <a className="float-right result-reference" href={`${dataset.metadata_url}#references`} target="_blank">
+          <a className="float-right result-reference" href={`${dataset.metadata_url}#references`}
+             target="_blank" rel="noreferrer">
             <img className="isipedia-logo" src="/static/images/isipedia.png" alt="ISIpedia logo" />
           </a>
         </OverlayTrigger>
@@ -38,7 +39,8 @@ class References extends Component {
             There are evaluation articles available for this dataset.
           </Tooltip>
         }>
-          <a className="float-right result-reference" href={`${dataset.metadata_url}#references`} target="_blank">
+          <a className="float-right result-reference" href={`${dataset.metadata_url}#references`}
+             target="_blank" rel="noreferrer">
             <span className="material-symbols-rounded symbols-reference">task_alt</span>
           </a>
         </OverlayTrigger>
@@ -50,7 +52,8 @@ class References extends Component {
             There are references to other publications for this dataset.
           </Tooltip>
         }>
-          <a className="float-right result-reference" href={`${dataset.metadata_url}#references`} target="_blank">
+          <a className="float-right result-reference" href={`${dataset.metadata_url}#references`}
+             target="_blank" rel="noreferrer">
             <span className="material-symbols-rounded symbols-reference">local_library</span>
           </a>
         </OverlayTrigger>

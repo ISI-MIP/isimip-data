@@ -70,7 +70,7 @@ class Selection extends Component {
         <div className="mt-2">
           <div className="float-md-right">
             <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
-              <form className="m-0" method="post" action="/download/" target="_blank">
+              <form className="m-0" method="post" action="/download/" target="_blank" rel="noreferrer">
                 <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
                 {files.map(file => {
                   return <input type="hidden" name="paths" value={file.path} key={file.id} />
@@ -135,7 +135,7 @@ class Selection extends Component {
             {
               selected.map(dataset => (
                 <tr key={dataset.id}>
-                  <td><a href={dataset.metadata_url} target="_blank">{dataset.name}</a></td>
+                  <td><a href={dataset.metadata_url} target="_blank" rel="noreferrer">{dataset.name}</a></td>
                   <td>{get_size(dataset.size)}</td>
                 </tr>
               ))

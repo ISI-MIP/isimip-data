@@ -29,7 +29,7 @@ class Country extends Component {
 
   render() {
     const { name, task, country, countryError, onSelect, label, help } = this.props
-    const { error, countries } = this.state
+    const { countries } = this.state
     const htmlId = 'check-' + name
     const checked = (task == name)
 
@@ -37,7 +37,7 @@ class Country extends Component {
       <div className="row download-row align-items-center">
         <div className="col-md-4 mb-2">
           <div className="form-check mb-0">
-            <input className="form-check-input" className="form-check-input"
+            <input className="form-check-input form-check-input"
                 type="radio" name="country" id={htmlId}
                 onChange={() => onSelect(name)} checked={checked} />
 

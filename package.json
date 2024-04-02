@@ -1,10 +1,11 @@
 {
   "name": "isimip-data",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "scripts": {
-    "build:prod": "webpack --config webpack/prod.config.js --mode production",
-    "build": "webpack --config webpack/dev.config.js --mode development",
-    "watch": "webpack --config webpack/dev.config.js --mode development --watch"
+    "build:prod": "webpack --config webpack.config.js --mode production",
+    "build": "webpack --config webpack.config.js --mode development",
+    "watch": "webpack --config webpack.config.js --mode development --watch",
+    "lint": "eslint isimip_data/**/*.js"
   },
   "author": "Potsdam Institute for Climate Impact Research",
   "license": "MIT",
@@ -25,8 +26,7 @@
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.6",
-    "react-dom": "^17.0.2",
-    "react-router-dom": "^5.3.4"
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
@@ -36,6 +36,8 @@
     "babel-loader": "^8.3.0",
     "copy-webpack-plugin": "^8.1.1",
     "css-loader": "^5.2.7",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
     "file-loader": "^6.2.0",
     "mini-css-extract-plugin": "^1.6.2",
     "sass": "^1.56.2",

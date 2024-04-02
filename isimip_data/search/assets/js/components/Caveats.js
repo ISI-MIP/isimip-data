@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import OverlayTrigger from "react-bootstrap/OverlayTrigger"
-import Tooltip from "react-bootstrap/Tooltip"
+
 
 class Caveats extends Component {
 
@@ -9,8 +8,8 @@ class Caveats extends Component {
     const { dataset, toggleCaveats } = this.props
 
     const get_caveats_color = caveats => {
-      const [level, color] = caveats.reduce((acc, cur) => {
-        const [acc_level, acc_color] = acc
+      const [level, color] = caveats.reduce((acc, cur) => {  // eslint-disable-line no-unused-vars
+        const [acc_level, acc_color] = acc  // eslint-disable-line no-unused-vars
         if (cur.severity_level > acc_level) {
           return [cur.severity_level, cur.severity_color]
         } else {

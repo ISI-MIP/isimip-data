@@ -34,7 +34,7 @@ class Facet extends Component {
   }
 
   componentWillUnmount(){
-    this.abortController.abort();
+    this.abortController.abort()
   }
 
   componentDidUpdate(prevProps) {
@@ -113,8 +113,8 @@ class Facet extends Component {
         </label>
         {filteredUrls.map((key, index) => {
           return (
-            <a key={index} className={'ml-1'.concat(index == 0 ? ' ml-auto' : '')} href={urls[key]} target="_blank"
-               onClick={e => e.stopPropagation()}>
+            <a key={index} className={'ml-1'.concat(index == 0 ? ' ml-auto' : '')} href={urls[key]}
+               target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}>
               <OverlayTrigger placement="bottom" overlay={<Tooltip>More information is available in the {key} protocol.</Tooltip>}>
                 <span className="material-symbols-rounded">quick_reference_all</span>
               </OverlayTrigger>
@@ -134,7 +134,7 @@ class Facet extends Component {
     return (
       <ul className="list-group list-group-flush">
         {
-          items.map((item, index) => {
+          items.map((item) => {
             const [specifier, count] = item
             const properties = getValueOrNull(glossary, identifier, specifier)
             const title = properties ? properties.title : null
@@ -177,7 +177,7 @@ class Facet extends Component {
   }
 
   render() {
-    const { params, facet, glossary } = this.props
+    const { params, facet } = this.props
     const { isOpen, isLoading, items } = this.state
     const checked = params[facet.identifier] || []
     const isChecked = checked.length > 0
@@ -204,6 +204,7 @@ class Facet extends Component {
 Facet.propTypes = {
   params: PropTypes.object.isRequired,
   facet: PropTypes.object.isRequired,
+  glossary: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired
 }
 

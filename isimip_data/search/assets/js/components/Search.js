@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+
 class Search extends Component {
 
   constructor(props) {
@@ -26,7 +27,7 @@ class Search extends Component {
     this.props.onSubmit(this.state.value)
   }
 
-  handleReset(e) {
+  handleReset() {
     this.setState({ value: '' })
     this.props.onReset()
   }

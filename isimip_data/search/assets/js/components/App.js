@@ -1,12 +1,10 @@
-import React, { Component} from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import ls from 'local-storage'
 
 import { getLocationParams, getLocationString } from 'isimip_data/metadata/assets/js/utils/location'
 
 import CoreApi from 'isimip_data/core/assets/js/api/CoreApi'
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
-import FacetApi from '../api/FacetApi'
 
 import Search from './Search'
 import Results from './Results'
@@ -18,10 +16,9 @@ import Version from './Version'
 class App extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       params: {},
-      facets: [],
       settings: {},
       identifiers: [],
       glossary: {},
@@ -150,7 +147,7 @@ class App extends Component {
   }
 
   render() {
-    const { params, facets, glossary, settings, sidebar } = this.state
+    const { params, glossary, settings, sidebar } = this.state
     const pageSize = parseInt(settings.METADATA_PAGE_SIZE)
 
     return (
@@ -164,12 +161,12 @@ class App extends Component {
               Sidebar view:
               <div className="form-check form-check-inline">
                 <input className="form-check-input" type="radio" id="tree-radio"
-                       onChange={e => this.handleSidebarChange('tree')} checked={sidebar == 'tree'} />
+                       onChange={() => this.handleSidebarChange('tree')} checked={sidebar == 'tree'} />
                 <label className="form-check-label" htmlFor="tree-radio">Tree</label>
               </div>
               <div className="form-check form-check-inline mr-0">
                 <input className="form-check-input" type="radio" id="facets-radio"
-                       onChange={e => this.handleSidebarChange('facets')} checked={sidebar == 'facets'} />
+                       onChange={() => this.handleSidebarChange('facets')} checked={sidebar == 'facets'} />
                 <label className="form-check-label" htmlFor="facets-radio">Facets</label>
               </div>
             </div>

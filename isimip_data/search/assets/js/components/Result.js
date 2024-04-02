@@ -4,8 +4,6 @@ import PropTypes from 'prop-types'
 import jQuery from 'jquery'
 import bytes from 'bytes'
 import Cookies from 'js-cookie'
-import OverlayTrigger from "react-bootstrap/OverlayTrigger"
-import Tooltip from "react-bootstrap/Tooltip"
 
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 import Badges from './Badges'
@@ -18,7 +16,7 @@ const get_size = size => bytes(size, {unitSeparator: ' '})
 class Result extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       showAttributes: false,
       showFiles: false,
@@ -32,11 +30,11 @@ class Result extends Component {
   }
 
   componentDidMount() {
-    jQuery('[data-toggle="tooltip"]').tooltip();
+    jQuery('[data-toggle="tooltip"]').tooltip()
   }
 
   componentDidUpdate() {
-    jQuery('[data-toggle="tooltip"]').tooltip();
+    jQuery('[data-toggle="tooltip"]').tooltip()
   }
 
   toggleAttributes(e) {
@@ -72,7 +70,7 @@ class Result extends Component {
           <References dataset={dataset} />
           <Caveats dataset={dataset} toggleCaveats={this.toggleCaveats} />
           <h4 className="card-title mt-0 mb-3">
-            <a className="result-title" href={dataset.metadata_url} target="_blank">{dataset.name}</a>
+            <a className="result-title" href={dataset.metadata_url} target="_blank" rel="noreferrer">{dataset.name}</a>
           </h4>
         </div>
 
@@ -225,13 +223,13 @@ class Result extends Component {
                 <li className="result-file" key={file.id}>
                   <div className="row">
                     <div className="col-md-8">
-                      <a href={file.metadata_url} target="_blank">{file.name}</a>
+                      <a href={file.metadata_url} target="_blank" rel="noreferrer">{file.name}</a>
                     </div>
                     <div className="col-md-2">
                       {get_size(file.size)}
                     </div>
                     <div className="col-md-2">
-                      <a href={file.file_url } target="_blank">Download file</a>
+                      <a href={file.file_url } target="_blank" rel="noreferrer">Download file</a>
                     </div>
                   </div>
                 </li>
@@ -255,7 +253,7 @@ class Result extends Component {
           </span>
         </div>
         <p className="mb-0">
-          <a href={caveat.url} target="_blank">{caveat.title}</a>
+          <a href={caveat.url} target="_blank" rel="noreferrer">{caveat.title}</a>
           <span className="text-muted"> #{caveat.id}</span>
         </p>
         <p className={'mb-0 text-' + caveat.message_color}> {caveat.message_display}</p>

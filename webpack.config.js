@@ -1,9 +1,11 @@
 const webpack = require('webpack')
+const { merge } = require('webpack-merge')
 const path = require('path')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
-module.exports = {
+const baseConfig = {
   entry: {
     base: [
       './isimip_data/core/assets/scss/base.scss',
@@ -12,10 +14,6 @@ module.exports = {
     download: [
       './isimip_data/download/assets/scss/download.scss',
       './isimip_data/download/assets/js/download.js',
-    ],
-    indicators: [
-      './isimip_data/indicators/assets/scss/indicators.scss',
-      './isimip_data/indicators/assets/js/indicators.js',
     ],
     metadata: [
       './isimip_data/metadata/assets/scss/metadata.scss',
@@ -32,7 +30,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      isimip_data: path.resolve(__dirname, '../isimip_data/')
+      isimip_data: path.resolve(__dirname, './isimip_data/')
     },
     extensions: ['*', '.js', '.jsx']
   },
@@ -93,4 +91,33 @@ module.exports = {
       jQuery: 'jquery'
     })
   ]
+}
+
+const developmentConfig = {
+  devtool: 'eval',
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development')
+    })
+  ]
+}
+
+const productionConfig = {
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    })
+  ],
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()]
+  }
+}
+
+module.exports = (env, argv) => {
+  if (argv.mode === 'development') {
+    return merge(baseConfig, developmentConfig)
+  } else {
+    return merge(baseConfig, productionConfig)
+  }
 }
