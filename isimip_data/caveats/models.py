@@ -1,3 +1,5 @@
+import textwrap
+
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from django.core.cache import cache
@@ -6,15 +8,29 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from isimip_data.accounts.utils import get_full_name
 from isimip_data.annotations.models import Download, Figure
 from isimip_data.annotations.utils import query_datasets, query_resources
+from isimip_data.core.utils import get_full_name
 from isimip_data.metadata.utils import prettify_specifiers
 
 from .managers import ModerationManager
 
 
 class Caveat(models.Model):
+
+    CATEGORY_NOTE = 'note'
+    CATEGORY_ISSUE = 'issue'
+    CATEGORY_CHOICES = (
+        (CATEGORY_NOTE, _('note')),
+        (CATEGORY_ISSUE, _('issue'))
+    )
+
+    SEVERITY_LOW = 'low'
+    SEVERITY_HIGH = 'high'
+    SEVERITY_CHOICES = (
+        (SEVERITY_LOW, _('low')),
+        (SEVERITY_HIGH, _('high'))
+    )
 
     STATUS_NEW = 'new'
     STATUS_ON_HOLD = 'on_hold'
@@ -25,13 +41,6 @@ class Caveat(models.Model):
         (STATUS_ON_HOLD, _('on hold')),
         (STATUS_RESOLVED, _('resolved')),
         (STATUS_WONT_FIX, _('won\'t fix')),
-    )
-
-    SEVERITY_LOW = 'low'
-    SEVERITY_HIGH = 'high'
-    SEVERITY_CHOICES = (
-        (SEVERITY_LOW, _('low')),
-        (SEVERITY_HIGH, _('high'))
     )
 
     MESSAGE_CAN_BE_USED = 'can_be_used'
@@ -58,8 +67,9 @@ class Caveat(models.Model):
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='caveats')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    severity = models.TextField(choices=SEVERITY_CHOICES)
-    status = models.TextField(choices=STATUS_CHOICES)
+    category = models.TextField(choices=CATEGORY_CHOICES, default=CATEGORY_ISSUE)
+    severity = models.TextField(blank=True, choices=SEVERITY_CHOICES, default=SEVERITY_LOW)
+    status = models.TextField(blank=True, choices=STATUS_CHOICES, default=STATUS_NEW)
     message = models.TextField(blank=True, choices=MESSAGE_CHOICES)
     specifiers = models.JSONField(default=dict)
     include = models.TextField(
@@ -74,7 +84,6 @@ class Caveat(models.Model):
     resources = ArrayField(models.UUIDField(), blank=True, default=list)
     version_after = models.CharField(max_length=8, blank=True)
     version_before = models.CharField(max_length=8, blank=True)
-    subscribers = models.ManyToManyField(User, blank=True)
     figures = models.ManyToManyField(Figure, related_name='caveats')
     downloads = models.ManyToManyField(Download, related_name='caveats')
 
@@ -97,6 +106,13 @@ class Caveat(models.Model):
 
     def get_creator_display(self):
         return get_full_name(self.creator)
+
+    @property
+    def category_color(self):
+        return {
+            self.CATEGORY_NOTE: 'light',
+            self.CATEGORY_ISSUE: 'dark'
+        }.get(self.category)
 
     @property
     def severity_level(self):
@@ -143,9 +159,6 @@ class Caveat(models.Model):
     def get_reply_url(self):
         return reverse('caveat', kwargs={'pk': self.pk}) + '#reply'
 
-    def get_unsubscribe_url(self):
-        return reverse('caveat_unsubscribe', kwargs={'pk': self.pk})
-
     def get_admin_url(self):
         return reverse('admin:caveats_caveat_change', kwargs={'object_id': self.pk})
 
@@ -163,6 +176,13 @@ class Caveat(models.Model):
                 query += f'{key}/{value}/'
 
         return reverse('search') + query
+
+    def get_quote_string(self, level):
+        head_indent = '> ' * level if level else ''
+        text_indent = '> ' * (level + 1)
+        return f'{head_indent}On {self.created.strftime("%B %d, %Y")}, {self.get_creator_display()} reported:\n' \
+            + textwrap.fill(self.description, width=70,
+                            initial_indent=text_indent, subsequent_indent=text_indent) + '\n'
 
 
 class Comment(models.Model):
@@ -194,3 +214,10 @@ class Comment(models.Model):
 
     def get_absolute_url(self):
         return reverse('caveat', args=[self.caveat.id]) + f'#comment-{self.id}'
+
+    def get_quote_string(self, level):
+        head_indent = '> ' * level if level else ''
+        text_indent = '> ' * (level + 1)
+        return f'{head_indent}On {self.created.strftime("%B %d, %Y")}, {self.get_creator_display()} commented:\n' \
+            + textwrap.fill(self.text, width=70,
+                            initial_indent=text_indent, subsequent_indent=text_indent) + '\n'

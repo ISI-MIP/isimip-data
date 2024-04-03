@@ -13,6 +13,7 @@ $container-max-widths: (
 $material-symbols-font-path: '~material-symbols/';
 @import '~material-symbols/rounded';
 
+@import 'caveats';
 @import 'fonts';
 @import 'footer';
 @import 'home';

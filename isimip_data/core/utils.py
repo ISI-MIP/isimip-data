@@ -21,3 +21,10 @@ def get_file_base_url(request):
 def get_file_api_url(request):
     url = settings.PROXY_FILES_API_URL if via_proxy(request) else settings.FILES_API_URL
     return trailing_slash(url)
+
+
+def get_full_name(user):
+    if user.first_name and user.last_name:
+        return f'{user.first_name} {user.last_name}'
+    else:
+        return user.username
