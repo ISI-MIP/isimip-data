@@ -1,5 +1,3 @@
-import textwrap
-
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from django.core.cache import cache
@@ -10,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from isimip_data.annotations.models import Download, Figure
 from isimip_data.annotations.utils import query_datasets, query_resources
-from isimip_data.core.utils import get_full_name
+from isimip_data.core.utils import get_full_name, get_quote_text
 from isimip_data.metadata.utils import prettify_specifiers
 
 from .managers import ModerationManager
@@ -177,13 +175,9 @@ class Caveat(models.Model):
 
         return reverse('search') + query
 
-    def get_quote_string(self, level):
-        head_indent = '> ' * level if level else ''
-        text_indent = '> ' * (level + 1)
-        return f'{head_indent}On {self.created.strftime("%B %d, %Y")}, {self.get_creator_display()} reported:\n' \
-            + textwrap.fill(self.description, width=70,
-                            initial_indent=text_indent, subsequent_indent=text_indent) + '\n'
-
+    def get_quote(self, level):
+        head = f'On {self.created.strftime("%B %d, %Y")}, {self.get_creator_display()} reported:'
+        return get_quote_text(head, self.description, level)
 
 class Comment(models.Model):
 
@@ -215,9 +209,6 @@ class Comment(models.Model):
     def get_absolute_url(self):
         return reverse('caveat', args=[self.caveat.id]) + f'#comment-{self.id}'
 
-    def get_quote_string(self, level):
-        head_indent = '> ' * level if level else ''
-        text_indent = '> ' * (level + 1)
-        return f'{head_indent}On {self.created.strftime("%B %d, %Y")}, {self.get_creator_display()} commented:\n' \
-            + textwrap.fill(self.text, width=70,
-                            initial_indent=text_indent, subsequent_indent=text_indent) + '\n'
+    def get_quote(self, level):
+        head = f'On {self.created.strftime("%B %d, %Y")}, {self.get_creator_display()} commented:'
+        return get_quote_text(head, self.text, level, add_newline=True)

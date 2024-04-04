@@ -1,3 +1,5 @@
+import textwrap
+
 from django.conf import settings
 
 
@@ -28,3 +30,15 @@ def get_full_name(user):
         return f'{user.first_name} {user.last_name}'
     else:
         return user.username
+
+def get_quote_text(head, text, level, add_newline=False):
+    head_indent = ('>' * level + ' ') if level else ''
+    text_indent = ('>' * (level + 1) + ' ')
+    quote = f'{head_indent}{head}\r\n' + '\r\n'.join(textwrap.wrap(
+        text, width=70, initial_indent=text_indent, subsequent_indent=text_indent
+    ))
+
+    if add_newline:
+        quote += f'\r\n{text_indent}'
+
+    return quote

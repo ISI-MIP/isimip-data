@@ -179,11 +179,11 @@ class CommentAdmin(admin.ModelAdmin):
 
         quotes = []
         level = 0
-        for prevous_comment in comment.caveat.comments.all():
-            quotes.append(prevous_comment.get_quote_string(level=level))
+        for prevous_comment in comment.caveat.comments.exclude(created__gte=comment.created) \
+                                                      .order_by('created'):
+            quotes.append(prevous_comment.get_quote(level=level))
             level += 1
-        quotes.append(comment.caveat.get_quote_string(level=level))
-
+        quotes.append(comment.caveat.get_quote(level=level))
 
         context = {
             'comment': comment,
