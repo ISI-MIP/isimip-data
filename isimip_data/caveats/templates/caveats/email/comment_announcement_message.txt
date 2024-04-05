@@ -8,6 +8,8 @@ We would like to draw your attention to the following update on the caveat:
 
 {{ comment.text|safe }}
 
+{% blocktrans %}If you have any questions or require further information, please do not hesitate to contact us.{% endblocktrans %}
+
 {% blocktrans %}More information about the caveat can be accessed at {{ caveat_url }}.{% endblocktrans %}
 
 Best wishes,

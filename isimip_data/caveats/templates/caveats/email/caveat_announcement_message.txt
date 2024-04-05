@@ -6,6 +6,8 @@
 
 {{ caveat.description|safe }}
 
+{% blocktrans %}If you have any questions or require further information, please do not hesitate to contact us.{% endblocktrans %}
+
 {% blocktrans %}More information about the caveat can be accessed at {{ caveat_url }}.{% endblocktrans %}
 
 {% if datasets %}The following datasets are affected:
