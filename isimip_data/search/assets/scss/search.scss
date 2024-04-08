@@ -234,11 +234,15 @@ main {
         }
 
         .symbols-caveat {
-            font-size: 24px;
-            margin-top: -2px;
+            font-size: 34px;
+            margin-top: -6px;
 
             cursor: pointer;
             user-select: none;
+
+            &.material-symbols-rounded {
+                font-variation-settings: 'FILL' 1, 'opsz' 24
+            }
         }
 
         .result-reference {

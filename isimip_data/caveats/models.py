@@ -106,6 +106,13 @@ class Caveat(models.Model):
         return get_full_name(self.creator)
 
     @property
+    def category_symbol(self):
+        return {
+            self.CATEGORY_NOTE: 'info',
+            self.CATEGORY_ISSUE: 'warning'
+        }.get(self.category)
+
+    @property
     def category_color(self):
         return {
             self.CATEGORY_NOTE: 'light',
@@ -117,14 +124,14 @@ class Caveat(models.Model):
         return {
             self.SEVERITY_LOW: 1,
             self.SEVERITY_HIGH: 2
-        }.get(self.severity)
+        }.get(self.severity, 0)
 
     @property
     def severity_color(self):
         return {
             self.SEVERITY_LOW: 'info',
             self.SEVERITY_HIGH: 'danger'
-        }.get(self.severity)
+        }.get(self.severity, 'default')
 
     @property
     def status_color(self):

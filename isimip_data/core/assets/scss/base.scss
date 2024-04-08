@@ -10,9 +10,6 @@ $container-max-widths: (
 
 @import '~bootstrap/scss/bootstrap';
 
-$material-symbols-font-path: '~material-symbols/';
-@import '~material-symbols/rounded';
-
 @import 'caveats';
 @import 'fonts';
 @import 'footer';

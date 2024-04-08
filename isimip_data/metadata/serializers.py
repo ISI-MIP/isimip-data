@@ -56,6 +56,7 @@ class DatasetResourceSerializer(serializers.ModelSerializer):
 class DatasetCaveatSerializer(serializers.ModelSerializer):
 
     url = serializers.SerializerMethodField()
+    category_display = serializers.CharField(source='get_category_display')
     severity_display = serializers.CharField(source='get_severity_display')
     status_display = serializers.CharField(source='get_status_display')
     message_display = serializers.CharField(source='get_message_display')
@@ -66,6 +67,10 @@ class DatasetCaveatSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'url',
+            'category',
+            'category_display',
+            'category_color',
+            'category_symbol',
             'severity',
             'severity_display',
             'severity_level',

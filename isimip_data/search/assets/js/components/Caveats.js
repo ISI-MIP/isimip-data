@@ -7,33 +7,38 @@ class Caveats extends Component {
   render() {
     const { dataset, toggleCaveats } = this.props
 
-    const get_caveats_color = caveats => {
-      const [level, color] = caveats.reduce((acc, cur) => {  // eslint-disable-line no-unused-vars
-        const [acc_level, acc_color] = acc  // eslint-disable-line no-unused-vars
-        if (cur.severity_level > acc_level) {
-          return [cur.severity_level, cur.severity_color]
+    const get_severity = caveats => {
+      return caveats.reduce((acc, cur) => {
+        if (cur.severity_level > acc.level) {
+          return {level: cur.severity_level, color: cur.severity_color, symbol: cur.category_symbol}
         } else {
           return acc
         }
-      }, [-1, 'muted'])
-
-      return color
+      }, {level: -1, color: 'muted', symbol: 'info'})
     }
 
     if (dataset.caveats.length > 0) {
+      const { color, symbol } = get_severity(dataset.caveats)
+
       return (
-        <div className={'float-right text-' + get_caveats_color(dataset.caveats)}>
-          <span className="material-symbols-rounded symbols-caveat"
-                title="There are caveats for this dataset."
-                onClick={toggleCaveats}>warning_amber</span>
+        <div className="float-right">
+          <button className={`btn btn-link text-${color}`}>
+            <span className="material-symbols-rounded symbols-caveat"
+                  title="There are caveats for this dataset."
+                  onClick={toggleCaveats}>{symbol}</span>
+          </button>
         </div>
       )
     } else if (dataset.caveats_versions.length > 0) {
+      const { symbol } = get_severity(dataset.caveats_versions)
+
       return (
-        <div className={'float-right text-primary'}>
-          <span className="material-symbols-rounded symbols-caveat"
-                title="There are caveats for other versions of this dataset."
-                onClick={toggleCaveats}>warning_amber</span>
+        <div className="float-right">
+          <button className="btn btn-link text-muted">
+            <span className="material-symbols-rounded symbols-caveat"
+                  title="There are caveats for other versions of this dataset."
+                  onClick={toggleCaveats}>{symbol}</span>
+          </button>
         </div>
       )
     } else {
