@@ -41,7 +41,8 @@ class Path extends Component {
 
 Path.propTypes = {
   path: PropTypes.string.isRequired,
-  pathError: PropTypes.string.isRequired
+  pathError: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired
 }
 
 export default Path

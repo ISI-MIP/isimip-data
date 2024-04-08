@@ -18,8 +18,7 @@ class CaveatViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return Caveat.objects.public(self.request.user) \
-                             .select_related('creator') \
-                             .prefetch_related('subscribers')
+                             .select_related('creator')
 
     @action(detail=False)
     def index(self, request):

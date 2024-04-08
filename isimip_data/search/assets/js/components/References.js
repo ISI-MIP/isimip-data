@@ -3,10 +3,6 @@ import PropTypes from 'prop-types'
 import OverlayTrigger from "react-bootstrap/OverlayTrigger"
 import Tooltip from "react-bootstrap/Tooltip"
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLink, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import { faCheckCircle } from '@fortawesome/free-regular-svg-icons'
-
 const referenceTypes = ['OTHER', 'EVALUATION', 'ISIPEDIA']
 
 class References extends Component {
@@ -30,7 +26,8 @@ class References extends Component {
             There are articles on ISIpedia available for this dataset.
           </Tooltip>
         }>
-          <a className="float-right result-reference" href={`${dataset.metadata_url}#references`} target="_blank">
+          <a className="float-right result-reference" href={`${dataset.metadata_url}#references`}
+             target="_blank" rel="noreferrer">
             <img className="isipedia-logo" src="/static/images/isipedia.png" alt="ISIpedia logo" />
           </a>
         </OverlayTrigger>
@@ -42,8 +39,9 @@ class References extends Component {
             There are evaluation articles available for this dataset.
           </Tooltip>
         }>
-          <a className="float-right result-reference" href={`${dataset.metadata_url}#references`} target="_blank">
-            <FontAwesomeIcon className="result-icon" icon={faCheckCircle} />
+          <a className="float-right result-reference" href={`${dataset.metadata_url}#references`}
+             target="_blank" rel="noreferrer">
+            <span className="material-symbols-rounded symbols-reference">task_alt</span>
           </a>
         </OverlayTrigger>
       )
@@ -54,8 +52,9 @@ class References extends Component {
             There are references to other publications for this dataset.
           </Tooltip>
         }>
-          <a className="float-right result-reference" href={`${dataset.metadata_url}#references`} target="_blank">
-            <FontAwesomeIcon className="result-icon" icon={faExternalLinkAlt} />
+          <a className="float-right result-reference" href={`${dataset.metadata_url}#references`}
+             target="_blank" rel="noreferrer">
+            <span className="material-symbols-rounded symbols-reference">local_library</span>
           </a>
         </OverlayTrigger>
       )

@@ -1,17 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronUp, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
-
 import jQuery from 'jquery'
 import bytes from 'bytes'
 import Cookies from 'js-cookie'
-import OverlayTrigger from "react-bootstrap/OverlayTrigger"
-import Tooltip from "react-bootstrap/Tooltip"
 
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
-import Scale from 'isimip_data/indicators/assets/js/components/Scale'
 import Badges from './Badges'
 import References from './References'
 import Caveats from './Caveats'
@@ -22,27 +16,25 @@ const get_size = size => bytes(size, {unitSeparator: ' '})
 class Result extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       showAttributes: false,
       showFiles: false,
       showCaveats: false,
-      showIndicators: false,
       csrfToken: Cookies.get('csrftoken')
     }
     this.toggleAttributes = this.toggleAttributes.bind(this)
     this.toggleFiles = this.toggleFiles.bind(this)
     this.toggleCaveats = this.toggleCaveats.bind(this)
-    this.toggleIndicators = this.toggleIndicators.bind(this)
     this.handleDownload = this.handleDownload.bind(this)
   }
 
   componentDidMount() {
-    jQuery('[data-toggle="tooltip"]').tooltip();
+    jQuery('[data-toggle="tooltip"]').tooltip()
   }
 
   componentDidUpdate() {
-    jQuery('[data-toggle="tooltip"]').tooltip();
+    jQuery('[data-toggle="tooltip"]').tooltip()
   }
 
   toggleAttributes(e) {
@@ -60,11 +52,6 @@ class Result extends Component {
     this.setState({ showCaveats: !this.state.showCaveats})
   }
 
-  toggleIndicators(e) {
-    e.preventDefault()
-    this.setState({ showIndicators: !this.state.showIndicators})
-  }
-
   handleDownload(e, files) {
     e.preventDefault()
     DatasetApi.downloadFiles(files)
@@ -72,7 +59,7 @@ class Result extends Component {
 
   renderDataset(dataset) {
     const { glossary, onSelect, isSelected } = this.props
-    const { showAttributes, showFiles, showCaveats, showIndicators } = this.state
+    const { showAttributes, showFiles, showCaveats } = this.state
     const inputId = `${dataset.id}-input`
 
     return (
@@ -83,7 +70,7 @@ class Result extends Component {
           <References dataset={dataset} />
           <Caveats dataset={dataset} toggleCaveats={this.toggleCaveats} />
           <h4 className="card-title mt-0 mb-3">
-            <a className="result-title" href={dataset.metadata_url} target="_blank">{dataset.name}</a>
+            <a className="result-title" href={dataset.metadata_url} target="_blank" rel="noreferrer">{dataset.name}</a>
           </h4>
         </div>
 
@@ -125,10 +112,12 @@ class Result extends Component {
           <div className="d-inline mr-2">
             <button className="btn btn-link" onClick={this.toggleAttributes}>
               {showAttributes && <span>
-                Attributes <FontAwesomeIcon icon={faChevronUp} />
+                Attributes
+                <span className="material-symbols-rounded symbols-expand">expand_less</span>
               </span>}
               {!showAttributes && <span>
-                Attributes <FontAwesomeIcon icon={faChevronDown} />
+                Attributes
+                <span className="material-symbols-rounded symbols-expand">expand_more</span>
               </span>}
             </button>
           </div>
@@ -136,10 +125,12 @@ class Result extends Component {
           <div className="d-inline mr-2">
             <button className="btn btn-link" onClick={this.toggleFiles}>
               {showFiles && <span>
-                Files <FontAwesomeIcon icon={faChevronUp} />
+                Files
+                <span className="material-symbols-rounded symbols-expand">expand_less</span>
               </span>}
               {!showFiles && <span>
-                Files <FontAwesomeIcon icon={faChevronDown} />
+                Files
+                <span className="material-symbols-rounded symbols-expand">expand_more</span>
               </span>}
             </button>
           </div>
@@ -149,32 +140,23 @@ class Result extends Component {
             <div className="d-inline">
               <button className="btn btn-link" onClick={this.toggleCaveats}>
                 {showCaveats && <span>
-                  Caveats <FontAwesomeIcon icon={faChevronUp} />
+                  Caveats
+                  <span className="material-symbols-rounded symbols-expand">expand_less</span>
                 </span>}
                 {!showCaveats && <span>
-                  Caveats <FontAwesomeIcon icon={faChevronDown} />
+                  Caveats
+                  <span className="material-symbols-rounded symbols-expand">expand_more</span>
                 </span>}
               </button>
             </div>
           }
 
-          {dataset.indicators.length > 0 && <div className="d-inline">
-            <button className="btn btn-link" onClick={this.toggleIndicators}>
-              {showIndicators && <span>
-                Indicators <FontAwesomeIcon icon={faChevronUp} />
-              </span>}
-              {!showIndicators && <span>
-                Indicators <FontAwesomeIcon icon={faChevronDown} />
-              </span>}
-            </button>
-          </div>}
         </div>
       </li>
     )
   }
 
   renderAttributes(dataset) {
-    const { glossary } = this.props
     const specifiers = dataset.pretty_specifiers
 
     return (
@@ -241,13 +223,13 @@ class Result extends Component {
                 <li className="result-file" key={file.id}>
                   <div className="row">
                     <div className="col-md-8">
-                      <a href={file.metadata_url} target="_blank">{file.name}</a>
+                      <a href={file.metadata_url} target="_blank" rel="noreferrer">{file.name}</a>
                     </div>
                     <div className="col-md-2">
                       {get_size(file.size)}
                     </div>
                     <div className="col-md-2">
-                      <a href={file.file_url } target="_blank">Download file</a>
+                      <a href={file.file_url } target="_blank" rel="noreferrer">Download file</a>
                     </div>
                   </div>
                 </li>
@@ -271,7 +253,7 @@ class Result extends Component {
           </span>
         </div>
         <p className="mb-0">
-          <a href={caveat.url} target="_blank">{caveat.title}</a>
+          <a href={caveat.url} target="_blank" rel="noreferrer">{caveat.title}</a>
           <span className="text-muted"> #{caveat.id}</span>
         </p>
         <p className={'mb-0 text-' + caveat.message_color}> {caveat.message_display}</p>
@@ -311,31 +293,6 @@ class Result extends Component {
     )
   }
 
-  renderIndicators(dataset) {
-    return (
-      <li className="list-group-item result-indicators">
-        <ul className="list-unstyled">
-          {
-            dataset.indicators.map(indicator => {
-              return (
-                <li className="result-indicator" key={indicator.id}>
-                  <div className="row">
-                    <div className="col-md-8">
-                      <a href={indicator.url} target="_blank">{indicator.title}</a>
-                    </div>
-                    <div className="col-md-4">
-                      <Scale value={indicator.value} minimum={indicator.minimum} maximum={indicator.maximum} />
-                    </div>
-                  </div>
-                </li>
-              )
-            })
-          }
-        </ul>
-      </li>
-    )
-  }
-
   renderConfigureDownloadForm(files) {
     const { csrfToken } = this.state
 
@@ -355,7 +312,7 @@ class Result extends Component {
 
   render() {
     const { dataset } = this.props
-    const { showAttributes, showFiles, showCaveats, showIndicators } = this.state
+    const { showAttributes, showFiles, showCaveats } = this.state
 
     return (
       <div className="card result">
@@ -364,7 +321,6 @@ class Result extends Component {
           {showAttributes && this.renderAttributes(dataset)}
           {showFiles && this.renderFiles(dataset)}
           {showCaveats && this.renderCaveats(dataset)}
-          {showIndicators && this.renderIndicators(dataset)}
         </ul>
       </div>
     )

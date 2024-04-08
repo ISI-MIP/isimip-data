@@ -5,7 +5,7 @@ class FacetApi {
       return response.json()
     }).catch(error => {
       return error
-    });
+    })
   }
 
 }

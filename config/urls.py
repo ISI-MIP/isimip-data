@@ -8,22 +8,12 @@ from django.views.generic.base import TemplateView
 
 from rest_framework import routers
 
-from isimip_data.accounts.views import profile_delete, profile_delete_success, profile_update
 from isimip_data.caveats.sitemaps import CaveatSitemap
-from isimip_data.caveats.views import (
-    caveat,
-    caveat_create,
-    caveat_subscribe,
-    caveat_unsubscribe,
-    caveats,
-    comment_create,
-    subscriptions,
-)
+from isimip_data.caveats.views import caveat, caveats
 from isimip_data.caveats.viewsets import CaveatViewSet
 from isimip_data.core.viewsets import SettingsViewSet
 from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
-from isimip_data.indicators.views import indicator, indicators
 from isimip_data.metadata.sitemaps import DatasetSitemap, FileSitemap, ResourceSitemap
 from isimip_data.metadata.views import (
     dataset,
@@ -81,11 +71,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
 
-    path('account/profile/', profile_update, name='profile_update'),
-    path('account/profile/delete/', profile_delete, name='profile_delete'),
-    path('account/profile/delete/success/', profile_delete_success, name='profile_delete_success'),
-    path('account/', include('allauth.urls')),
-
     path('metadata/', metadata, name='metadata'),
     path('doi/', resources, name='resources'),
 
@@ -108,14 +93,6 @@ urlpatterns = [
 
     path('caveats/', caveats, name='caveats'),
     path('caveats/<int:pk>/', caveat, name='caveat'),
-    path('caveats/<int:pk>/subscribe/', caveat_subscribe, name='caveat_subscribe'),
-    path('caveats/<int:pk>/unsubscribe/', caveat_unsubscribe, name='caveat_unsubscribe'),
-    path('caveats/create/', caveat_create, name='caveat_create'),
-    path('caveats/comments/create/', comment_create, name='comment_create'),
-    path('subscriptions/', subscriptions, name='subscriptions'),
-
-    path('indicators/', indicators, name='indicators'),
-    path('indicators/<int:pk>/', indicator, name='indicator'),
 
     path('', TemplateView.as_view(template_name='home/home.html'), name='home'),
     path('robots.txt', TemplateView.as_view(template_name='core/robots.txt'), name='robots.txt'),

@@ -17,8 +17,8 @@ function dropHandler(e) {
     }
   } else {
     // Use DataTransfer interface to access the file(s)
-    for (var i = 0; i < ev.dataTransfer.files.length; i++) {
-      processFile(e.target, e.dataTransfer.files[i])
+    for (var j = 0; j < e.dataTransfer.files.length; j++) {
+      processFile(e.target, e.dataTransfer.files[j])
     }
   }
 }

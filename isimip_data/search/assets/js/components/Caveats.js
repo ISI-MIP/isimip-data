@@ -1,45 +1,44 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import OverlayTrigger from "react-bootstrap/OverlayTrigger"
-import Tooltip from "react-bootstrap/Tooltip"
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
 class Caveats extends Component {
 
   render() {
     const { dataset, toggleCaveats } = this.props
 
-    const get_caveats_color = caveats => {
-      const [level, color] = caveats.reduce((acc, cur) => {
-        const [acc_level, acc_color] = acc
-        if (cur.severity_level > acc_level) {
-          return [cur.severity_level, cur.severity_color]
+    const get_severity = caveats => {
+      return caveats.reduce((acc, cur) => {
+        if (cur.severity_level > acc.level) {
+          return {level: cur.severity_level, color: cur.severity_color, symbol: cur.category_symbol}
         } else {
           return acc
         }
-      }, [-1, 'muted'])
-
-      return color
+      }, {level: -1, color: 'muted', symbol: 'info'})
     }
 
     if (dataset.caveats.length > 0) {
+      const { color, symbol } = get_severity(dataset.caveats)
+
       return (
-        <div className={'float-right text-' + get_caveats_color(dataset.caveats)}>
-          <FontAwesomeIcon className="result-icon"
-                           title="There are caveats for this dataset."
-                           icon={faExclamationTriangle}
-                           onClick={toggleCaveats} />
+        <div className="float-right">
+          <button className={`btn btn-link text-${color}`}>
+            <span className="material-symbols-rounded symbols-caveat"
+                  title="There are caveats for this dataset."
+                  onClick={toggleCaveats}>{symbol}</span>
+          </button>
         </div>
       )
     } else if (dataset.caveats_versions.length > 0) {
+      const { symbol } = get_severity(dataset.caveats_versions)
+
       return (
-        <div className={'float-right text-primary'}>
-          <FontAwesomeIcon className="result-icon"
-                           title="There are caveats for other versions of this dataset."
-                           icon={faExclamationTriangle}
-                           onClick={toggleCaveats} />
+        <div className="float-right">
+          <button className="btn btn-link text-muted">
+            <span className="material-symbols-rounded symbols-caveat"
+                  title="There are caveats for other versions of this dataset."
+                  onClick={toggleCaveats}>{symbol}</span>
+          </button>
         </div>
       )
     } else {

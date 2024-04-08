@@ -77,21 +77,21 @@ class Version extends Component {
         <div className="card-header d-md-flex">
           <div className="form-check form-check-inline mb-2 mb-md-0">
             <input className="form-check-input" type="radio" id="latest-version-radio"
-                   checked={!showVersions} onChange={e => this.handleshowVersionsChange(false)} />
+                   checked={!showVersions} onChange={() => this.handleshowVersionsChange(false)} />
             <label className="form-check-label" htmlFor="latest-version-radio">
               Show only the latest version
             </label>
           </div>
           <div className="form-check form-check-inline mb-2 mb-md-0">
             <input className="form-check-input" type="radio" id="specific-versions-radio"
-                   checked={showVersions} onChange={e => this.handleshowVersionsChange(true)} />
+                   checked={showVersions} onChange={() => this.handleshowVersionsChange(true)} />
             <label className="form-check-label" htmlFor="specific-versions-radio">
               Show specific versions with date constraints
             </label>
           </div>
           <div className="form-check form-check-inline ml-auto mr-0">
             <input className="form-check-input" type="checkbox" id="archived-versions-checkbox"
-                   checked={allChecked} onChange={e => onChange({ all: !allChecked})} />
+                   checked={allChecked} onChange={() => onChange({ all: !allChecked})} />
             <label className="form-check-label" htmlFor="archived-versions-checkbox">Show archived files</label>
           </div>
         </div>

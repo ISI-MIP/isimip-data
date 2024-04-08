@@ -1,14 +1,9 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
-
-import { getLocationParams, getLocationString } from 'isimip_data/metadata/assets/js/utils/location'
 
 import CoreApi from 'isimip_data/core/assets/js/api/CoreApi'
 import DownloadApi from '../api/DownloadApi'
 
-import Path from './Path'
 import Country from './Country'
 import BBox from './BBox'
 import Landonly from './Landonly'
@@ -170,9 +165,9 @@ class App extends Component {
     DownloadApi.submitJob(url, data).then(response => {
       if (response.status == 'error') {
         const pathsError = response.errors.paths || []
-        const countryError = response.errors.country || '';
-        const bboxError = response.errors.bbox || '';
-        const pointError = response.errors.point || '';
+        const countryError = response.errors.country || ''
+        const bboxError = response.errors.bbox || ''
+        const pointError = response.errors.point || ''
         this.setState({ job: null, pathsError, countryError, bboxError, pointError })
       } else {
         setTimeout(() => this.fetch(response.job_url), 2000)
@@ -181,7 +176,7 @@ class App extends Component {
         this.setState({ job: response })
       }
 
-    }).catch(error => {
+    }).catch(() => {
       this.setState({ serverError: 'There has been a problem connecting to the server. If this problem persists, please contact support.' })
     })
   }
@@ -195,7 +190,7 @@ class App extends Component {
       }
 
       this.setState({ job: response })
-    }).catch(error => {
+    }).catch(() => {
       this.setState({ serverError: 'There has been a problem connecting to the server. If this problem persists, please contact support.' })
     })
   }
@@ -210,7 +205,7 @@ class App extends Component {
     }
   }
 
-  toggleAll(e) {
+  toggleAll() {
     const allChecked = (this.state.paths.length == this.props.files.length)
     if (allChecked) {
       this.setState({ paths: [] })
@@ -220,7 +215,7 @@ class App extends Component {
   }
 
   renderJob() {
-    const { job, settings } = this.state
+    const { job } = this.state
 
     return (
       <div>
@@ -230,13 +225,15 @@ class App extends Component {
             {
               job.status == 'queued' &&
               <p className="text-success">
-                <FontAwesomeIcon icon={faSpinner} spin /> The download has been queued on the server.
+                <span className="material-symbols-rounded symbols-spin">progress_activity</span>
+                The download has been queued on the server.
               </p>
             }
             {
               job.status == 'started' &&
               <p className="text-success">
-                <FontAwesomeIcon icon={faSpinner} spin /> The files are created on the server ({job.meta.created_files} of {job.meta.total_files} created).
+                <span className="material-symbols-rounded symbols-spin">progress_activity</span>
+                The files are created on the server ({job.meta.created_files} of {job.meta.total_files} created).
               </p>
             }
             {
@@ -246,7 +243,8 @@ class App extends Component {
                   The files were successfully created on the server, the download should start now.
                 </p>
                 <p>
-                  Alternatively, you can use the following link: <a href={job.file_url} target="_blank">{job.file_url}</a>.
+                  Alternatively, you can use the following link:
+                  <a href={job.file_url} target="_blank" rel="noreferrer">{job.file_url}</a>.
                 </p>
               </>
             }
@@ -260,7 +258,10 @@ class App extends Component {
               job.id &&
               <>
                 <p>
-                  If you need to close the browser, you can bookmark this page or store its URL otherwise: <a href={document.location.toString()} target="_blank">{document.location.toString()}</a>.
+                  If you need to close the browser, you can bookmark this page or store its URL otherwise:
+                  <a href={document.location.toString()} target="_blank" rel="noreferrer">
+                    {document.location.toString()}
+                  </a>.
                 </p>
                 <p>
                   After completion, the files will be stored on the server for {job.ttl/60.0/60.0} hours.
@@ -304,14 +305,14 @@ class App extends Component {
           <div className="card-header">
             <div className="form-check form-check-inline mb-0">
               <input className="form-check-input" type="radio" id="range-radio"
-                     onChange={e => this.handleModeChange('range')} checked={mode == 'range'} />
+                     onChange={() => this.handleModeChange('range')} checked={mode == 'range'} />
               <label className="form-check-label font-weight-normal" htmlFor="range-radio">
                 Select files by time range
               </label>
             </div>
             <div className="form-check form-check-inline">
               <input className="form-check-input" type="radio" id="files-radio"
-                     onChange={e => this.handleModeChange('files')} checked={mode == 'files'} />
+                     onChange={() => this.handleModeChange('files')} checked={mode == 'files'} />
               <label className="form-check-label font-weight-normal" htmlFor="files-radio">
                 Select individual files
               </label>

@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronUp, faTimes, faSpinner  } from '@fortawesome/free-solid-svg-icons'
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 import bytes from 'bytes'
@@ -64,7 +62,7 @@ class Selection extends Component {
             You selected {selected_count} {selected_count > 1 ? 'datasets' : 'dataset'} of {size} size.
           </div>
           <div className="d-md-inline-block ml-auto mt-2 mt-md-0">
-            {isLoading && <FontAwesomeIcon icon={faSpinner} spin />}
+            {isLoading && <span className="material-symbols-rounded symbols-spin">progress_activity</span>}
             {!isLoading && <span>{ count.toLocaleString('en-US') } datasets found.</span>}
           </div>
         </div>
@@ -72,7 +70,7 @@ class Selection extends Component {
         <div className="mt-2">
           <div className="float-md-right">
             <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
-              <form className="m-0" method="post" action="/download/" target="_blank">
+              <form className="m-0" method="post" action="/download/" target="_blank" rel="noreferrer">
                 <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
                 {files.map(file => {
                   return <input type="hidden" name="paths" value={file.path} key={file.id} />
@@ -99,16 +97,19 @@ class Selection extends Component {
           <div className="d-inline mr-2">
             <button className="btn btn-link" onClick={this.toggleDatasets}>
               {showDatasets && <span>
-                Hide selected datasets <FontAwesomeIcon icon={faChevronUp} />
+                Hide selected datasets
+                <span className="material-symbols-rounded symbols-expand">expand_less</span>
               </span>}
               {!showDatasets && <span>
-                Show selected datasets <FontAwesomeIcon icon={faChevronDown} />
+                Show selected datasets
+                <span className="material-symbols-rounded symbols-expand">expand_more</span>
               </span>}
             </button>
           </div>
           <div className="d-inline">
             <button className="btn btn-link" onClick={e => onReset(e)}>
-              Reset selection <FontAwesomeIcon icon={faTimes} />
+              Reset selection
+              <span className="material-symbols-rounded symbols-close">close</span>
             </button>
           </div>
         </div>}
@@ -134,7 +135,7 @@ class Selection extends Component {
             {
               selected.map(dataset => (
                 <tr key={dataset.id}>
-                  <td><a href={dataset.metadata_url} target="_blank">{dataset.name}</a></td>
+                  <td><a href={dataset.metadata_url} target="_blank" rel="noreferrer">{dataset.name}</a></td>
                   <td>{get_size(dataset.size)}</td>
                 </tr>
               ))

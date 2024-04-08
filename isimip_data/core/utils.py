@@ -1,3 +1,5 @@
+import textwrap
+
 from django.conf import settings
 
 
@@ -21,3 +23,22 @@ def get_file_base_url(request):
 def get_file_api_url(request):
     url = settings.PROXY_FILES_API_URL if via_proxy(request) else settings.FILES_API_URL
     return trailing_slash(url)
+
+
+def get_full_name(user):
+    if user.first_name and user.last_name:
+        return f'{user.first_name} {user.last_name}'
+    else:
+        return user.username
+
+def get_quote_text(head, text, level, add_newline=False):
+    head_indent = ('>' * level + ' ') if level else ''
+    text_indent = ('>' * (level + 1) + ' ')
+    quote = f'{head_indent}{head}\r\n' + '\r\n'.join(textwrap.wrap(
+        text, width=70, initial_indent=text_indent, subsequent_indent=text_indent
+    ))
+
+    if add_newline:
+        quote += f'\r\n{text_indent}'
+
+    return quote

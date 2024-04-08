@@ -14,9 +14,6 @@
     <header>
         <h1>{% trans 'Dataset' %}</h1>
         <h2>{{ dataset.name }}</h2>
-        <a href="{% url 'caveat_create' %}">
-            {% trans 'Submit new caveat for this dataset' %}
-        </a>
     </header>
 
     {% if public_version %}

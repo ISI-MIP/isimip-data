@@ -1,11 +1,11 @@
-import React, { Component} from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import ls from 'local-storage'
 
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 import Filter from './Filter'
 import Resources from './Resources'
+
 
 class App extends Component {
 

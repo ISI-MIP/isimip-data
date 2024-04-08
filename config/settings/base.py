@@ -4,10 +4,6 @@ from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).parent.parent.parent
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '::1']
-
-INTERNAL_IPS = ['127.0.0.1']
-
 SITE_ID = 1
 
 INSTALLED_APPS = [
@@ -22,12 +18,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     # isimip_data apps
-    'isimip_data.accounts',
     'isimip_data.annotations',
     'isimip_data.caveats',
     'isimip_data.core',
     'isimip_data.download',
-    'isimip_data.indicators',
     'isimip_data.home',
     'isimip_data.metadata',
     'isimip_data.search',
@@ -37,11 +31,7 @@ INSTALLED_APPS = [
     'django_cleanup',
     'django_extensions',
     'django_filters',
-    'adminsortable2',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.orcid'
+    'adminsortable2'
 ]
 
 MIDDLEWARE = [
@@ -125,20 +115,6 @@ LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_URL = '/account/logout/'
 LOGOUT_REDIRECT_URL = '/'
-
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
-]
-
-ACCOUNT_USER_DISPLAY = 'isimip_data.accounts.utils.get_full_name'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_ACTIVATION_DAYS = 7
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
-ACCOUNT_EMAIL_VERIFICATION = 'optional'
-ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
-ACCOUNT_USERNAME_MIN_LENGTH = 4
-ACCOUNT_PASSWORD_MIN_LENGTH = 4
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_FROM = 'noreply@isimip.org'

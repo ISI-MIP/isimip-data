@@ -111,7 +111,8 @@ class Badges extends Component {
 
           {dataset.terms_of_use &&
             <OverlayTrigger placement="bottom" overlay={<Tooltip>{ dataset.terms_of_use.terms_of_use }</Tooltip>}>
-              <a className="badge badge-secondary mb-1" href={dataset.terms_of_use.terms_of_use_url} target="_blank">
+              <a className="badge badge-secondary mb-1" href={dataset.terms_of_use.terms_of_use_url}
+                 target="_blank" rel="noreferrer">
                 Terms of use
               </a>
             </OverlayTrigger>
@@ -157,7 +158,8 @@ class Badges extends Component {
                   <p className="mb-1">The dataset can be cited using a Digital Object Identifier (DOI):</p>
                   <p className="font-italic">{resource.citation}.</p>
                 </Tooltip>}>
-                  <a className="badge badge-light" href={resource.doi_url} target="_blank">
+                  <a className="badge badge-light" href={resource.doi_url}
+                     target="_blank" rel="noreferrer">
                     {resource.doi_url}
                   </a>
                 </OverlayTrigger> : null

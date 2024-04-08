@@ -21,7 +21,9 @@
         </p>
 
         <p class="text-center">
-            <a href="{% url 'caveat_create' %}">{% trans 'Submit new caveat' %}</a>
+            {% blocktrans trimmed %}
+            If you encounter problems with the data yourself and want to notify us, please contact <a href="mailto:isimip-data@isimip.org">isimip-data@isimip.org</a>.
+            {% endblocktrans %}
         </p>
     </header>
 

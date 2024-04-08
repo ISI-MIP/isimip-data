@@ -1,7 +1,0 @@
-{% load i18n %}{% load account %}{% user_display user as user_display %}{% autoescape off %}{% blocktrans %}Dear {{ user_display }},{% endblocktrans %}
-
-{% block content %}{% endblock %}
-
-{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Sincerely,
-    {{ site_name }} admins{% endblocktrans %}
-{% endautoescape %}

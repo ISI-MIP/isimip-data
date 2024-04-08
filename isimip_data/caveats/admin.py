@@ -5,20 +5,16 @@ from django.contrib.messages import INFO
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
 from isimip_data.annotations.models import Download, Figure
 from isimip_data.annotations.utils import format_affected_datasets, format_affected_resources
 from isimip_data.annotations.widgets import SpecifierWidget
+from isimip_data.core.mail import send_mail
 from isimip_data.metadata.models import Dataset
 
-from .mail import (
-    get_caveat_announcement_mail,
-    get_comment_announcement_mail,
-    send_caveat_announcement_mail,
-    send_comment_announcement_mail,
-)
 from .models import Caveat, Comment
 
 
@@ -87,19 +83,15 @@ class CaveatAdmin(admin.ModelAdmin):
     inlines = [FigureInline, DownloadInline]
 
     search_fields = ('title', 'description')
-    list_display = ('title', 'created', 'updated', 'severity', 'status', 'public')
-    list_filter = ('severity', 'status', 'public')
+    list_display = ('title', 'created', 'updated', 'category', 'severity', 'status', 'public')
+    list_filter = ('category', 'severity', 'status', 'public')
     readonly_fields = ('created', 'updated', 'affected_datasets', 'affected_resources')
     exclude = ('datasets', 'figures', 'downloads')
-    filter_vertical = ('subscribers', )
 
     fieldsets = (
         (None, {
-            'fields': ('public', 'email', 'title', 'description', 'creator', 'severity', 'status', 'message')
-        }),
-        ('Subscribers', {
-            'classes': ('collapse',),
-            'fields': ('subscribers', ),
+            'fields': ('public', 'email', 'title', 'description', 'creator', 'category',
+                       'severity', 'status', 'message')
         }),
         ('Specifiers', {
             'classes': ('collapse',),
@@ -132,7 +124,14 @@ class CaveatAdmin(admin.ModelAdmin):
 
         datasets = Dataset.objects.using('metadata').filter(target=None, id__in=caveat.datasets)
 
-        subject, message = get_caveat_announcement_mail(request, caveat, datasets)
+        context = {
+            'caveat': caveat,
+            'caveat_url': request.build_absolute_uri(caveat.get_absolute_url()),
+            'datasets': datasets
+        }
+
+        subject = render_to_string('caveats/email/caveat_announcement_subject.txt', context, request=request)
+        message = render_to_string('caveats/email/caveat_announcement_message.txt', context, request=request)
 
         form = AnnouncementAdminForm(request.POST or None, object=caveat, initial={
             'subject': subject,
@@ -147,9 +146,10 @@ class CaveatAdmin(admin.ModelAdmin):
                 caveat.email = True
                 caveat.save()
 
-                send_caveat_announcement_mail(form.cleaned_data['subject'],
-                                              form.cleaned_data['message'],
-                                              form.cleaned_data['recipients'])
+                for recipient in form.cleaned_data['recipients']:
+                    send_mail(form.cleaned_data['subject'], form.cleaned_data['message'],
+                              to=[recipient], reply_to=settings.CAVEATS_REPLY_TO)
+
                 self.message_user(request, 'An email has been send.', level=INFO)
                 return redirect('admin:caveats_caveat_change', object_id=caveat.id)
 
@@ -177,7 +177,22 @@ class CommentAdmin(admin.ModelAdmin):
     def caveats_comment_send(self, request, pk):
         comment = get_object_or_404(Comment, id=pk)
 
-        subject, message = get_comment_announcement_mail(request, comment)
+        quotes = []
+        level = 0
+        for prevous_comment in comment.caveat.comments.exclude(created__gte=comment.created) \
+                                                      .order_by('created'):
+            quotes.append(prevous_comment.get_quote(level=level))
+            level += 1
+        quotes.append(comment.caveat.get_quote(level=level))
+
+        context = {
+            'comment': comment,
+            'caveat_url': request.build_absolute_uri(comment.get_absolute_url()),
+            'quotes': quotes
+        }
+
+        subject = render_to_string('caveats/email/comment_announcement_subject.txt', context, request=request)
+        message = render_to_string('caveats/email/comment_announcement_message.txt', context, request=request)
 
         form = AnnouncementAdminForm(request.POST or None, object=comment, initial={
             'subject': subject,
@@ -192,9 +207,10 @@ class CommentAdmin(admin.ModelAdmin):
                 comment.email = True
                 comment.save()
 
-                send_comment_announcement_mail(form.cleaned_data['subject'],
-                                               form.cleaned_data['message'],
-                                               form.cleaned_data['recipients'])
+                for recipient in form.cleaned_data['recipients']:
+                    send_mail(form.cleaned_data['subject'], form.cleaned_data['message'],
+                              to=[recipient], reply_to=settings.CAVEATS_REPLY_TO)
+
                 self.message_user(request, 'An email has been send.', level=INFO)
                 return redirect('admin:caveats_comment_change', object_id=comment.id)
 

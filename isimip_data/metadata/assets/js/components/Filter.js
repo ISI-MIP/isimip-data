@@ -1,10 +1,8 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes, faSearch } from '@fortawesome/free-solid-svg-icons'
 
-class Filter extends React.Component {
+class Filter extends Component {
 
   render() {
     const { filterString, showAll, onFilterStringChange, onShowAllChange } = this.props
@@ -21,15 +19,15 @@ class Filter extends React.Component {
               </div>
               <div className="form-check form-check-inline">
                 <input className="form-check-input" type="checkbox" id="show-all-checkbox"
-                       checked={showAll} onChange={e => onShowAllChange(!showAll)} />
+                       checked={showAll} onChange={() => onShowAllChange(!showAll)} />
                 <label className="form-check-label" htmlFor="show-all-checkbox">
                   Show older DOI versions as well
                 </label>
               </div>
             </div>
             <div className="col-6 col-md-auto">
-              <button className="btn btn-outline-secondary btn-lg w-100" type="button" onClick={e => onFilterStringChange('')}>
-                Reset <FontAwesomeIcon className="fa-fw" icon={faTimes} />
+              <button className="btn btn-outline-secondary btn-lg w-100" type="button" onClick={() => onFilterStringChange('')}>
+                Reset <span className="material-symbols-rounded symbols-reset">close</span>
               </button>
             </div>
           </div>
@@ -38,5 +36,13 @@ class Filter extends React.Component {
     )
   }
 }
+
+Filter.propTypes = {
+  filterString: PropTypes.string.isRequired,
+  showAll: PropTypes.bool.isRequired,
+  onFilterStringChange: PropTypes.func.isRequired,
+  onShowAllChange: PropTypes.func.isRequired
+}
+
 
 export default Filter

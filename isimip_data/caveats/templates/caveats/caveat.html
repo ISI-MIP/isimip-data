@@ -2,59 +2,26 @@
 {% load static %}
 {% load i18n %}
 
-{% block style %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{% static 'caveats.css' %}" />
-{% endblock %}
-
-
 {% block main %}
 
 <div class="container">
     <header>
         <h1>{{ caveat.title }} <span class="text-muted">#{{ caveat.id }}</span></h1>
-
-        <p class="text-center mb-2">
-            <strong>{{ caveat.get_creator_display }}</strong> opened this caveat on {{ caveat.created|date }}.
-        </p>
-
-        <p class="text-center mb-2">
-        {% if request.user in caveat.subscribers.all %}
-        <a href="{% url 'caveat_unsubscribe' caveat.id %}">
-            <span class="badge badge-pill badge-light">
-                <i class="fas fa-eye-slash"></i> {% trans 'Unsubscribe' %}
-            </span>
-        </a>
-        {% else %}
-        <a href="{% url 'caveat_subscribe' caveat.id %}">
-            <span class="badge badge-pill badge-light">
-                <i class="fas fa-eye"></i> {% trans 'Subscribe' %}
-            </span>
-        </a>
-        {% endif %}
-        </p>
-
-        <p class="text-center mb-2">
-        {% if not caveat.public %}
-            {% include 'caveats/snippets/not_public.html' %}
-        {% endif %}
-        </p>
     </header>
 
     <div class="row">
-        <div class="col-md-9">
-            <h3>{% trans 'Discussion' %}</h3>
+        <div class="col-md-9 caveat-discussion">
+            <h3>{{ caveat.get_category_display }}</h3>
             <div class="card mb-2">
                 <div class="card-header">
                     <strong>{{ caveat.get_creator_display }}</strong> reported on {{ caveat.created|date }}.
-                </div>
-                <div class="card-body">
                     {% if request.user.is_staff %}
                     <a class="d-block float-right" href="{% url 'admin:caveats_caveat_change' caveat.id %}">
-                        <i class="fas fa-pen"></i>
+                        <strong class="material-symbols-rounded">edit_square</strong>
                     </a>
                     {% endif %}
-
+                </div>
+                <div class="card-body">
                     {{ caveat.description|linebreaksbr|urlize }}
                 </div>
             </div>
@@ -63,7 +30,34 @@
             {% include 'annotations/cards/figures.html' with figures=caveat.figures.all col=12 mb=2 %}
             {% endif %}
 
-            {% include 'caveats/cards/comments.html' %}
+            {% for comment in comments %}
+            <div class="card mb-2" id="comment-{{ comment.id }}">
+                <div class="card-header">
+                    {% if not comment.public %}
+                    <div class="float-right">
+                        {% include 'caveats/snippets/not_public.html' %}
+                    </div>
+                    {% endif %}
+                    <strong>{{ comment.get_creator_display }}</strong> commented on {{ comment.created|date }}.
+                </div>
+                <div class="card-body">
+                    {% if request.user.is_staff %}
+                    <a class="d-block float-right" href="{% url 'admin:caveats_comment_change' comment.id %}">
+                        <span class="material-symbols-rounded">edit_square</span>
+                    </a>
+                    {% endif %}
+
+                    {{ comment.text|linebreaksbr|urlize }}
+                </div>
+            </div>
+            {% endfor %}
+
+            {% if request.user.is_staff %}
+            <a class="btn btn-success btn-sm mb-2"
+               href="{% url 'admin:caveats_comment_add' %}?caveat={{ caveat.id }}&creator={{ request.user.id }}">
+                {% trans 'Add comment' %}
+            </a>
+            {% endif %}
         </div>
 
         <div class="col-md-3">
@@ -72,8 +66,14 @@
                 <div class="card-body">
                     {% if request.user.is_staff %}
                     <a class="d-block float-right" href="{% url 'admin:caveats_caveat_change' caveat.id %}">
-                        <i class="fas fa-pen"></i>
+                        <span class="material-symbols-rounded">edit_square</span>
                     </a>
+                    {% endif %}
+
+                    {% if not caveat.public %}
+                    <p class="mb-2">
+                        {% include 'caveats/snippets/not_public.html' %}
+                    </p>
                     {% endif %}
 
                     {% if caveat.message %}
@@ -82,13 +82,17 @@
                     </p>
                     {% endif %}
 
+                    {% if caveat.severity %}
                     <p class="mb-2">
                         <strong class="mr-2">{% trans 'Severity' %}</strong>{% include 'caveats/snippets/severity.html' %}
                     </p>
+                    {% endif %}
 
+                    {% if caveat.status %}
                     <p class="mb-2">
                         <strong class="mr-2">{% trans 'Status' %}</strong>{% include 'caveats/snippets/status.html' %}
                     </p>
+                    {% endif %}
 
                     <dl>
                         <dt>{% trans 'Versions' %}</dt>

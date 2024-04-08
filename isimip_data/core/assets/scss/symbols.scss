@@ -1,0 +1,33 @@
+.material-symbols-rounded {
+    vertical-align: middle;
+    font-size: 16px;
+}
+
+.symbols-expand {
+    // margin: -1px -6px;
+    // overflow: hidden;
+}
+
+.symbols-expand,
+.symbols-close {
+    margin-top: -1px;
+    font-weight: 600;
+}
+
+.symbols-expand {
+    margin-left: -1px;
+    margin-right: -1px;
+    font-size: 20px;
+}
+
+.symbols-spin {
+    animation-name: spin;
+    animation-duration: 2000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes spin {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+}

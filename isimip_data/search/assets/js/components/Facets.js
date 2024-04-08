@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 import FacetApi from '../api/FacetApi'
 
 import Facet from './Facet'
@@ -10,7 +9,7 @@ import Facet from './Facet'
 class Facets extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       facets: []
     }
