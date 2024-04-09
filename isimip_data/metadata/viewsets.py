@@ -121,7 +121,8 @@ class DatasetViewSet(ReadOnlyModelViewSet):
 class FileViewSet(ReadOnlyModelViewSet):
 
     serializer_class = FileSerializer
-    queryset = File.objects.using('metadata').filter(target=None).select_related('dataset').prefetch_related('links')
+    queryset = File.objects.using('metadata').filter(target=None).select_related('dataset') \
+                           .prefetch_related('links').distinct('path')
     pagination_class = Pagination
 
     filter_backends = (
