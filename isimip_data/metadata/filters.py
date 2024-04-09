@@ -6,7 +6,7 @@ from django.db.models import Q
 
 from rest_framework.filters import BaseFilterBackend
 
-from .models import Identifier
+from .models import File, Identifier
 from .utils import split_query_string
 
 logger = logging.getLogger(__name__)
@@ -76,10 +76,10 @@ class SearchFilterBackend(BaseFilterBackend):
             search_query = SearchQuery(search_string, search_type='raw')
 
             # last, perform a full text search on the search_vector field
-            try:
-                queryset = queryset.filter(search__vector=search_query)
-            except FieldError:
+            if queryset.model == File:
                 queryset = queryset.filter(dataset__search__vector=search_query)
+            else:
+                queryset = queryset.filter(search__vector=search_query)
 
         return queryset
 
@@ -140,7 +140,10 @@ class TreeFilterBackend(BaseFilterBackend):
         if tree_list:
             q = Q()
             for tree in tree_list:
-                q |= Q(tree_path__startswith=tree) | Q(links__tree_path__startswith=tree)
+                if queryset.model == File:
+                    q |= Q(dataset__tree_path__startswith=tree) | Q(dataset__links__tree_path__startswith=tree)
+                else:
+                    q |= Q(tree_path__startswith=tree) | Q(links__tree_path__startswith=tree)
 
             queryset = queryset.filter(q)
 

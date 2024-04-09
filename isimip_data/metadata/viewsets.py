@@ -130,7 +130,8 @@ class FileViewSet(ReadOnlyModelViewSet):
         PathFilterBackend,
         SearchFilterBackend,
         VersionFilterBackend,
-        IdentifierFilterBackend
+        IdentifierFilterBackend,
+        TreeFilterBackend
     )
     filterset_fields = (
         'name',
