@@ -63,7 +63,7 @@ def dataset(request, pk=None, path=None):
 
     if versions:
         caveats_datasets = list(versions.exclude(id=obj.id).values_list('id', flat=True))
-        caveats_versions = Caveat.objects.exclude(id__in=[caveat.id for caveat in caveats]) \
+        caveats_versions = Caveat.objects.exclude(datasets__contains=[obj.id]) \
                                          .filter(datasets__overlap=caveats_datasets)
     else:
         caveats_versions = None
@@ -104,7 +104,7 @@ def file(request, pk=None, path=None):
 
     if versions:
         caveats_datasets = list(versions.exclude(id=obj.id).values_list('dataset_id', flat=True))
-        caveats_versions = Caveat.objects.exclude(id__in=[caveat.id for caveat in caveats]) \
+        caveats_versions = Caveat.objects.exclude(datasets__contains=[obj.id]) \
                                          .filter(datasets__overlap=caveats_datasets)
     else:
         caveats_versions = None

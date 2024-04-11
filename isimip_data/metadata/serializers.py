@@ -218,7 +218,8 @@ class DatasetSerializer(serializers.ModelSerializer):
         if self.context.get('request').GET.get('caveats'):
             user = self.context['request'].user
             versions = Dataset.objects.using('metadata').filter(path=obj.path).exclude(id=obj.id)
-            queryset = Caveat.objects.filter(datasets__overlap=[version.id for version in versions]).public(user)
+            queryset = Caveat.objects.exclude(datasets__contains=[obj.id]) \
+                                     .filter(datasets__overlap=[version.id for version in versions]).public(user)
             serializer = DatasetCaveatSerializer(queryset, many=True)
             return serializer.data
 
