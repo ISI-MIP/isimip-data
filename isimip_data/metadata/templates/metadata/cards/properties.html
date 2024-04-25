@@ -3,14 +3,17 @@
 <div class="card">
     <div class="card-body">
         <dl class="row">
-            <dt class="col-sm-4">{% trans 'Path' %}</dt>
-            <dd class="col-sm-8">
-                {% for path in obj.paths %}
-                {{ path }}
-                {% endfor %}
-            </dd>
+            <div class="col-sm-12">
+                <div><strong>{% trans 'Path' %}</strong></div>
+                <div>
+                    {% for path in obj.paths %}
+                    <code>{{ path }}</code>
+                    {% endfor %}
+                </div>
+            <hr class="mt-3 mb-3" />
+            </div>
             <dt class="col-sm-4">{% trans 'ISIMIP ID' %}</dt>
-            <dd class="col-sm-8">{{ obj.id }}</dd>
+            <dd class="col-sm-8"><code>{{ obj.id }}</code></dd>
             <dt class="col-sm-4">{% trans 'Size' %}</dt>
             <dd class="col-sm-8">{{ obj.size|filesizeformat }}</dd>
             {% if obj.checksum %}

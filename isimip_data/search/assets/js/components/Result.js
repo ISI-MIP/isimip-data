@@ -161,35 +161,34 @@ class Result extends Component {
 
     return (
       <li className="list-group-item">
-        <div className="row">
-          <div className="col-lg-3">
-            <strong>Path</strong>
-          </div>
-          <div className="col-lg-9">
-            {dataset.paths.map((path, index) => <div key={index}>{path}</div>)}
-          </div>
+        <div>
+          <strong>Path</strong>
         </div>
+        <div>
+          {dataset.paths.map((path, index) => <div key={index}><code>{path}</code></div>)}
+        </div>
+        <hr className="mt-3 mb-3" />
         <div className="row">
-          <div className="col-lg-3">
+          <div className="col-lg-4">
             <strong>ISIMIP ID</strong>
           </div>
-          <div className="col-lg-9">
-            {dataset.id}
+          <div className="col-lg-8">
+            <code>{dataset.id}</code>
           </div>
         </div>
         <div className="row">
-          <div className="col-lg-3">
+          <div className="col-lg-4">
             <strong>Version</strong>
           </div>
-          <div className="col-lg-9">
+          <div className="col-lg-8">
             {dataset.version}
           </div>
         </div>
         <div className="row">
-          <div className="col-lg-3">
+          <div className="col-lg-4">
             <strong>Size</strong>
           </div>
-          <div className="col-lg-9">
+          <div className="col-lg-8">
             {get_size(dataset.size)}
           </div>
         </div>
@@ -199,10 +198,10 @@ class Result extends Component {
 
             return (
               <div key={index} className="row">
-                <div className="col-lg-3">
+                <div className="col-lg-4">
                   <strong>{key}</strong>
                 </div>
-                <div className="col-lg-9">
+                <div className="col-lg-8">
                   {values.map((v, i) => <div key={i}>{v}</div>)}
                 </div>
               </div>
