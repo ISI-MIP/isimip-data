@@ -167,7 +167,7 @@ class Result extends Component {
         <div>
           {dataset.paths.map((path, index) => <div key={index}><code>{path}</code></div>)}
         </div>
-        <hr className="mt-3 mb-3" />
+        <hr className="mt-2 mb-2" />
         <div className="row">
           <div className="col-lg-4">
             <strong>ISIMIP ID</strong>

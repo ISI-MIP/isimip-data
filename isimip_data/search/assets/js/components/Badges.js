@@ -152,18 +152,23 @@ class Badges extends Component {
           dataset.resources.length > 0 &&
           <div className="badges mb-2">
             {
-              dataset.resources.map((resource, index) => (
-                resource.is_current_version ?
-                <OverlayTrigger key={index} placement="bottom" overlay={<Tooltip>
-                  <p className="mb-1">The dataset can be cited using a Digital Object Identifier (DOI):</p>
-                  <p className="font-italic">{resource.citation}.</p>
-                </Tooltip>}>
-                  <a className="badge badge-light" href={resource.doi_url}
-                     target="_blank" rel="noreferrer">
-                    {resource.doi_url}
-                  </a>
-                </OverlayTrigger> : null
-              ))
+              dataset.resources.map((resource, index) => {
+                const is_current_version = (
+                  resource.new_version === null || !dataset.resources.map((r) => r.doi).includes(resource.new_version)
+                )
+
+                return is_current_version && (
+                  <OverlayTrigger key={index} placement="bottom" overlay={<Tooltip>
+                    <p className="mb-1">The dataset can be cited using a Digital Object Identifier (DOI):</p>
+                    <p className="font-italic">{resource.citation}.</p>
+                  </Tooltip>}>
+                    <a className="badge badge-light" href={resource.doi_url}
+                       target="_blank" rel="noreferrer">
+                      {resource.doi_url}
+                    </a>
+                  </OverlayTrigger>
+                )
+              })
             }
           </div>
         }

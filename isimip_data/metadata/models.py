@@ -85,8 +85,11 @@ class Dataset(models.Model):
 
     @cached_property
     def current_resources(self):
-        return sorted([resource for resource in self.resources.all() if resource.is_current_version],
-                      key=lambda resource: resource.paths)
+        resources = self.resources.order_by('paths', 'doi')
+        resource_dois = {resource.doi for resource in resources}
+        return [resource for resource in resources if (
+            (resource.new_version is None) or (resource.new_version not in resource_dois)
+        )]
 
     @cached_property
     def json_ld(self):
@@ -243,10 +246,6 @@ class Resource(models.Model):
             return related_identifier.get('relatedIdentifier').replace('https://doi.org/', '')
         except (AttributeError, StopIteration):
             return None
-
-    @cached_property
-    def is_current_version(self):
-        return self.new_version is None
 
     @cached_property
     def citation(self):

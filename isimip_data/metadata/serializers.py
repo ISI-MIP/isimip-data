@@ -49,7 +49,7 @@ class DatasetResourceSerializer(serializers.ModelSerializer):
             'doi',
             'doi_url',
             'citation',
-            'is_current_version'
+            'new_version'
         )
 
 
