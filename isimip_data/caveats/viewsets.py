@@ -65,7 +65,7 @@ class CaveatViewSet(ReadOnlyModelViewSet):
 
         response = Response({
             'file_base_url': get_file_base_url(request),
-            'files': File.objects.using('metadata').filter(dataset__id__in=caveat.datasets)
+            'files': File.objects.using('metadata').filter(dataset__id__in=caveat.datasets, dataset__public=True)
         }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
         response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.txt'
         return response
