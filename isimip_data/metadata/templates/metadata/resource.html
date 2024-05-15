@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load static %}
 {% load core_tags %}
+{% load metadata_tags %}
 
 {% block style %}
     {{ block.super }}
@@ -105,7 +106,7 @@
                         <dt class="col-sm-3 text-right">{{ description.descriptionType }}:</dt>
                         <dd class="col-sm-9">
                         {% for paragraph in description.description|split_br %}
-                            <p>{{ paragraph|urlize }}</p>
+                            <p>{{ paragraph|urlize|replace_caveats }}</p>
                         {% endfor %}
                         </dd>
                     </dl>
