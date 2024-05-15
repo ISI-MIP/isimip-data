@@ -18,7 +18,6 @@
                     If you use ISIMIP data for scientific publications or other documents or reports, for example in a political or commercial context, please let us know. For this, as well as for general feedback or any questions related to ISIMIP, you can reach us at <a href="mailto:info@isimip.org?subject=ISIMIP%20inquiry">info@isimip.org</a>.
                 </p>
 
-
                 <p class="text-center">
                     By downloading data, you agree to our <a href="http://www.isimip.org/protocol/terms-of-use">Terms of Use</a>. Documentation of the impact models that provided impact simulations for this archive can be found in the <a href="https://www.isimip.org/impactmodels/">ISIMIP Impact Model Database</a>. If you want to get notified, when we find issues in the ISIMIP input and output data, please <a href="https://www.listserv.dfn.de/sympa/info/isimip-data_updates">subscribe to our caveats and updates mailing list</a>.  The archive of this mailing list can be accessed <a href="https://www.listserv.dfn.de/sympa/arc/isimip-data_updates">here</a>.
                 </p>
@@ -31,7 +30,7 @@
         <div class="form-row">
             <div class="col">
                 <input class="form-control" name="query" placeholder="Search for variable, sector, scenario, climate forcing, ..." />
-                <small class="form-text text-muted text-left">You can use any specifier from the <a href="https://www.isimip.org/protocol/">ISIMIP protocols</a>, e.g. "qtot", "water_global", "rcp26", "climate", "water_global",  etc. You can also directly use the <a href="{% url 'search' %}">advanced search interface</a>.</small>
+                <small class="form-text text-muted text-left">You can use any specifier from the <a href="https://www.isimip.org/protocol/">ISIMIP protocols</a>, e.g. "qtot", "water_global", "rcp26", "climate",  etc. You can also directly use the <a href="{% url 'search' %}">advanced search interface</a>.</small>
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-light" type="button" onClick={this.handleSubmit}>
