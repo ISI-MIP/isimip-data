@@ -32,4 +32,5 @@ def restricted_message(obj):
 def replace_caveats(value):
     # replaces, e.g. <a ...>https://data.isimip.org/caveats/8/</a>
     # with <a ...>#8</a>
-    return mark_safe(re.sub(r'(<a.*?>)(.*?)(\d+)([/]*)(</a>)', r'\1#\3\5', value))
+    return mark_safe(re.sub(r'(<a.*?>)(https://data\.isimip\.org/caveats/.*?)(\d+)([/]*)(</a>)',
+                            r'\1#\3\5', value))
