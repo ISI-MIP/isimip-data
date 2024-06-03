@@ -123,7 +123,7 @@
             <div class="card mb-1">
                 <div class="card-body">
                     <p>
-                        There are {{ count }} datasets affected by this caveat. {% if count > settings.CAVEATS_MAX_DATASETS %}Here we only display the first {{ settings.CAVEATS_MAX_DATASETS }} datasets.{% endif %} You can download a complete list of all the <a href="{% url 'caveat-detail-datasets' caveat.id %}">datasets</a>, or <a href="{% url 'caveat-detail-files' caveat.id %}">files</a> affected by this caveat as JSON. Alternatively,  can also download a list the files <a href="{% url 'caveat-detail-filelist' caveat.id %}">as a flat file</a> suitable for Wget. You can use the search interface to further restrict your <a class="break-link" href="{{ search_url }}" target="_blank">query</a>.
+                        There are {{ count }} datasets affected by this update. {% if count > settings.CAVEATS_MAX_DATASETS %}Here we only display the first {{ settings.CAVEATS_MAX_DATASETS }} datasets.{% endif %} You can download a complete list of all the <a href="{% url 'caveat-detail-datasets' caveat.id %}">datasets</a>, or <a href="{% url 'caveat-detail-files' caveat.id %}">files</a> affected by this update as JSON. Alternatively,  can also download a list the files <a href="{% url 'caveat-detail-filelist' caveat.id %}">as a flat file</a> suitable for Wget. You can use the search interface to further restrict your <a class="break-link" href="{{ search_url }}" target="_blank">query</a>.
                     </p>
                 </div>
             </div>

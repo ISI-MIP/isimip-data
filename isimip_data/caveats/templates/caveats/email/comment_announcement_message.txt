@@ -1,7 +1,7 @@
 {% load i18n %}Dear ISIMIP data users,
 
 {% blocktrans trimmed with caveat_title=comment.caveat.title %}
-We would like to draw your attention to the following update on the caveat:
+We would like to draw your attention to the following data update:
 {% endblocktrans %}
 
 {{ comment.caveat.title|safe }}
@@ -10,7 +10,7 @@ We would like to draw your attention to the following update on the caveat:
 
 {% blocktrans %}If you have any questions or require further information, please do not hesitate to contact us.{% endblocktrans %}
 
-{% blocktrans %}More information about the caveat can be accessed at {{ caveat_url }}.{% endblocktrans %}
+{% blocktrans %}More information about the update can be accessed at {{ caveat_url }}.{% endblocktrans %}
 
 Best wishes,
 The ISIMIP data team

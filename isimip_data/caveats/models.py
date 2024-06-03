@@ -46,7 +46,7 @@ class Caveat(models.Model):
     MESSAGE_REPLACED = 'replaced'
     MESSAGE_CHOICES = (
         (MESSAGE_CAN_BE_USED, _('Affected datasets can still be used for simulations or research.')),
-        (MESSAGE_DO_NOT_USE, _('Affected datasets should not be used until this caveat is resolved.')),
+        (MESSAGE_DO_NOT_USE, _('Affected datasets should not be used until this issue is resolved.')),
         (MESSAGE_REPLACED, _('Please use the replaced datasets for new simulations or research.'))
     )
 
