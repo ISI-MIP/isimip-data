@@ -1,6 +1,6 @@
 {% load i18n %}Dear ISIMIP data users,
 
-We would like to draw your attention to the following {{ comment.caveat.category }}:
+We would like to draw your attention to the following update on the {{ comment.caveat.category }}:
 
 {{ comment.caveat.title|safe }}
 
