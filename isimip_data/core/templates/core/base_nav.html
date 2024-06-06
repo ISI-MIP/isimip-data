@@ -28,7 +28,7 @@
                     <a class="nav-link" href="{% url 'metadata' %}">Metadata</a>
                 </li>
                 <li class="nav-item {% if request.resolver_match.url_name in 'caveats,caveat' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'caveats' %}">Updates</a>
+                    <a class="nav-link" href="{% url 'issues_and_notes' %}">Issues & Notes</a>
                 </li>
             </ul>
             <ul class="navbar-nav">

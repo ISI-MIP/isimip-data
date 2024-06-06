@@ -137,6 +137,8 @@ SETTINGS_EXPORT = [
     'LOGOUT_URL',
     'CACHE_MIDDLEWARE_SECONDS',
     'CAVEATS_MAX_DATASETS',
+    'CAVEATS_LIST_SUBSCRIBE_URL',
+    'CAVEATS_LIST_ARCHIVE_URL',
     'METADATA_RESOURCE_MAX_DATASETS',
 ]
 
@@ -193,6 +195,10 @@ CAVEATS_REPLY_TO = (
 CAVEATS_DEFAULT_RECIPIENTS = (
     'isimip-data_updates@listserv.dfn.de',
 )
+
+CAVEATS_LIST_SUBSCRIBE_URL = 'https://www.listserv.dfn.de/sympa/subscribe/isimip-data_updates'
+CAVEATS_LIST_ARCHIVE_URL = 'https://www.listserv.dfn.de/sympa/arc/isimip-data_updates'
+
 CAVEATS_MAX_DATASETS = 100
 
 PROXY = None

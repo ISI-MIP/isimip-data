@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from isimip_data.metadata.models import Dataset
 
@@ -7,6 +7,9 @@ from .models import Caveat
 
 
 def caveats(request):
+    if request.resolver_match.url_name != 'issues_and_notes':
+        return redirect('issues_and_notes')
+
     caveats = Caveat.objects.public(request.user) \
                             .select_related('creator')
 
@@ -19,6 +22,10 @@ def caveats(request):
 def caveat(request, pk=None):
     queryset = Caveat.objects.public(request.user)
     caveat = get_object_or_404(queryset, id=pk)
+
+    if request.path != caveat.get_absolute_url():
+        return redirect(caveat)
+
     comments = caveat.comments.public(request.user)
     datasets = Dataset.objects.using('metadata') \
                               .filter(target=None, id__in=caveat.datasets[:settings.CAVEATS_MAX_DATASETS]) \

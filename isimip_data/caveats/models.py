@@ -159,10 +159,10 @@ class Caveat(models.Model):
         return prettify_specifiers(self.specifiers, self.specifiers.keys())
 
     def get_absolute_url(self):
-        return reverse('caveat', kwargs={'pk': self.pk})
+        return reverse(self.category, kwargs={'pk': self.pk})
 
     def get_reply_url(self):
-        return reverse('caveat', kwargs={'pk': self.pk}) + '#reply'
+        return reverse(self.category, kwargs={'pk': self.pk}) + '#reply'
 
     def get_admin_url(self):
         return reverse('admin:caveats_caveat_change', kwargs={'object_id': self.pk})
@@ -214,7 +214,7 @@ class Comment(models.Model):
         return get_full_name(self.creator)
 
     def get_absolute_url(self):
-        return reverse('caveat', args=[self.caveat.id]) + f'#comment-{self.id}'
+        return reverse(self.caveat.category, args=[self.caveat.id]) + f'#comment-{self.id}'
 
     def get_quote(self, level):
         head = f'On {self.created.strftime("%B %d, %Y")}, {self.get_creator_display()} commented:'

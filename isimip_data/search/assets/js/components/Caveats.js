@@ -24,7 +24,7 @@ class Caveats extends Component {
         <div className="float-right">
           <button className={`btn btn-link text-${color}`}>
             <span className="material-symbols-rounded symbols-caveat"
-                  title="There are updates for this dataset."
+                  title="There are issues or notes for this dataset."
                   onClick={toggleCaveats}>{symbol}</span>
           </button>
         </div>
@@ -36,7 +36,7 @@ class Caveats extends Component {
         <div className="float-right">
           <button className="btn btn-link text-muted">
             <span className="material-symbols-rounded symbols-caveat"
-                  title="There are updates for other versions of this dataset."
+                  title="There are issues or notes for other versions of this dataset."
                   onClick={toggleCaveats}>{symbol}</span>
           </button>
         </div>

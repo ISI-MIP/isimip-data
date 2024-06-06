@@ -1,14 +1,14 @@
-{% load i18n %}Dear ISIMIP data users,
+Dear ISIMIP data users,
 
-{% blocktrans %}We would like to draw your attention to the following data update:{% endblocktrans %}
+We would like to draw your attention to the following {{ caveat.category }}:
 
 {{ caveat.title|safe }}
 
 {{ caveat.description|safe }}
 
-{% blocktrans %}If you have any questions or require further information, please do not hesitate to contact us.{% endblocktrans %}
+If you have any questions or require further information, please do not hesitate to contact us.
 
-{% blocktrans %}More information about the update can be accessed at {{ caveat_url }}.{% endblocktrans %}
+More information about the {{ caveat.category }} can be accessed at {{ caveat_url }}.
 
 {% if datasets %}The following datasets are affected:
 {% for dataset in datasets %}

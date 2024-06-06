@@ -140,11 +140,11 @@ class Result extends Component {
             <div className="d-inline">
               <button className="btn btn-link" onClick={this.toggleCaveats}>
                 {showCaveats && <span>
-                  Caveats
+                  Issues & Notes
                   <span className="material-symbols-rounded symbols-expand">expand_less</span>
                 </span>}
                 {!showCaveats && <span>
-                  Caveats
+                  Issues & Notes
                   <span className="material-symbols-rounded symbols-expand">expand_more</span>
                 </span>}
               </button>
