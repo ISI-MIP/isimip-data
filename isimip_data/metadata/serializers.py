@@ -55,7 +55,7 @@ class DatasetResourceSerializer(serializers.ModelSerializer):
 
 class DatasetCaveatSerializer(serializers.ModelSerializer):
 
-    url = serializers.SerializerMethodField()
+    url = serializers.CharField(source='get_absolute_url')
     category_display = serializers.CharField(source='get_category_display')
     severity_display = serializers.CharField(source='get_severity_display')
     status_display = serializers.CharField(source='get_status_display')
@@ -82,9 +82,6 @@ class DatasetCaveatSerializer(serializers.ModelSerializer):
             'message_display',
             'message_color'
         )
-
-    def get_url(self, obj):
-        return reverse('caveat', args=[obj.id])
 
 
 class DatasetAnnotationFigureSerializer(serializers.ModelSerializer):

@@ -30,7 +30,7 @@ def restricted_message(obj):
 
 @register.filter
 def replace_caveats(value):
-    # replaces, e.g. <a ...>https://data.isimip.org/caveats/8/</a>
+    # replaces, e.g. <a ...>https://data.isimip.org/issues/8/</a>
     # with <a ...>#8</a>
-    return mark_safe(re.sub(r'(<a.*?>)(https://data\.isimip\.org/caveats/.*?)(\d+)([/]*)(</a>)',
-                            r'\1#\3\5', value))
+    return mark_safe(re.sub(r'(<a.*?>)(https://data\.isimip\.org/(caveats|issues|notes)/.*?)(\d+)([/]*)(</a>)',
+                            r'\1#\4\6', value))

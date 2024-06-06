@@ -119,12 +119,12 @@
     {% include 'metadata/cards/datasets.html' with datasets=parents %}
 
     {% if caveats %}
-    <h3>{% trans 'Caveats for the dataset' %}</h3>
+    <h3>{% trans 'Issues and notes for the dataset' %}</h3>
     {% include 'caveats/cards/caveats.html' %}
     {% endif %}
 
     {% if caveats_versions %}
-    <h3>{% trans 'Caveats for other versions of the dataset' %}</h3>
+    <h3>{% trans 'Issues and notes for other versions of the dataset' %}</h3>
     {% include 'caveats/cards/caveats.html' with caveats=caveats_versions %}
     {% endif %}
 

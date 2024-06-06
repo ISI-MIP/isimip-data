@@ -19,7 +19,7 @@
                     {% include 'caveats/snippets/status.html' %}
                     {% endif %}
                 </div>
-                <a href="{% url 'caveat' caveat.id %}">{{ caveat.title }}</a>
+                <a href="{{ caveat.get_absolute_url }}">{{ caveat.title }}</a>
                 <span class="text-muted">#{{ caveat.id }}</span>
             </h4>
             <div class="mb-2">
@@ -29,7 +29,7 @@
                 <li class="list-inline-item">{% trans 'Affected versions' %}: {% include 'caveats/snippets/versions.html' %}</li>
             </ul>
             <p>
-                {{ caveat.get_creator_display }} opened this caveat on {{ caveat.created|date }}.
+                {{ caveat.get_creator_display }} created this {{ caveat.category }} on {{ caveat.created|date }}.
                 {% if caveat.created != caveat.updated %}It was last updated on {{ caveat.updated|date }}.{% endif %}
             </p>
         </li>

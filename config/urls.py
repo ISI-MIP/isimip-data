@@ -53,7 +53,15 @@ router.register(r'settings', SettingsViewSet, basename='setting')
 class StaticSitemap(Sitemap):
 
     def items(self):
-        return ['metadata', 'resources', 'search', 'download', 'caveats', 'home']
+        return [
+            'metadata',
+            'resources',
+            'search',
+            'download',
+            'issues-and-notes',
+            'caveats',  # legacy
+            'home'
+        ]
 
     def location(self, item):
         return reverse(item)
@@ -61,6 +69,7 @@ class StaticSitemap(Sitemap):
 
 sitemaps = {
     'static': StaticSitemap,
+    'issues-and-notes': CaveatSitemap,
     'caveats': CaveatSitemap,
     'datasets': DatasetSitemap,
     'files': FileSitemap,
@@ -91,8 +100,12 @@ urlpatterns = [
     path('download/', download, name='download'),
     path('download/<str:job_id>/', download, name='download'),
 
-    path('caveats/', caveats, name='caveats'),
-    path('caveats/<int:pk>/', caveat, name='caveat'),
+    path('issues-and-notes/', caveats, name='issues_and_notes'),
+    path('caveats/', caveats, name='caveats'),  # legacy
+
+    path('issues/<int:pk>/', caveat, name='issue'),
+    path('notes/<int:pk>/', caveat, name='note'),
+    path('caveats/<int:pk>/', caveat, name='caveat'),  # legacy
 
     path('', TemplateView.as_view(template_name='home/home.html'), name='home'),
     path('robots.txt', TemplateView.as_view(template_name='core/robots.txt'), name='robots.txt'),

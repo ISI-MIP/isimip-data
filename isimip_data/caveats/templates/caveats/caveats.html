@@ -1,29 +1,22 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% load i18n %}
 
 {% block main %}
 
 <div class="container">
     <header>
-        <h1>{% trans 'Caveats and Updates' %}</h1>
+        <h1>Issues and notes</h1>
 
         <p class="text-center">
-            {% blocktrans trimmed %}
-            If you want to get notified, when we find issues found in the ISIMIP input and output data, please subscribe to our <a href="https://www.listserv.dfn.de/sympa/subscribe/isimip-data_updates">caveats mailing list</a>.
-            {% endblocktrans %}
+            If you want to get notified, when we find issues found in the ISIMIP input and output data, please subscribe to our <a href="{{ settings.CAVEATS_LIST_SUBSCRIBE_URL }}">data issues and notes mailing list</a>.
         </p>
 
         <p class="text-center">
-            {% blocktrans trimmed %}
-            The archive of this mailing list can be accessed <a href="https://www.listserv.dfn.de/sympa/arc/isimip-data_updates">here</a>.
-            {% endblocktrans %}
+            The archive of this mailing list can be accessed <a href="{{ settings.CAVEATS_LIST_ARCHIVE_URL }}">here</a>.
         </p>
 
         <p class="text-center">
-            {% blocktrans trimmed %}
             If you encounter problems with the data yourself and want to notify us, please contact <a href="mailto:isimip-data@isimip.org">isimip-data@isimip.org</a>.
-            {% endblocktrans %}
         </p>
     </header>
 
