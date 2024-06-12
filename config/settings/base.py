@@ -193,11 +193,11 @@ CAVEATS_REPLY_TO = (
     'ISIMIP data <isimip-data@isimip.org>',
 )
 CAVEATS_DEFAULT_RECIPIENTS = (
-    'isimip-data_updates@listserv.dfn.de',
+    'isimip-data-issues-notes@listserv.dfn.de',
 )
 
-CAVEATS_LIST_SUBSCRIBE_URL = 'https://www.listserv.dfn.de/sympa/subscribe/isimip-data_updates'
-CAVEATS_LIST_ARCHIVE_URL = 'https://www.listserv.dfn.de/sympa/arc/isimip-data_updates'
+CAVEATS_LIST_SUBSCRIBE_URL = 'https://www.listserv.dfn.de/sympa/subscribe/isimip-data-issues-notes'
+CAVEATS_LIST_ARCHIVE_URL = 'https://www.listserv.dfn.de/sympa/arc/isimip-data-issues-notes'
 
 CAVEATS_MAX_DATASETS = 100
 
