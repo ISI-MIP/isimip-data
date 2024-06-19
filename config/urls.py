@@ -14,6 +14,7 @@ from isimip_data.caveats.viewsets import CaveatViewSet
 from isimip_data.core.viewsets import SettingsViewSet
 from isimip_data.download.views import download
 from isimip_data.download.viewsets import CountryViewSet
+from isimip_data.home.views import home
 from isimip_data.metadata.sitemaps import DatasetSitemap, FileSitemap, ResourceSitemap
 from isimip_data.metadata.views import (
     dataset,
@@ -107,7 +108,7 @@ urlpatterns = [
     path('notes/<int:pk>/', caveat, name='note'),
     path('caveats/<int:pk>/', caveat, name='caveat'),  # legacy
 
-    path('', TemplateView.as_view(template_name='home/home.html'), name='home'),
+    path('', home, name='home'),
     path('robots.txt', TemplateView.as_view(template_name='core/robots.txt'), name='robots.txt'),
 
     path('sitemap.xml', sitemaps_views.index, {'sitemaps': sitemaps}),
