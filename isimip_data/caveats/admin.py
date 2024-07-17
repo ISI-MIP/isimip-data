@@ -83,7 +83,8 @@ class CaveatAdmin(admin.ModelAdmin):
     inlines = [FigureInline, DownloadInline]
 
     search_fields = ('title', 'description')
-    list_display = ('title', 'created', 'updated', 'category', 'severity', 'status', 'public')
+    list_display = ('id', 'title', 'created', 'updated', 'category', 'severity', 'status', 'public', 'email')
+    list_display_links = ('id', 'title')
     list_filter = ('category', 'severity', 'status', 'public')
     readonly_fields = ('created', 'updated', 'affected_datasets', 'affected_resources')
     exclude = ('datasets', 'figures', 'downloads')
@@ -166,7 +167,8 @@ class CaveatAdmin(admin.ModelAdmin):
 
 class CommentAdmin(admin.ModelAdmin):
     search_fields = ('caveat', 'creator', 'text')
-    list_display = ('caveat', 'creator', 'created', 'public')
+    list_display = ('id', 'caveat', 'creator', 'created', 'public', 'email')
+    list_display_links = ('id', 'caveat')
     list_filter = ('public', )
     readonly_fields = ('created', )
 
