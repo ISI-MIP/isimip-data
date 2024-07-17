@@ -99,7 +99,7 @@ class Caveat(models.Model):
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        # cache.clear()
+        cache.clear()
         super().delete(*args, **kwargs)
 
     def get_creator_display(self):
