@@ -207,7 +207,8 @@ class DatasetSerializer(serializers.ModelSerializer):
     def get_caveats(self, obj):
         if self.context.get('request').GET.get('caveats'):
             user = self.context['request'].user
-            queryset = Caveat.objects.filter(datasets__contains=[obj.id]).public(user)
+            queryset = Caveat.objects.exclude(public=False) \
+                                     .filter(datasets__contains=[obj.id]).public(user)
             serializer = DatasetCaveatSerializer(queryset, many=True)
             return serializer.data
 
@@ -215,7 +216,8 @@ class DatasetSerializer(serializers.ModelSerializer):
         if self.context.get('request').GET.get('caveats'):
             user = self.context['request'].user
             versions = Dataset.objects.using('metadata').filter(path=obj.path).exclude(id=obj.id)
-            queryset = Caveat.objects.exclude(datasets__contains=[obj.id]) \
+            queryset = Caveat.objects.exclude(public=False) \
+                                     .exclude(datasets__contains=[obj.id]) \
                                      .filter(datasets__overlap=[version.id for version in versions]).public(user)
             serializer = DatasetCaveatSerializer(queryset, many=True)
             return serializer.data
