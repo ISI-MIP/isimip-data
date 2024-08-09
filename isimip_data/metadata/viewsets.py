@@ -3,6 +3,8 @@ from pathlib import PurePath
 
 from django.conf import settings
 from django.contrib.postgres.search import TrigramSimilarity
+from django.core.paginator import Paginator as DjangoPaginator
+from django.utils.functional import cached_property
 
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -33,10 +35,19 @@ from .serializers import (
 from .utils import fetch_glossary, split_query_string
 
 
+class Paginator(DjangoPaginator):
+
+    @cached_property
+    def count(self):
+        return self.object_list[:settings.METADATA_MAX_COUNT + 1].count()
+
+
 class Pagination(PageNumberPagination):
     page_size = settings.METADATA_PAGE_SIZE
     page_size_query_param = 'page_size'
     max_page_size = settings.METADATA_MAX_PAGE_SIZE
+
+    django_paginator_class = Paginator
 
 
 class DatasetViewSet(ReadOnlyModelViewSet):

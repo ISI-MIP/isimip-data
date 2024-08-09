@@ -132,12 +132,12 @@ class Results extends Component {
   }
 
   render() {
-    const { params, glossary, onSearch, onParamsRemove } = this.props
+    const { params, maxCount, glossary, onSearch, onParamsRemove } = this.props
     const { isLoading, loadMore, results, selected, count, suggestions } = this.state
 
     return (
       <div className="results">
-        <Selection selected={selected} count={count} isLoading={isLoading} onReset={this.handleSelectionReset} />
+        <Selection selected={selected} count={count} maxCount={maxCount} isLoading={isLoading} onReset={this.handleSelectionReset} />
         <Params params={params} count={count} onRemove={onParamsRemove} />
         <Suggestions count={count} suggestions={suggestions} onClick={onSearch} />
         {
@@ -155,6 +155,7 @@ class Results extends Component {
 Results.propTypes = {
   params: PropTypes.object.isRequired,
   pageSize: PropTypes.number.isRequired,
+  maxCount: PropTypes.number.isRequired,
   glossary: PropTypes.object.isRequired,
   onSearch: PropTypes.func.isRequired,
   onParamsRemove: PropTypes.func.isRequired,

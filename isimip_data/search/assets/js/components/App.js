@@ -149,6 +149,7 @@ class App extends Component {
   render() {
     const { params, glossary, settings, sidebar } = this.state
     const pageSize = parseInt(settings.METADATA_PAGE_SIZE)
+    const maxCount = parseInt(settings.METADATA_MAX_COUNT)
 
     return (
       <div className="row">
@@ -178,6 +179,7 @@ class App extends Component {
           <Version params={params} onChange={this.handleVersionChange}/>
           <Results params={params}
                    pageSize={pageSize}
+                   maxCount={maxCount}
                    glossary={glossary}
                    onSearch={this.handleSearch}
                    onParamsRemove={this.handleParamsRemove}

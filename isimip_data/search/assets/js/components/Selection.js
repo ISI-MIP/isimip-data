@@ -34,7 +34,7 @@ class Selection extends Component {
   }
 
   renderSelection() {
-    const { selected, count, isLoading, onReset } = this.props
+    const { selected, count, maxCount, isLoading, onReset } = this.props
     const { showDatasets, csrfToken } = this.state
 
     const selected_count = selected.length
@@ -63,7 +63,16 @@ class Selection extends Component {
           </div>
           <div className="d-md-inline-block ml-auto mt-2 mt-md-0">
             {isLoading && <span className="material-symbols-rounded symbols-spin">progress_activity</span>}
-            {!isLoading && <span>{ count.toLocaleString('en-US') } datasets found.</span>}
+            {
+              !isLoading && count >= 0 && count <= maxCount && (
+                <span>{ count.toLocaleString('en-US') } datasets found.</span>
+              )
+            }
+            {
+              !isLoading && count > maxCount && (
+                <span>More than { maxCount.toLocaleString('en-US') } datasets found.</span>
+              )
+            }
           </div>
         </div>
         {selected.length > 0 &&
@@ -164,6 +173,7 @@ class Selection extends Component {
 Selection.propTypes = {
   selected: PropTypes.array.isRequired,
   count: PropTypes.number.isRequired,
+  maxCount: PropTypes.number.isRequired,
   isLoading: PropTypes.bool.isRequired,
   onReset: PropTypes.func.isRequired
 }
