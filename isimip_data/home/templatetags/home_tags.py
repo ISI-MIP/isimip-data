@@ -6,14 +6,14 @@ register = template.Library()
 
 
 @register.inclusion_tag('home/tags/home_list.html', takes_context=True)
-def home_list(context, product, category_sector_publication):
+def home_list(context, product, category_sector_resource):
     return {
-        'links': get_home_links(context['tree'], product, category_sector_publication)
+        'links': get_home_links(context['tree'], product, category_sector_resource)
     }
 
 
 @register.inclusion_tag('home/tags/home_inline_list.html', takes_context=True)
-def home_inline_list(context, product, category_sector_publication):
+def home_inline_list(context, product, category_sector_resource):
     return {
-        'links': get_home_links(context['tree'], product, category_sector_publication)
+        'links': get_home_links(context['tree'], product, category_sector_resource)
     }
