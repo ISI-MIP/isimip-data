@@ -91,7 +91,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
 
             return Response([
                 ' '.join(permutation)
-                for permutation in list(product(*specifiers))
+                for permutation in list(product(*specifiers))[:settings.METADATA_MAX_SUGGESTIONS]
             ])
         else:
             return Response([])
