@@ -25,11 +25,12 @@ def get_home_links(tree, product, category_sector_resource):
                     tree_publication = category_sector_resource_tree.get(resource_publication) or \
                                        category_sector_resource_tree.get(resource_publication.lower())
                     if tree_publication:
+                        publication = tree_publication.get('specifier')
                         links.append(
                             (
                                 simulation_round,
                                 reverse('search', args=[
-                                    f'tree/{simulation_round}/{product}/{tree_publication}'
+                                    f'tree/{simulation_round}/{product}/{publication}'
                                 ])
                             )
                         )
