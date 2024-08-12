@@ -13,7 +13,7 @@ def home(request):
     for simulation_round in tree.tree_dict.keys():
         q |= Q(paths_agg__icontains=f'{simulation_round}/DerivedOutputData/')
 
-    resources = Resource.objects.using('metadata').annotate(paths_agg=ArrayAgg('paths')).filter(q)
+    resources = Resource.objects.using('metadata').annotate(paths_agg=ArrayAgg('paths')).filter(q).order_by('paths')
 
     return render(request, 'home/home.html', {
         'tree': tree,
