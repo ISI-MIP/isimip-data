@@ -27,6 +27,7 @@ class SettingsViewSet(ListModelMixin, GenericViewSet):
                 'value': getattr(settings, key)
             } for key in [
                 'METADATA_PAGE_SIZE',
+                'METADATA_MAX_COUNT',
                 'DOWNLOAD'
             ]
         ]
