@@ -1,31 +1,27 @@
 @import 'isimip_data/core/assets/scss/colors';
 @import 'isimip_data/core/assets/scss/base';
 
-.download-row {
-    min-height: 46px;
-}
+// .card {
+//     p {
+//         margin-bottom: 0.5rem;
+//     }
+//     .card-header {
+//         background-color: white;
+//         padding: 0.5rem 1.25rem;
+//     }
+// }
 
-.card {
-    p {
-        margin-bottom: 0.5rem;
-    }
-    .card-header {
-        background-color: white;
-        padding: 0.5rem 1.25rem;
-    }
-}
+// form .form-check {
+//     margin-bottom: 0.5rem;
 
-form .form-check {
-    margin-bottom: 0.5rem;
+//     &:last-child {
+//         margin-bottom: 0;
+//     }
 
-    &:last-child {
-        margin-bottom: 0;
-    }
-
-    label.text-muted {
-        font-weight: normal;
-    }
-}
+//     label.text-muted {
+//         font-weight: normal;
+//     }
+// }
 
 .symbols-spin {
     font-size: 24px;
@@ -108,6 +104,37 @@ form .form-check {
             div {
                 position: absolute;
             }
+        }
+    }
+}
+
+.dropdown-operations {
+    .dropdown-item {
+        white-space: normal;
+        max-width: 100%;
+
+        small {
+            cursor: pointer;
+
+            p {
+                margin: 0;
+            }
+        }
+    }
+}
+
+.operation {
+    p {
+        margin-bottom: 0.5rem;
+    }
+
+    .close-operation {
+        position: absolute;
+        top: 2px;
+        right: 6px;
+
+        span.material-symbols-rounded {
+            font-size: 20px;
         }
     }
 }
