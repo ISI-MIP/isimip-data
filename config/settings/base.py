@@ -212,82 +212,148 @@ PROTOCOL_LOCATIONS = [
     'https://protocol2.isimip.org'
 ]
 
-DOWNLOAD = {
-    'cutout': {
-        'help': 'You can cutout a specific bounding box given by its south, north, west,'
-                ' and east border. This is done on the server using the <code>ncks</code>'
-                ' command which is part of the <a href="http://nco.sourceforge.net"'
-                ' target="_blank">NCO toolkit</a>.'
+DOWNLOAD_OPERATIONS_HELP = '''
+Please select one of the operations using the button below. You can select multiple operations which are
+applied subsequently. If you are interested in a time series of a variable, please select the corresponding operation
+for corresponding area or point and then check the boxes for averaging and creating a CSV.
+'''
+
+DOWNLOAD_OPERATIONS = [
+    {
+        'operation': 'select_bbox',
+        'title': 'Select rectangular box',
+        'label': '**Select a rectangular box** using `cdo`.',
+        'help': 'The area is extracted using the command:'
+                ' `cdo -f nc4c -z zip_5 -L -sellonlatbox,WEST,EAST,SOUTH,NORTH IFILE OFILE`.',
+        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'bbox': [-180,180,-23.43651,23.43651],
+            'compute_mean': False,
+            'output_csv': False
+        }
     },
-    'cutout_bbox': {
-        'label': 'Cut out bounding box',
-        'help': 'The files are cut out using the bounding box given by you (e.g. -23.43651,'
-                ' 23.43651, -180, 180) and the command: <code>ncks -O -h -d lat,SOUTH,NORTH'
-                ' -d lon,WEST,EAST IFILE OFILE</code>.',
+    {
+        'operation': 'select_point',
+        'title': 'Select point',
+        'label': '**Select a point** using `cdo`.',
+        'help': 'The point is extracted by calculating the grid index for the point given and the command:'
+                ' `cdo -f nc4c -z zip_5 -L  -selindexbox,IX,IX,IY,IY IFILE`.',
+        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'point': [13.064332, 52.38051],
+            'output_csv': False
+        }
+    },
+    {
+        'operation': 'mask_bbox',
+        'title': 'Mask by bounding box',
+        'label': '**Mask a rectangular box** using `cdo`,'
+                 ' keeping the grid and setting everything outside to `missing_value`.',
+        'help': 'The area is masked using the provided values and the command:'
+                ' `cdo -f nc4c -z zip_5 -masklonlatbox,WEST,EAST,SOUTH,NORTH IFILE OFILE`.'
+                ' Everything outside is set to `missing_value` and the grid is kept.',
+        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'bbox': [-180,180,-23.43651,23.43651],
+            'compute_mean': False,
+            'output_csv': False
+        }
+    },
+    {
+        'operation': 'mask_country',
+        'title': 'Mask by country',
+        'label': '**Mask a country** using `cdo` and the ISIMIP countrymask,'
+                 ' keeping the grid and setting everything outside to `missing_value`.',
+        'help': 'The files are masked using the command:'
+                ' `cdo -f nc4c -z zip_5 -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK OFILE`'
+                ' and the <a href="https://doi.org/10.48364/ISIMIP.635131.2" target="_blank">ISIMIP countrymask</a>.'
+                ' Everything outside is set to `missing_value` and the grid is kept.',
+        'resolutions': ['30arcmin'],
+        'initial': {
+            'country': 'aus',
+            'compute_mean': False,
+            'output_csv': False
+        }
+    },
+    {
+        'operation': 'mask_landonly',
+        'title': 'Mask only land data',
+        'label': '**Mask only the land data** using `cdo` and the ISIMIP landseamask,'
+                 ' keeping the grid and setting everything outside to `missing_value`.',
+        'help': 'The files are masked using the command:'
+                ' `cdo -f nc4c -z zip_5 -ifthen IFILE -selname,mask LANDSEAMASK OFILE`'
+                ' and the <a href="https://doi.org/10.48364/ISIMIP.822294" target="_blank">ISIMIP'
+                ' landseamask without Antarctica</a>.'
+                ' Everything outside is set to `missing_value` and the grid is kept.',
+        'resolutions': ['30arcmin']
+    },
+    {
+        'operation': 'mask_mask',
+        'title': 'Mask using a custom NetCDF mask',
+        'label': '**Mask using a custom NetCDF mask** using `cdo`,'
+                 ' keeping the grid and setting everything outside to `missing_value`.',
+        'help': 'The area is masked using the mask in the provided NetCDF and the command:'
+                ' `cdo -f nc4c -z zip_5 -ifthen -selname,VAR MASKFILE IFILE OFILE`.'
+                ' You can set a name for the mask file on the server and the variable which is used as mask.'
+                ' The mask varaible needs to contain only zeros and ones.',
+        'resolutions': ['30arcmin'],
+        'initial': {
+            'mask': 'mask.nc',
+            'var': 'm_VAR'
+        }
+    },
+    {
+        'operation': 'cutout_bbox',
+        'title': 'Cut out bounding box',
+        'label': '**Cut out a rectangular box** using `ncks`'
+                 ' (prefered for high-resolution datasets).',
+        'help': 'Instead of using [CDO](https://code.mpimet.mpg.de/projects/cdo) to select a bounding box, '
+                'the cut-out can also be performed using [ncks](https://nco.sourceforge.net/nco.html). '
+                'This operation has a much better performance when applied to the high resolution data '
+                'from [CHELSA-W5E5 v1.0: W5E5 v1.0 downscaled with CHELSA v2.0](https://doi.org/10.48364/ISIMIP.836809.3).\n\n'
+                'The extraction is performed using the command: '
+                '`ncks -O -h -d lat,SOUTH,NORTH -d lon,WEST,EAST IFILE OFILE`.',
         'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
-                        '15arcmin', '30arcmin', '60arcmin', '120arcmin']
+                        '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'bbox': [-180,180,-23.43651,23.43651],
+            'compute_mean': False,
+            'output_csv': False
+        }
     },
-    'mask': {
-        'help': 'You can also mask all data outside of a certain country, bounding box,'
-                ' or by applying a land-sea-mask. The compression of the NetCDF file will'
-                ' then reduce the file size considerably. The resulting file will still'
-                ' have the same dimensions and metadata as the original. The extraction is'
-                ' done on the server using the <a href="https://code.mpimet.mpg.de/projects/cdo/"'
-                ' target="_blank">CDO toolkit</a>.'
+    {
+        'operation': 'cutout_point',
+        'title': 'Cut out point',
+        'label': '**Cut out a point** using `ncks`'
+                 ' (prefered for high-resolution datasets).',
+        'help': 'Instead of using [CDO](https://code.mpimet.mpg.de/projects/cdo) to select a point, '
+                'the cut-out can also be performed using [ncks](https://nco.sourceforge.net/nco.html). '
+                'This operation has a much better performance when applied to the high resolution data '
+                'from [CHELSA-W5E5 v1.0: W5E5 v1.0 downscaled with CHELSA v2.0](https://doi.org/10.48364/ISIMIP.836809.3).\n\n'
+                'The extraction is performed using the command: '
+                '`ncks -h -d lat,SOUTH,NORTH -d WEST,EAST IFILE OFILE`.',
+        'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
+                        '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'point': [13.064332, 52.38051],
+            'output_csv': False
+        }
     },
-    'mask_country': {
-        'label': 'Mask by country',
-        'help': 'The files are masked using the countrymask of the ISIPEDIA project'
-                ' (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc"'
-                ' target="_blank">available on GitHub</a>) and the command: <code>cdo -f nc4c -z zip_5'
-                ' -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK OFILE</code>.',
-        'resolutions': ['30arcmin']
-    },
-    'mask_bbox': {
-        'label': 'Mask by bounding box',
-        'help': 'The files are masked using the bounding box given by you (e.g. -23.43651,'
-                ' 23.43651, -180, 180) and the command:  <code>cdo -f nc4c -z zip_5'
-                ' -masklonlatbox,WEST,EAST,SOUTH,NORTH IFILE OFILE</code>.',
-        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin']
-    },
-    'mask_landonly': {
-        'label': 'Mask only land data',
-        'help': 'The files are masked using the ISIMIP3 landseamask without Antarctica'
-                ' (<a href="https://doi.org/10.48364/ISIMIP.822294" target="_blank">'
-                'https://data.isimip.org/10.48364/ISIMIP.822294</a>) and the command:'
-                ' <code>cdo -f nc4c -z zip_5 -ifthen IFILE -selname,mask LANDSEAMASK OFILE</code>.',
-        'resolutions': ['30arcmin']
-    },
-    'select': {
-        'help': 'If you are interested in a time series for a certain region, you can extract'
-                ' the data for one point, for a country, or for a bounding box. The values are'
-                ' averaged over the selected area and CSV files containing dates and values is'
-                ' returned. The extraction is done on the server using the'
-                ' <a href="https://code.mpimet.mpg.de/projects/cdo/" target="_blank">CDO toolkit</a>.'
-    },
-    'select_country': {
-        'label': 'Select by country',
-        'help': 'The time series is extracted using the countrymask of the ISIPEDIA project'
-                ' (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc"'
-                ' target="_blank">available on GitHub</a>) and the command: <code>cdo -s outputtab,date,value,nohead'
-                ' -fldmean -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK</code>.',
-        'resolutions': ['30arcmin']
-    },
-    'select_bbox': {
-        'label': 'Select by bounding box',
-        'help': 'The time series is extracted using the bounding box given by you (e.g. -23.43651,'
-                ' 23.43651, -180, 180) and the command: <code>cdo -s outputtab,date,value,nohead'
-                ' -fldmean -sellonlatbox,WEST,EAST,SOUTH,NORTH IFILE</code>.',
-        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin']
-    },
-    'select_point': {
-        'label': 'Select by point',
-        'help': 'The time series is extracted by calculating the grid index for the point'
-                ' given by you (e.g. 52.39, 13.06) and the command:'
-                ' <code>cdo -s outputtab,date,value,nohead -selindexbox,IX,IX,IY,IY IFILE</code>.',
-        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin']
+    {
+        'operation': 'create_mask',
+        'title': 'Create mask',
+        'label': '**Create a NefCDF mask** from a GeoJSON or Shaperfile, which can be used'
+                 ' in subsequent operations.',
+        'help': 'A mask can be created from vector based input file, namely '
+                '[Shapefiles](https://en.wikipedia.org/wiki/Shapefile) or '
+                '[GeoJSON files](https://en.wikipedia.org/wiki/GeoJSON). '
+                'This operation is performed once and the resulting mask can then be used '
+                'in the `mask_mask` operation. You can set a name for the mask file on the server.',
+        'initial': {
+            'mask': 'mask.nc'
+        }
     }
-}
+]
 
 RESTRICTED_MESSAGES = {}
 RESTRICTED_DEFAULT_MESSAGE = 'Please contact <a href="mailto:info@isimip.org">info@isimip.org</a>' \
