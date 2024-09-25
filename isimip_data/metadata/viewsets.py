@@ -101,7 +101,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         if Identifier.objects.using('metadata').filter(identifier=identifier).exists():
             # exclude the identifier from IdentifierFilterBackend
             self.identifier_filter_exclude = identifier
-            queryset = self.filter_queryset(Dataset.objects.using('metadata'))
+            queryset = self.filter_queryset(Dataset.objects.using('metadata').filter(target=None))
             values = queryset.histogram(identifier)
             return Response(values)
         else:
@@ -125,7 +125,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
             'file_base_url': get_file_base_url(request),
             'files': File.objects.using('metadata').filter(dataset=dataset)
         }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
-        response['Content-Disposition'] = 'attachment; filename=%s.txt' % dataset.name
+        response['Content-Disposition'] = f'attachment; filename={dataset.name}.txt'
         return response
 
 

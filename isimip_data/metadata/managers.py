@@ -4,7 +4,7 @@ from django.db import models
 class DatasetQuerySet(models.QuerySet):
 
     def histogram(self, identifier):
-        field = 'specifiers__%s' % identifier
+        field = f'specifiers__{identifier}'
         return self.values_list(field).annotate(count=models.Count(field)).order_by(field)
 
 
