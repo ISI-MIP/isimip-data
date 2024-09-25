@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 import jQuery from 'jquery'
 import bytes from 'bytes'
-import Cookies from 'js-cookie'
 
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 import Badges from './Badges'
@@ -20,8 +19,7 @@ class Result extends Component {
     this.state = {
       showAttributes: false,
       showFiles: false,
-      showCaveats: false,
-      csrfToken: Cookies.get('csrftoken')
+      showCaveats: false
     }
     this.toggleAttributes = this.toggleAttributes.bind(this)
     this.toggleFiles = this.toggleFiles.bind(this)
@@ -293,11 +291,8 @@ class Result extends Component {
   }
 
   renderConfigureDownloadForm(files) {
-    const { csrfToken } = this.state
-
     return (
       <form className="m-0" method="post" action="/download/" target="_blank">
-        <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
         {files.map(file => {
           return <input type="hidden" name="paths" value={file.path} key={file.id} />
         })}

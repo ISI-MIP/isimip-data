@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 import bytes from 'bytes'
-import Cookies from 'js-cookie'
 
 import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
 
@@ -15,8 +14,7 @@ class Selection extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      showDatasets: false,
-      csrfToken: Cookies.get('csrftoken')
+      showDatasets: false
     }
     this.toggleDatasets = this.toggleDatasets.bind(this)
   }
@@ -35,7 +33,7 @@ class Selection extends Component {
 
   renderSelection() {
     const { selected, count, maxCount, isLoading, onReset } = this.props
-    const { showDatasets, csrfToken } = this.state
+    const { showDatasets } = this.state
 
     const selected_count = selected.length
     const size = get_size(selected.reduce((accumulator, dataset) => {
@@ -80,7 +78,6 @@ class Selection extends Component {
           <div className="float-md-right">
             <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
               <form className="m-0" method="post" action="/download/" target="_blank" rel="noreferrer">
-                <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
                 {files.map(file => {
                   return <input type="hidden" name="paths" value={file.path} key={file.id} />
                 })}

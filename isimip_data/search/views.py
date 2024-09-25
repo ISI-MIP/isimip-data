@@ -1,8 +1,6 @@
 from django.shortcuts import redirect, render
-from django.views.decorators.csrf import ensure_csrf_cookie
 
 
-@ensure_csrf_cookie
 def search(request, path=None):
     # redirect GET params to match react location
     if request.GET:
