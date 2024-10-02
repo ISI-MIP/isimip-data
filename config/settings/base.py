@@ -189,7 +189,7 @@ NAVIGATION = [
 ]
 
 FILES_BASE_URL = 'https://files.isimip.org'
-FILES_API_URL = 'https://files.isimip.org/api/v1'
+FILES_API_URL = 'https://files.isimip.org/api/v2'
 
 CAVEATS_REPLY_TO = (
     'ISIMIP data <isimip-data@pik-potsdam.de>',

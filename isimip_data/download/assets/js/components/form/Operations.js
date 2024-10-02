@@ -1,36 +1,32 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
+import { isEmpty } from 'lodash'
 
 import { useSettingsQuery } from 'isimip_data/core/assets/js/hooks/queries'
 
 import Operation from './Operation'
 
-const Operations = ({ files, values, errors, setValues }) => {
+const Operations = ({ files, errors, operations, setOperations }) => {
 
   const { data: settings } = useSettingsQuery()
 
   const addOperation = (operation) => {
-    setValues({
-      ...values, operations: [...values.operations, {
-        operation: operation.operation,
-        ...operation.initial
-      }]
-    })
+    setOperations([
+      ...operations, { operation: operation.operation, ...operation.initial }
+    ])
   }
 
   const updateOperation = (operationIndex, operation) => {
-    setValues({
-      ...values, operations: [...values.operations.map((op, opIndex) => (
-        (opIndex == operationIndex) ? operation : op
-      ))]
-    })
+    setOperations([
+      ...operations.map((op, opIndex) => ((opIndex == operationIndex) ? operation : op))
+    ])
   }
 
   const removeOperation = (operationIndex) => {
-    setValues({
-      ...values, operations: [...values.operations.filter((op, opIndex) => opIndex != operationIndex)]
-    })
+    setOperations([
+      ...operations.filter((op, opIndex) => opIndex != operationIndex)
+    ])
   }
 
   return settings && (
@@ -42,13 +38,13 @@ const Operations = ({ files, values, errors, setValues }) => {
         </div>
       </div>
       {
-        values.operations.map((operation, operationIndex) => (
+        isEmpty(operations) || operations.map((values, index) => (
           <Operation
-            key={operationIndex}
-            operation={settings.DOWNLOAD_OPERATIONS.find(op => (op.operation == operation.operation))}
-            operationIndex={operationIndex}
-            operationValues={values.operations[operationIndex]}
-            operationErrors={[]}
+            key={index}
+            operation={settings.DOWNLOAD_OPERATIONS.find(op => (op.operation == values.operation))}
+            index={index}
+            values={values}
+            errors={[]}
             updateOperation={updateOperation}
             removeOperation={removeOperation}
           />
@@ -77,9 +73,9 @@ const Operations = ({ files, values, errors, setValues }) => {
 
 Operations.propTypes = {
   files: PropTypes.array.isRequired,
-  values: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired,
-  setValues: PropTypes.func.isRequired
+  errors: PropTypes.object,
+  operations: PropTypes.array,
+  setOperations: PropTypes.func.isRequired
 }
 
 export default Operations
