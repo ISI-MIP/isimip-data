@@ -3,23 +3,19 @@ import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
 import { isUndefined } from 'lodash'
 
-
-// import Html from 'isimip_data/core/assets/js/components/Html'
-
 import Country from './widgets/Country'
 import BBox from './widgets/BBox'
 import Csv from './widgets/Csv'
 import Mean from './widgets/Mean'
 import Point from './widgets/Point'
 
-const Operation = ({ operation, operationIndex, operationValues, operationErrors,
-                     updateOperation, removeOperation }) => {
+const Operation = ({ operation, index, values, errors, updateOperation, removeOperation }) => {
   const error = []
 
   return (
     <div className="card mb-2 operation">
       <div className="card-body">
-        <button type="button" className="btn btn-link close-operation" onClick={() => removeOperation(operationIndex)}>
+        <button type="button" className="btn btn-link close-operation" onClick={() => removeOperation(index)}>
           <span className="material-symbols-rounded">close</span>
         </button>
 
@@ -28,47 +24,47 @@ const Operation = ({ operation, operationIndex, operationValues, operationErrors
           <Markdown>{operation.help}</Markdown>
         </div>
         {
-          !isUndefined(operationValues.bbox) && (
+          !isUndefined(values.bbox) && (
             <BBox
-              bbox={operationValues.bbox}
-              errors={operationErrors}
-              onChange={bbox => updateOperation(operationIndex, {...operationValues, bbox})}
+              bbox={values.bbox}
+              errors={errors}
+              onChange={bbox => updateOperation(index, {...values, bbox})}
             />
           )
         }
         {
-          !isUndefined(operationValues.point) && (
+          !isUndefined(values.point) && (
             <Point
-              point={operationValues.point}
-              errors={operationErrors}
-              onChange={point => updateOperation(operationIndex, {...operationValues, point})}
+              point={values.point}
+              errors={errors}
+              onChange={point => updateOperation(index, {...values, point})}
             />
           )
         }
         {
-          !isUndefined(operationValues.country) && (
+          !isUndefined(values.country) && (
             <Country
-              country={operationValues.country}
-              errors={operationErrors}
-              onChange={country => updateOperation(operationIndex, {...operationValues, country})}
+              country={values.country}
+              errors={errors}
+              onChange={country => updateOperation(index, {...values, country})}
             />
           )
         }
         {
-          !isUndefined(operationValues.compute_mean) && (
+          !isUndefined(values.compute_mean) && (
             <Mean
-              checked={operationValues.compute_mean}
-              errors={operationErrors}
-              onChange={compute_mean => updateOperation(operationIndex, {...operationValues, compute_mean})}
+              checked={values.compute_mean}
+              errors={errors}
+              onChange={compute_mean => updateOperation(index, {...values, compute_mean})}
             />
           )
         }
         {
-          !isUndefined(operationValues.output_csv) && (
+          !isUndefined(values.output_csv) && (
             <Csv
-              checked={operationValues.output_csv}
-              errors={operationErrors}
-              onChange={output_csv => updateOperation(operationIndex, {...operationValues, output_csv})}
+              checked={values.output_csv}
+              errors={errors}
+              onChange={output_csv => updateOperation(index, {...values, output_csv})}
             />
           )
         }
@@ -79,8 +75,9 @@ const Operation = ({ operation, operationIndex, operationValues, operationErrors
 
 Operation.propTypes = {
   operation: PropTypes.object.isRequired,
-  operationIndex: PropTypes.number.isRequired,
-  operationValues: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
+  values: PropTypes.object.isRequired,
+  errors: PropTypes.array.isRequired,
   updateOperation: PropTypes.func.isRequired,
   removeOperation: PropTypes.func.isRequired
 }

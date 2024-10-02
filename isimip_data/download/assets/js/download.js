@@ -4,23 +4,18 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-import Form from './components/Form.js'
-import Job from './components/Job.js'
+import App from "./components/App.js"
 
-const appElement = document.getElementById('app')
 const queryClient = new QueryClient()
 
-if (appElement.dataset.url) {
-  createRoot(appElement).render(
-    <QueryClientProvider client={queryClient}>
-      <Job url={appElement.dataset.url} />
-    </QueryClientProvider>
-  )
-} else {
-  const files = JSON.parse(document.getElementById('files').textContent)
-  createRoot(appElement).render(
-    <QueryClientProvider client={queryClient}>
-      <Form files={files} />
-    </QueryClientProvider>
-  )
-}
+const appElement = document.getElementById('app')
+const filesElement = document.getElementById('files')
+
+const jobUrl = appElement.dataset.jobUrl
+const files = filesElement && JSON.parse(filesElement.textContent)
+
+createRoot(appElement).render(
+  <QueryClientProvider client={queryClient}>
+    <App jobUrl={jobUrl} files={files} />
+  </QueryClientProvider>
+)

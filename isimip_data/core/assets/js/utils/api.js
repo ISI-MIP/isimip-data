@@ -1,3 +1,11 @@
+class BadRequestError extends Error {
+  constructor(message, status, errors) {
+    super(message)
+    this.status = status
+    this.errors = errors
+  }
+}
+
 const encodeParams = params => {
   return Object.entries(params).map(item => {
     const [key, value] = item
@@ -26,6 +34,13 @@ const getFileName = response => {
   }
 }
 
+const downloadFile = (url) => {
+  const a = document.createElement('a')
+  a.href = url
+  a.click()
+  a.remove()
+}
+
 const downloadBlob = (blob, fileName) => {
   const url = window.URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -35,4 +50,4 @@ const downloadBlob = (blob, fileName) => {
   a.remove()
 }
 
-export { encodeParams, getFileName, downloadBlob }
+export { BadRequestError, encodeParams, getFileName, downloadFile, downloadBlob }

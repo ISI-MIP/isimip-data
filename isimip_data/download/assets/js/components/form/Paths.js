@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 
 import Range from './widgets/Range'
 
-const Selection = ({ files, values, errors, setValues }) => {
+const Paths = ({ files, errors, paths, setPaths }) => {
   // compute if files are checked
-  const allChecked = (files.length == values.paths.length)
+  const allChecked = (files.length == paths.length)
 
   // compute the start_year/end_year of the files in this.props.files
   const initialRange = files.reduce((acc, cur) => {
@@ -39,28 +39,29 @@ const Selection = ({ files, values, errors, setValues }) => {
       endYear = (value > startYear) ? value : endYear
     }
 
-    setValues({ ...values, paths: files.filter(file => (
+    setPaths(
+      files.filter(file => (
         (file.specifiers.start_year === undefined) ||
         (file.specifiers.start_year >= startYear && file.specifiers.start_year <= endYear)
       )).map(file => file.path)
-    })
+    )
 
     setState({ ...state, rangeValues: [startYear, endYear] })
   }
 
   const togglePath = (path) => {
-    if (values.paths.includes(path)) {
-      setValues({ ...values, paths: values.paths.filter(item => item != path) })
+    if (paths.includes(path)) {
+      setPaths(paths.filter(item => item != path))
     } else {
-      setValues({ ...values, paths: [...values.paths, path]})
+      setPaths([...paths, path])
     }
   }
 
   const toggleAll = () => {
     if (allChecked) {
-      setValues({ ...values, paths: [] })
+      setPaths([])
     } else {
-      setValues({ ...values, paths: files.map(file => file.path) })
+      setPaths(files.map(file => file.path))
     }
   }
 
@@ -93,7 +94,7 @@ const Selection = ({ files, values, errors, setValues }) => {
             state.mode == 'range' && <div>
               <Range domain={state.rangeDomain} values={state.rangeValues} onChange={handleRangeChange} />
               <div className="text-center">
-                <span className="mr-3"><strong>Number of files:</strong> {values.paths.length}</span>
+                <span className="mr-3"><strong>Number of files:</strong> {paths.length}</span>
                 <span className="mr-3"><strong>Start year:</strong> {state.rangeValues[0]}</span>
                 <span><strong>End year:</strong> {state.rangeValues[1]}</span>
               </div>
@@ -116,7 +117,7 @@ const Selection = ({ files, values, errors, setValues }) => {
                   return (
                     <div className="form-check" key={index}>
                       <input className="form-check-input" type="checkbox" id={index}
-                             checked={values.paths.includes(file.path)}
+                             checked={paths.includes(file.path)}
                              onChange={() => togglePath(file.path)} />
                       <label className="form-check-label" htmlFor={index}>{file.path}</label>
                     </div>
@@ -140,11 +141,11 @@ const Selection = ({ files, values, errors, setValues }) => {
   )
 }
 
-Selection.propTypes = {
+Paths.propTypes = {
   files: PropTypes.array.isRequired,
-  values: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
-  setValues: PropTypes.func.isRequired
+  paths: PropTypes.array.isRequired,
+  setPaths: PropTypes.func.isRequired
 }
 
-export default Selection
+export default Paths

@@ -1,0 +1,18 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import DownloadApi from '../api/DownloadApi'
+
+export const useSubmitJobMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (variables) => {
+      return DownloadApi.submitJob(variables.url, variables.data)
+    },
+    onSuccess: (data, variables) => {
+      variables.setJob(data)
+    },
+    onError: (error, variables) => {
+      variables.setErrors(error.errors)
+    }
+  })
+}
