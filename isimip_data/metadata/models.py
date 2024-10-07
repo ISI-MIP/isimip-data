@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 
 from .constants import RIGHTS
-from .managers import DatasetManager, IdentifierManager
+from .managers import DatasetManager, IdentifierManager, ResourceManager
 from .utils import get_json_ld_name, get_terms_of_use, merge_identifiers, merge_specifiers, prettify_specifiers
 
 
@@ -202,6 +202,8 @@ class File(models.Model):
 
 
 class Resource(models.Model):
+
+    objects = ResourceManager()
 
     id = models.UUIDField(primary_key=True)
     doi = models.TextField()
