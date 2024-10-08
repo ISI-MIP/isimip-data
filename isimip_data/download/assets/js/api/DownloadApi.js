@@ -1,3 +1,5 @@
+import { isEmpty } from 'lodash'
+
 import { BadRequestError, downloadFile } from 'isimip_data/core/assets/js/utils/api'
 
 class DownloadApi {
@@ -21,14 +23,37 @@ class DownloadApi {
     })
   }
 
-  static submitJob(url, data) {
-    return fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    }).then(response => {
+  static submitJob(url, data, uploads) {
+    let promise
+
+    if (isEmpty(uploads)) {
+      promise = fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+    } else {
+      const formData = new FormData()
+
+      // append data as a JSON blob
+      formData.append('data', new Blob([JSON.stringify(data)]), {
+        type: "application/json"
+      })
+
+      // append each file
+      Object.entries(uploads).forEach(([fileName, file]) => {
+        formData.append(fileName, file)
+      })
+
+      promise = fetch(url, {
+        method: 'POST',
+        body: formData
+      })
+    }
+
+    return promise.then(response => {
       if (response.ok) {
         return response.json()
       } else {
@@ -38,11 +63,6 @@ class DownloadApi {
       }
     })
   }
-
-  static downloadFile(file_url) {
-
-  }
-
 }
 
 export default DownloadApi

@@ -1,28 +1,6 @@
 @import 'isimip_data/core/assets/scss/colors';
 @import 'isimip_data/core/assets/scss/base';
 
-// .card {
-//     p {
-//         margin-bottom: 0.5rem;
-//     }
-//     .card-header {
-//         background-color: white;
-//         padding: 0.5rem 1.25rem;
-//     }
-// }
-
-// form .form-check {
-//     margin-bottom: 0.5rem;
-
-//     &:last-child {
-//         margin-bottom: 0;
-//     }
-
-//     label.text-muted {
-//         font-weight: normal;
-//     }
-// }
-
 .symbols-spin {
     font-size: 24px;
     margin: -1px 6px -1px 0;
@@ -110,9 +88,6 @@
 
 .dropdown-operations {
     .dropdown-item {
-        white-space: normal;
-        max-width: 100%;
-
         small {
             cursor: pointer;
 
@@ -136,5 +111,19 @@
         span.material-symbols-rounded {
             font-size: 20px;
         }
+    }
+}
+
+.file-control {
+    height: auto;
+
+    .file-control-inner {
+        cursor: pointer;
+
+        height: 5rem;
+        padding: 0.25rem 0.5rem;
+        border: 1px dashed silver;
+        border-radius: 4px;
+        font-size: small;
     }
 }
