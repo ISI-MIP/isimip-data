@@ -6,12 +6,13 @@ export const useSubmitJobMutation = () => {
 
   return useMutation({
     mutationFn: (variables) => {
-      return DownloadApi.submitJob(variables.url, variables.data)
+      return DownloadApi.submitJob(variables.url, variables.data, variables.uploads)
     },
     onSuccess: (data, variables) => {
       variables.setJob(data)
     },
     onError: (error, variables) => {
+      console.log(error)
       variables.setErrors(error.errors)
     }
   })

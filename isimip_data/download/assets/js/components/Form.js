@@ -20,12 +20,18 @@ const Form = ({ files, setJob }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
+
+    const uploads = {}
+    const data = { paths, operations: operations.map(operation => {
+      const { file, ...values } = operation
+      uploads[values.mask] = file
+      return values
+    })}
+
     mutation.mutate({
       url: settings.FILES_API_URL,
-      data: {
-        paths,
-        operations
-      },
+      data,
+      uploads,
       setErrors,
       setJob
     })
@@ -45,7 +51,7 @@ const Form = ({ files, setJob }) => {
         operations={operations}
         setOperations={setOperations}
       />
-      <div className="mb-3 text-center">
+      <div className="mt-4 mb-3 text-center">
         <button className="btn btn-primary btn-lg" disabled={isEmpty(paths) || isEmpty(operations)}
                 onClick={handleSubmit}>
           Start download job

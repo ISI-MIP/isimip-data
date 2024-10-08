@@ -8,6 +8,7 @@ import BBox from './widgets/BBox'
 import Csv from './widgets/Csv'
 import Mean from './widgets/Mean'
 import Point from './widgets/Point'
+import Mask from './widgets/Mask'
 
 const Operation = ({ operation, index, values, errors, updateOperation, removeOperation }) => {
   const error = []
@@ -47,6 +48,15 @@ const Operation = ({ operation, index, values, errors, updateOperation, removeOp
               country={values.country}
               errors={errors}
               onChange={country => updateOperation(index, {...values, country})}
+            />
+          )
+        }
+        {
+          !isUndefined(values.mask) && (
+            <Mask
+              values={values}
+              errors={errors}
+              onChange={maskValues => updateOperation(index, {...values, ...maskValues})}
             />
           )
         }

@@ -50,22 +50,27 @@ const Operations = ({ files, errors, operations, setOperations }) => {
           />
         ))
       }
-      <div className="dropdown dropdown-operations">
-        <button className="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-          Add operation
-        </button>
-        <div className="dropdown-menu">
-          {
-            settings && settings.DOWNLOAD_OPERATIONS.map(operation => (
-              <button key={operation.operation} className="dropdown-item" type="button"
-                      onClick={() => addOperation(operation)}>
-                <small>
-                  <Markdown>{operation.label}</Markdown>
-                </small>
-              </button>
-            ))
-          }
+      <div className="d-flex">
+        <div className="dropdown dropdown-operations">
+          <button className="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+            Add operation
+          </button>
+          <div className="dropdown-menu">
+            {
+              settings && settings.DOWNLOAD_OPERATIONS.map(operation => (
+                <button key={operation.operation} className="dropdown-item" type="button"
+                        onClick={() => addOperation(operation)}>
+                  <small>
+                    <Markdown>{operation.label}</Markdown>
+                  </small>
+                </button>
+              ))
+            }
+          </div>
         </div>
+        <button className="btn btn-danger ml-auto" onClick={() => setOperations([])}>
+          Reset
+        </button>
       </div>
     </div>
   )
