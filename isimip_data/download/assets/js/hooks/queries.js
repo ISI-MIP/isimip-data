@@ -19,7 +19,9 @@ export const useJobQuery = (url) => {
     queryFn: () => DownloadApi.fetchJob(url),
     placeholderData: keepPreviousData,
     refetchInterval: refetchInterval,
+    refetchOnWindowFocus: false,
     enabled: !isNil(url),
+    refetchIntervalInBackground: true,
     refetchInterval: (query) => {
       return (query.state.data && [
         'queued',
