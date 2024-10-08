@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash'
 
 const getLsValue = (path) => {
-  const lsValue = localStorage.getItem(`daiquiri.${path}`)
+  const lsValue = localStorage.getItem(path)
 
   // check if the value is empty
   if (isEmpty(lsValue)) {
