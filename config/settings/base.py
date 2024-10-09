@@ -192,7 +192,7 @@ FILES_BASE_URL = 'https://files.isimip.org'
 FILES_API_URL = 'https://files.isimip.org/api/v1'
 
 CAVEATS_REPLY_TO = (
-    'ISIMIP data <isimip-data@isimip.org>',
+    'ISIMIP data <isimip-data@pik-potsdam.de>',
 )
 CAVEATS_DEFAULT_RECIPIENTS = (
     'isimip-data-issues-notes@listserv.dfn.de',
