@@ -34,19 +34,13 @@ const baseConfig = {
     },
     extensions: ['*', '.js', '.jsx']
   },
-  output: {
-    libraryTarget: 'this',
-    library: '[name]',
-    path: path.resolve('./static/'),
-    filename: '[name].js'
-  },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader",
-        options: { presets: ["@babel/env"] }
+        loader: 'babel-loader',
+        options: { presets: ['@babel/env','@babel/preset-react'] }
       },
       {
         test: /\.s?css$/,
@@ -59,18 +53,26 @@ const baseConfig = {
       {
         test: /\.(woff2?|ttf|eot|otf)$/,
         loader: 'file-loader',
+        type: 'javascript/auto',
         options: {
-          name: 'fonts/[name].[ext]'
+          name: 'fonts/[name].[ext]',
+          esModule: false
         }
       },
       {
         test: /\.(svg|png|jpg)$/,
         loader: 'file-loader',
+        type: 'javascript/auto',
         options: {
-          name: 'images/[name].[ext]'
+          name: 'images/[name].[ext]',
+          esModule: false
         }
       }
     ]
+  },
+  output: {
+    path: path.resolve('./static/'),
+    filename: '[name].js'
   },
   plugins: [
     new MiniCssExtractPlugin({
