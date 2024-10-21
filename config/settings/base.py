@@ -298,7 +298,7 @@ DOWNLOAD_OPERATIONS = [
                 ' You can set a name for the mask file on the server (which does not need'
                 ' to match the uploaded file) and the variable which is used as mask.'
                 ' For NetCDF files, the mask varaible needs to contain only zeros and ones.'
-                ' GeoJSON and shapefiles are converted to a suitable NetCDF mask on the server.',
+                ' GeoJSON and shapefiles (as .zip) are converted to a suitable NetCDF mask on the server.',
         'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
                         '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {

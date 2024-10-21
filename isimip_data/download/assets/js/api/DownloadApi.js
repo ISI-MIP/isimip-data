@@ -43,9 +43,7 @@ class DownloadApi {
       })
 
       // append each file
-      Object.entries(uploads).forEach(([fileName, file]) => {
-        formData.append(fileName, file)
-      })
+      uploads.forEach(file => formData.append(file.name, file))
 
       promise = fetch(url, {
         method: 'POST',

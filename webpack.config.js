@@ -32,7 +32,10 @@ const baseConfig = {
     alias: {
       isimip_data: path.resolve(__dirname, './isimip_data/')
     },
-    extensions: ['*', '.js', '.jsx']
+    extensions: ['*', '.js', '.jsx'],
+    fallback: {
+      buffer: require.resolve('buffer/'),
+    }
   },
   module: {
     rules: [
@@ -91,7 +94,10 @@ const baseConfig = {
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
-    })
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
   ]
 }
 
