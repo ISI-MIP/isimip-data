@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { isEmpty } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 
 import { useLsState } from 'isimip_data/core/assets/js/hooks/ls'
 import { useSettingsQuery } from 'isimip_data/core/assets/js/hooks/queries'
@@ -21,12 +21,28 @@ const Form = ({ files, setJob }) => {
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    const uploads = {}
-    const data = { paths, operations: operations.map(operation => {
-      const { file, ...values } = operation
-      uploads[values.mask] = file
-      return values
-    })}
+    const uploads = []
+    const data = {
+      paths,
+      operations: operations.reduce((operations, operation) => {
+        const { file, ...values } = operation
+
+        if (!isNil(file)) {
+          uploads.push(file)
+        }
+
+        if (values.operation == 'mask_mask') {
+          const createMaskOperation = {
+            operation: 'create_mask',
+            shape: file.name,
+            mask: operation.mask
+          }
+          return [...operations, createMaskOperation, values]
+        } else {
+          return [...operations, values]
+        }
+      }, [])
+    }
 
     mutation.mutate({
       url: settings.FILES_API_URL,

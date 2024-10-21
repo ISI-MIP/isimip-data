@@ -12,7 +12,9 @@ const Mask = ({ values, errors, onChange }) => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
-      'application/x-hdf': ['.nc', '.nc4']
+      'application/x-hdf': ['.nc', '.nc4'],
+      'application/json': ['.json'],
+      'application/zip': ['.zip']
     },
     onDropAccepted: acceptedFiles => {
       if (acceptedFiles.length > 0) {
