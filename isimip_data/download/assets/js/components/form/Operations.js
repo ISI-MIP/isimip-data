@@ -38,17 +38,21 @@ const Operations = ({ files, errors, operations, setOperations }) => {
         </div>
       </div>
       {
-        isEmpty(operations) || operations.map((values, index) => (
-          <Operation
-            key={index}
-            operation={settings.DOWNLOAD_OPERATIONS.find(op => (op.operation == values.operation))}
-            index={index}
-            values={values}
-            errors={[]}
-            updateOperation={updateOperation}
-            removeOperation={removeOperation}
-          />
-        ))
+        isEmpty(operations) || operations.map((values, index) => {
+          const operation = settings.DOWNLOAD_OPERATIONS.find(op => (op.operation == values.operation))
+
+          return operation && (
+            <Operation
+              key={index}
+              operation={operation}
+              index={index}
+              values={values}
+              errors={[]}
+              updateOperation={updateOperation}
+              removeOperation={removeOperation}
+            />
+          )
+        })
       }
       <div className="d-flex">
         <div className="dropdown dropdown-operations">
