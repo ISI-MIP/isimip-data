@@ -289,14 +289,18 @@ DOWNLOAD_OPERATIONS = [
     },
     {
         'operation': 'mask_mask',
-        'title': 'Mask using a custom NetCDF mask',
-        'label': '**Mask using a custom NetCDF mask** using `cdo`,'
+        'title': 'Mask using a custom mask',
+        'label': '**Mask using a custom mask** using `cdo`,'
                  ' keeping the grid and setting everything outside to `missing_value`.',
-        'help': 'The area is masked using the mask in the provided NetCDF and the command:'
+        'help': 'You can upload a custom NetCDF mask or vector mask in GeoJSON/shapefile format.'
+                ' The files are then masked using the command:'
                 ' `cdo -f nc4c -z zip_5 -ifthen -selname,VAR MASKFILE IFILE OFILE`.'
-                ' You can set a name for the mask file on the server and the variable which is used as mask.'
-                ' The mask varaible needs to contain only zeros and ones.',
-        'resolutions': ['30arcmin'],
+                ' You can set a name for the mask file on the server (which does not need'
+                ' to match the uploaded file) and the variable which is used as mask.'
+                ' For NetCDF files, the mask varaible needs to contain only zeros and ones.'
+                ' GeoJSON and shapefiles are converted to a suitable NetCDF mask on the server.',
+        'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
+                        '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
             'mask': 'mask.nc',
             'var': 'm_VAR'
@@ -337,20 +341,6 @@ DOWNLOAD_OPERATIONS = [
         'initial': {
             'point': [13.064332, 52.38051],
             'output_csv': False
-        }
-    },
-    {
-        'operation': 'create_mask',
-        'title': 'Create mask',
-        'label': '**Create a NefCDF mask** from a GeoJSON or Shaperfile, which can be used'
-                 ' in subsequent operations.',
-        'help': 'A mask can be created from vector based input file, namely '
-                '[Shapefiles](https://en.wikipedia.org/wiki/Shapefile) or '
-                '[GeoJSON files](https://en.wikipedia.org/wiki/GeoJSON). '
-                'This operation is performed once and the resulting mask can then be used '
-                'in the `mask_mask` operation. You can set a name for the mask file on the server.',
-        'initial': {
-            'mask': 'mask.nc'
         }
     }
 ]
