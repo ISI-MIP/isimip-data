@@ -320,14 +320,20 @@ class ResourceSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'doi',
+            'doi_url',
             'title',
             'title_with_version',
             'version',
             'paths',
-            'datacite',
-            'doi_url',
+            'creators_str',
+            'publication_year',
+            'publication_date',
+            'publisher',
+            'citation',
             'previous_version',
-            'new_version'
+            'new_version',
+            'is_external',
+            'datacite',
         )
 
 

@@ -251,8 +251,11 @@ class Resource(models.Model):
 
     @cached_property
     def citation(self):
-        return f'{self.creators_str} ({self.publication_year}): ' \
-               f'{self.title_with_version}. {self.publisher}. {self.doi_url}'
+        if self.is_external:
+            return f'{self.title}. {self.doi_url}'
+        else:
+            return f'{self.creators_str} ({self.publication_year}): ' \
+                   f'{self.title_with_version}. {self.publisher}. {self.doi_url}'
 
     @cached_property
     def creators_str(self):
@@ -305,9 +308,9 @@ class Resource(models.Model):
 
         if date_string is not None:
             try:
-                return datetime.strptime(date_string, '%Y-%m-%d')
+                return datetime.strptime(date_string, '%Y-%m-%d').date()
             except ValueError:
-                return datetime.strptime(date_string, '%Y')
+                return datetime.strptime(date_string, '%Y').date()
 
     @cached_property
     def rights_list(self):
@@ -328,7 +331,7 @@ class Resource(models.Model):
 
     @cached_property
     def is_external(self):
-        return self.datacite is not None
+        return self.datacite is None
 
     def get_absolute_url(self):
         return reverse('resource', kwargs={'doi': self.doi})
