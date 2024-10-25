@@ -358,7 +358,7 @@ class Resource(models.Model):
                     '@type': 'Organization',
                     'name': self.datacite.get('publisher')
                 },
-                'datePublished': self.publication_date.date().isoformat(),
+                'datePublished': self.publication_date.isoformat(),
                 'license': [
                     {
                         '@type': 'CreativeWork',
