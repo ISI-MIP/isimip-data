@@ -31,21 +31,22 @@ const serialize = (values) => {
 const storeFile = (file) => {
   const reader = new FileReader()
   reader.onload = function(event) {
-    localStorage.setItem(file.path, reader.result.replace('data:', '').replace(/^.+,/, ''))
+    localStorage.setItem(file.path, reader.result)
   }
   reader.readAsDataURL(file)
 }
 
 const loadFile = (filePath) => {
   const lsString = localStorage.getItem(filePath)
-  const match = lsString.match(/^data:(?<mimeType>[a-z/]+);\w+,(?<base64>.*?)$/)
-  if (match) {
-    const { mimeType, base64 } = match.groups
-    const buffer = Buffer.from(base64, 'base64')
-    return new File([buffer], filePath, {type: mimeType})
-  } else {
-    return null
+  if (lsString) {
+    const match = lsString.match(/^data:(?<mimeType>[a-z\/\-\+]+);\w+,(?<base64>.*?)$/)
+    if (match) {
+      const { mimeType, base64 } = match.groups
+      const buffer = Buffer.from(base64, 'base64')
+      return new File([buffer], filePath, {type: mimeType})
+    }
   }
+  return null
 }
 
 export const useLsState = (path, initialValues) => {

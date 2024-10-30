@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, isUndefined } from 'lodash'
 
 import { useLsState } from 'isimip_data/core/assets/js/hooks/ls'
 import { useSettingsQuery } from 'isimip_data/core/assets/js/hooks/queries'
@@ -26,21 +26,31 @@ const Form = ({ files, setJob }) => {
     const data = {
       paths,
       operations: operations.reduce((operations, operation) => {
-        const { file, ...values } = operation
+        const { mask, shape, ...values } = operation
 
-        if (!isNil(file)) {
-          uploads.push(file)
-        }
+        switch (operation.operation) {
+          case 'mask_mask':
+            uploads.push(mask)
+            return [...operations, { ...values, mask: mask.name }]
 
-        if (values.operation == 'mask_mask') {
-          const createMaskOperation = {
-            operation: 'create_mask',
-            shape: file.name,
-            mask: operation.mask
-          }
-          return [...operations, createMaskOperation, values]
-        } else {
-          return [...operations, values]
+          case 'mask_shape':
+            uploads.push(shape)
+            return [
+              ...operations,
+              {
+                operation: 'create_mask',
+                shape: shape.name,
+                mask: shape.name + '.nc'
+              },
+              {
+                operation: 'mask_mask',
+                mask: shape.name + '.nc',
+                var: `m_${values.layer}`
+              }
+            ]
+
+          default:
+            return [...operations, values]
         }
       }, [])
     }
