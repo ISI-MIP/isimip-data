@@ -61,25 +61,25 @@ const Operation = ({ operation, index, values, errors, updateOperation, removeOp
         {
           !isUndefined(values.mask) && (
             <Mask
-              file={values.mask_file}
+              file={values.mask}
               accept={{
                 'application/x-hdf': ['.nc', '.nc4']
               }}
-              errors={errors.mask_file}
-              onChange={mask => updateOperation(index, {...values, mask_file})}
+              errors={errors.mask}
+              onChange={mask => updateOperation(index, {...values, mask})}
             />
           )
         }
         {
           !isUndefined(values.shape) && (
             <Mask
-              file={values.shape_file}
+              file={values.shape}
               accept={{
-                'application/json': ['.json'],
+                'application/json': ['.json', '.geojson'],
                 'application/zip': ['.zip']
               }}
-              errors={errors.shape_file}
-              onChange={shape => updateOperation(index, {...values, shape_file})}
+              errors={errors.shape}
+              onChange={shape => updateOperation(index, {...values, shape})}
             />
           )
         }

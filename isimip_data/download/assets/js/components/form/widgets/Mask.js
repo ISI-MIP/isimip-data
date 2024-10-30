@@ -16,7 +16,7 @@ const Mask = ({ file, accept, errors, onChange }) => {
     accept,
     onDropAccepted: acceptedFiles => {
       if (acceptedFiles.length > 0) {
-        onChange({ file: acceptedFiles[0] })
+        onChange(acceptedFiles[0])
         setDropzoneError('')
       }
     },
