@@ -35,6 +35,15 @@ const Operations = ({ files, errors, operations, setOperations }) => {
       <div className="card mb-2">
         <div className="card-body">
           <Markdown>{settings.DOWNLOAD_OPERATIONS_HELP}</Markdown>
+          {
+            !isEmpty(errors.operations) && (
+              <ul className="list-unstyled text-danger mb-0">
+                {
+                  errors.operations.map((error, errorIndex) => <li key={errorIndex}>{error}</li>)
+                }
+              </ul>
+            )
+          }
         </div>
       </div>
       {
