@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash'
 
-import { BadRequestError, downloadFile } from 'isimip_data/core/assets/js/utils/api'
+import { ValidationError, UnknownError, downloadFile } from 'isimip_data/core/assets/js/utils/api'
 
 class DownloadApi {
 
@@ -56,9 +56,11 @@ class DownloadApi {
         return response.json()
       } else {
         return response.json().then(data => {
-          throw new BadRequestError(response.statusText, response.status, data.errors)
+          throw new ValidationError(response.statusText, response.status, data.errors)
         })
       }
+    }).catch(error => {
+      throw new UnknownError()
     })
   }
 }

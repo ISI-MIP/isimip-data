@@ -1,4 +1,4 @@
-class BadRequestError extends Error {
+export class ValidationError extends Error {
   constructor(message, status, errors) {
     super(message)
     this.status = status
@@ -6,7 +6,16 @@ class BadRequestError extends Error {
   }
 }
 
-const encodeParams = params => {
+export class UnknownError extends Error {
+  constructor(message, errors) {
+    super(message)
+    this.errors = {
+      non_field_errors: ['An unknown error occured. Please contact support if this problem persists.']
+    }
+  }
+}
+
+export const encodeParams = params => {
   return Object.entries(params).map(item => {
     const [key, value] = item
 
@@ -20,7 +29,7 @@ const encodeParams = params => {
   }).join('&')
 }
 
-const getFileName = response => {
+export const getFileName = response => {
   const disposition = response.headers.get('Content-Disposition')
 
   if (disposition && disposition.indexOf('attachment') !== -1) {
@@ -34,14 +43,14 @@ const getFileName = response => {
   }
 }
 
-const downloadFile = (url) => {
+export const downloadFile = (url) => {
   const a = document.createElement('a')
   a.href = url
   a.click()
   a.remove()
 }
 
-const downloadBlob = (blob, fileName) => {
+export const downloadBlob = (blob, fileName) => {
   const url = window.URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
@@ -49,5 +58,3 @@ const downloadBlob = (blob, fileName) => {
   a.click()
   a.remove()
 }
-
-export { BadRequestError, encodeParams, getFileName, downloadFile, downloadBlob }

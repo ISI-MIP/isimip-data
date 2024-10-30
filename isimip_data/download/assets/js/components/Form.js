@@ -5,6 +5,7 @@ import { isEmpty, isNil } from 'lodash'
 import { useLsState } from 'isimip_data/core/assets/js/hooks/ls'
 import { useSettingsQuery } from 'isimip_data/core/assets/js/hooks/queries'
 
+import Errors from './form/Errors'
 import Operations from './form/Operations'
 import Paths from './form/Paths'
 
@@ -73,6 +74,7 @@ const Form = ({ files, setJob }) => {
           Start download job
         </button>
       </div>
+      <Errors errors={errors} />
     </form>
   )
 }
