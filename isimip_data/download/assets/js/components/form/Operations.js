@@ -56,7 +56,7 @@ const Operations = ({ files, errors, operations, setOperations }) => {
       }
       <div className="d-flex">
         <div className="dropdown dropdown-operations">
-          <button className="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+          <button type="button" className="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             Add operation
           </button>
           <div className="dropdown-menu">
@@ -72,7 +72,7 @@ const Operations = ({ files, errors, operations, setOperations }) => {
             }
           </div>
         </div>
-        <button className="btn btn-danger ml-auto" onClick={() => setOperations([])}>
+        <button type="button" className="btn btn-danger ml-auto" onClick={() => setOperations([])}>
           Reset
         </button>
       </div>

@@ -4,7 +4,7 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework.viewsets import GenericViewSet
 
 from .serializers import SettingsSerializer
-from .utils import get_file_api_url, get_file_base_url
+from .utils import get_download_operations, get_file_api_url, get_file_base_url
 
 
 class SettingsViewSet(ListModelMixin, GenericViewSet):
@@ -20,6 +20,10 @@ class SettingsViewSet(ListModelMixin, GenericViewSet):
             {
                 'key': 'FILES_API_URL',
                 'value': get_file_api_url(self.request),
+            },
+            {
+                'key': 'DOWNLOAD_OPERATIONS',
+                'value': get_download_operations(self.request),
             }
         ] + [
             {
@@ -28,7 +32,6 @@ class SettingsViewSet(ListModelMixin, GenericViewSet):
             } for key in [
                 'METADATA_PAGE_SIZE',
                 'METADATA_MAX_COUNT',
-                'DOWNLOAD_OPERATIONS',
                 'DOWNLOAD_OPERATIONS_HELP'
             ]
         ]

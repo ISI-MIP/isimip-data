@@ -1,0 +1,14 @@
+<p>
+    You can upload a custom NetCDF mask which needs to contain a mask variable <code>var</code>,
+    which contains only zeros and ones. You can also set a name for the mask file on the server
+    (which does not need to match the name of the uploaded file).
+</p>
+
+<p>
+    The files are then masked using the command:
+    <code>cdo -f nc4c -z zip_5 -ifthen -selname,VAR MASKFILE IFILE OFILE</code>.
+</p>
+
+<p>
+    Everything outside is set to <code>missing_value</code> and the grid is kept.
+</p>
