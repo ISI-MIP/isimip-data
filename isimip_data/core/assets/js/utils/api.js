@@ -6,15 +6,6 @@ export class ValidationError extends Error {
   }
 }
 
-export class UnknownError extends Error {
-  constructor(message, errors) {
-    super(message)
-    this.errors = {
-      non_field_errors: ['An unknown error occured. Please contact support if this problem persists.']
-    }
-  }
-}
-
 export const encodeParams = params => {
   return Object.entries(params).map(item => {
     const [key, value] = item
