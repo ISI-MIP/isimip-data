@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
 import { isUndefined } from 'lodash'
 
+import Html from 'isimip_data/core/assets/js/components/Html'
+
 import Country from './widgets/Country'
 import BBox from './widgets/BBox'
 import Csv from './widgets/Csv'
@@ -22,7 +24,7 @@ const Operation = ({ operation, index, values, errors, updateOperation, removeOp
 
         <h5 className="card-title">{operation.title}</h5>
         <div className="mb-2">
-          <Markdown>{operation.help}</Markdown>
+          <Html html={operation.template} />
         </div>
         {
           !isUndefined(values.bbox) && (

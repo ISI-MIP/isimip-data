@@ -223,8 +223,7 @@ DOWNLOAD_OPERATIONS = [
         'operation': 'select_bbox',
         'title': 'Select rectangular box',
         'label': '**Select a rectangular box** using `cdo`.',
-        'help': 'The area is extracted using the command:'
-                ' `cdo -f nc4c -z zip_5 -L -sellonlatbox,WEST,EAST,SOUTH,NORTH IFILE OFILE`.',
+        'template': 'download/operations/select_bbox.html',
         'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
             'bbox': [-180,180,-23.43651,23.43651],
@@ -236,8 +235,7 @@ DOWNLOAD_OPERATIONS = [
         'operation': 'select_point',
         'title': 'Select point',
         'label': '**Select a point** using `cdo`.',
-        'help': 'The point is extracted by calculating the grid index for the point given and the command:'
-                ' `cdo -f nc4c -z zip_5 -L  -selindexbox,IX,IX,IY,IY IFILE`.',
+        'template': 'download/operations/select_point.html',
         'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
             'point': [13.064332, 52.38051],
@@ -249,9 +247,7 @@ DOWNLOAD_OPERATIONS = [
         'title': 'Mask by bounding box',
         'label': '**Mask a rectangular box** using `cdo`,'
                  ' keeping the grid and setting everything outside to `missing_value`.',
-        'help': 'The area is masked using the provided values and the command:'
-                ' `cdo -f nc4c -z zip_5 -masklonlatbox,WEST,EAST,SOUTH,NORTH IFILE OFILE`.'
-                ' Everything outside is set to `missing_value` and the grid is kept.',
+        'template': 'download/operations/mask_bbox.html',
         'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
             'bbox': [-180,180,-23.43651,23.43651],
@@ -264,10 +260,7 @@ DOWNLOAD_OPERATIONS = [
         'title': 'Mask by country',
         'label': '**Mask a country** using `cdo` and the ISIMIP countrymask,'
                  ' keeping the grid and setting everything outside to `missing_value`.',
-        'help': 'The files are masked using the command:'
-                ' `cdo -f nc4c -z zip_5 -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK OFILE`'
-                ' and the <a href="https://doi.org/10.48364/ISIMIP.635131.2" target="_blank">ISIMIP countrymask</a>.'
-                ' Everything outside is set to `missing_value` and the grid is kept.',
+        'template': 'download/operations/mask_country.html',
         'resolutions': ['30arcmin'],
         'initial': {
             'country': 'aus',
@@ -280,25 +273,28 @@ DOWNLOAD_OPERATIONS = [
         'title': 'Mask only land data',
         'label': '**Mask only the land data** using `cdo` and the ISIMIP landseamask,'
                  ' keeping the grid and setting everything outside to `missing_value`.',
-        'help': 'The files are masked using the command:'
-                ' `cdo -f nc4c -z zip_5 -ifthen IFILE -selname,mask LANDSEAMASK OFILE`'
-                ' and the <a href="https://doi.org/10.48364/ISIMIP.822294" target="_blank">ISIMIP'
-                ' landseamask without Antarctica</a>.'
-                ' Everything outside is set to `missing_value` and the grid is kept.',
+        'template': 'download/operations/mask_landonly.html',
         'resolutions': ['30arcmin']
     },
     {
         'operation': 'mask_mask',
         'title': 'Mask using a custom mask',
-        'label': '**Mask using a custom mask** using `cdo`,'
+        'label': '**Mask using a custom NetCDF mask** using `cdo`,'
                  ' keeping the grid and setting everything outside to `missing_value`.',
-        'help': 'You can upload a custom NetCDF mask or vector mask in GeoJSON/shapefile format.'
-                ' The files are then masked using the command:'
-                ' `cdo -f nc4c -z zip_5 -ifthen -selname,VAR MASKFILE IFILE OFILE`.'
-                ' You can set a name for the mask file on the server (which does not need'
-                ' to match the uploaded file) and the variable which is used as mask.'
-                ' For NetCDF files, the mask varaible needs to contain only zeros and ones.'
-                ' GeoJSON and shapefiles (as .zip) are converted to a suitable NetCDF mask on the server.',
+        'template': 'download/operations/mask_mask.html',
+        'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
+                        '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'mask': 'mask.nc',
+            'var': 'm_VAR'
+        }
+    },
+    {
+        'operation': 'mask_shape',
+        'title': 'Mask using a custom mask',
+        'label': '**Mask using a custom shapefile or GeoJSON** using `cdo`,'
+                 ' keeping the grid and setting everything outside to `missing_value`.',
+        'template': 'download/operations/mask_shape.html',
         'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
                         '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
@@ -309,14 +305,8 @@ DOWNLOAD_OPERATIONS = [
     {
         'operation': 'cutout_bbox',
         'title': 'Cut out bounding box',
-        'label': '**Cut out a rectangular box** using `ncks`'
-                 ' (prefered for high-resolution datasets).',
-        'help': 'Instead of using [CDO](https://code.mpimet.mpg.de/projects/cdo) to select a bounding box, '
-                'the cut-out can also be performed using [ncks](https://nco.sourceforge.net/nco.html). '
-                'This operation has a much better performance when applied to the high resolution data '
-                'from [CHELSA-W5E5 v1.0: W5E5 v1.0 downscaled with CHELSA v2.0](https://doi.org/10.48364/ISIMIP.836809.3).\n\n'
-                'The extraction is performed using the command: '
-                '`ncks -O -h -d lat,SOUTH,NORTH -d lon,WEST,EAST IFILE OFILE`.',
+        'label': '**Cut out a rectangular box** using `ncks` (prefered for high-resolution datasets).',
+        'template': 'download/operations/cutout_bbox.html',
         'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
                         '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
@@ -328,14 +318,8 @@ DOWNLOAD_OPERATIONS = [
     {
         'operation': 'cutout_point',
         'title': 'Cut out point',
-        'label': '**Cut out a point** using `ncks`'
-                 ' (prefered for high-resolution datasets).',
-        'help': 'Instead of using [CDO](https://code.mpimet.mpg.de/projects/cdo) to select a point, '
-                'the cut-out can also be performed using [ncks](https://nco.sourceforge.net/nco.html). '
-                'This operation has a much better performance when applied to the high resolution data '
-                'from [CHELSA-W5E5 v1.0: W5E5 v1.0 downscaled with CHELSA v2.0](https://doi.org/10.48364/ISIMIP.836809.3).\n\n'
-                'The extraction is performed using the command: '
-                '`ncks -h -d lat,SOUTH,NORTH -d WEST,EAST IFILE OFILE`.',
+        'label': '**Cut out a point** using `ncks` (prefered for high-resolution datasets).',
+        'template': 'download/operations/cutout_point.html',
         'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
                         '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {

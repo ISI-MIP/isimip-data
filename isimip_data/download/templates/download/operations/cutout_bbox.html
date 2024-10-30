@@ -1,0 +1,10 @@
+<p>
+    Instead of using <a href="https://code.mpimet.mpg.de/projects/cdo">CDO</a> to select
+    a bounding box, the cut-out can also be performed using <a href="https://nco.sourceforge.net/nco.html">ncks</a>.
+    This operation has a much better performance when applied to the high resolution data from
+    <a class="doi-link" href="https://doi.org/10.48364/ISIMIP.836809.3">CHELSA-W5E5 v1.0: W5E5 v1.0 downscaled with CHELSA v2.0></a>.
+</p>
+
+<p>
+    The extraction is performed using the command: <code>ncks -O -h -d lat,SOUTH,NORTH -d lon,WEST,EAST IFILE OFILE</code>
+</p>
