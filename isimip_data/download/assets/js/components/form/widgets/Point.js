@@ -17,22 +17,20 @@ const Point = ({ point, errors, onChange }) => {
     event.target.blur()
   }
 
-  return (
-    <div className="form-row align-items-center">
-      <div className="col-lg-4">
-        <label className="mb-0" htmlFor={latId}>Latitude</label>
-        <input className={'form-control download-form-input-point mb-2 ' +  (!isEmpty(errors) && 'is-invalid')}
-            type="number" id={latId} placeholder="Latitude" min="-90" max="90" step="any"
-            value={lat} onChange={event => handleChange(event, 0)} />
-      </div>
-      <div className="col-lg-4">
-        <label className="mb-0" htmlFor={lonId}>Longitude</label>
-        <input className={'form-control download-form-input-point mb-2 ' +  (!isEmpty(errors) && 'is-invalid')}
-            type="number" id={lonId} placeholder="Longitude" min="-180" max="180" step="any"
-            value={lon} onChange={event => handleChange(event, 1)} />
-      </div>
+  return <>
+    <div className="col-lg-4">
+      <label className="mb-0" htmlFor={latId}>Latitude</label>
+      <input className={'form-control download-form-input-point mb-2 ' +  (!isEmpty(errors) && 'is-invalid')}
+          type="number" id={latId} placeholder="Latitude" min="-90" max="90" step="any"
+          value={lat} onChange={event => handleChange(event, 0)} />
     </div>
-  )
+    <div className="col-lg-4">
+      <label className="mb-0" htmlFor={lonId}>Longitude</label>
+      <input className={'form-control download-form-input-point mb-2 ' +  (!isEmpty(errors) && 'is-invalid')}
+          type="number" id={lonId} placeholder="Longitude" min="-180" max="180" step="any"
+          value={lon} onChange={event => handleChange(event, 1)} />
+    </div>
+  </>
 }
 
 Point.propTypes = {

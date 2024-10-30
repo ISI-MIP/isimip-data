@@ -9,21 +9,19 @@ const Country = ({ country, errors, onChange }) => {
 
   const countryId = uniqueId('download-form-input-country-')
 
-  return countries && (
-    <div className="form-row align-items-center">
-      <div className="col-lg-4">
-        <select className={'form-control download-form-input-country mb-2 ' + (!isEmpty(errors) && 'is-invalid')}
-                value={country} onChange={event => onChange(event.target.value)}>
-          <option disabled value="">Choose...</option>
-          {
-            countries.map(country => {
-              return <option key={country.key} value={country.key}>{country.long_name}</option>
-            })
-          }
-        </select>
-      </div>
+  return countries && <>
+    <div className="col-lg-4">
+      <select className={'form-control download-form-input-country mb-2 ' + (!isEmpty(errors) && 'is-invalid')}
+              value={country} onChange={event => onChange(event.target.value)}>
+        <option disabled value="">Choose...</option>
+        {
+          countries.map(country => {
+            return <option key={country.key} value={country.key}>{country.long_name}</option>
+          })
+        }
+      </select>
     </div>
-  )
+  </>
 }
 
 Country.propTypes = {

@@ -6,7 +6,7 @@ const Csv = ({ checked, errors, onChange }) => {
   const id = uniqueId('download-form-input-csv-')
 
   return (
-    <div className="align-items-center">
+    <div className="col-lg-12">
       <div className="form-check mb-2">
         <input className="form-check-input" type="checkbox" id={id} checked={checked}
                onChange={event => onChange(event.target.checked)} />
@@ -15,7 +15,7 @@ const Csv = ({ checked, errors, onChange }) => {
         </label>
       </div>
     </div>
-)
+  )
 }
 
 Csv.propTypes = {
