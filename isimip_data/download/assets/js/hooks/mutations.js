@@ -13,8 +13,10 @@ export const useSubmitJobMutation = () => {
       variables.setJob(data)
     },
     onError: (error, variables) => {
-      console.log(error)
-      variables.setErrors(error.errors)
+      console.error(error);
+      variables.setErrors(error.errors || {
+        non_field_errors: ['An unknown error occured. Please contact support if this problem persists.']
+      })
     }
   })
 }
