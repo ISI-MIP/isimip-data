@@ -282,6 +282,9 @@ DOWNLOAD_OPERATIONS = [
         'label': '**Mask using a custom NetCDF mask** using `cdo`,'
                  ' keeping the grid and setting everything outside to `missing_value`.',
         'template': 'download/operations/mask_mask.html',
+        'accept': {
+            'application/x-hdf': ['.nc', '.nc4']
+        },
         'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
                         '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
@@ -295,6 +298,10 @@ DOWNLOAD_OPERATIONS = [
         'label': '**Mask using a custom Shapefile or GeoJSON** using `cdo`,'
                  ' keeping the grid and setting everything outside to `missing_value`.',
         'template': 'download/operations/mask_shape.html',
+        'accept': {
+            'application/json': ['.json', '.geojson'],
+            'application/zip': ['.zip']
+        },
         'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
                         '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
