@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import DownloadApi from '../api/DownloadApi'
+import { isNil } from 'lodash'
 
 export const useSubmitJobMutation = () => {
   const queryClient = useQueryClient()
