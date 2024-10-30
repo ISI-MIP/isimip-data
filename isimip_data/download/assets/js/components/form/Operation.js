@@ -5,12 +5,15 @@ import { isUndefined } from 'lodash'
 
 import Html from 'isimip_data/core/assets/js/components/Html'
 
-import Country from './widgets/Country'
 import BBox from './widgets/BBox'
+import Country from './widgets/Country'
 import Csv from './widgets/Csv'
+import Layer from './widgets/Layer'
+import Mask from './widgets/Mask'
 import Mean from './widgets/Mean'
 import Point from './widgets/Point'
-import Mask from './widgets/Mask'
+import Var from './widgets/Var'
+
 
 const Operation = ({ operation, index, values, errors, updateOperation, removeOperation }) => {
   const error = []
@@ -26,6 +29,8 @@ const Operation = ({ operation, index, values, errors, updateOperation, removeOp
         <div className="mb-2">
           <Html html={operation.template} />
         </div>
+
+        <div className="form-row">
         {
           !isUndefined(values.bbox) && (
             <BBox
@@ -56,9 +61,43 @@ const Operation = ({ operation, index, values, errors, updateOperation, removeOp
         {
           !isUndefined(values.mask) && (
             <Mask
-              values={values}
-              errors={errors}
-              onChange={maskValues => updateOperation(index, {...values, ...maskValues})}
+              file={values.mask_file}
+              accept={{
+                'application/x-hdf': ['.nc', '.nc4']
+              }}
+              errors={errors.mask_file}
+              onChange={mask => updateOperation(index, {...values, mask_file})}
+            />
+          )
+        }
+        {
+          !isUndefined(values.shape) && (
+            <Mask
+              file={values.shape_file}
+              accept={{
+                'application/json': ['.json'],
+                'application/zip': ['.zip']
+              }}
+              errors={errors.shape_file}
+              onChange={shape => updateOperation(index, {...values, shape_file})}
+            />
+          )
+        }
+        {
+          !isUndefined(values.var) && (
+            <Var
+              value={values.var}
+              errors={errors.var}
+              onChange={value => updateOperation(index, {...values, var: value})}
+            />
+          )
+        }
+        {
+          !isUndefined(values.layer) && (
+            <Layer
+              value={values.layer}
+              errors={errors.layer}
+              onChange={layer => updateOperation(index, {...values, layer})}
             />
           )
         }
@@ -80,6 +119,7 @@ const Operation = ({ operation, index, values, errors, updateOperation, removeOp
             />
           )
         }
+        </div>
       </div>
     </div>
   )

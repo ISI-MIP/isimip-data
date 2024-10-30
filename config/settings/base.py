@@ -278,28 +278,28 @@ DOWNLOAD_OPERATIONS = [
     },
     {
         'operation': 'mask_mask',
-        'title': 'Mask using a custom mask',
+        'title': 'Mask using a NetCDF custom mask',
         'label': '**Mask using a custom NetCDF mask** using `cdo`,'
                  ' keeping the grid and setting everything outside to `missing_value`.',
         'template': 'download/operations/mask_mask.html',
         'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
                         '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
-            'mask': 'mask.nc',
-            'var': 'm_VAR'
+            'mask': None,
+            'var': ''
         }
     },
     {
         'operation': 'mask_shape',
-        'title': 'Mask using a custom mask',
-        'label': '**Mask using a custom shapefile or GeoJSON** using `cdo`,'
+        'title': 'Mask using a custom Shapefile or GeoJSON',
+        'label': '**Mask using a custom Shapefile or GeoJSON** using `cdo`,'
                  ' keeping the grid and setting everything outside to `missing_value`.',
         'template': 'download/operations/mask_shape.html',
         'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
                         '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
-            'mask': 'mask.nc',
-            'var': 'm_VAR'
+            'shape': None,
+            'layer': 0
         }
     },
     {
