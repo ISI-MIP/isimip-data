@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { difference, isArray, isEmpty, isNil, isPlainObject } from 'lodash'
+import { difference, isArray, isEmpty, isNaN, isNil, isPlainObject, toNumber } from 'lodash'
 
 const deserialize = (values) => {
   if (isArray(values)) {
@@ -11,7 +11,13 @@ const deserialize = (values) => {
       return Object.fromEntries(Object.entries(values).map(([key, value]) => [key, deserialize(value)]))
     }
   } else {
-    return values
+    const number = toNumber(values)
+
+    if (isNaN(number)) {
+      return values
+    } else {
+      return number
+    }
   }
 }
 
@@ -31,7 +37,11 @@ const serialize = (values) => {
 const storeFile = (file) => {
   const reader = new FileReader()
   reader.onload = function(event) {
-    localStorage.setItem(file.path, reader.result)
+    try {
+      localStorage.setItem(file.path, reader.result)
+    } catch (e) {
+      console.log(e);
+    }
   }
   reader.readAsDataURL(file)
 }
