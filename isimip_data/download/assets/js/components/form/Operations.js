@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
-import { isEmpty } from 'lodash'
+import { isEmpty, last } from 'lodash'
 
 import { useSettingsQuery } from 'isimip_data/core/assets/js/hooks/queries'
 
@@ -10,6 +10,8 @@ import Operation from './Operation'
 const Operations = ({ files, errors, operations, setOperations }) => {
 
   const { data: settings } = useSettingsQuery()
+
+  const lastOperation = last(operations)
 
   const addOperation = (operation) => {
     setOperations([
@@ -27,6 +29,18 @@ const Operations = ({ files, errors, operations, setOperations }) => {
     setOperations([
       ...operations.filter((op, opIndex) => opIndex != operationIndex)
     ])
+  }
+
+  const renderLastOperationMessage = () => {
+    if (lastOperation && lastOperation.is_last) {
+      return <div className="ml-3">No operations can be added after this operation.</div>
+    } else if (lastOperation && lastOperation.output_csv) {
+      return <div className="ml-3">No operations can be added after creating a CSV file.</div>
+    } else if (lastOperation && lastOperation.compute_mean) {
+      return <div className="ml-3">No operations can be added after computing the mean field.</div>
+    } else {
+      return null
+    }
   }
 
   return settings && (
@@ -55,6 +69,7 @@ const Operations = ({ files, errors, operations, setOperations }) => {
               key={index}
               operation={operation}
               index={index}
+              isLast={index == operations.length - 1}
               values={values}
               errors={[]}
               updateOperation={updateOperation}
@@ -63,9 +78,17 @@ const Operations = ({ files, errors, operations, setOperations }) => {
           )
         })
       }
-      <div className="d-flex">
+      <div className="d-flex align-items-center">
         <div className="dropdown dropdown-operations">
-          <button type="button" className="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <button
+            type="button"
+            className="btn btn-success dropdown-toggle"
+            disabled={lastOperation && (
+              lastOperation.compute_mean || lastOperation.output_csv || lastOperation.is_last
+            )}
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
             Add operation
           </button>
           <div className="dropdown-menu">
@@ -81,6 +104,9 @@ const Operations = ({ files, errors, operations, setOperations }) => {
             }
           </div>
         </div>
+        {
+          renderLastOperationMessage()
+        }
         <button type="button" className="btn btn-danger ml-auto" onClick={() => setOperations([])}>
           Reset
         </button>

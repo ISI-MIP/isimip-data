@@ -239,8 +239,9 @@ DOWNLOAD_OPERATIONS = [
         'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
             'point': [13.064332, 52.38051],
-            'output_csv': False
-        }
+            'output_csv': False,
+            'is_last': True
+        },
     },
     {
         'operation': 'mask_bbox',
@@ -331,8 +332,9 @@ DOWNLOAD_OPERATIONS = [
                         '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
             'point': [13.064332, 52.38051],
-            'output_csv': False
-        }
+            'output_csv': False,
+            'is_last': True
+        },
     }
 ]
 

@@ -15,7 +15,7 @@ import Point from './widgets/Point'
 import Var from './widgets/Var'
 
 
-const Operation = ({ operation, index, values, errors, updateOperation, removeOperation }) => {
+const Operation = ({ operation, index, isLast, values, errors, updateOperation, removeOperation }) => {
   const error = []
 
   return (
@@ -97,16 +97,20 @@ const Operation = ({ operation, index, values, errors, updateOperation, removeOp
           )
         }
         {
-          !isUndefined(values.compute_mean) && (
+          isLast && !isUndefined(values.compute_mean) && (
             <Mean
               checked={values.compute_mean}
               errors={errors}
-              onChange={compute_mean => updateOperation(index, {...values, compute_mean})}
+              onChange={compute_mean => updateOperation(index, {
+                ...values,
+                compute_mean,
+                output_csv: !compute_mean ? false : values.output_csv  // unset output_csv if compute_mean is unset
+              })}
             />
           )
         }
         {
-          !isUndefined(values.output_csv) && (
+          isLast && values.compute_mean && !isUndefined(values.output_csv) && (
             <Csv
               checked={values.output_csv}
               errors={errors}
@@ -123,6 +127,7 @@ const Operation = ({ operation, index, values, errors, updateOperation, removeOp
 Operation.propTypes = {
   operation: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
+  isLast: PropTypes.bool.isRequired,
   values: PropTypes.object.isRequired,
   errors: PropTypes.array.isRequired,
   updateOperation: PropTypes.func.isRequired,
