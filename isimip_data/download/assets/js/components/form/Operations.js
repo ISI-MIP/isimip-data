@@ -1,15 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
-import { isEmpty, last } from 'lodash'
-
-import { useSettingsQuery } from 'isimip_data/core/assets/js/hooks/queries'
+import { isEmpty, isUndefined, last } from 'lodash'
 
 import Operation from './Operation'
 
-const Operations = ({ files, errors, operations, setOperations }) => {
-
-  const { data: settings } = useSettingsQuery()
+const Operations = ({ operationsConfig, operationsHelp, operations, errors, setOperations }) => {
 
   const lastOperation = last(operations)
 
@@ -43,12 +39,12 @@ const Operations = ({ files, errors, operations, setOperations }) => {
     }
   }
 
-  return settings && (
+  return (
     <div>
       <h3>Operations</h3>
       <div className="card mb-2">
         <div className="card-body">
-          <Markdown>{settings.DOWNLOAD_OPERATIONS_HELP}</Markdown>
+          <Markdown>{operationsHelp}</Markdown>
           {
             !isEmpty(errors.operations) && (
               <ul className="list-unstyled text-danger mb-0">
@@ -62,7 +58,7 @@ const Operations = ({ files, errors, operations, setOperations }) => {
       </div>
       {
         isEmpty(operations) || operations.map((values, index) => {
-          const operation = settings.DOWNLOAD_OPERATIONS.find(op => (op.operation == values.operation))
+          const operation = operationsConfig.find(op => (op.operation == values.operation))
 
           return operation && (
             <Operation
@@ -93,7 +89,7 @@ const Operations = ({ files, errors, operations, setOperations }) => {
           </button>
           <div className="dropdown-menu">
             {
-              settings && settings.DOWNLOAD_OPERATIONS.map(operation => (
+              operationsConfig.map(operation => (
                 <button key={operation.operation} className="dropdown-item" type="button"
                         onClick={() => addOperation(operation)}>
                   <small>
@@ -116,9 +112,10 @@ const Operations = ({ files, errors, operations, setOperations }) => {
 }
 
 Operations.propTypes = {
-  files: PropTypes.array.isRequired,
-  errors: PropTypes.object,
+  operationsConfig: PropTypes.array,
+  operationsHelp: PropTypes.string,
   operations: PropTypes.array,
+  errors: PropTypes.object,
   setOperations: PropTypes.func.isRequired
 }
 
