@@ -32,6 +32,7 @@ class SettingsViewSet(ListModelMixin, GenericViewSet):
             } for key in [
                 'METADATA_PAGE_SIZE',
                 'METADATA_MAX_COUNT',
-                'DOWNLOAD_OPERATIONS_HELP'
+                'DOWNLOAD_OPERATIONS_HELP',
+                'DOWNLOAD_ERRORS'
             ]
         ]

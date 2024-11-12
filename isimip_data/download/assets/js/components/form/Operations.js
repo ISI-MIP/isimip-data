@@ -67,7 +67,7 @@ const Operations = ({ operationsConfig, operationsHelp, operations, errors, setO
               index={index}
               isLast={index == operations.length - 1}
               values={values}
-              errors={[]}
+              errors={errors}
               updateOperation={updateOperation}
               removeOperation={removeOperation}
             />
