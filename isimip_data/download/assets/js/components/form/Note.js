@@ -6,9 +6,11 @@ const Note = ({ files, resolutions }) => {
   return (
     <div className="card mb-2">
       <div className="card-body">
+        <p className="mb-1 text-danger">
+          No operations are available for your selection of files.
+        </p>
         <p className="mb-1">
-          No operations are available for your selection of files. This usually happens when the resolution of one or
-          if the files are not supported by the Files API.
+          This usually happens when the resolution of one or more of the files are not supported by the Files API.
         </p>
         <p className="mb-1">
           You selected:
@@ -18,13 +20,14 @@ const Note = ({ files, resolutions }) => {
             files.map((file, fileIndex) => (
               <li key={fileIndex}>
                 <div>{file.path}</div>
-                <div>Resolution: {get(file, 'specifiers.resolution', '30arcmin')}</div>
+                <div>Resolution: <span className="text-info">{get(file, 'specifiers.resolution', '30arcmin')}</span></div>
               </li>
             ))
           }
         </ul>
         <p className="mb-0">
-          The Files API supports: {resolutions.join(', ')}.
+          The Files API supports: {resolutions.map(r => (<span className="text-info">{r}</span>))
+                                              .reduce((s, r) => [s, ', ', r])}.
         </p>
       </div>
     </div>
