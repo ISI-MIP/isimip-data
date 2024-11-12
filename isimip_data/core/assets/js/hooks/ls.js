@@ -10,7 +10,7 @@ const deserialize = (values) => {
     } else {
       return Object.fromEntries(Object.entries(values).map(([key, value]) => [key, deserialize(value)]))
     }
-  } else if ([true, false, null].includes(values)) {
+  } else if (['', true, false, null, undefined].includes(values)) {
     return values
   } else {
     const number = toNumber(values)
