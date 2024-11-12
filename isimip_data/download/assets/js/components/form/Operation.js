@@ -14,10 +14,7 @@ import Mean from './widgets/Mean'
 import Point from './widgets/Point'
 import Var from './widgets/Var'
 
-
 const Operation = ({ operation, index, isLast, values, errors, updateOperation, removeOperation }) => {
-  const error = []
-
   return (
     <div className="card mb-2 operation">
       <div className="card-body">
@@ -35,7 +32,7 @@ const Operation = ({ operation, index, isLast, values, errors, updateOperation, 
           !isUndefined(values.bbox) && (
             <BBox
               bbox={values.bbox}
-              errors={errors}
+              errors={errors.bbox}
               onChange={bbox => updateOperation(index, {...values, bbox})}
             />
           )
@@ -44,7 +41,7 @@ const Operation = ({ operation, index, isLast, values, errors, updateOperation, 
           !isUndefined(values.point) && (
             <Point
               point={values.point}
-              errors={errors}
+              errors={errors.point}
               onChange={point => updateOperation(index, {...values, point})}
             />
           )
@@ -53,7 +50,7 @@ const Operation = ({ operation, index, isLast, values, errors, updateOperation, 
           !isUndefined(values.country) && (
             <Country
               country={values.country}
-              errors={errors}
+              errors={errors.country}
               onChange={country => updateOperation(index, {...values, country})}
             />
           )

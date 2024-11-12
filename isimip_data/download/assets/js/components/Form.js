@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { get, isEmpty, isNil, isUndefined } from 'lodash'
+import { get, isEmpty, isNil, isNumber, isUndefined } from 'lodash'
 
 import { useLsState } from 'isimip_data/core/assets/js/hooks/ls'
 import { useSettingsQuery } from 'isimip_data/core/assets/js/hooks/queries'
@@ -46,46 +46,75 @@ const Form = ({ files, setJob }) => {
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    const uploads = []
-    const data = {
-      paths,
-      operations: operations.reduce((operations, operation) => {
-        const { mask, shape, ...values } = operation
-
-        switch (operation.operation) {
-          case 'mask_mask':
-            uploads.push(mask)
-            return [...operations, { ...values, mask: mask.name }]
-
-          case 'mask_shape':
-            uploads.push(shape)
-            return [
-              ...operations,
-              {
-                operation: 'create_mask',
-                shape: shape.name,
-                mask: shape.name + '.nc'
-              },
-              {
-                operation: 'mask_mask',
-                mask: shape.name + '.nc',
-                var: `m_${values.layer}`
-              }
-            ]
-
-          default:
-            return [...operations, values]
-        }
-      }, [])
-    }
-
-    mutation.mutate({
-      url: settings.FILES_API_URL,
-      data,
-      uploads,
-      setErrors,
-      setJob
+    let errors = {}
+    operations.forEach((operation) => {
+      if (!isUndefined(operation.bbox) && operation.bbox.some(v => !isNumber(v))) {
+        errors = { ...errors, bbox: settings.DOWNLOAD_ERRORS.bbox }
+      }
+      if (!isUndefined(operation.point) && operation.point.some(v => !isNumber(v))) {
+        errors = { ...errors, point: settings.DOWNLOAD_ERRORS.point }
+      }
+      if (!isUndefined(operation.country) && isEmpty(operation.country)) {
+        errors = { ...errors, country: settings.DOWNLOAD_ERRORS.country }
+      }
+      if (!isUndefined(operation.mask) && isNil(operation.mask)) {
+        errors = { ...errors, mask: settings.DOWNLOAD_ERRORS.mask }
+      }
+      if (!isUndefined(operation.shape) && isNil(operation.shape)) {
+        errors = { ...errors, shape: settings.DOWNLOAD_ERRORS.shape }
+      }
+      if (!isUndefined(operation.var) && isEmpty(operation.var)) {
+        errors = { ...errors, var: settings.DOWNLOAD_ERRORS.var }
+      }
+      if (!isUndefined(operation.layer) && isNumber(operation.layer)) {
+        errors = { ...errors, layer: settings.DOWNLOAD_ERRORS.layer }
+      }
     })
+
+    if (isEmpty(errors)) {
+      const uploads = []
+      const data = {
+        paths,
+        operations: operations.reduce((operations, operation) => {
+          const { mask, shape, ...values } = operation
+
+          switch (operation.operation) {
+            case 'mask_mask':
+              uploads.push(mask)
+              return [...operations, { ...values, mask: mask.name }]
+
+            case 'mask_shape':
+              uploads.push(shape)
+              return [
+                ...operations,
+                {
+                  operation: 'create_mask',
+                  shape: shape.name,
+                  mask: shape.name + '.nc'
+                },
+                {
+                  operation: 'mask_mask',
+                  mask: shape.name + '.nc',
+                  var: `m_${values.layer}`
+                }
+              ]
+
+            default:
+              return [...operations, values]
+          }
+        }, [])
+      }
+
+      mutation.mutate({
+        url: settings.FILES_API_URL,
+        data,
+        uploads,
+        setErrors,
+        setJob
+      })
+    } else {
+      setErrors(errors)
+    }
   }
 
   return settings && (

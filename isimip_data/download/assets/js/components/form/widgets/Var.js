@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty, uniqueId } from 'lodash'
 
+import Errors from './Errors'
+
 const Var = ({ value, errors, onChange }) => {
   const id = uniqueId('download-form-input-var-')
 
@@ -11,6 +13,7 @@ const Var = ({ value, errors, onChange }) => {
       <input className={'form-control mb-2 ' +  (!isEmpty(errors) && 'is-invalid')}
           type="text" id={id} placeholder="Mask variable"
           value={value} onChange={event => onChange(event.target.value)} />
+      <Errors errors={errors} />
     </div>
   )
 }

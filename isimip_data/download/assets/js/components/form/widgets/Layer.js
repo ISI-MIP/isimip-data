@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty, uniqueId } from 'lodash'
 
+import Errors from './Errors'
+
 const Layer = ({ value, errors, onChange }) => {
   const id = uniqueId('download-form-input-layer-')
 
@@ -11,6 +13,7 @@ const Layer = ({ value, errors, onChange }) => {
       <input className={'form-control mb-2 ' +  (!isEmpty(errors) && 'is-invalid')}
           type="number" id={id} placeholder="Layer"
           value={value} onChange={event => onChange(event.target.value)} />
+      <Errors errors={errors} />
     </div>
   )
 }

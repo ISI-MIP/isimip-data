@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty, uniqueId } from 'lodash'
 
+import Errors from './Errors'
+
 const BBox = ({ bbox, errors, onChange }) => {
   const [ west, east, south, north ] = bbox
 
@@ -20,29 +22,34 @@ const BBox = ({ bbox, errors, onChange }) => {
   }
 
   return <>
-    <div className="col-lg-2">
-      <label className="mb-0" htmlFor={westId}>West</label>
-      <input className={'form-control download-form-input-bbox mb-2 ' + (!isEmpty(errors) && 'is-invalid')}
-          type="number" id={westId} placeholder="West" min="-180" max="180" step="any"
-          value={west} onChange={event => handleChange(event, 0)} onWheel={handleWheel} />
-    </div>
-    <div className="col-lg-2">
-      <label className="mb-0" htmlFor={eastId}>East</label>
-      <input className={'form-control download-form-input-bbox mb-2 ' + (!isEmpty(errors) && 'is-invalid')}
-          type="number" id={eastId} placeholder="East" min="-180" max="180" step="any"
-          value={east} onChange={event => handleChange(event, 1)} onWheel={handleWheel} />
-    </div>
-    <div className="col-lg-2">
-      <label className="mb-0" htmlFor={southId}>South</label>
-      <input className={'form-control download-form-input-bbox mb-2 ' + (!isEmpty(errors) && 'is-invalid')}
-          type="number" id={southId} placeholder="South" min="-90" max="90" step="any"
-          value={south} onChange={event => handleChange(event, 2)} onWheel={handleWheel} />
-    </div>
-    <div className="col-lg-2">
-      <label className="mb-0" htmlFor={northId}>North</label>
-      <input className={'form-control download-form-input-bbox mb-2 ' + (!isEmpty(errors) && 'is-invalid')}
-          type="number" id={northId} placeholder="North" min="-90" max="90" step="any"
-          value={north} onChange={event => handleChange(event, 3)} onWheel={handleWheel} />
+    <div className="col-lg-8">
+      <div className="row">
+        <div className="col-lg-3">
+          <label className="mb-0" htmlFor={westId}>West</label>
+          <input className={'form-control download-form-input-bbox mb-2 ' + (!isEmpty(errors) && 'is-invalid')}
+              type="number" id={westId} placeholder="West" min="-180" max="180" step="any"
+              value={west} onChange={event => handleChange(event, 0)} onWheel={handleWheel} />
+        </div>
+        <div className="col-lg-3">
+          <label className="mb-0" htmlFor={eastId}>East</label>
+          <input className={'form-control download-form-input-bbox mb-2 ' + (!isEmpty(errors) && 'is-invalid')}
+              type="number" id={eastId} placeholder="East" min="-180" max="180" step="any"
+              value={east} onChange={event => handleChange(event, 1)} onWheel={handleWheel} />
+        </div>
+        <div className="col-lg-3">
+          <label className="mb-0" htmlFor={southId}>South</label>
+          <input className={'form-control download-form-input-bbox mb-2 ' + (!isEmpty(errors) && 'is-invalid')}
+              type="number" id={southId} placeholder="South" min="-90" max="90" step="any"
+              value={south} onChange={event => handleChange(event, 2)} onWheel={handleWheel} />
+        </div>
+        <div className="col-lg-3">
+          <label className="mb-0" htmlFor={northId}>North</label>
+          <input className={'form-control download-form-input-bbox mb-2 ' + (!isEmpty(errors) && 'is-invalid')}
+              type="number" id={northId} placeholder="North" min="-90" max="90" step="any"
+              value={north} onChange={event => handleChange(event, 3)} onWheel={handleWheel} />
+        </div>
+      </div>
+      <Errors errors={errors} />
     </div>
   </>
 }

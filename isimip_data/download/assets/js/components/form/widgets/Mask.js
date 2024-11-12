@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { useDropzone } from 'react-dropzone'
 import { isEmpty, isNil, uniqueId } from 'lodash'
 
+import Errors from './Errors'
+
 const Mask = ({ file, accept, errors, onChange }) => {
   const fileId = uniqueId('download-form-input-file-')
 
@@ -49,9 +51,10 @@ const Mask = ({ file, accept, errors, onChange }) => {
       </div>
       {
         dropzoneError && (
-          <div class="invalid-feedback">{dropzoneError}</div>
+          <div class="text-danger">{dropzoneError}</div>
         )
       }
+      <Errors errors={errors} />
     </div>
   )
 }

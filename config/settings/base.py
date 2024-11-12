@@ -338,6 +338,16 @@ DOWNLOAD_OPERATIONS = [
     }
 ]
 
+DOWNLOAD_ERRORS = {
+    'bbox': ['Please enter a valid bounding box.'],
+    'point': ['Please enter a valid point.'],
+    'country': ['Please select a country.'],
+    'mask': ['Please select a valid NetCDF file.'],
+    'shape': ['Please select a valid Shapefile or GeoJSON file.'],
+    'var': ['Please enter a valid name for a variable.'],
+    'layer': ['Please enter a layer.']
+}
+
 RESTRICTED_MESSAGES = {}
 RESTRICTED_DEFAULT_MESSAGE = 'Please contact <a href="mailto:info@isimip.org">info@isimip.org</a>' \
                              ' if you need access to the dataset.'
