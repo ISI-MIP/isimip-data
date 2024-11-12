@@ -22,10 +22,10 @@ class Command(BaseCommand):
             self.clean_media()
         if options['command'] in ['all', 'npm']:
             self.clean_npm()
-        if options['command'] in ['all', 'python']:
-            self.clean_python()
         if options['command'] in ['all', 'static']:
             self.clean_static()
+        if options['command'] in ['all', 'python']:
+            self.clean_python()
 
     def clean_media(self):
         shutil.rmtree(settings.MEDIA_ROOT, ignore_errors=True)
