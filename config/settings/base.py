@@ -228,7 +228,8 @@ DOWNLOAD_OPERATIONS = [
         'initial': {
             'bbox': [-180,180,-23.43651,23.43651],
             'compute_mean': False,
-            'output_csv': False
+            'output_csv': False,
+            'is_last': True
         }
     },
     {

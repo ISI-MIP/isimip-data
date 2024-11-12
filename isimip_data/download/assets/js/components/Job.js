@@ -39,14 +39,49 @@ const Job = ({ jobUrl }) => {
             </>
           }
           {
-            job.status == 'failed' &&
-            <p className="text-danger">
-              Due to a timeout, not all files were successfully created on the server, the download will only contain a subset of the selected files. Please select fewer files.
-            </p>
+            job.status == 'failed' && <>
+              <p className="text-danger">
+                An error occurred while creating the files on the server!
+              </p>
+              {
+                job.meta.error && <>
+                  <p className="mb-1">
+                    The following error message was provided:
+                  </p>
+                  <p className="text-info">
+                    {job.meta.error}
+                  </p>
+                </>
+              }
+              {
+                job.meta.errorMessage && <>
+                  <p className="mb-1">
+                    The following output from the process was provided as well:
+                  </p>
+                  <p className="text-info">
+                    {job.meta.errorMessage}
+                  </p>
+                </>
+              }
+              {
+                (job.meta.error || job.meta.errorMessage) ? (
+                  <p>
+                    This could be due to the values you have entered, so please check your entries again.
+                  </p>
+                ) : (
+                  <p>
+                    No error message was returned by the server. This usually means that the timeout
+                    configured on the server has been reached. You can try again with fewer files selected.
+                  </p>
+                )
+              }
+              <p>
+                If the problem persists, please contact support.
+              </p>
+            </>
           }
           {
-            job.id &&
-            <>
+            job.id && job.status != 'failed' && <>
               <p>
                 If you need to close the browser, you can bookmark this page or store its URL otherwise:
                 {' '}
