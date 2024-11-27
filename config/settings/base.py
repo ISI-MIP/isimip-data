@@ -229,8 +229,11 @@ DOWNLOAD_OPERATIONS = [
             'bbox': [-180,180,-23.43651,23.43651],
             'compute_mean': False,
             'output_csv': False,
-            'is_last': True
-        }
+        },
+        'next': [
+            'mask_mask',
+            'mask_shape',
+        ]
     },
     {
         'operation': 'select_point',
@@ -240,9 +243,8 @@ DOWNLOAD_OPERATIONS = [
         'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
             'point': [13.064332, 52.38051],
-            'output_csv': False,
-            'is_last': True
-        },
+            'output_csv': False
+        }
     },
     {
         'operation': 'mask_bbox',
@@ -255,7 +257,13 @@ DOWNLOAD_OPERATIONS = [
             'bbox': [-180,180,-23.43651,23.43651],
             'compute_mean': False,
             'output_csv': False
-        }
+        },
+        'next': [
+            'mask_country',
+            'mask_landonly',
+            'mask_mask',
+            'mask_shape'
+        ]
     },
     {
         'operation': 'mask_country',
@@ -268,7 +276,15 @@ DOWNLOAD_OPERATIONS = [
             'country': 'aus',
             'compute_mean': False,
             'output_csv': False
-        }
+        },
+        'next': [
+            'select_bbox',
+            'mask_bbox',
+            'mask_country',
+            'mask_landonly',
+            'mask_mask',
+            'mask_shape',
+        ]
     },
     {
         'operation': 'mask_landonly',
@@ -276,7 +292,15 @@ DOWNLOAD_OPERATIONS = [
         'label': '**Mask only the land data** using `cdo` and the ISIMIP landseamask,'
                  ' keeping the grid and setting everything outside to `missing_value`.',
         'template': 'download/operations/mask_landonly.html',
-        'resolutions': ['30arcmin']
+        'resolutions': ['30arcmin'],
+        'next': [
+            'select_bbox',
+            'mask_bbox',
+            'mask_country',
+            'mask_landonly',
+            'mask_mask',
+            'mask_shape'
+        ]
     },
     {
         'operation': 'mask_mask',
@@ -292,7 +316,15 @@ DOWNLOAD_OPERATIONS = [
         'initial': {
             'mask': None,
             'var': ''
-        }
+        },
+        'next': [
+            'select_bbox',
+            'mask_bbox',
+            'mask_country',
+            'mask_landonly',
+            'mask_mask',
+            'mask_shape'
+        ]
     },
     {
         'operation': 'mask_shape',
@@ -309,7 +341,15 @@ DOWNLOAD_OPERATIONS = [
         'initial': {
             'shape': None,
             'layer': 0
-        }
+        },
+        'next': [
+            'select_bbox',
+            'mask_bbox',
+            'mask_country',
+            'mask_landonly',
+            'mask_mask',
+            'mask_shape'
+        ]
     },
     {
         'operation': 'cutout_bbox',
@@ -322,7 +362,11 @@ DOWNLOAD_OPERATIONS = [
             'bbox': [-180,180,-23.43651,23.43651],
             'compute_mean': False,
             'output_csv': False
-        }
+        },
+        'next': [
+            'mask_mask',
+            'mask_shape'
+        ]
     },
     {
         'operation': 'cutout_point',
@@ -333,9 +377,8 @@ DOWNLOAD_OPERATIONS = [
                         '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
             'point': [13.064332, 52.38051],
-            'output_csv': False,
-            'is_last': True
-        },
+            'output_csv': False
+        }
     }
 ]
 
