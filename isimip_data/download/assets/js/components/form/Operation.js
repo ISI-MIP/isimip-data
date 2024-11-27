@@ -97,7 +97,7 @@ const Operation = ({ operation, index, isLast, values, errors, updateOperation, 
           isLast && !isUndefined(values.compute_mean) && (
             <Mean
               checked={values.compute_mean}
-              errors={errors}
+              errors={errors.mean}
               onChange={compute_mean => updateOperation(index, {
                 ...values,
                 compute_mean,
@@ -110,7 +110,7 @@ const Operation = ({ operation, index, isLast, values, errors, updateOperation, 
           isLast && values.compute_mean && !isUndefined(values.output_csv) && (
             <Csv
               checked={values.output_csv}
-              errors={errors}
+              errors={errors.csv}
               onChange={output_csv => updateOperation(index, {...values, output_csv})}
             />
           )
@@ -126,7 +126,7 @@ Operation.propTypes = {
   index: PropTypes.number.isRequired,
   isLast: PropTypes.bool.isRequired,
   values: PropTypes.object.isRequired,
-  errors: PropTypes.array.isRequired,
+  errors: PropTypes.object.isRequired,
   updateOperation: PropTypes.func.isRequired,
   removeOperation: PropTypes.func.isRequired
 }

@@ -8,6 +8,17 @@ import Operation from './Operation'
 const Operations = ({ operationsConfig, operationsHelp, operations, errors, setOperations }) => {
 
   const lastOperation = last(operations)
+  const lastOperationConfig = operationsConfig.find(operation => (
+    lastOperation && (operation.operation == lastOperation.operation)
+  ))
+
+  const disabledOperations = operationsConfig.filter(operation => (
+    lastOperationConfig && (
+      isUndefined(lastOperationConfig.next) ||
+      isEmpty(lastOperationConfig.next) ||
+      !lastOperationConfig.next.includes(operation.operation)
+    )
+  )).map(operation => operation.operation)
 
   const addOperation = (operation) => {
     setOperations([
@@ -28,7 +39,7 @@ const Operations = ({ operationsConfig, operationsHelp, operations, errors, setO
   }
 
   const renderLastOperationMessage = () => {
-    if (lastOperation && lastOperation.is_last) {
+    if (disabledOperations.length == operationsConfig.length) {
       return <div className="ml-3">No operations can be added after this operation.</div>
     } else if (lastOperation && lastOperation.output_csv) {
       return <div className="ml-3">No operations can be added after creating a CSV file.</div>
@@ -80,7 +91,9 @@ const Operations = ({ operationsConfig, operationsHelp, operations, errors, setO
             type="button"
             className="btn btn-success dropdown-toggle"
             disabled={lastOperation && (
-              lastOperation.compute_mean || lastOperation.output_csv || lastOperation.is_last
+              lastOperation.compute_mean || lastOperation.output_csv || (
+                disabledOperations.length == operationsConfig.length
+              )
             )}
             data-toggle="dropdown"
             aria-expanded="false"
@@ -89,8 +102,19 @@ const Operations = ({ operationsConfig, operationsHelp, operations, errors, setO
           </button>
           <div className="dropdown-menu">
             {
+              !isEmpty(disabledOperations) && (
+                <p className="dropdown-header mb-0 text-info">
+                  <small>
+                    Some operations are deactivated because they are incompatible or
+                    senseless in relation to the last operation selected.
+                  </small>
+                </p>
+              )
+            }
+            {
               operationsConfig.map(operation => (
                 <button key={operation.operation} className="dropdown-item" type="button"
+                        disabled={disabledOperations.includes(operation.operation)}
                         onClick={() => addOperation(operation)}>
                   <small>
                     <Markdown>{operation.label}</Markdown>
