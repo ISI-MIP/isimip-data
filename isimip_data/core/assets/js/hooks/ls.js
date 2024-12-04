@@ -29,16 +29,20 @@ const serialize = (value) => {
 }
 
 const storeFile = (file) => {
-  const reader = new FileReader()
-  reader.onload = function(event) {
-    try {
-      localStorage.setItem(file.name, reader.result)
-    } catch (e) {
-      console.log(e);
+  if (file.size < 1024 * 1024) {
+    const reader = new FileReader()
+    reader.onload = function(event) {
+      try {
+        localStorage.setItem(file.name, reader.result)
+      } catch (e) {
+        console.log(e);
+      }
     }
+    reader.readAsDataURL(file)
+    return { fileName: file.name }
+  } else {
+    return null
   }
-  reader.readAsDataURL(file)
-  return { fileName: file.name }
 }
 
 const loadFile = (fileName) => {
