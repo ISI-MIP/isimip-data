@@ -66,7 +66,7 @@ const Form = ({ files, setJob }) => {
       if (!isUndefined(operation.var) && isEmpty(operation.var)) {
         errors = { ...errors, var: settings.DOWNLOAD_ERRORS.var }
       }
-      if (!isUndefined(operation.layer) && isNumber(operation.layer)) {
+      if (!isUndefined(operation.layer) && !isNumber(operation.layer)) {
         errors = { ...errors, layer: settings.DOWNLOAD_ERRORS.layer }
       }
     })

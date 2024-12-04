@@ -9,7 +9,7 @@ const Errors = ({ errors }) => {
     return (
       <ul className="text-danger list-unstyled mb-2">
         {
-          errors.map((error, errorIndex) => <li>{error}</li>)
+          errors.map((error, errorIndex) => <li key={errorIndex}>{error}</li>)
         }
       </ul>
     )
