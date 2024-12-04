@@ -12,3 +12,6 @@ djangorestframework~=3.14.0
 drf-extensions~=0.7.1
 Pillow~=10.0.0
 psycopg2-binary~=2.9.6
+
+# upstrem problem, see https://github.com/python/importlib_metadata/issues/506
+importlib_metadata<8.5.0
