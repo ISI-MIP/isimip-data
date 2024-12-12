@@ -158,7 +158,7 @@ def render_bibtex(resource):
 
     return '''
 @misc{{{doi},
-    authors = {{{authors}}},
+    author = {{{authors}}},
     year = {{{year}}},
     title = {{{title}}},
     version = {{{version}}},
