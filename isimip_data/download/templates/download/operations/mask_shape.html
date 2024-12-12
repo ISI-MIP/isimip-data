@@ -1,0 +1,14 @@
+<p>
+    You can upload a custom vector mask in <strong>Shapefile or GeoJSON</strong> format,
+    which will be converted to a NetCDF mask on the server. You can set the <strong>layer</strong>
+    of the uploaded file to be used as mask.
+</p>
+
+<p>
+    The files are then masked using the command:
+    <code>cdo -f nc4c -z zip_5 -ifthen -selname,VAR MASKFILE IFILE OFILE</code>.
+</p>
+
+<p>
+    Everything outside is set to <code>missing_value</code> and the grid is kept.
+</p>

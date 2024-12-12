@@ -32,21 +32,18 @@ const baseConfig = {
     alias: {
       isimip_data: path.resolve(__dirname, './isimip_data/')
     },
-    extensions: ['*', '.js', '.jsx']
-  },
-  output: {
-    libraryTarget: 'this',
-    library: '[name]',
-    path: path.resolve('./static/'),
-    filename: '[name].js'
+    extensions: ['*', '.js', '.jsx'],
+    fallback: {
+      buffer: require.resolve('buffer/'),
+    }
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader",
-        options: { presets: ["@babel/env"] }
+        loader: 'babel-loader',
+        options: { presets: ['@babel/env','@babel/preset-react'] }
       },
       {
         test: /\.s?css$/,
@@ -59,18 +56,26 @@ const baseConfig = {
       {
         test: /\.(woff2?|ttf|eot|otf)$/,
         loader: 'file-loader',
+        type: 'javascript/auto',
         options: {
-          name: 'fonts/[name].[ext]'
+          name: 'fonts/[name].[ext]',
+          esModule: false
         }
       },
       {
         test: /\.(svg|png|jpg)$/,
         loader: 'file-loader',
+        type: 'javascript/auto',
         options: {
-          name: 'images/[name].[ext]'
+          name: 'images/[name].[ext]',
+          esModule: false
         }
       }
     ]
+  },
+  output: {
+    path: path.resolve('./static/'),
+    filename: '[name].js'
   },
   plugins: [
     new MiniCssExtractPlugin({
@@ -89,7 +94,10 @@ const baseConfig = {
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
-    })
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
   ]
 }
 

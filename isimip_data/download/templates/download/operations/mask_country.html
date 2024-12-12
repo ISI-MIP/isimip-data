@@ -1,0 +1,16 @@
+<p>
+    The files are masked using the command:
+    <code>cdo -f nc4c -z zip_5 -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK OFILE</code>
+    and the <a href="https://doi.org/10.48364/ISIMIP.635131.2" target="_blank">ISIMIP countrymask</a>.
+</p>
+
+<p>
+    Everything outside is set to <code>missing_value</code> and the grid is kept.
+</p>
+
+<p>
+    Note that our binary country mask is constructed in such a way that any grid cell touched
+    by the country is fully counted for that country. One effect of this is that grid cells may
+    belong to more than one country. Also, the calculation of the field mean for the country
+    will be different than when using a fractional mask.
+</p>
