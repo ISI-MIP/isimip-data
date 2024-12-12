@@ -271,7 +271,7 @@ DOWNLOAD_OPERATIONS = [
         'label': '**Mask a country** using `cdo` and the ISIMIP countrymask,'
                  ' keeping the grid and setting everything outside to `missing_value`.',
         'template': 'download/operations/mask_country.html',
-        'resolutions': ['30arcmin'],
+        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
             'country': 'aus',
             'compute_mean': False,

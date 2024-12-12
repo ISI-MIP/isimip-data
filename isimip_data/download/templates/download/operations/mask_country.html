@@ -7,3 +7,10 @@
 <p>
     Everything outside is set to <code>missing_value</code> and the grid is kept.
 </p>
+
+<p>
+    Note that our binary country mask is constructed in such a way that any grid cell touched
+    by the country is fully counted for that country. One effect of this is that grid cells may
+    belong to more than one country. Also, the calculation of the field mean for the country
+    will be different than when using a fractional mask.
+</p>
