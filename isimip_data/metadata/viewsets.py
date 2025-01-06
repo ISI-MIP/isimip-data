@@ -16,6 +16,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 from isimip_data.core.utils import get_file_base_url
 
 from .filters import (
+    DatasetFilterBackend,
     IdentifierFilterBackend,
     IdFilterBackend,
     NameFilterBackend,
@@ -138,6 +139,7 @@ class FileViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (
         IdFilterBackend,
+        DatasetFilterBackend,
         NameFilterBackend,
         PathFilterBackend,
         SearchFilterBackend,

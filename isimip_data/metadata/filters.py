@@ -25,6 +25,20 @@ class IdFilterBackend(BaseFilterBackend):
         return queryset
 
 
+class DatasetFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
+        dataset_ids = request.GET.getlist('dataset')
+        print(request.GET)
+        if dataset_ids:
+            queryset = queryset.filter(dataset_id__in=dataset_ids)
+
+        return queryset
+
+
 class NameFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
