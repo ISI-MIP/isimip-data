@@ -101,40 +101,47 @@ main {
 }
 
 .facets {
-    .facet {
-        .card-header {
+    .card-header {
+        cursor: pointer;
+    }
+
+    .card-header,
+    .card-body {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    .list-group-item {
+        padding: 0.5rem 0.75rem 0.5rem 2rem;
+
+        input {
+            margin-top: 0.15rem;
+        }
+
+        label {
             cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
+    }
 
-        .list-group-item {
-            padding: 0.5rem 0.75rem 0.5rem 2rem;
+    .list-group {
+        max-height: 200px;
+        overflow: auto;
+    }
 
-            input {
-                margin-top: 0.15rem;
-            }
+    .symbols-check {
+        margin-right: 5px;
+    }
 
-            label {
-                cursor: pointer;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-        }
-
-        .list-group {
-            max-height: 200px;
-            overflow: auto;
-        }
-
-        .symbols-check {
-            margin-right: 5px;
-        }
-
-        .symbols-expand {
-            margin: -3px -6px;
-            font-size: 24px;
-            font-weight: normal;
-        }
+    .symbols-expand {
+        margin: -3px -6px;
+        font-size: 24px;
+        font-weight: normal;
     }
 }
 

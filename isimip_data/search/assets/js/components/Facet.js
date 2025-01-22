@@ -184,7 +184,7 @@ class Facet extends Component {
     const isEmpty = (items.length == 0) || (items.length == 1 && items[0][0] == null)
 
     return (
-      <div className="card facet">
+      <>
         <div className="card-header d-flex justify-content-between align-items-center" onClick={this.toggleFacet}>
           {facet.title}
           <div>
@@ -196,7 +196,7 @@ class Facet extends Component {
         {isOpen && !isEmpty && this.renderListGroup(facet.identifier, items, checked)}
         {isOpen && isEmpty && !isLoading && this.renderEmpty()}
         {isOpen && isEmpty && isLoading && this.renderSpinner()}
-      </div>
+      </>
     )
   }
 }

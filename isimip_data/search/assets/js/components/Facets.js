@@ -28,12 +28,16 @@ class Facets extends Component {
     return (
       <div className="facets">
         {
-          facets.map((facet, index) => {
-            return (
-              <Facet key={index} params={params} facet={facet} glossary={glossary}
-                     onChange={onFacetChange} />
-            )
-          })
+          facets.map((facetGroup, facetGroupIndex) => (
+            <div className="card facet-group">
+            {
+              facetGroup.map((facet, facetIndex) => (
+                <Facet key={facetIndex} params={params} facet={facet} glossary={glossary}
+                       onChange={onFacetChange} />
+              ))
+            }
+            </div>
+          ))
         }
       </div>
     )

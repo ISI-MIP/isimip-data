@@ -392,6 +392,141 @@ DOWNLOAD_ERRORS = {
     'layer': ['Please enter a layer.']
 }
 
+SEARCH_FACETS = [
+    [
+        {
+            'identifier': 'simulation_round',
+            'title': 'ISIMIP simulation round'
+        },
+        {
+            'identifier': 'product',
+            'title': 'Data product'
+        },
+        {
+            'identifier': 'period',
+            'title': 'Simulation period'
+        },
+        {
+            'identifier': 'sector',
+            'title': 'Sector'
+        }
+    ],
+    [
+        {
+            'identifier': 'climate_scenario',
+            'title': 'Climate related forcing'
+        },
+        {
+            'identifier': 'climate_forcing',
+            'title': 'Climate forcing dataset'
+        },
+        {
+            'identifier': 'soc_scenario',
+            'title': 'Direct human forcing'
+        },
+        {
+            'identifier': 'sens_forcing',
+            'title': 'Sensitivity experiment'
+        },
+    ],
+    [
+        {
+            'identifier': 'model',
+            'title': 'Impact model'
+        },
+        {
+            'identifier': 'variable',
+            'title': 'Output variable'
+        },
+        {
+            'identifier': 'pft',
+            'title': 'PFT'
+        },
+        {
+            'identifier': 'crop',
+            'title': 'Crop'
+        },
+        {
+            'identifier': 'irrigation',
+            'title': 'Irrigation'
+        },
+        {
+            'identifier': 'forest_stand',
+            'title': 'Forest stand'
+        },
+        {
+            'identifier': 'lake_site',
+            'title': 'Lake site'
+        },
+        {
+            'identifier': 'ocean_region',
+            'title': 'Ocean region'
+        },
+        {
+            'identifier': 'pool',
+            'title': 'Soil organic carbon pools'
+        },
+        {
+            'identifier': 'river',
+            'title': 'River'
+        },
+        {
+            'identifier': 'river_basin',
+            'title': 'River basin'
+        },
+        {
+            'identifier': 'species',
+            'title': 'Tree species'
+        }
+    ],
+    [
+        {
+            'identifier': 'frequency',
+            'title': 'Temporal resolution'
+        },
+        {
+            'identifier': 'resolution',
+            'title': 'Spatial resolution'
+        }
+    ],
+    [
+        {
+            'identifier': 'category',
+            'title': 'Input category'
+        },
+        {
+            'identifier': 'subcategory',
+            'title': 'Input subcategory '
+        },
+        {
+            'identifier': 'climate_variable',
+            'title': 'Climate variable'
+        },
+        {
+            'identifier': 'climate_dataset',
+            'title': 'Climate dataset'
+        },
+        {
+            'identifier': 'soc_variable',
+            'title': 'Direct human forcing variable'
+        },
+        {
+            'identifier': 'soc_dataset',
+            'title': 'Direct human forcing dataset'
+        },
+        {
+            'identifier': 'geo_dataset',
+            'title': 'Geographic dataset'
+        }
+    ],
+    [
+        {
+            'identifier': 'publication',
+            'title': 'Publication'
+        }
+    ]
+]
+
 RESTRICTED_MESSAGES = {}
 RESTRICTED_DEFAULT_MESSAGE = 'Please contact <a href="mailto:info@isimip.org">info@isimip.org</a>' \
                              ' if you need access to the dataset.'
