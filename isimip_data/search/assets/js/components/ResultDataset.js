@@ -95,7 +95,7 @@ const ResultDataset = ({ dataset, glossary, selected, setSelected, dropdown, set
               </div>
 
               <div className="d-sm-inline-block mb-2 mb-md-0">
-                <button className="btn btn-link" onClick={() => handleDownload()}
+                <button className="btn btn-link" onClick={() => handleDownload({id: dataset.id})}
                         title="Download all files in this dataset at once.">
                   Download all files
                 </button>
