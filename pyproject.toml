@@ -53,3 +53,6 @@ rest_framework = ["rest_framework"]
   "F405",
   "F821",
 ]
+
+[tool.typos.default.extend-words]
+IY = "IY"

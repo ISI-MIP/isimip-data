@@ -1,8 +1,9 @@
 -r common.txt
 
-# development only dependencies in aphabetical order
+# development only dependencies in alphabetical order
 django-debug-toolbar
 pre-commit
+pre-commit-update
 ruff
 
 pytest~=7.4.0

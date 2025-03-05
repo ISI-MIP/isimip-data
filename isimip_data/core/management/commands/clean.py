@@ -49,4 +49,4 @@ class Command(BaseCommand):
         for staticfiles_dir in settings.STATICFILES_DIRS:
             shutil.rmtree(staticfiles_dir, ignore_errors=True)
             os.makedirs(staticfiles_dir)
-            print(f'Directory "{staticfiles_dir}" has been emtied!')
+            print(f'Directory "{staticfiles_dir}" has been emptied!')

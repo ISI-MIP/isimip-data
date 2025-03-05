@@ -354,7 +354,7 @@ DOWNLOAD_OPERATIONS = [
     {
         'operation': 'cutout_bbox',
         'title': 'Cut out bounding box',
-        'label': '**Cut out a rectangular box** using `ncks` (prefered for high-resolution datasets).',
+        'label': '**Cut out a rectangular box** using `ncks` (preferred for high-resolution datasets).',
         'template': 'download/operations/cutout_bbox.html',
         'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
                         '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
@@ -371,7 +371,7 @@ DOWNLOAD_OPERATIONS = [
     {
         'operation': 'cutout_point',
         'title': 'Cut out point',
-        'label': '**Cut out a point** using `ncks` (prefered for high-resolution datasets).',
+        'label': '**Cut out a point** using `ncks` (preferred for high-resolution datasets).',
         'template': 'download/operations/cutout_point.html',
         'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
                         '15arcmin', '30arcmin', '60arcmin', '120arcmin'],

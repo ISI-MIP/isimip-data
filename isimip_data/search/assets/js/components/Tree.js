@@ -31,7 +31,7 @@ const Tree = ({ params, glossary, updateParams }) => {
     }
   }
 
-  const toogleItem = (item) => {
+  const toggleItem = (item) => {
     if (item.items) {
       handleClose(item)
     } else {
@@ -68,7 +68,7 @@ const Tree = ({ params, glossary, updateParams }) => {
 
   const renderItem = (item) => (
     <div className="tree-item d-flex align-items-center"
-         onClick={() => toogleItem(item)}>
+         onClick={() => toggleItem(item)}>
       <input className="mr-2" type="checkbox" checked={item.items || false} readOnly />
       <span>{item.title || item.specifier}</span>
       {item.hasItems && <span className="material-symbols-rounded symbols-expand">expand_more</span>}
@@ -102,7 +102,7 @@ const Tree = ({ params, glossary, updateParams }) => {
     <ul>
       {
         sortBy(items, ['specifier']).map((item, index) => {
-          // try to get addtional or updated properties from the glossary
+          // try to get additional or updated properties from the glossary
           const properties = get(glossary, [item.identifier, item.specifier], {})
 
           return renderItemWrapper({...item, ...properties}, index)

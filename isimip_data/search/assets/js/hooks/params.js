@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { isNil, isEmpty } from 'lodash'
 
-export const useParams = (initalParams) => {
+export const useParams = (initialParams) => {
 
-  const [params, setParams] = useState(initalParams)
+  const [params, setParams] = useState(initialParams)
 
   const updateParams = (inputParams) => {
     const updatedParams = { ...params }

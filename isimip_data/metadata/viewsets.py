@@ -184,7 +184,7 @@ class ResourceViewSet(ReadOnlyModelViewSet):
         ]
 
         response = Response(datasets)
-        response['Content-Disposition'] = 'attachment; filename=%s.datasets.json' % resource.doi
+        response['Content-Disposition'] = f'attachment; filename={resource.doi}.datasets.json'
         return response
 
     @action(detail=True, url_path='files', renderer_classes=[JSONRenderer])
@@ -203,7 +203,7 @@ class ResourceViewSet(ReadOnlyModelViewSet):
         ]
 
         response = Response(datasets)
-        response['Content-Disposition'] = 'attachment; filename=%s.files.json' % resource.doi
+        response['Content-Disposition'] = f'attachment; filename={resource.doi}.files.json'
         return response
 
     @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])
@@ -214,7 +214,7 @@ class ResourceViewSet(ReadOnlyModelViewSet):
             'file_base_url': get_file_base_url(request),
             'files': File.objects.using('metadata').filter(dataset__resources=resource)
         }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
-        response['Content-Disposition'] = 'attachment; filename=%s.txt' % resource.doi
+        response['Content-Disposition'] = f'attachment; filename={resource.doi}.txt'
         return response
 
 

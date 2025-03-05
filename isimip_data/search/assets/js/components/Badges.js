@@ -12,11 +12,11 @@ const Badges = ({ glossary, dataset }) => {
 
   const renderTooltip = (identifier, specifier) => {
     const properties = get(glossary, [identifier, specifier])
-    const identfier_title = (identifier[0].toUpperCase() + identifier.slice(1)).replace('_', ' ')
+    const identifier_title = (identifier[0].toUpperCase() + identifier.slice(1)).replace('_', ' ')
 
     return (
       <Tooltip>
-        <strong>{identfier_title}:</strong>&nbsp;
+        <strong>{identifier_title}:</strong>&nbsp;
         {properties && properties.title && <span>{properties.title}</span>}
         {properties && properties.long_name && <span>{properties.long_name}</span>}
         {properties && properties.description && <div>{properties.description}</div>}

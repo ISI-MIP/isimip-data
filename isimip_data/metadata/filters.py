@@ -74,7 +74,7 @@ class SearchFilterBackend(BaseFilterBackend):
         if view.detail:
             return queryset
 
-        # this is the compicated part, we use full text search here
+        # this is the complicated part, we use full text search here
         # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/search/
         # and http://rachbelaid.com/postgres-full-text-search-is-good-enough/
         query = request.GET.get('query')

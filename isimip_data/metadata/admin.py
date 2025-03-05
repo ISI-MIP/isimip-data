@@ -39,7 +39,7 @@ class DatasetAdmin(ReadOnlyMixin, admin.ModelAdmin):
         lines = [
             textwrap.fill(line, 80) for line in json.dumps(instance.specifiers, indent=2).splitlines()
         ]
-        return mark_safe('<pre>%s</pre>' % '\n'.join(lines))
+        return mark_safe('<pre>{}</pre>'.format('\n'.join(lines)))
 
 
 class FilesAdmin(ReadOnlyMixin, admin.ModelAdmin):
@@ -61,13 +61,13 @@ class FilesAdmin(ReadOnlyMixin, admin.ModelAdmin):
         lines = [
             textwrap.fill(line, 80) for line in json.dumps(instance.specifiers, indent=2).splitlines()
         ]
-        return mark_safe('<pre>%s</pre>' % '\n'.join(lines))
+        return mark_safe('<pre>{}</pre>'.format('\n'.join(lines)))
 
     def netcdf_header_json(self, instance):
         lines = [
             textwrap.fill(line, 80) for line in json.dumps(instance.netcdf_header, indent=2).splitlines()
         ]
-        return mark_safe('<pre>%s</pre>' % '\n'.join(lines))
+        return mark_safe('<pre>{}</pre>'.format('\n'.join(lines)))
 
 
 class ResourceAdmin(ReadOnlyMixin, admin.ModelAdmin):
@@ -84,7 +84,7 @@ class ResourceAdmin(ReadOnlyMixin, admin.ModelAdmin):
         lines = [
             textwrap.fill(line, 80) for line in json.dumps(instance.datacite, indent=2).splitlines()
         ]
-        return mark_safe('<pre>%s</pre>' % '\n'.join(lines))
+        return mark_safe('<pre>{}</pre>'.format('\n'.join(lines)))
 
     def datasets_list(self, instance):
         return format_html_join(
