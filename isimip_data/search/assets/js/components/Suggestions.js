@@ -1,51 +1,39 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
+import { useDatasetSuggestionsQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
 
-class Suggestions extends Component {
 
-  constructor(props) {
-    super(props)
-  }
+const Suggestions = ({ params, updateParams }) => {
 
-  handleCLick(e) {
-    e.preventDefault()
-    this.props.onClick()
-  }
+  const { data: suggestions } = useDatasetSuggestionsQuery(params)
 
-  render() {
-    const { count, suggestions, onClick } = this.props
-    const suggestionsList = (suggestions === null) ? [] : suggestions.reduce((acc, cur) => {
-      if (cur.length > 0) acc.push(cur)
-      return acc
-    }, [])
+  const onClick = (suggestion) => updateParams({ query: suggestion })
 
-    return (count == 0) && (
-      <div className="card suggestions">
-        <div className="card-body">
-          <strong>No results found</strong>
-          {
-            suggestionsList.length > 0 && <>
-              <span className="ml-2">Maybe you misspelled your query. Did you mean:</span>
-              {
-                suggestionsList.map((suggestion, index) => (
-                  <button key={index} className="btn btn-link ml-2" onClick={() => onClick(suggestion)}>
-                    {suggestion}
-                  </button>
-                ))
-              }
-            </>
-          }
-        </div>
+  return suggestions && (
+    <div className="card suggestions">
+      <div className="card-body">
+        <strong>No results found</strong>
+        {
+          suggestions.length > 0 && <>
+            <span className="ml-2">Maybe you misspelled your query. Did you mean:</span>
+            {
+              suggestions.map((suggestion, index) => (
+                <button key={index} className="btn btn-link ml-2" onClick={() => onClick(suggestion)}>
+                  {suggestion}
+                </button>
+              ))
+            }
+          </>
+        }
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 Suggestions.propTypes = {
-  count: PropTypes.number.isRequired,
-  suggestions: PropTypes.array,
-  onClick: PropTypes.func.isRequired
+  params: PropTypes.object.isRequired,
+  updateParams: PropTypes.func.isRequired
 }
 
 export default Suggestions

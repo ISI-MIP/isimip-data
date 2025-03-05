@@ -1,53 +1,37 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import { isEmpty } from 'lodash'
 
-import FacetApi from '../api/FacetApi'
+import { useFacetsQuery } from '../hooks/queries'
 
 import Facet from './Facet'
 
 
-class Facets extends Component {
+const Facets = ({ params, glossary, updateParams }) => {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      facets: []
-    }
-  }
+  const { data: facets } = useFacetsQuery()
 
-  componentDidMount() {
-    FacetApi.fetchFacets().then(facets => {
-      this.setState({ facets })
-    })
-  }
-
-  render() {
-    const { params, glossary, onFacetChange } = this.props
-    const { facets } = this.state
-
-    return (
-      <div className="facets">
-        {
-          facets.map((facetGroup, facetGroupIndex) => (
-            <div className="card facet-group">
-            {
-              facetGroup.map((facet, facetIndex) => (
-                <Facet key={facetIndex} params={params} facet={facet} glossary={glossary}
-                       onChange={onFacetChange} />
-              ))
-            }
-            </div>
-          ))
-        }
-      </div>
-    )
-  }
+  return !isEmpty(facets) && (
+    <div className="facets">
+      {
+        facets.map((facetGroup, facetGroupIndex) => (
+          <div key={facetGroupIndex} className="card facet-group">
+          {
+            facetGroup.map((facet, facetIndex) => (
+              <Facet key={facetIndex} facet={facet} params={params} glossary={glossary} updateParams={updateParams} />
+            ))
+          }
+          </div>
+        ))
+      }
+    </div>
+  )
 }
 
 Facets.propTypes = {
   params: PropTypes.object.isRequired,
   glossary: PropTypes.object.isRequired,
-  onFacetChange: PropTypes.func.isRequired
+  updateParams: PropTypes.func.isRequired
 }
 
 export default Facets

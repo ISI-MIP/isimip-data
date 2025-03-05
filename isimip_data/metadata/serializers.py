@@ -211,6 +211,8 @@ class DatasetSerializer(serializers.ModelSerializer):
                                      .filter(datasets__contains=[obj.id]).public(user)
             serializer = DatasetCaveatSerializer(queryset, many=True)
             return serializer.data
+        else:
+            return []
 
     def get_caveats_versions(self, obj):
         if self.context.get('request').GET.get('caveats'):
@@ -221,12 +223,16 @@ class DatasetSerializer(serializers.ModelSerializer):
                                      .filter(datasets__overlap=[version.id for version in versions]).public(user)
             serializer = DatasetCaveatSerializer(queryset, many=True)
             return serializer.data
+        else:
+            return []
 
     def get_annotations(self, obj):
         if self.context.get('request').GET.get('annotations'):
             queryset = Annotation.objects.filter(datasets__contains=[obj.id])
             serializer = DatasetAnnotationSerializer(queryset, many=True)
             return serializer.data
+        else:
+            return []
 
 
 class FileLinkSerializer(serializers.ModelSerializer):
