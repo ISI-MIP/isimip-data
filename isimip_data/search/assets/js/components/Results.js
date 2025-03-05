@@ -34,7 +34,7 @@ const Results = ({ params, maxCount, glossary, updateParams }) => {
         !isEmpty(params) && <Params params={params} count={count} updateParams={updateParams} />
       }
       {
-        (count == 0) && <Suggestions params={params} updateParams={updateParams} />
+        !isLoading && (count == 0) && <Suggestions params={params} updateParams={updateParams} />
       }
       {
         results.map(dataset => {
