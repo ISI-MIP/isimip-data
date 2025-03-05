@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { isEmpty, uniqueId } from 'lodash'
+import { uniqueId } from 'lodash'
 
-const Mean = ({ checked, errors, onChange }) => {
+const Mean = ({ checked, onChange }) => {
   const id = uniqueId('download-form-input-mean-')
 
   return (
@@ -20,7 +20,6 @@ const Mean = ({ checked, errors, onChange }) => {
 
 Mean.propTypes = {
   checked: PropTypes.bool.isRequired,
-  errors: PropTypes.array,
   onChange: PropTypes.func.isRequired
 }
 

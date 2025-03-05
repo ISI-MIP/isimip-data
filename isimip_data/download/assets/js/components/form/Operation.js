@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Markdown from 'react-markdown'
 import { isUndefined } from 'lodash'
 
 import Html from 'isimip_data/core/assets/js/components/Html'

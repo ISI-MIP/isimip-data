@@ -15,10 +15,6 @@ const Point = ({ point, errors, onChange }) => {
     onChange(point)
   }
 
-  const handleWheel = (event) => {
-    event.target.blur()
-  }
-
   return <>
     <div className="col-lg-8">
       <div className="row">

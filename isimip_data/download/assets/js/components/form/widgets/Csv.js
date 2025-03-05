@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { isEmpty, uniqueId } from 'lodash'
+import { uniqueId } from 'lodash'
 
-const Csv = ({ checked, errors, onChange }) => {
+const Csv = ({ checked, onChange }) => {
   const id = uniqueId('download-form-input-csv-')
 
   return (

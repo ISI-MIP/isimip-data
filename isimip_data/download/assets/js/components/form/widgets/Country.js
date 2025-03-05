@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { isEmpty, uniqueId } from 'lodash'
+import { isEmpty } from 'lodash'
 
 import { useCountriesQuery } from '../../../hooks/queries'
 
@@ -8,8 +8,6 @@ import Errors from './Errors'
 
 const Country = ({ country, errors, onChange }) => {
   const { data: countries } = useCountriesQuery()
-
-  const countryId = uniqueId('download-form-input-country-')
 
   return countries && <>
     <div className="col-lg-4">

@@ -51,7 +51,7 @@ const Mask = ({ file, accept, errors, onChange }) => {
       </div>
       {
         dropzoneError && (
-          <div class="text-danger">{dropzoneError}</div>
+          <div className="text-danger">{dropzoneError}</div>
         )
       }
       <Errors errors={errors} />
@@ -61,6 +61,7 @@ const Mask = ({ file, accept, errors, onChange }) => {
 
 Mask.propTypes = {
   file: PropTypes.object,
+  accept: PropTypes.object,
   errors: PropTypes.array,
   onChange: PropTypes.func.isRequired
 }

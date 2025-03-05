@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { get, isEmpty, isNil, isNumber, isUndefined } from 'lodash'
+import { isEmpty, isNil, isNumber, isUndefined } from 'lodash'
 
 import { useLsState } from 'isimip_data/core/assets/js/hooks/ls'
 import { useSettingsQuery } from 'isimip_data/core/assets/js/hooks/queries'

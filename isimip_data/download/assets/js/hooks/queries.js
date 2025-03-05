@@ -18,7 +18,6 @@ export const useJobQuery = (url) => {
     queryKey: ['job', url],
     queryFn: () => DownloadApi.fetchJob(url),
     placeholderData: keepPreviousData,
-    refetchInterval: refetchInterval,
     refetchOnWindowFocus: false,
     enabled: !isNil(url),
     refetchIntervalInBackground: true,

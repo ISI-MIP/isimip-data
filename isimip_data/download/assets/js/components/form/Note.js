@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash'
 
@@ -26,7 +26,7 @@ const Note = ({ files, resolutions }) => {
           }
         </ul>
         <p className="mb-0">
-          The Files API supports: {resolutions.map(r => (<span className="text-info">{r}</span>))
+          The Files API supports: {resolutions.map((r, i) => (<span key={i} className="text-info">{r}</span>))
                                               .reduce((s, r) => [s, ', ', r])}.
         </p>
       </div>
