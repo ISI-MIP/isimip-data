@@ -53,3 +53,12 @@ export const useTreeQuery = (params) => {
     placeholderData: keepPreviousData
   })
 }
+
+export const useResourcesQuery = () => {
+  return useQuery({
+    queryKey: ['resources'],
+    queryFn: () => DatasetApi.fetchResources(),
+    initialData: [],
+    placeholderData: keepPreviousData
+  })
+}
