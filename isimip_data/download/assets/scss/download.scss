@@ -117,17 +117,3 @@
         }
     }
 }
-
-.file-control {
-    height: auto;
-
-    .file-control-inner {
-        cursor: pointer;
-
-        height: 5rem;
-        padding: 0.25rem 0.5rem;
-        border: 1px dashed silver;
-        border-radius: 4px;
-        font-size: small;
-    }
-}

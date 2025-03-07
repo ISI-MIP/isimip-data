@@ -1,12 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useDropzone } from 'react-dropzone'
+
+import { useLsState } from 'isimip_data/core/assets/js/hooks/ls'
 
 import { useResourcesQuery } from '../hooks/queries'
 
+import Filter from './Filter'
 import Resource from './Resource'
 
 
-const Resources = ({ values }) => {
+const Resources = () => {
+
+  const [values, setValues] = useLsState('resources', {
+    showAll: false,
+    filterString: ''
+  })
 
   const { data: resources } = useResourcesQuery()
 
@@ -29,6 +38,7 @@ const Resources = ({ values }) => {
 
   return (
     <div className="resources">
+      <Filter values={values} setValues={setValues} />
       {
         filteredResources.map(resource => <Resource key={resource.id} resource={resource} />)
       }

@@ -1,7 +1,7 @@
 import logging
 
 from django.contrib.postgres.search import SearchQuery
-from django.core.exceptions import FieldError
+from django.core.exceptions import FieldError, ValidationError
 from django.db.models import Q
 
 from rest_framework.filters import BaseFilterBackend
@@ -20,7 +20,10 @@ class IdFilterBackend(BaseFilterBackend):
 
         ids = request.GET.getlist('id')
         if ids:
-            queryset = queryset.filter(id__in=ids)
+            try:
+                queryset = queryset.filter(id__in=ids)
+            except ValidationError:
+                pass
 
         return queryset
 
@@ -160,5 +163,21 @@ class TreeFilterBackend(BaseFilterBackend):
                     q |= Q(tree_path__startswith=tree) | Q(links__tree_path__startswith=tree)
 
             queryset = queryset.filter(q)
+
+        return queryset
+
+
+class ChecksumFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
+        checksum = request.GET.get('checksum')
+        if checksum:
+            try:
+                queryset = queryset.filter(checksum=checksum)
+            except ValidationError:
+                pass
 
         return queryset

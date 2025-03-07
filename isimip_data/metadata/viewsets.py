@@ -16,6 +16,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 from isimip_data.core.utils import get_file_base_url
 
 from .filters import (
+    ChecksumFilterBackend,
     DatasetFilterBackend,
     IdentifierFilterBackend,
     IdFilterBackend,
@@ -145,13 +146,8 @@ class FileViewSet(ReadOnlyModelViewSet):
         SearchFilterBackend,
         VersionFilterBackend,
         IdentifierFilterBackend,
-        TreeFilterBackend
-    )
-    filterset_fields = (
-        'name',
-        'path',
-        'version',
-        'checksum'
+        TreeFilterBackend,
+        ChecksumFilterBackend
     )
 
 

@@ -34,6 +34,16 @@ class DatasetApi {
       })
   }
 
+  static fetchFiles(params, fetchParams = {}) {
+    return fetch('/api/v1/files/?' + encodeParams(params), fetchParams).then(response => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        throw new Error(response.statusText)
+      }
+    })
+  }
+
   static fetchResources() {
     const fetchParams = {}
     return fetch('/api/v1/resources/index/', fetchParams).then(response => {
