@@ -116,6 +116,9 @@ class CaveatAdmin(admin.ModelAdmin):
         })
     )
 
+    class Media:
+        css = {'all': ('admin/css/specifier-widget.css',)}
+
     def get_urls(self):
         view = self.admin_site.admin_view(self.caveats_caveat_send)
         return [path('<int:pk>/send/', view, name='caveats_caveat_send'), *super().get_urls()]

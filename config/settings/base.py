@@ -8,7 +8,6 @@ SITE_ID = 1
 
 INSTALLED_APPS = [
     # apps
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -21,6 +20,7 @@ INSTALLED_APPS = [
     'isimip_data.annotations',
     'isimip_data.caveats',
     'isimip_data.core',
+    'isimip_data.core.admin.AdminConfig',
     'isimip_data.download',
     'isimip_data.home',
     'isimip_data.metadata',
