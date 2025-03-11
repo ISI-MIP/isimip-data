@@ -1,9 +1,10 @@
 import re
+from datetime import timezone
 
 from django.db.models import Max
 from django.middleware.cache import CacheMiddleware
 from django.utils.cache import learn_cache_key
-from django.utils.timezone import make_aware, utc
+from django.utils.timezone import make_aware
 
 from .models import Dataset, Resource
 
@@ -56,14 +57,14 @@ class MetadataCacheMiddleware(CacheMiddleware):
 
         # get the latest timestamp from the datasets and resources table
         timestamp_values = [
-            make_aware(value, utc) for value in Dataset.objects.using('metadata').aggregate(
+            make_aware(value, timezone.utc) for value in Dataset.objects.using('metadata').aggregate(
                 Max('created'),
                 Max('updated'),
                 Max('published'),
                 Max('archived')
             ).values() if value is not None
         ] + [
-            make_aware(value, utc) for value in Resource.objects.using('metadata').aggregate(
+            make_aware(value, timezone.utc) for value in Resource.objects.using('metadata').aggregate(
                 Max('created'),
                 Max('updated')
             ).values() if value is not None

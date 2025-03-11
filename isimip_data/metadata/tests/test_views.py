@@ -24,16 +24,18 @@ def test_metadata_file(db, client):
     assert response.url == f'/files/{file.id}/'
 
 
-def test_metadata_not_found(db, client):
-    url = reverse('metadata') + '?query=cf20cfa9-55ba-4c3c-9f00-486c8c259dd5'
+def test_metadata_file_checksum(db, client):
+    file = File.objects.using('metadata').first()
+    url = reverse('metadata') + '?query=' + str(file.checksum)
     response = client.get(url)
-    assert response.status_code == 200
+    assert response.status_code == 302
+    assert response.url == f'/files/{file.id}/'
 
 
-def test_metadata_uuid_wrong(db, client):
+def test_metadata_wrong(db, client):
     url = reverse('metadata') + '?query=wrong'
     response = client.get(url)
-    assert response.status_code == 200
+    assert response.status_code == 404
 
 
 def test_dataset_id(db, client):

@@ -29,9 +29,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_cleanup',
-    'django_extensions',
-    'django_filters',
-    'adminsortable2'
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
