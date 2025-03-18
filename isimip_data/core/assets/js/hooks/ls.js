@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { isArray, isEmpty, isNaN, isNil, isPlainObject, toNumber } from 'lodash'
+import { isArray, isBoolean, isEmpty, isNaN, isNil, isPlainObject, toNumber } from 'lodash'
 
 const deserialize = (value) => {
   if (isArray(value)) {
@@ -10,7 +10,7 @@ const deserialize = (value) => {
     } else {
       return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, deserialize(v)]))
     }
-  } else if (['', true, false, null, undefined].includes(value)) {
+  } else if (isBoolean(value)) {
     return value
   } else {
     const number = toNumber(value)
@@ -61,13 +61,13 @@ const loadFile = (fileName) => {
 export const useLsState = (path, initialValues) => {
   // get the value from the local storage
   const lsString = localStorage.getItem(path)
-  const lsValues = isEmpty(lsString) ? null : deserialize(JSON.parse(lsString))
+  const lsState = (isBoolean(lsString) || !isEmpty(lsString)) ? deserialize(JSON.parse(lsString)) : null
 
   // setup the state with the values from the local storage or the provided initialValues
-  const [values, setValues] = useState((isNil(lsValues) || isEmpty(lsValues)) ? initialValues : lsValues)
+  const [state, setState] = useState(isNil(lsState) ? initialValues : lsState)
 
-  return [values, (values) => {
-    localStorage.setItem(path, JSON.stringify(serialize(values)))
-    setValues(values)
+  return [state, (state) => {
+    localStorage.setItem(path, JSON.stringify(serialize(state)))
+    setState(state)
   }]
 }
