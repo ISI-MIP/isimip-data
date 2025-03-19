@@ -17,7 +17,7 @@
                 {{ settings.LABEL|safe }}
             </span>
             {% endif %}
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item {% if request.resolver_match.url_name == 'search' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'search' %}">Search</a>
                 </li>

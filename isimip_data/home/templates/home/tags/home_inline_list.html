@@ -1,1 +1,1 @@
-{% for text, href in links %}<a class="badge badge-light" href="{{ href }}">{{ text }}</a>{% if forloop.revcounter0 == 1 %}{% if forloop.counter0 > 1 %},{% endif %} and{% elif forloop.revcounter > 1 %}, {% endif %} {% endfor %}
+{% for text, href in links %} <span class="text-nowrap"><a class="badge rounded-pill border border-orange text-orange" href="{{ href }}">{{ text }}</a>{% if forloop.revcounter0 == 1 %}{% if forloop.counter0 > 1 %},{% endif %} and{% elif forloop.revcounter > 1 %}, {% endif %}</span>{% endfor %}

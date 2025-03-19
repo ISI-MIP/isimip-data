@@ -21,6 +21,7 @@
         <link rel="shortcut icon" href="{% static 'images/favicons/favicon.ico' %}" type="image/png" />
 
         {% block style %}
+        <link rel="stylesheet" href="{% static 'bootstrap.css' %}" />
         <link rel="stylesheet" href="{% static 'base.css' %}" />
         {% endblock %}
     </head>
@@ -36,6 +37,7 @@
         {% include 'core/base_footer.html' %}
 
         {% block script %}
+        <script src="{% static 'bootstrap.js' %}"></script>
         <script src="{% static 'base.js' %}"></script>
         {% endblock %}
     </body>

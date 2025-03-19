@@ -1,5 +1,7 @@
 {% for text, href in links %}
 <li>
-    <a href="{{ href }}">{{ text }}</a>
+    <a href="{{ href }}">
+        <span class="badge rounded-pill border border-white text-white" href="{{ href }}">{{ text }}</span>
+    </a>
 </li>
 {% endfor %}

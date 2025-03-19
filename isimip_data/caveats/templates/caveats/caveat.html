@@ -5,21 +5,23 @@
 {% block main %}
 
 <div class="container">
-    <header>
+    <header class="wide">
         <h1>{{ caveat.title }} <span class="text-muted">#{{ caveat.id }}</span></h1>
     </header>
 
     <div class="row">
-        <div class="col-md-9 caveat-discussion">
+        <div class="col-md-9">
             <h3>{{ caveat.get_category_display }}</h3>
             <div class="card mb-2">
                 <div class="card-header">
-                    <strong>{{ caveat.get_creator_display }}</strong> reported on {{ caveat.created|date }}.
-                    {% if request.user.is_staff %}
-                    <a class="d-block float-right" href="{% url 'admin:caveats_caveat_change' caveat.id %}">
-                        <strong class="material-symbols-rounded">edit_square</strong>
-                    </a>
-                    {% endif %}
+                    <div class="d-flex align-items-center">
+                        <span class="me-auto">
+                            <strong>{{ caveat.get_creator_display }}</strong> reported on {{ caveat.created|date }}.
+                        </span>
+                        {% if request.user.is_staff %}
+                        <a class="material-symbols-rounded" href="{% url 'admin:caveats_caveat_change' caveat.id %}">edit_square</a>
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="card-body">
                     {{ caveat.description|linebreaksbr|urlize }}
@@ -33,27 +35,30 @@
             {% for comment in comments %}
             <div class="card mb-2" id="comment-{{ comment.id }}">
                 <div class="card-header">
-                    {% if not comment.public %}
-                    <div class="float-right">
-                        {% include 'caveats/snippets/not_public.html' %}
+                    <div class="d-flex align-items-center">
+                        <span class="me-auto">
+                            <strong>{{ comment.get_creator_display }}</strong> commented on {{ comment.created|date }}.
+                        </span>
+                        {% if not comment.public %}
+                        <span class="me-2">
+                            {% include 'caveats/snippets/not_public.html' %}
+                        </span>
+                        {% endif %}
+                        {% if request.user.is_staff %}
+                        <a class="material-symbols-rounded" href="{% url 'admin:caveats_comment_change' comment.id %}">
+                            edit_square
+                        </a>
+                        {% endif %}
                     </div>
-                    {% endif %}
-                    <strong>{{ comment.get_creator_display }}</strong> commented on {{ comment.created|date }}.
                 </div>
                 <div class="card-body">
-                    {% if request.user.is_staff %}
-                    <a class="d-block float-right" href="{% url 'admin:caveats_comment_change' comment.id %}">
-                        <span class="material-symbols-rounded">edit_square</span>
-                    </a>
-                    {% endif %}
-
                     {{ comment.text|linebreaksbr|urlize }}
                 </div>
             </div>
             {% endfor %}
 
             {% if request.user.is_staff %}
-            <a class="btn btn-success btn-sm mb-2"
+            <a class="btn btn-success btn-sm mb-4"
                href="{% url 'admin:caveats_comment_add' %}?caveat={{ caveat.id }}&creator={{ request.user.id }}">
                 {% trans 'Add comment' %}
             </a>
@@ -65,7 +70,7 @@
             <div class="card">
                 <div class="card-body">
                     {% if request.user.is_staff %}
-                    <a class="d-block float-right" href="{% url 'admin:caveats_caveat_change' caveat.id %}">
+                    <a class="d-block float-end" href="{% url 'admin:caveats_caveat_change' caveat.id %}">
                         <span class="material-symbols-rounded">edit_square</span>
                     </a>
                     {% endif %}
@@ -84,13 +89,13 @@
 
                     {% if caveat.severity %}
                     <p class="mb-2">
-                        <strong class="mr-2">{% trans 'Severity' %}</strong>{% include 'caveats/snippets/severity.html' %}
+                        <strong class="me-2">{% trans 'Severity' %}</strong>{% include 'caveats/snippets/severity.html' %}
                     </p>
                     {% endif %}
 
                     {% if caveat.status %}
                     <p class="mb-2">
-                        <strong class="mr-2">{% trans 'Status' %}</strong>{% include 'caveats/snippets/status.html' %}
+                        <strong class="me-2">{% trans 'Status' %}</strong>{% include 'caveats/snippets/status.html' %}
                     </p>
                     {% endif %}
 
@@ -120,7 +125,7 @@
     <h3>{% trans 'Affected datasets' %}</h3>
     <div class="row">
         <div class="col-sm-12">
-            <div class="card mb-1">
+            <div class="card mb-2">
                 <div class="card-body">
                     <p>
                         There are {{ count }} datasets affected by this {{ caveat.category }}. {% if count > settings.CAVEATS_MAX_DATASETS %}Here we only display the first {{ settings.CAVEATS_MAX_DATASETS }} datasets.{% endif %} You can download a complete list of all the <a href="{% url 'caveat-detail-datasets' caveat.id %}">datasets</a>, or <a href="{% url 'caveat-detail-files' caveat.id %}">files</a> affected by this {{ caveat.category }} as JSON. Alternatively,  can also download a list the files <a href="{% url 'caveat-detail-filelist' caveat.id %}">as a flat file</a> suitable for Wget. You can use the search interface to further restrict your <a class="break-link" href="{{ search_url }}" target="_blank">query</a>.

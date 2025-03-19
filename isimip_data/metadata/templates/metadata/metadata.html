@@ -14,17 +14,13 @@
 {% block main %}
 
 <div class="container">
-    <div class="row justify-content-md-center">
-        <div class="col-md-8">
-            <header>
-                <h1>{% trans 'Metadata' %}</h1>
+    <header>
+        <h1>{% trans 'Metadata' %}</h1>
 
-                <p>
-                    Please give the <code>isimip_id</code> (e.g. <code>{{ example_file.id }}</code>, found in the NetCDF header), the SHA512 checksum (a long string, which can be computed with tools like <code>sha512sum</code>) or the path of a file to be redirected to the corresponding information page.
-                </p>
-            </header>
-        </div>
-    </div>
+        <p>
+            Please give the <code>isimip_id</code> (e.g. <code>{{ example_file.id }}</code>, found in the NetCDF header), the SHA512 checksum (a long string, which can be computed with tools like <code>sha512sum</code>) or the path of a file to be redirected to the corresponding information page.
+        </p>
+    </header>
 
     <div id="app"></div>
 </div>

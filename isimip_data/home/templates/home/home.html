@@ -7,36 +7,30 @@
 {% cache settings.CACHE_MIDDLEWARE_SECONDS home %}
 
 <div class="container">
-    <div class="row justify-content-sm-center text-center">
-        <div class="col-md-8">
-            <header class="mb-5 mt-5">
-                <h1 class="mb-5">
-                    Welcome to the ISIMIP Repository
-                </h1>
+    <header>
+        <h1>
+            Welcome to the ISIMIP Repository
+        </h1>
 
-                <p class="text-center">
-                    If you use ISIMIP data for scientific publications or other documents or reports, for example in a political or commercial context, please let us know. For this, as well as for general feedback or any questions related to ISIMIP, you can reach us at <a href="mailto:info@isimip.org?subject=ISIMIP%20inquiry">info@isimip.org</a>.
-                </p>
+        <p class="text-center">
+            If you use ISIMIP data for scientific publications or other documents or reports, for example in a political or commercial context, please let us know. For this, as well as for general feedback or any questions related to ISIMIP, you can reach us at <a href="mailto:info@isimip.org?subject=ISIMIP%20inquiry">info@isimip.org</a>.
+        </p>
 
-                <p class="text-center">
-                    By downloading data, you agree to our <a href="http://www.isimip.org/protocol/terms-of-use">Terms of Use</a>. Documentation of the impact models that provided impact simulations for this archive can be found in the <a href="https://www.isimip.org/impactmodels/">ISIMIP Impact Model Database</a>. If you want to get notified, when we find issues in the ISIMIP input and output data, please <a href="{{ settings.CAVEATS_LIST_SUBSCRIBE_URL }}">subscribe to our data issues and notes mailing list</a>.  The archive of this mailing list can be accessed <a href="{{ settings.CAVEATS_LIST_ARCHIVE_URL }}">here</a>.
-                </p>
-            </header>
-        </div>
-    </div>
+        <p class="text-center">
+            By downloading data, you agree to our <a href="http://www.isimip.org/protocol/terms-of-use">Terms of Use</a>. Documentation of the impact models that provided impact simulations for this archive can be found in the <a href="https://www.isimip.org/impactmodels/">ISIMIP Impact Model Database</a>. If you want to get notified, when we find issues in the ISIMIP input and output data, please <a href="{{ settings.CAVEATS_LIST_SUBSCRIBE_URL }}">subscribe to our data issues and notes mailing list</a>.  The archive of this mailing list can be accessed <a href="{{ settings.CAVEATS_LIST_ARCHIVE_URL }}">here</a>.
+        </p>
+    </header>
 
     <h3>Search the ISIMIP Repository</h3>
-    <form id="metadata-form" class="mb-5" method="GET" action="{% url 'search' %}">
-        <div class="form-row">
-            <div class="col">
-                <input class="form-control" name="query" placeholder="Search for variable, sector, scenario, climate forcing, ..." />
-                <small class="form-text text-muted text-left">You can use any specifier from the <a href="https://www.isimip.org/protocol/">ISIMIP protocols</a>, e.g. "qtot", "water_global", "rcp26", "climate",  etc. You can also directly use the <a href="{% url 'search' %}">advanced search interface</a>.</small>
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-light" type="button" onClick={this.handleSubmit}>
-                    Search
-                </button>
-            </div>
+    <form id="metadata-form" class="d-flex mb-5" method="GET" action="{% url 'search' %}">
+        <div class="flex-grow-1">
+            <input class="form-control" name="query" placeholder="Search for variable, sector, scenario, climate forcing, ..." />
+            <small class="form-text text-muted text-left">You can use any specifier from the <a href="https://www.isimip.org/protocol/">ISIMIP protocols</a>, e.g. "qtot", "water_global", "rcp26", "climate",  etc. You can also directly use the <a href="{% url 'search' %}">advanced search interface</a>.</small>
+        </div>
+        <div class="ms-3">
+            <button type="submit" class="btn btn-light">
+                Search
+            </button>
         </div>
     </form>
 
@@ -47,7 +41,7 @@
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/climate.jpg' %}" alt="Climate forcing"/>
+                        <img class="img-fluid" src="{% static 'images/home/climate.jpg' %}" alt="Climate forcing"/>
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -58,14 +52,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Climate forcing</h5>
+                    <h5 class="mb-2">Climate forcing</h5>
                     <p>
-                        Climate and climate-related forcing data for the {% home_inline_list 'InputData' 'climate' %} simulation rounds
+                        Climate and climate-related forcing data for the {% home_inline_list 'InputData' 'climate' %} simulation rounds.
                     </p>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/socioeconomic.jpg' %}" alt="Socioeconomic forcing"/>
+                        <img class="img-fluid" src="{% static 'images/home/socioeconomic.jpg' %}" alt="Socioeconomic forcing"/>
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -76,14 +70,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Socioeconomic forcing</h5>
+                    <h5 class="mb-2">Socioeconomic forcing</h5>
                     <p>
-                        Socioeconomic datasets for the {% home_inline_list 'InputData' 'socioeconomic' %} simulation rounds
+                        Socioeconomic datasets for the {% home_inline_list 'InputData' 'socioeconomic' %} simulation rounds.
                     </p>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/geo_conditions.jpg' %}" alt="Static geographic information"/>
+                        <img class="img-fluid" src="{% static 'images/home/geo_conditions.jpg' %}" alt="Static geographic information"/>
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -94,9 +88,9 @@
                             </p>
                         </div>
                     </div>
-                    <h5 class="">Static geographic information</h5>
+                    <h5 class="mb-2" class="">Static geographic information</h5>
                     <p>
-                        Geographic data and information for the {% home_inline_list 'InputData' 'geo_conditions' %} simulation rounds
+                        Geographic data and information for the {% home_inline_list 'InputData' 'geo_conditions' %} simulation rounds.
                     </p>
                 </div>
             </div>
@@ -110,7 +104,7 @@
             <div class="row">
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/agriculture.jpg' %}" alt="Agriculture sector">
+                        <img class="img-fluid" src="{% static 'images/home/agriculture.jpg' %}" alt="Agriculture sector">
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -121,14 +115,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Agriculture sector</h5>
+                    <h5 class="mb-2">Agriculture sector</h5>
                     <p>
-                        Output data from {% home_inline_list 'OutputData' 'agriculture' %}
+                        Output data from {% home_inline_list 'OutputData' 'agriculture' %}.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/biodiversity.jpg' %}" alt="Terrestrial biodiversity sector">
+                        <img class="img-fluid" src="{% static 'images/home/biodiversity.jpg' %}" alt="Terrestrial biodiversity sector">
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -139,14 +133,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Terrestrial biodiversity sector</h5>
+                    <h5 class="mb-2">Terrestrial biodiversity sector</h5>
                     <p>
-                        Output data from {% home_inline_list 'OutputData' 'biodiversity' %}
+                        Output data from {% home_inline_list 'OutputData' 'biodiversity' %}.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/biomes.jpg' %}"alt="Biomes sector">
+                        <img class="img-fluid" src="{% static 'images/home/biomes.jpg' %}"alt="Biomes sector">
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -157,14 +151,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Biomes sector</h5>
+                    <h5 class="mb-2">Biomes sector</h5>
                     <p>
-                        Output data from {% home_inline_list 'OutputData' 'biomes' %}
+                        Output data from {% home_inline_list 'OutputData' 'biomes' %}.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/fire.png' %}" alt="Fire sector">
+                        <img class="img-fluid" src="{% static 'images/home/fire.png' %}" alt="Fire sector">
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -175,14 +169,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Fire sector</h5>
+                    <h5 class="mb-2">Fire sector</h5>
                     <p>
-                        Output data from {% home_inline_list 'OutputData' 'fire' %}
+                        Output data from {% home_inline_list 'OutputData' 'fire' %}.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/forestry.jpg' %}" alt="Fire sector">
+                        <img class="img-fluid" src="{% static 'images/home/forestry.jpg' %}" alt="Fire sector">
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -193,14 +187,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Regional forests sector</h5>
+                    <h5 class="mb-2">Regional forests sector</h5>
                     <p>
-                        Output data from {% home_inline_list 'OutputData' 'forestry' %}
+                        Output data from {% home_inline_list 'OutputData' 'forestry' %}.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/health.jpg' %}" alt="Fire sector">
+                        <img class="img-fluid" src="{% static 'images/home/health.jpg' %}" alt="Fire sector">
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -211,14 +205,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Temperature-related mortality sector</h5>
+                    <h5 class="mb-2">Temperature-related mortality sector</h5>
                     <p>
-                        Output data from {% home_inline_list 'OutputData' 'health' %}
+                        Output data from {% home_inline_list 'OutputData' 'health' %}.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/lakes_global.jpg' %}" alt="Lakes (global) sector">
+                        <img class="img-fluid" src="{% static 'images/home/lakes_global.jpg' %}" alt="Lakes (global) sector">
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -229,14 +223,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Lakes (global) sector</h5>
+                    <h5 class="mb-2">Lakes (global) sector</h5>
                     <p>
-                        Output data from {% home_inline_list 'OutputData' 'lakes_global' %}
+                        Output data from {% home_inline_list 'OutputData' 'lakes_global' %}.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/lakes_local.jpg' %}" alt="Lakes (local) sector">
+                        <img class="img-fluid" src="{% static 'images/home/lakes_local.jpg' %}" alt="Lakes (local) sector">
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -247,14 +241,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Lakes (local) sector</h5>
+                    <h5 class="mb-2">Lakes (local) sector</h5>
                     <p>
-                        Output data from {% home_inline_list 'OutputData' 'lakes_local' %}
+                        Output data from {% home_inline_list 'OutputData' 'lakes_local' %}.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/marine-fisheries_global.jpg' %}" alt="Fisheries & Marine Ecosystems (global) sector">
+                        <img class="img-fluid" src="{% static 'images/home/marine-fisheries_global.jpg' %}" alt="Fisheries & Marine Ecosystems (global) sector">
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -265,14 +259,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Fisheries & Marine Ecosystems (global) sector</h5>
+                    <h5 class="mb-2">Fisheries & Marine Ecosystems (global) sector</h5>
                     <p>
-                        Output data from {% home_inline_list 'OutputData' 'marine-fishery_global' %}
+                        Output data from {% home_inline_list 'OutputData' 'marine-fishery_global' %}.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/marine-fisheries_regional.jpg' %}" alt="Fisheries & Marine Ecosystems (regional) sector">
+                        <img class="img-fluid" src="{% static 'images/home/marine-fisheries_regional.jpg' %}" alt="Fisheries & Marine Ecosystems (regional) sector">
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -283,14 +277,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Fisheries & Marine Ecosystems (regional) sector</h5>
+                    <h5 class="mb-2">Fisheries & Marine Ecosystems (regional) sector</h5>
                     <p>
-                        Output data from {% home_inline_list 'OutputData' 'marine-fishery_regional' %}
+                        Output data from {% home_inline_list 'OutputData' 'marine-fishery_regional' %}.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/permafrost.jpg' %}" alt="Permafrost sector">
+                        <img class="img-fluid" src="{% static 'images/home/permafrost.jpg' %}" alt="Permafrost sector">
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -301,14 +295,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5 class="card-title">Permafrost sector</h5>
+                    <h5 class="mb-2" class="card-title">Permafrost sector</h5>
                     <p>
-                        Output data from {% home_inline_list 'OutputData' 'permafrost' %}
+                        Output data from {% home_inline_list 'OutputData' 'permafrost' %}.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/water_global.jpg' %}" alt="Water (global) sector">
+                        <img class="img-fluid" src="{% static 'images/home/water_global.jpg' %}" alt="Water (global) sector">
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -319,14 +313,14 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Water (global) sector</h5>
+                    <h5 class="mb-2">Water (global) sector</h5>
                     <p>
-                        Output data from {% home_inline_list 'OutputData' 'water_global' %}
+                        Output data from {% home_inline_list 'OutputData' 'water_global' %}.
                     </p>
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
-                        <img src="{% static 'images/home/water_regional.jpg' %}" alt="Water (regional) sector">
+                        <img class="img-fluid" src="{% static 'images/home/water_regional.jpg' %}" alt="Water (regional) sector">
                         <div>
                             <p>Please select a simulation round:</p>
                             <ul>
@@ -337,9 +331,9 @@
                             </p>
                         </div>
                     </div>
-                    <h5>Water (regional) sector</h5>
+                    <h5 class="mb-2">Water (regional) sector</h5>
                     <p>
-                        Output data from {% home_inline_list 'OutputData' 'water_regional' %}
+                        Output data from {% home_inline_list 'OutputData' 'water_regional' %}.
                     </p>
                 </div>
             </div>
@@ -352,17 +346,17 @@
         <ul class="list-group list-group-flush">
             {% for resource in resources %}
             <li class="list-group-item">
-                <h5>{{ resource.title }}</h5>
+                <h5 class="mb-2" class="mt-1 mb-2">{{ resource.title }}</h5>
 
-                <p class="mb-1">
+                <p class="mb-2">
                     <i>{{ resource.creators_str }} ({{ resource.publication_year }})</i>
                     <a class="doi-link" href="{{ resource.doi_url }}" target="_blank">
                         {{ resource.doi_url }}
                     </a>
                 </p>
 
-                <p class="mb-0">
-                    Derived output data data from {% home_inline_list 'DerivedOutputData' resource %}
+                <p>
+                    Derived output data data from {% home_inline_list 'DerivedOutputData' resource %}.
                 </p>
             </li>
             {% endfor %}

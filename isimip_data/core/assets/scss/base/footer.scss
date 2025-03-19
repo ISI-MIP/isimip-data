@@ -1,13 +1,15 @@
+@import '../breakpoints';
+
 footer {
-    background-color: $color-neutral-dark;
-    color: $color-white;
+    background-color: var(--isimip-color-dark-gray);
+    color: var(--isimip-color-white);
     overflow: auto;
 
     a {
-        color: $color-white;
+        color: var(--isimip-color-white);
 
         &:focus, &:hover {
-            color: $color-white;
+            color: var(--isimip-color-blue);
         }
     }
 
@@ -23,8 +25,10 @@ footer {
                     background-color: transparent;
                     font-size: 16px;
 
+                    color: var(--isimip-color-white);
+
                     &:focus, &:hover {
-                        color: $color-primary;
+                        color: var(--isimip-color-blue);
                     }
 
                     @media(min-width:992px) {
@@ -34,11 +38,11 @@ footer {
 
                 &.active {
                     a {
-                        color: $color-primary-light;
+                        color: var(--isimip-color-light-blue);
 
                         &:focus, &:hover {
                             background-color: transparent;
-                            color: $color-primary;
+                            color: var(--isimip-color-blue);
                         }
                     }
                 }
@@ -47,8 +51,14 @@ footer {
     }
 
     hr {
+        // box-sizing: content-box;
+        // height: 0;
+        // overflow: ;overflow: visible;
+
         margin: 15px 15px 25px 15px;
-        border-color: $color-neutral;
+        // border-width: 1;
+        border-color: var(--isimip-color-gray);
+        opacity: 1;
     }
 
     .logos {
@@ -57,22 +67,11 @@ footer {
         p:last-child {
             margin-bottom: 0;
         }
-
-        @include media-breakpoint-only(xs) {
+        @media(min-width: $grid-breakpoint-xs) {
             margin-bottom: 15px;
         }
-        @include media-breakpoint-up(sm) {
+        @media(min-width: $grid-breakpoint-sm) {
             margin-bottom: 30px;
         }
-    }
-
-    .image {
-        display: block;
-        width: 100%;
-        height: auto;
-    }
-
-    .image-bmbf {
-        opacity: .8;
     }
 }

@@ -3,8 +3,8 @@ nav {
 
     &.navbar {
         padding: 0;
-        border-bottom: 1px solid $color-neutral;
-        background-color: white;
+        border-bottom: 1px solid var(--isimip-color-gray);
+        background-color: var(--isimip-color-white);
 
         .navbar-brand {
             display: block;
@@ -71,19 +71,19 @@ nav {
                     text-align: center;
 
                     text-transform: uppercase;
-                    color: $color-black;
+                    color: var(--isimip-color-black);
 
                     -webkit-transition: color 0.5s;
                     transition: color 0.5s;
 
                     &:focus, &:hover {
-                        color: $color-primary;
+                        color: var(--isimip-color-blue);
                     }
                 }
 
                 &.active {
                     .nav-link {
-                        color: $color-primary;
+                        color: var(--isimip-color-blue);
                         position: relative;
 
                         @media(min-width:992px) {
@@ -95,7 +95,7 @@ nav {
                                 left: 12px;
                                 right: 12px;
                                 height: 3px;
-                                background-color: $color-neutral;
+                                background-color: var(--isimip-color-gray);
                             }
                         }
                     }

@@ -4,24 +4,32 @@
     <ul class="list-group list-group-flush">
         {% for file in files %}
         <li class="list-group-item">
-            <div class="float-right">
-                <span class="mr-3">
+            <div class="d-flex gap-1 align-items-center">
+                <div class="me-auto">
+                    <a href="{% url 'file' file.id %}" target="_blank">
+                        {{ file.name }}
+                    </a>
+                    {% if file == current_file %}
+                    <span class="mr-3 badge badge-light">this file</span>
+                    {% endif %}
+                    {% if file == current_version %}
+                    <span class="mr-3 badge badge-light">this version</span>
+                    {% endif %}
+                </div>
+                <span class="me-2">
                     {{ file.size|filesizeformat }}
                 </span>
-
                 {% if file.public and not current_version %}
                 <a href="{{ file_base_url }}{{ file.path }}" target="_blank">
                     Download file
                 </a>
                 {% endif %}
-
                 {% if not file.public %}
                 <span class="badge badge-danger"
                     data-toggle="tooltip" data-placement="bottom" title="This dataset is archived and currently not available for download. Please contact support if you need this version of the dataset.">
                     Archived
                 </span>
                 {% endif %}
-
                 {% if current_version %}
                 <span class="badge badge-dark"
                     data-toggle="tooltip" data-placement="bottom" title="Version">
@@ -29,16 +37,6 @@
                 </span>
                 {% endif %}
             </div>
-
-            <a href="{% url 'file' file.id %}" target="_blank">
-                {{ file.name }}
-            </a>
-            {% if file == current_file %}
-            <span class="mr-3 badge badge-light">this file</span>
-            {% endif %}
-            {% if file == current_version %}
-            <span class="mr-3 badge badge-light">this version</span>
-            {% endif %}
         </li>
         {% endfor %}
     </ul>

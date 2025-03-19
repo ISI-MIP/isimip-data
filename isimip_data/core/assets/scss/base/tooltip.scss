@@ -1,0 +1,10 @@
+.tooltip {
+    .tooltip-inner {
+        font-size: 10pt;
+        text-align: left;
+
+        :last-child {
+            margin-bottom: 0;
+        }
+    }
+}

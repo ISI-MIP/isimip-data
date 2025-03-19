@@ -11,36 +11,26 @@
 
 {% block main %}
 
-<div class="container">
-    <header>
+<div class="container resource">
+    <header class="wide">
         <h1>{{ resource.title }}</h1>
     </header>
 
-    <div class="row">
-        <div class="col-sm-12">
-            {% if references.IsPreviousVersionOf %}
-            <div class="card">
-                <div class="card-body">
-                    <p class="new-doi">
-                        Please note that a <strong>newer version</strong> of this DOI is available:
-                        {% with references.IsPreviousVersionOf|first as resource %}
-                        <a class="doi-link" href="{{ resource.relatedIdentifier }}" target="_blank">
-                            {{ resource.relatedIdentifier }}
-                        </a>
-                        {% endwith %}
-                    </p>
-                </div>
-            </div>
-            {% endif %}
+    {% if references.IsPreviousVersionOf %}
+    <div class="card card-lg">
+        <div class="card-body">
+            Please note that a <strong>newer version</strong> of this DOI is available:
+            {% with references.IsPreviousVersionOf|first as resource %}
+            <a class="doi-link" href="{{ resource.relatedIdentifier }}" target="_blank">
+                {{ resource.relatedIdentifier }}
+            </a>
+            {% endwith %}
         </div>
     </div>
+    {% endif %}
 
-    <div class="row">
-        <div class="col-sm-12">
-            <h3>{% trans 'Cite as' %}</h3>
-            {% include 'metadata/cards/citation.html' %}
-        </div>
-    </div>
+    <h3>{% trans 'Cite as' %}</h3>
+    {% include 'metadata/cards/citation.html' %}
 
     {% if resource.datacite %}
     <div class="row">
@@ -200,7 +190,7 @@
     </div>
 
     {% if references.Cites %}
-    <h3>{% trans 'References' %}</h3>
+    <h3 class="reference">{% trans 'References' %}</h3>
     {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.Cites %}
     {% endif %}
 

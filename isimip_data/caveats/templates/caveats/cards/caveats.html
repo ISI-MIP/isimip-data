@@ -4,8 +4,8 @@
     <ul class="list-group list-group-flush">
         {% for caveat in caveats %}
         <li class="list-group-item">
-            <h4>
-                <div class="float-right">
+            <h4 class="mt-1 mb-2">
+                <div class="float-end">
                     {% if not caveat.public %}
                         {% include 'caveats/snippets/not_public.html' %}
                     {% endif %}
@@ -22,16 +22,18 @@
                 <a href="{{ caveat.get_absolute_url }}">{{ caveat.title }}</a>
                 <span class="text-muted">#{{ caveat.id }}</span>
             </h4>
-            <div class="mb-2">
+            <p class="mb-2">
                 {% include 'caveats/snippets/severity_message.html' %}
-            </div>
-            <ul class="list-inline float-right">
-                <li class="list-inline-item">{% trans 'Affected versions' %}: {% include 'caveats/snippets/versions.html' %}</li>
-            </ul>
-            <p>
-                {{ caveat.get_creator_display }} created this {{ caveat.category }} on {{ caveat.created|date }}.
-                {% if caveat.created != caveat.updated %}It was last updated on {{ caveat.updated|date }}.{% endif %}
             </p>
+            <div class="d-flex">
+                <p class="me-auto mb-0">
+                    {{ caveat.get_creator_display }} created this {{ caveat.category }} on {{ caveat.created|date }}.
+                    {% if caveat.created != caveat.updated %}It was last updated on {{ caveat.updated|date }}.{% endif %}
+                </p>
+                <p class="mb-0">
+                    {% trans 'Affected versions' %}: {% include 'caveats/snippets/versions.html' %}
+                </p>
+            </div>
         </li>
         {% endfor %}
     </ul>

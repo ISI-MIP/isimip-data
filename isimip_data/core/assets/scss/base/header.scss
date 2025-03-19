@@ -1,0 +1,19 @@
+@import '../breakpoints';
+
+header {
+    margin: 4rem auto 3rem auto;
+
+    @media(min-width: $grid-breakpoint-lg) {
+        width: $container-max-width-md;
+
+        &.wide {
+            width: auto;
+        }
+    }
+
+    text-align: center;
+
+    h1 {
+        margin-bottom: 2rem;
+    }
+}

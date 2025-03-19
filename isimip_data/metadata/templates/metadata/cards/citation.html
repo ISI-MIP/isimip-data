@@ -1,18 +1,18 @@
 {% load i18n %}
 
-<div class="card">
+<div class="card card-lg">
     {% if citation_header %}
     <h5 class="card-header">{{ citation_header }}</h5>
     {% endif %}
     <div class="card-body">
         {% if resource.datacite %}
         <p class="card-text cite-as">
-            <button class="btn btn-link btn-copy-to-clipboard float-right ml-1" title="Copy to clipboard">
+            <button class="btn btn-link btn-copy-to-clipboard float-end ml-1" title="Copy to clipboard">
                 <span class="material-symbols-rounded symbols-copy">content_copy</span>
                 <code class="d-none">{{ resource.citation }}</code>
             </button>
-            <b>{{ resource.creators_str }} ({{ resource.publication_year }}):</b>
-            <i>{{ resource.title_with_version }}</i>. {{ resource.publisher }}.
+            <i>{{ resource.creators_str }} ({{ resource.publication_year }}):</i>
+            <b>{{ resource.title_with_version }}</b>. {{ resource.publisher }}.
             <a class="doi-link" href="{{ resource.doi_url }}" target="_blank">
                 {{ resource.doi_url }}
             </a>
@@ -27,9 +27,9 @@
         {% endif %}
     </div>
     {% if citation_footer %}
-    <div class="card-footer">
+    <div class="card-footer bg-body">
         {% if resource.datacite %}
-        <ul class="list-inline mb-0 float-right">
+        <ul class="list-inline mb-0 float-end">
             <li class="list-inline-item">
                 <a href="{% url 'resource_bibtex' resource.doi %}">{% trans 'BibTeX' %}</a>
             </li>

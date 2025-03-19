@@ -17,17 +17,19 @@
     {% for identifier, rows in identifiers %}
     <div class="card identifiers">
         <div class="card-header">
-            {{ identifier }}
+            <strong>{{ identifier }}</strong>
         </div>
         <div class="card-body">
             <ul class="list-inline mb-0">
             {% for specifier, count in rows %}
+            {% if count > 0 %}
             <li class="list-inline-item">
                 {{ specifier }}
-                <div class="badge badge-secondary badge-pill">
+                <div class="badge rounded-pill text-bg-secondary">
                     {{ count }}
                 </div>
             </li>
+            {% endif %}
             {% endfor %}
             </ul>
         </div>

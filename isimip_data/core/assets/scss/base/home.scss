@@ -1,3 +1,5 @@
+@import '../breakpoints';
+
 .home-img-wrapper {
     background-color: black;
     box-shadow: 0 0 4px #ccc;
@@ -86,14 +88,7 @@
         }
     }
 
-    @include media-breakpoint-only(md) {
-        p:first-child,
-        ul {
-            display: none;
-        }
-    }
-
-    @include media-breakpoint-only(lg) {
+    @media(max-width: $grid-breakpoint-lg) {
         p:first-child,
         ul {
             display: none;

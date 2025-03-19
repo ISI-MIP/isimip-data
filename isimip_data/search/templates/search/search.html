@@ -2,17 +2,19 @@
 {% load static %}
 
 {% block style %}
+    {{ block.super }}
     <link rel="stylesheet" href="{% static 'search.css' %}" />
 {% endblock %}
 
 {% block script %}
+    {{ block.super }}
     <script src="{% static 'search.js' %}"></script>
 {% endblock %}
 
 {% block main %}
 
 <div class="container">
-    <div id="app"></div>
+    <div class="search" id="app"></div>
 </div>
 
 {% endblock %}
