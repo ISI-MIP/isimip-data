@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { isArray, isBoolean, isEmpty, isNaN, isNil, isPlainObject, toNumber } from 'lodash'
+import { isArray, isBoolean, isEmpty, isNil, isPlainObject } from 'lodash'
 
 const deserialize = (value) => {
   if (isArray(value)) {
@@ -10,11 +10,8 @@ const deserialize = (value) => {
     } else {
       return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, deserialize(v)]))
     }
-  } else if (isBoolean(value)) {
-    return value
   } else {
-    const number = toNumber(value)
-    return isNaN(number) ? value : number
+    return value
   }
 }
 

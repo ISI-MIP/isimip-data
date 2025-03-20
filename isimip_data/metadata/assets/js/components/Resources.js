@@ -1,6 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { useDropzone } from 'react-dropzone'
 
 import { useLsState } from 'isimip_data/core/assets/js/hooks/ls'
 
@@ -44,10 +42,6 @@ const Resources = () => {
       }
     </div>
   )
-}
-
-Resources.propTypes = {
-  values: PropTypes.object.isRequired
 }
 
 export default Resources

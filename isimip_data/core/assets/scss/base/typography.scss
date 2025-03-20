@@ -71,4 +71,12 @@ h4 {
 
 .material-symbols-rounded {
     font-size: 20px;
+
+    &.material-symbols-rounded-sm {
+        font-size: 16px;
+    }
+
+    &.material-symbols-rounded-lg {
+        font-size: 24px;
+    }
 }

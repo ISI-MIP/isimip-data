@@ -70,7 +70,7 @@ const Metadata = () => {
         <div className="card-body">
           <form className="mb-0" method="GET" onSubmit={onSubmit}>
             <div>
-              <label className="mb-0" htmlFor="metadata-query">UUID or Checksum</label>
+              <label className="form-label" htmlFor="metadata-query">UUID or Checksum</label>
               <textarea
                 id="metadata-query"
                 className={classNames('form-control mb-2', {
@@ -93,11 +93,8 @@ const Metadata = () => {
       </div>
       <div className="card mb-2">
         <div className="card-body">
-          <p>
-              You can also drag the file to the area below to compute its checksum automatically.
-          </p>
           <div>
-            <div className={'form-control file-control mb-2'}>
+            <div className="form-control file-control">
               <div {...getRootProps({className: 'dropzone'})}>
                 <input id="metadata-file" {...getInputProps()} />
                 <div className="file-control-inner">
@@ -110,6 +107,9 @@ const Metadata = () => {
                   }
                 </div>
               </div>
+            </div>
+            <div id="metadata-file-help" className="form-text">
+                You can also drag the file to the area above to compute its checksum automatically.
             </div>
           </div>
         </div>

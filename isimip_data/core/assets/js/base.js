@@ -1,11 +1,7 @@
-import 'bootstrap'
-
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-
-  $('.btn-copy-to-clipboard').click(function () {
-    var code = this.getElementsByTagName('code')[0]
-    var text = code.textContent
-    navigator.clipboard.writeText(text)
-  })
-})
+for (const element of document.getElementsByClassName('btn-copy-to-clipboard')) {
+    element.addEventListener('click', () => {
+        const code = element.getElementsByTagName('code')[0]
+        const text = code.textContent
+        navigator.clipboard.writeText(text)
+    })
+}
