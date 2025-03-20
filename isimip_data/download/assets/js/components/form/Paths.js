@@ -70,18 +70,18 @@ const Paths = ({ files, errors, paths, setPaths }) => {
       <h3>File selection</h3>
 
       <div className="card mb-2">
-        <div className="card-header">
+        <div className="card-body">
           <div className="form-check form-check-inline mb-0">
             <input className="form-check-input" type="radio" id="range-radio"
                    onChange={() => setState({...state, mode: 'range'})} checked={state.mode == 'range'} />
-            <label className="form-check-label font-weight-normal" htmlFor="range-radio">
+            <label className="form-check-label" htmlFor="range-radio">
               Select files by time range
             </label>
           </div>
           <div className="form-check form-check-inline">
             <input className="form-check-input" type="radio" id="files-radio"
                    onChange={() => setState({...state, mode: 'files'})} checked={state.mode == 'files'} />
-            <label className="form-check-label font-weight-normal" htmlFor="files-radio">
+            <label className="form-check-label" htmlFor="files-radio">
               Select individual files
             </label>
           </div>
@@ -94,28 +94,26 @@ const Paths = ({ files, errors, paths, setPaths }) => {
             state.mode == 'range' && <div>
               <Range domain={state.rangeDomain} values={state.rangeValues} onChange={handleRangeChange} />
               <div className="text-center">
-                <span className="mr-3"><strong>Number of files:</strong> {paths.length}</span>
-                <span className="mr-3"><strong>Start year:</strong> {state.rangeValues[0]}</span>
+                <span className="me-3"><strong>Number of files:</strong> {paths.length}</span>
+                <span className="me-3"><strong>Start year:</strong> {state.rangeValues[0]}</span>
                 <span><strong>End year:</strong> {state.rangeValues[1]}</span>
               </div>
             </div>
           }
           {
-            state.mode == 'files' && <div>
-              {
-                files.length > 3 && <div className="form-check">
-                  <input className="form-check-input" type="checkbox" id="check-all"
-                         checked={allChecked}
-                         onChange={() => toggleAll()} />
-                  <label className="form-check-label text-muted" htmlFor="check-all">
-                    {allChecked ? <span>Uncheck all</span> : <span>Check all</span>}
-                  </label>
-                </div>
-              }
+            state.mode == 'files' && <>
+              <div className="form-check">
+                <input className="form-check-input" type="checkbox" id="check-all"
+                       checked={allChecked}
+                       onChange={() => toggleAll()} />
+                <label className="form-check-label text-muted" htmlFor="check-all">
+                  {allChecked ? <span>Uncheck all</span> : <span>Check all</span>}
+                </label>
+              </div>
               {
                 files.map((file, index) => {
                   return (
-                    <div className="form-check" key={index}>
+                    <div className="form-check mt-2" key={index}>
                       <input className="form-check-input" type="checkbox" id={index}
                              checked={paths.includes(file.path)}
                              onChange={() => togglePath(file.path)} />
@@ -124,7 +122,7 @@ const Paths = ({ files, errors, paths, setPaths }) => {
                   )
                 })
               }
-            </div>
+            </>
           }
           {
             errors.paths && (

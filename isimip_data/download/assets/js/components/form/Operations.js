@@ -3,9 +3,15 @@ import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
 import { isEmpty, isUndefined, last } from 'lodash'
 
+import Dropdown from 'isimip_data/core/assets/js/components/Dropdown'
+
+import { useDropdown } from 'isimip_data/core/assets/js/hooks/dropdown'
+
 import Operation from './Operation'
 
 const Operations = ({ operationsConfig, operationsHelp, operations, errors, setOperations }) => {
+
+  const dropdown = useDropdown()
 
   const lastOperation = last(operations)
   const lastOperationConfig = operationsConfig.find(operation => (
@@ -24,6 +30,7 @@ const Operations = ({ operationsConfig, operationsHelp, operations, errors, setO
     setOperations([
       ...operations, { operation: operation.operation, ...operation.initial }
     ])
+    dropdown.hide()
   }
 
   const updateOperation = (operationIndex, operation) => {
@@ -40,11 +47,11 @@ const Operations = ({ operationsConfig, operationsHelp, operations, errors, setO
 
   const renderLastOperationMessage = () => {
     if (disabledOperations.length == operationsConfig.length) {
-      return <div className="ml-3">No operations can be added after this operation.</div>
+      return <div className="ms-3">No operations can be added after this operation.</div>
     } else if (lastOperation && lastOperation.output_csv) {
-      return <div className="ml-3">No operations can be added after creating a CSV file.</div>
+      return <div className="ms-3">No operations can be added after creating a CSV file.</div>
     } else if (lastOperation && lastOperation.compute_mean) {
-      return <div className="ml-3">No operations can be added after computing the mean field.</div>
+      return <div className="ms-3">No operations can be added after computing the mean field.</div>
     } else {
       return null
     }
@@ -85,49 +92,44 @@ const Operations = ({ operationsConfig, operationsHelp, operations, errors, setO
           )
         })
       }
+
       <div className="d-flex align-items-center">
-        <div className="dropdown dropdown-operations">
-          <button
-            type="button"
-            className="btn btn-success dropdown-toggle"
-            disabled={lastOperation && (
-              lastOperation.compute_mean || lastOperation.output_csv || (
-                disabledOperations.length == operationsConfig.length
-              )
-            )}
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Add operation
-          </button>
-          <div className="dropdown-menu">
-            {
-              !isEmpty(disabledOperations) && (
-                <p className="dropdown-header mb-0 text-info">
-                  <small>
-                    Some operations are deactivated because they are incompatible or
-                    senseless in relation to the last operation selected.
-                  </small>
-                </p>
-              )
-            }
-            {
-              operationsConfig.map(operation => (
-                <button key={operation.operation} className="dropdown-item" type="button"
-                        disabled={disabledOperations.includes(operation.operation)}
-                        onClick={() => addOperation(operation)}>
-                  <small>
-                    <Markdown>{operation.label}</Markdown>
-                  </small>
-                </button>
-              ))
-            }
-          </div>
-        </div>
+        <Dropdown
+          dropdown={dropdown}
+          label="Add operation"
+          className="btn btn-success dropdown-toggle"
+          disabled={lastOperation && (
+            lastOperation.compute_mean || lastOperation.output_csv || (
+              disabledOperations.length == operationsConfig.length
+            )
+          )}
+        >
+          {
+            !isEmpty(disabledOperations) && (
+              <p className="dropdown-header pt-0 text-secondary">
+                <small>
+                  Some operations are deactivated because they are incompatible or
+                  senseless in relation to the last operation selected.
+                </small>
+              </p>
+            )
+          }
+          {
+            operationsConfig.map(operation => (
+              <button key={operation.operation} className="dropdown-item" type="button"
+                      disabled={disabledOperations.includes(operation.operation)}
+                      onClick={() => addOperation(operation)}>
+                <small>
+                  <Markdown className="mb-0">{operation.label}</Markdown>
+                </small>
+              </button>
+            ))
+          }
+        </Dropdown>
         {
           renderLastOperationMessage()
         }
-        <button type="button" className="btn btn-danger ml-auto" onClick={() => setOperations([])}>
+        <button type="button" className="btn btn-danger ms-auto" onClick={() => setOperations([])}>
           Reset
         </button>
       </div>

@@ -15,18 +15,22 @@ const Note = ({ files, resolutions }) => {
         <p className="mb-1">
           You selected:
         </p>
-        <ul className="mb-1 pl-4">
+        <ul className="mb-1">
           {
             files.map((file, fileIndex) => (
               <li key={fileIndex}>
                 <div>{file.path}</div>
-                <div>Resolution: <span className="text-info">{get(file, 'specifiers.resolution', '30arcmin')}</span></div>
+                <div>
+                  Resolution: <span className="text-success">
+                    {get(file, 'specifiers.resolution', '30arcmin')}
+                  </span>
+                </div>
               </li>
             ))
           }
         </ul>
         <p className="mb-0">
-          The Files API supports: {resolutions.map((r, i) => (<span key={i} className="text-info">{r}</span>))
+          The Files API supports: {resolutions.map((r, i) => (<span key={i} className="text-success">{r}</span>))
                                               .reduce((s, r) => [s, ', ', r])}.
         </p>
       </div>

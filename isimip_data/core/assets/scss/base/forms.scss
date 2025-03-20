@@ -1,5 +1,5 @@
 form {
-    label {
+    label:not(.form-check-label) {
         font-weight: bold;
     }
 }
@@ -63,4 +63,9 @@ label {
         border-radius: 4px;
         font-size: small;
     }
+}
+
+
+.form-check.form-check-inline {
+    margin-bottom: 0;
 }

@@ -135,12 +135,16 @@ const Form = ({ files, setJob }) => {
           errors={errors}
           setOperations={setOperations}
         />
-        <div className="mt-4 mb-3 text-center">
-          <button className="btn btn-primary btn-lg" disabled={isEmpty(paths) || isEmpty(operations)}
-                  onClick={handleSubmit}>
-            Start download job
-          </button>
-        </div>
+        {
+          !isEmpty(paths) && !isEmpty(operations) && (
+            <div className="mt-4 mb-3 text-center">
+              <button className="btn btn-primary btn-lg" onClick={handleSubmit}>
+                Start download job
+              </button>
+            </div>
+          )
+        }
+
         <Errors errors={errors} />
       </form>
     )
