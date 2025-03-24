@@ -51,6 +51,14 @@ label {
     --bs-border-radius-sm: 0;
 }
 
+.form-check-input[type=checkbox] {
+    border-radius: 0;
+
+    &:not(:checked) {
+        border: 1px solid var(--isimip-color-gray);
+    }
+}
+
 .file-control {
     height: auto;
 
