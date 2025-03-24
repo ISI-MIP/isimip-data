@@ -11,16 +11,18 @@ const baseConfig = {
       './isimip_data/core/assets/scss/base.scss',
       './isimip_data/core/assets/js/base.js',
     ],
+    bootstrap: [
+      './isimip_data/core/assets/scss/bootstrap.scss',
+      './isimip_data/core/assets/js/bootstrap.js',
+    ],
     download: [
       './isimip_data/download/assets/scss/download.scss',
       './isimip_data/download/assets/js/download.js',
     ],
     metadata: [
-      './isimip_data/metadata/assets/scss/metadata.scss',
       './isimip_data/metadata/assets/js/metadata.js',
     ],
     resources: [
-      './isimip_data/metadata/assets/scss/resources.scss',
       './isimip_data/metadata/assets/js/resources.js',
     ],
     search: [
@@ -90,10 +92,6 @@ const baseConfig = {
           context: './isimip_data/core/assets/images/'
         }
       ]
-    }),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery'
     }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
