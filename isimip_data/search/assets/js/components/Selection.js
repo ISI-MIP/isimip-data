@@ -45,7 +45,7 @@ const Selection = ({ selected, count, maxCount, isLoading, setSelected }) => {
   return (
     <div className="card">
       <div className="card-body">
-        <div className="d-md-flex mb-md-1">
+        <div className="d-md-flex">
           <strong className="d-block me-2 mb-1 mb-md-0">Selection</strong>
           <div className="d-md-inline mb-1 mb-md-0">
             You selected {selected.length} {selected.length > 1 ? 'datasets' : 'dataset'} of {size} size.
@@ -66,7 +66,7 @@ const Selection = ({ selected, count, maxCount, isLoading, setSelected }) => {
         </div>
         {
           !isEmpty(selected) && (
-            <div className="d-md-flex gap-2">
+            <div className="d-md-flex gap-2 mt-md-1">
               <button type="button" className="d-flex align-items-center link" onClick={handleToggleDatasets}>
                 {
                   (dropdown == 'datasets') ? (
