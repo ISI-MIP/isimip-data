@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { Dropdown as BootstrapDropdown } from 'bootstrap'
 
 const Dropdown = ({ dropdown, label, className, disabled, children }) => {
@@ -34,10 +35,10 @@ const Dropdown = ({ dropdown, label, className, disabled, children }) => {
   }, [dropdown])
 
   return (
-    <div ref={ref} className="dropdown dropdown-operations">
+    <div ref={ref} className="dropdown">
       <button
         type="button"
-        className={`${className} dropdown-toggle`}
+        className={className}
         disabled={disabled}
         data-bs-toggle="dropdown"
         aria-expanded="false"
@@ -54,10 +55,10 @@ const Dropdown = ({ dropdown, label, className, disabled, children }) => {
 
 Dropdown.propTypes = {
   dropdown: PropTypes.object.isRequired,
-  label: PropTypes.string.isRequired,
-  className: PropTypes.string.isRequired,
+  label: PropTypes.node,
+  className: PropTypes.string,
   disabled: PropTypes.bool,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node
 }
 
 export default Dropdown

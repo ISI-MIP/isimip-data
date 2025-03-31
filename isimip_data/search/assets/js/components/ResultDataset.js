@@ -5,13 +5,13 @@ import { isEmpty } from 'lodash'
 import Checkbox from 'isimip_data/core/assets/js/components/Checkbox'
 import Icon from 'isimip_data/core/assets/js/components/Icon'
 
-import Badges from './Badges'
-import References from './References'
 import Caveats from './Caveats'
 import ConfigureDownload from './ConfigureDownload'
+import References from './References'
+import Resources from './Resources'
+import ResultBadges from './Badges'
 
 import { handleDownload } from '../utils'
-
 
 const ResultDataset = ({ dataset, glossary, selected, setSelected, dropdown, setDropdown }) => {
 
@@ -25,14 +25,15 @@ const ResultDataset = ({ dataset, glossary, selected, setSelected, dropdown, set
 
   return (
     <li className="list-group-item">
-      <Badges glossary={glossary} dataset={dataset} />
+      <ResultBadges glossary={glossary} dataset={dataset} />
 
-      <div className="d-flex gap-2 mt-0 mb-3">
+      <div className="d-flex gap-2 mt-2 mb-2">
         <h4 className="card-title me-auto mb-0">
           <a className="result-title" href={dataset.metadata_url} target="_blank" rel="noreferrer">{dataset.name}</a>
         </h4>
         <References dataset={dataset} />
         <Caveats dataset={dataset} toggleCaveats={() => setDropdown('caveats')} />
+        <Resources dataset={dataset} />
       </div>
 
       <div className="d-flex">

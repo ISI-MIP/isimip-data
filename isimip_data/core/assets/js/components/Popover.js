@@ -1,17 +1,19 @@
 import React, { useEffect, useRef } from 'react'
 import { renderToString } from 'react-dom/server'
 import PropTypes from 'prop-types'
-import { Tooltip as BootstrapTooltip } from 'bootstrap'
+import { Popover as BootstrapPopover } from 'bootstrap'
 
-const Tooltip = ({ children, ...props }) => {
+const Popover = ({ children, ...props }) => {
   const ref = useRef(null)
 
   useEffect(() => {
-    if (props.title) {
-      const { title, ...otherProps } = props
-      const t = new BootstrapTooltip(ref.current, {
+    if (props.title || props.content) {
+      const { title, content, ...otherProps } = props
+      const t = new BootstrapPopover(ref.current, {
         title: renderToString(title),
+        content: renderToString(content),
         html: true,
+        trigger: 'hover',
         placement: 'bottom',
         ...otherProps
       })
@@ -22,8 +24,8 @@ const Tooltip = ({ children, ...props }) => {
   return React.cloneElement(children, { ref })
 }
 
-Tooltip.propTypes = {
+Popover.propTypes = {
   children: PropTypes.node.isRequired
 }
 
-export default Tooltip
+export default Popover

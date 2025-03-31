@@ -48,6 +48,7 @@ class DatasetResourceSerializer(serializers.ModelSerializer):
             'id',
             'doi',
             'doi_url',
+            'title',
             'citation',
             'new_version'
         )

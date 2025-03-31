@@ -1,3 +1,18 @@
 .dropdown-menu {
     --bs-dropdown-border-radius: 0;
+    --bs-dropdown-font-size: 10pt;
+
+    .dropdown-header {
+        font-size: var(--bs-dropdown-font-size);
+        padding-top: 0;
+    }
+
+    .dropdown-item {
+        &button {
+            cursor: pointer;
+        }
+        p {
+            margin: 0;
+        }
+    }
 }

@@ -5,11 +5,9 @@ import { get, isNil } from 'lodash'
 
 import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
 
-
 const Badges = ({ glossary, dataset }) => {
 
   const specifiers = dataset.merged_specifiers
-  const hasResources = (dataset.resources.length > 0)
 
   const getTooltip = (identifier, specifier) => {
     const properties = get(glossary, [identifier, specifier])
@@ -33,7 +31,7 @@ const Badges = ({ glossary, dataset }) => {
 
   return (
     <React.Fragment>
-      <div className={classNames('d-lg-flex flex-wrap gap-1', {'mb-2': !hasResources})}>
+      <div className={classNames('d-md-flex flex-wrap gap-1')}>
         {
           specifiers.simulation_round && specifiers.simulation_round.map((simulation_round, index) =>
             <Tooltip key={index} title={getTooltip('simulation_round', simulation_round)}>
@@ -105,7 +103,7 @@ const Badges = ({ glossary, dataset }) => {
             <Tooltip placement="bottom" title={dataset.terms_of_use.terms_of_use}>
               <a className="badge text-bg-secondary mb-1" href={dataset.terms_of_use.terms_of_use_url}
                  target="_blank" rel="noreferrer">
-                Terms of use
+                ToU
               </a>
             </Tooltip>
           )
@@ -138,30 +136,6 @@ const Badges = ({ glossary, dataset }) => {
           <span className="badge text-bg-dark mb-1">{dataset.version}</span>
         </Tooltip>
       </div>
-      {
-        dataset.resources.length > 0 &&
-        <div className="badges mb-2">
-          {
-            dataset.resources.map((resource, index) => {
-              const is_current_version = (
-                resource.new_version === null || !dataset.resources.map((r) => r.doi).includes(resource.new_version)
-              )
-
-              return is_current_version && (
-                <Tooltip key={index} title={<>
-                  <p className="mb-1">The dataset can be cited using a Digital Object Identifier (DOI):</p>
-                  <p className="font-italic">{resource.citation}.</p>
-                </>}>
-                  <a className="badge text-bg-light" href={resource.doi_url}
-                     target="_blank" rel="noreferrer">
-                    {resource.doi_url}
-                  </a>
-                </Tooltip>
-              )
-            })
-          }
-        </div>
-      }
     </React.Fragment>
   )
 }
