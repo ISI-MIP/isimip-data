@@ -39,9 +39,8 @@ const Filter = ({ values, setValues }) => {
           </div>
 
           <div className="ms-md-2">
-            <button role="button" className="d-flex btn btn-outline-secondary btn-lg" onClick={handleReset}>
-              Reset
-              <Icon icon="close" size="lg" />
+            <button role="button" className="d-flex align-items-center btn btn-outline-secondary btn-lg" onClick={handleReset}>
+              Reset <Icon icon="close" size="lg" />
             </button>
           </div>
         </div>
