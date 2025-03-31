@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useLsState } from 'isimip_data/core/assets/js/hooks/ls'
+import { useLs } from 'isimip_data/core/assets/js/hooks/ls'
 
 import { useResourcesQuery } from '../hooks/queries'
 
@@ -10,7 +10,7 @@ import Resource from './Resource'
 
 const Resources = () => {
 
-  const [values, setValues] = useLsState('resources', {
+  const [values, setValues] = useLs('isimip.resources', {
     showAll: false,
     filterString: ''
   })

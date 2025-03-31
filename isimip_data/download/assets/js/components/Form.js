@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty, isNil, isNumber, isUndefined } from 'lodash'
 
-import { useLsState } from 'isimip_data/core/assets/js/hooks/ls'
+import { useLs } from 'isimip_data/core/assets/js/hooks/ls'
 import { useSettingsQuery } from 'isimip_data/core/assets/js/hooks/queries'
 
 import Errors from './form/Errors'
@@ -18,7 +18,7 @@ const Form = ({ files, setJob }) => {
 
   const [errors, setErrors] = useState({})
   const [paths, setPaths] = useState([...files.map(file => file.path)])
-  const [operations, setOperations] = useLsState('operations', [])
+  const [operations, setOperations] = useLs('isimip.download.operations', [])
 
   // get all resolutions from the operations
   const resolutions = isUndefined(settings) ? null : (

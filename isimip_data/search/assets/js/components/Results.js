@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty, isNil } from 'lodash'
 
-import { useLsState } from 'isimip_data/core/assets/js/hooks/ls'
+import { useLs } from 'isimip_data/core/assets/js/hooks/ls'
 
 import { useDatasetsQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
 
@@ -15,7 +15,7 @@ import Suggestions from './Suggestions'
 
 const Results = ({ params, maxCount, glossary, updateParams }) => {
 
-  const [selected, setSelected] = useLsState('result.selected', [])  // todo lsstate
+  const [selected, setSelected] = useLs('isimip.search.selected', [])  // todo lsstate
 
   const { data, fetchNextPage, hasNextPage, isLoading, isFetching } = useDatasetsQuery(params)
   const count = isNil(data) ? 0 : data.pages[0].count

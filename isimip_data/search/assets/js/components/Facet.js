@@ -6,13 +6,13 @@ import Icon from 'isimip_data/core/assets/js/components/Icon'
 import Spinner from 'isimip_data/core/assets/js/components/Spinner'
 import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
 
-import { useLsState } from 'isimip_data/core/assets/js/hooks/ls'
+import { useLs } from 'isimip_data/core/assets/js/hooks/ls'
 import { useDatasetsHistogramQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
 
 
 const Facet = ({ facet, params, glossary, updateParams }) => {
 
-  const [isOpen, setIsOpen] = useLsState(`facet.${facet.identifier}`, false)
+  const [isOpen, setIsOpen] = useLs(`isimip.search.facet.${facet.identifier}`, false)
 
   const { data: items, isLoading, isFetching } = useDatasetsHistogramQuery(facet.identifier, params, isOpen)
 

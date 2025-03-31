@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { useLsState } from 'isimip_data/core/assets/js/hooks/ls'
+import { useLs } from 'isimip_data/core/assets/js/hooks/ls'
 
 import Facets from './Facets'
 import Tree from './Tree'
@@ -9,7 +9,7 @@ import Tree from './Tree'
 
 const Sidebar = ({ params, glossary, updateParams }) => {
 
-  const [sidebar, setSidebar] = useLsState('sidebar', 'tree')
+  const [sidebar, setSidebar] = useLs('isimip.search.sidebar', 'tree')
 
   return <>
     <div className="card">

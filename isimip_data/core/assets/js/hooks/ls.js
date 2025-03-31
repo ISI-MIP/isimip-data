@@ -55,7 +55,7 @@ const loadFile = (fileName) => {
   return null
 }
 
-export const useLsState = (path, initialValues) => {
+export const useLs = (path, initialValues) => {
   // get the value from the local storage
   const lsString = localStorage.getItem(path)
   const lsState = (isBoolean(lsString) || !isEmpty(lsString)) ? deserialize(JSON.parse(lsString)) : null
