@@ -17,7 +17,7 @@ const Operation = ({ operation, index, isLast, values, errors, updateOperation, 
   return (
     <div className="card mb-2 operation">
       <div className="card-body">
-        <button type="button" className="btn btn-link close-operation" onClick={() => removeOperation(index)}>
+        <button type="button" className="link close-operation" onClick={() => removeOperation(index)}>
           <span className="material-symbols-rounded">close</span>
         </button>
 

@@ -47,14 +47,14 @@ const ResultDataset = ({ dataset, glossary, selected, setSelected, dropdown, set
         }
 
         <div className="d-inline me-1">
-          <button role="button" className="d-flex btn btn-link" onClick={() => setDropdown('attributes')}>
+          <button role="button" className="d-flex link" onClick={() => setDropdown('attributes')}>
             Attributes
             <Icon icon={dropdown == 'attributes' ? 'expand_less' : 'expand_more'} />
           </button>
         </div>
 
         <div className="d-inline me-1">
-          <button role="button" className="d-flex btn btn-link" onClick={() => setDropdown('files')}>
+          <button role="button" className="d-flex link" onClick={() => setDropdown('files')}>
             Files
             <Icon icon={dropdown == 'files' ? 'expand_less' : 'expand_more'} />
           </button>
@@ -63,7 +63,7 @@ const ResultDataset = ({ dataset, glossary, selected, setSelected, dropdown, set
         {
           (!isEmpty(dataset.caveats) || !isEmpty(dataset.caveats_versions)) && (
             <div className="d-inline">
-              <button role="button" className="d-flex btn btn-link" onClick={() => setDropdown('files')}>
+              <button role="button" className="d-flex link" onClick={() => setDropdown('files')}>
                 Issues & Notes
                 <Icon icon={dropdown == 'files' ? 'expand_less' : 'expand_more'} />
               </button>
@@ -90,7 +90,7 @@ const ResultDataset = ({ dataset, glossary, selected, setSelected, dropdown, set
               </div>
 
               <div className="d-sm-inline-block mb-2 mb-md-0">
-                <button role="button" className="btn btn-link" onClick={() => handleDownload({id: dataset.id})}
+                <button role="button" className="link" onClick={() => handleDownload({id: dataset.id})}
                         title="Download all files in this dataset at once.">
 
                   Download all files

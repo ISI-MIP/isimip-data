@@ -22,18 +22,6 @@ label {
     --bs-btn-border-color: var(--isimip-color-gray);
 }
 
-.btn-link {
-    --bs-btn-font-weight: 600;
-    --bs-link-color: var(--isimip-color-blue);
-    --bs-link-hover-color: var(--isimip-color-dark-blue);
-
-    font-size: inherit;
-    text-decoration: none;
-
-    padding: 0;
-    border: none;
-}
-
 .form-control {
     --bs-border-radius: 0;
     --bs-border-color: var(--isimip-color-gray);

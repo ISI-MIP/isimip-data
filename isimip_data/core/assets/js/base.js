@@ -1,4 +1,4 @@
-for (const element of document.getElementsByClassName('btn-copy-to-clipboard')) {
+for (const element of document.getElementsByClassName('copy-to-clipboard')) {
     element.addEventListener('click', () => {
         const code = element.getElementsByTagName('code')[0]
         const text = code.textContent

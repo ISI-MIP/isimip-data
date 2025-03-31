@@ -19,7 +19,7 @@ const Suggestions = ({ params, updateParams }) => {
             <span className="ml-2">Maybe you misspelled your query. Did you mean:</span>
             {
               suggestions.map((suggestion, index) => (
-                <button key={index} className="btn btn-link ms-2" onClick={() => onClick(suggestion)}>
+                <button type="button" key={index} className="link ms-2" onClick={() => onClick(suggestion)}>
                   {suggestion}
                 </button>
               ))

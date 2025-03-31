@@ -27,7 +27,7 @@ const Params = ({ params, count, updateParams }) => {
           {
             items.map(([key, value], index) => {
               return !isEmpty(value) && (
-                <button key={index} className="d-flex align-items-center btn btn-link"
+                <button type="button" key={index} className="d-flex align-items-center link"
                         onClick={() => handleRemove(key, value)}>
                   {key} = {value} <Icon icon="close" size="sm" />
                 </button>
@@ -47,7 +47,7 @@ const Params = ({ params, count, updateParams }) => {
         }
         {
           count < 10 && (
-              <button className="btn btn-link" onClick={() => handleDownload(params)}
+              <button type="button" className="link" onClick={() => handleDownload(params)}
                  title="Download all files for this search at once.">
                 Download all files
               </button>

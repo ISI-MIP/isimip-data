@@ -85,7 +85,7 @@
                         <form method="post" action="{% url 'download' %}" target="_blank" class="mb-0">
                             {% csrf_token %}
                             <input type="hidden" name="paths" value="{{ file.path }}">
-                            <button class="btn btn-link" type="submit">{% trans 'Configure download' %}</button>
+                            <button type="submit" class="link">{% trans 'Configure download' %}</button>
                         </form>
                     </li>
                     {% endif %}

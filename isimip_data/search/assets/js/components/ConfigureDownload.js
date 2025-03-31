@@ -7,7 +7,7 @@ const ConfigureDownload = ({ files }) => (
     {
       files.map(file => <input type="hidden" name="paths" value={file.path} key={file.id} />)
     }
-    <button type="submit" className="btn btn-link"
+    <button type="submit" className="link"
        title="Download only a specific country, a lat/lon box or landonly data.">
       Configure download
     </button>

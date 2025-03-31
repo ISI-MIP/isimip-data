@@ -10,7 +10,7 @@ const LoadMore = ({ onClick, isFetching }) => (
       <div className="card">
         <div className="card-body">
           <div className="d-flex justify-content-center">
-            <button className="btn btn-link" onClick={onClick}>
+            <button type="button" className="link" onClick={onClick}>
               Load more datasets
             </button>
           </div>

@@ -22,7 +22,7 @@ const Caveats = ({ dataset, toggleCaveats }) => {
 
     return (
       <div className="float-right">
-        <button className={`btn btn-link text-${color}`}>
+        <button type="button" className={`link text-${color}`}>
           <Icon icon={symbol} title="There are issues or notes for this dataset."
                 size="xl" onClick={toggleCaveats} />
         </button>
@@ -33,7 +33,7 @@ const Caveats = ({ dataset, toggleCaveats }) => {
 
     return (
       <div className="float-right">
-        <button className="btn btn-link text-muted">
+        <button type="button" className="link text-muted">
           <Icon icon={symbol} title="There are issues or notes for other versions of this dataset."
                 size="xl" onClick={toggleCaveats} />
         </button>
