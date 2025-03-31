@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { get, isEmpty, sortBy } from 'lodash'
+import { get, intersection, isEmpty, sortBy } from 'lodash'
 
-import OverlayTrigger from "react-bootstrap/OverlayTrigger"
-import Tooltip from "react-bootstrap/Tooltip"
+import Icon from 'isimip_data/core/assets/js/components/Icon'
+import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
 
 import { useTreeQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
 
@@ -31,34 +31,39 @@ const Tree = ({ params, glossary, updateParams }) => {
     }
   }
 
-  const toggleItem = (item) => {
-    if (item.items) {
-      handleClose(item)
-    } else {
-      handleOpen(item)
+  const toggleItem = (event, item) => {
+    if (event.type == 'change' || isEmpty(
+      // do not react to click events on the checkbox or the label, those are handled by the change event
+      intersection(event.target.classList, ['form-check-input', 'form-check-label']))
+    ) {
+      if (item.items) {
+        handleClose(item)
+      } else {
+        handleOpen(item)
+      }
     }
   }
 
-  const renderTooltip = (item) => (
-    (item.long_name || item.description || item.warning) ? (
-      <Tooltip>
-        {item.long_name && (<strong>{item.long_name}</strong>)}
-        {item.description && (<p>{item.description}</p>)}
-        {item.warning && (<p>Warning: {item.warning}</p>)}
-      </Tooltip>
+  const renderTooltip = (properties) => (
+    (properties.long_name || properties.description || properties.warning) ? (
+      <>
+        {properties.long_name && (<strong>{properties.long_name}</strong>)}
+        {properties.description && (<p>{properties.description}</p>)}
+        {properties.warning && (<p>Warning: {properties.warning}</p>)}
+      </>
     ) : null
   )
 
-  const renderUrl = (item) => (
-    Object.keys(item.urls).map((key, index) => {
+  const renderUrl = (item, properties) => (
+    Object.keys(properties.urls).map((key, index) => {
       if (item.tree.includes(key)) {
         return (
-          <a key={index} className="ml-auto" href={item.urls[key]} target="_blank" rel="noreferrer"
-             onClick={e => e.stopPropagation()}>
-            <OverlayTrigger placement="bottom" overlay={<Tooltip>More information is available in the {key} protocol.</Tooltip>}>
-              <span className="material-symbols-rounded symbols-protocol">quick_reference_all</span>
-            </OverlayTrigger>
-          </a>
+          <Tooltip key={index} title={<>More information is available in the {key} protocol.</>}>
+            <a className="d-block ms-auto" href={properties.urls[key]} target="_blank" rel="noreferrer"
+               onClick={e => e.stopPropagation()}>
+              <Icon className="d-block" icon="quick_reference_all" size="sm" />
+            </a>
+          </Tooltip>
         )
       } else {
         return null
@@ -66,54 +71,49 @@ const Tree = ({ params, glossary, updateParams }) => {
     })
   )
 
-  const renderItem = (item) => (
-    <div className="tree-item d-flex align-items-center"
-         onClick={() => toggleItem(item)}>
-      <input className="mr-2" type="checkbox" checked={item.items || false} readOnly />
-      <span>{item.title || item.specifier}</span>
-      {item.hasItems && <span className="material-symbols-rounded symbols-expand">expand_more</span>}
-      {item.urls && renderUrl(item)}
-    </div>
-  )
+  const renderItem = (item, level) => {
+    // try to get additional or updated properties from the glossary
+    const properties = get(glossary, [item.identifier, item.specifier], {})
+    const id = `${item.identifier}-${item.specifier}`
 
-  const renderItemWrapper = (item, index) => {
-    const tooltip = renderTooltip(item)
+    return (
+      <li className="list-group-item" onClick={(event) => toggleItem(event, item)}>
+        <div className={`tree-level-${level}`}>
+          <Tooltip placement="right" title={renderTooltip(properties)}>
+            <div className="d-flex gap-1 align-items-center">
+              <input className="form-check-input me-1 mt-0" type="checkbox" id={id} checked={!isEmpty(item.items)}
+                     onChange={(event) => toggleItem(event, item)} />
 
-    if (tooltip) {
-      return (
-        <li key={index}>
-          <OverlayTrigger placement="right" overlay={tooltip}>
-            {renderItem(item)}
-          </OverlayTrigger>
-          {item.items && renderItems(item.items)}
-        </li>
-      )
-    } else {
-      return (
-        <li key={index}>
-          {renderItem(item)}
-          {item.items && renderItems(item.items)}
-        </li>
-      )
-    }
+              <label className="form-check-label flex-grow-1" htmlFor={id}>
+                {properties.title || item.specifier}
+              </label>
+
+              {properties.urls && renderUrl(item, properties)}
+            </div>
+          </Tooltip>
+        </div>
+      </li>
+    )
   }
 
-  const renderItems = (items) => (
-    <ul>
+  const renderItems = (items, level = 0) => (
+    <>
       {
-        sortBy(items, ['specifier']).map((item, index) => {
-          // try to get additional or updated properties from the glossary
-          const properties = get(glossary, [item.identifier, item.specifier], {})
-
-          return renderItemWrapper({...item, ...properties}, index)
-        })
+        sortBy(items, ['specifier']).map((item, index) => (
+          <React.Fragment key={index}>
+            {renderItem(item, level)}
+            {item.items && renderItems(item.items, level + 1)}
+          </React.Fragment>
+        ))
       }
-    </ul>
+    </>
   )
 
   return !isEmpty(tree) && (
     <div className="card tree">
-      {renderItems(tree)}
+      <ul className="list-group list-group-flush">
+        {renderItems(tree)}
+      </ul>
     </div>
   )
 }

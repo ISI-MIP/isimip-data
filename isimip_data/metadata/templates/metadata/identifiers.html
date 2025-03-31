@@ -20,18 +20,18 @@
             <strong>{{ identifier }}</strong>
         </div>
         <div class="card-body">
-            <ul class="list-inline mb-0">
+            <div class="d-flex flex-wrap row-gap-1 column-gap-2">
             {% for specifier, count in rows %}
             {% if count > 0 %}
-            <li class="list-inline-item">
-                {{ specifier }}
+            <div class="d-flex gap-2 align-items-center border border-gray rounded ps-2 pe-2">
+                <strong>{{ specifier }}</strong>
                 <div class="badge rounded-pill text-bg-secondary">
                     {{ count }}
                 </div>
-            </li>
+            </div>
             {% endif %}
             {% endfor %}
-            </ul>
+            </div>
         </div>
     </div>
     {% endfor %}

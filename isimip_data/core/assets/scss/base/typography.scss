@@ -63,6 +63,12 @@ h4 {
     border-color: var(--isimip-color-orange) !important;
 }
 
+
+.border-gray {
+    border-color: var(--isimip-color-gray) !important;
+}
+
+
 .badge {
     --bs-badge-padding-x: 0.4em;
     --bs-badge-padding-y: 0.2em;
@@ -79,4 +85,14 @@ h4 {
     &.material-symbols-rounded-lg {
         font-size: 24px;
     }
+
+    &.material-symbols-rounded-xl {
+        font-size: 36px;
+    }
+}
+
+.spinner-border-xs {
+    --bs-spinner-width: 0.75rem;
+    --bs-spinner-height: 0.75rem;
+    --bs-spinner-border-width: 0.1em;
 }

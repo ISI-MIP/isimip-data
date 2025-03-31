@@ -6,6 +6,7 @@ import { isEmpty } from 'lodash'
 
 const Spinner = ({ size, className }) => (
   <div className={classNames('spinner-border', {
+    'spinner-border-xs': size == 'xs',
     'spinner-border-sm': size == 'sm',
     'spinner-border-lg': size == 'lg',
     [className]: !isEmpty(className)
@@ -15,7 +16,7 @@ const Spinner = ({ size, className }) => (
 )
 
 Spinner.propTypes = {
-  size: PropTypes.string.isRequired,
+  size: PropTypes.string,
   className: PropTypes.string
 }
 

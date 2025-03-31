@@ -12,18 +12,20 @@ const Sidebar = ({ params, glossary, updateParams }) => {
   const [sidebar, setSidebar] = useLsState('sidebar', 'tree')
 
   return <>
-    <div className="card sidebar-header">
-      <div className="card-header d-flex justify-content-between">
-        Sidebar view:
-        <div className="form-check form-check-inline">
-          <input className="form-check-input" type="radio" id="tree-radio"
-                 onChange={() => setSidebar('tree')} checked={sidebar == 'tree'} />
-          <label className="form-check-label" htmlFor="tree-radio">Tree</label>
-        </div>
-        <div className="form-check form-check-inline mr-0">
-          <input className="form-check-input" type="radio" id="facets-radio"
-                 onChange={() => setSidebar('facets')} checked={sidebar == 'facets'} />
-          <label className="form-check-label" htmlFor="facets-radio">Facets</label>
+    <div className="card">
+      <div className="card-body">
+        <div className="d-flex">
+          Sidebar View:
+          <div className="form-check form-check-inline ms-3 me-0">
+            <input className="form-check-input" type="radio" id="tree-radio"
+                   onChange={() => setSidebar('tree')} checked={sidebar == 'tree'} />
+            <label className="form-check-label" htmlFor="tree-radio">Tree</label>
+          </div>
+          <div className="form-check form-check-inline ms-3 me-0">
+            <input className="form-check-input" type="radio" id="facets-radio"
+                   onChange={() => setSidebar('facets')} checked={sidebar == 'facets'} />
+            <label className="form-check-label" htmlFor="facets-radio">Facets</label>
+          </div>
         </div>
       </div>
     </div>

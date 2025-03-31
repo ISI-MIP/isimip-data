@@ -32,10 +32,6 @@ label {
 
     padding: 0;
     border: none;
-
-    .material-symbols-rounded {
-        line-height: 1rem;
-    }
 }
 
 .form-control {
@@ -54,6 +50,12 @@ label {
 .form-check-input[type=checkbox] {
     border-radius: 0;
 
+    &:not(:checked) {
+        border: 1px solid var(--isimip-color-gray);
+    }
+}
+
+.form-check-input[type=radio] {
     &:not(:checked) {
         border: 1px solid var(--isimip-color-gray);
     }

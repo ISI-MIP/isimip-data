@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 
 import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
 
+import Icon from 'isimip_data/core/assets/js/components/Icon'
+import Spinner from 'isimip_data/core/assets/js/components/Spinner'
+
 import { getSize, handleDownload } from '../utils'
 
 
@@ -43,11 +46,11 @@ const Selection = ({ selected, count, maxCount, isLoading, setSelected }) => {
             <div className="d-md-inline">
               <strong>Selection</strong>
             </div>
-            <div className="d-md-inline ml-md-2">
+            <div className="d-md-inline ms-md-2">
               You selected {selected.length} {selected.length > 1 ? 'datasets' : 'dataset'} of {size} size.
             </div>
-            <div className="d-md-inline-block ml-auto mt-2 mt-md-0">
-              {isLoading && <span className="material-symbols-rounded symbols-spin">progress_activity</span>}
+            <div className="d-md-inline-block ms-auto mt-2 mt-md-0">
+              {isLoading && <Spinner size="sm" className="text-secondary" />}
               {
                 !isLoading && count >= 0 && count <= maxCount && (
                   <span>{ count.toLocaleString('en-US') } datasets found.</span>
@@ -66,8 +69,8 @@ const Selection = ({ selected, count, maxCount, isLoading, setSelected }) => {
                 <div className="float-md-right">
                   <div className="d-sm-inline-block mr-2 mb-2 mb-md-0">
                     <form className="m-0" method="post" action="/download/" target="_blank" rel="noreferrer">
-                      {files.map(file => {
-                        return <input type="hidden" name="paths" value={file.path} key={file.id} />
+                      {files.map((file, fileIndex) => {
+                        return <input type="hidden" name="paths" value={file.path} key={fileIndex} />
                       })}
                       <button type="submit" className="btn btn-link"
                          title="Download only a specific country, a lat/lon box or landonly data.">
@@ -93,25 +96,22 @@ const Selection = ({ selected, count, maxCount, isLoading, setSelected }) => {
                     {
                       (dropdown == 'datasets') && (
                         <span>
-                          Hide selected datasets
-                          <span className="material-symbols-rounded symbols-expand">expand_less</span>
+                          Hide selected datasets <Icon icon="expand_less" />
                         </span>
                       )
                     }
                     {
                       (dropdown != 'datasets') && (
                         <span>
-                          Show selected datasets
-                          <span className="material-symbols-rounded symbols-expand">expand_more</span>
+                          Show selected datasets <Icon icon="expand_more" />
                         </span>
                       )
                     }
                   </button>
                 </div>
                 <div className="d-inline">
-                  <button className="btn btn-link" onClick={handleReset}>
-                    Reset selection
-                    <span className="material-symbols-rounded symbols-close">close</span>
+                  <button role="button" className="btn btn-link" onClick={handleReset}>
+                    Reset selection <Icon icon="close" />
                   </button>
                 </div>
               </div>

@@ -15,7 +15,7 @@ const Facets = ({ params, glossary, updateParams }) => {
     <div className="facets">
       {
         facets.map((facetGroup, facetGroupIndex) => (
-          <div key={facetGroupIndex} className="card facet-group">
+          <div key={facetGroupIndex} className="card">
           {
             facetGroup.map((facet, facetIndex) => (
               <Facet key={facetIndex} facet={facet} params={params} glossary={glossary} updateParams={updateParams} />

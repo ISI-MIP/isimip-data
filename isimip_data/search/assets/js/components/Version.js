@@ -2,29 +2,30 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { get, isEmpty, isNil, omit } from 'lodash'
 
+import Checkbox from 'isimip_data/core/assets/js/components/Checkbox'
 
 const Version = ({ params, updateParams }) => {
 
   const [values, setValues] = useState({
-    show: false,
+    display: false,
     after: '',
     before: ''
   })
 
   useEffect(() => {
     setValues({
-      show: !isEmpty(params.after) || !isEmpty(params.before),
+      display: !isEmpty(params.after) || !isEmpty(params.before),
       after: params.after || '',
       before: params.before || ''
     })
   }, [params])
 
   const toggleVersion = () => {
-    if (values.show) {
-      setValues({ ...values, show: false })
+    if (values.display) {
+      setValues({ ...values, display: false })
       updateParams({ after: null, before: null })
     } else {
-      setValues({ ...values, show: true })
+      setValues({ ...values, display: true })
     }
   }
 
@@ -33,28 +34,24 @@ const Version = ({ params, updateParams }) => {
   }
 
   const handleApply = () => {
-    updateParams({ ...omit(values, ['show']) })
+    updateParams({ ...omit(values, ['display']) })
   }
 
   return (
-    <div className="card version">
-      <div className="card-header d-md-flex">
-        <div className="form-check form-check-inline mb-2 mb-md-0">
-          <input className="form-check-input" type="checkbox" id="specific-versions-checkbox"
-                 checked={values.show} onChange={toggleVersion} />
-          <label className="form-check-label" htmlFor="specific-versions-checkbox">
-            Show specific versions with date constraints
-          </label>
-        </div>
-        <div className="form-check form-check-inline ml-auto mr-0">
-          <input className="form-check-input" type="checkbox" id="archived-versions-checkbox"
-                 checked={!isNil(get(params, 'all'))} onChange={toggleAll} />
-          <label className="form-check-label" htmlFor="archived-versions-checkbox">Show archived files</label>
-        </div>
-      </div>
-      {
-        values.show && (
-          <ul className="list-group list-group-flush">
+    <div className="card">
+      <ul className="list-group list-group-flush">
+        <li className="list-group-item">
+          <div className="d-md-flex">
+            <Checkbox className="mb-2 mb-md-0" checked={values.display} onChange={toggleVersion}>
+              Show specific versions with date constraints
+            </Checkbox>
+            <Checkbox className="mb-0 ms-md-auto" checked={!isNil(get(params, 'all'))} onChange={toggleAll}>
+              Show archived files
+            </Checkbox>
+          </div>
+        </li>
+        {
+          values.display && (
             <li className="list-group-item">
               <div className="row align-items-center">
                 <div className="col-12 col-md-auto mb-2 mb-md-0">
@@ -74,13 +71,13 @@ const Version = ({ params, updateParams }) => {
                          onChange={(event) => setValues({...values, before: event.target.value})} />
                 </div>
                 <div className="col-12 col-md-auto">
-                  <button className="btn btn-default btn-sm" onClick={handleApply}>Apply range</button>
+                  <button className="btn btn-outline-secondary btn-sm" onClick={handleApply}>Apply range</button>
                 </div>
               </div>
             </li>
-          </ul>
-        )
-      }
+          )
+        }
+      </ul>
     </div>
   )
 }

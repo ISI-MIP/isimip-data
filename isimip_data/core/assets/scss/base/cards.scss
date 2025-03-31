@@ -6,15 +6,16 @@
     --bs-card-cap-padding-x: var(--bs-card-spacer-x);
     --bs-card-cap-padding-y: var(--bs-card-spacer-y);
 
+    margin-bottom: 2rem;
+
     font-size: 10pt;
+    line-height: 1.5em;
 
     &.card-lg {
         .card-body {
             font-size: 12pt;
         }
     }
-
-    margin-bottom: 2rem;
 
     h4, p, dl, dd {
         &:last-child {
@@ -26,10 +27,7 @@
         min-height: 1rem;
     }
 
-    .card-header {
-        .material-symbols-rounded {
-            height: 1rem;
-            line-height: 1rem;
-        }
+    .btn-link {
+        line-height: 1em;
     }
 }

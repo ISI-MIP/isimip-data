@@ -6,12 +6,12 @@ import ResultFiles from './ResultFiles'
 import ResultCaveats from './ResultCaveats'
 import ResultDataset from './ResultDataset'
 
-import { useToggle } from 'isimip_data/core/assets/js/hooks/toggle'
+import { useSelect } from 'isimip_data/core/assets/js/hooks/select'
 
 
 const Result = ({ dataset, glossary, selected, setSelected }) => {
 
-  const [dropdown, setDropdown] = useToggle('')
+  const [dropdown, setDropdown] = useSelect('')
 
   return (
     <div className="card result">

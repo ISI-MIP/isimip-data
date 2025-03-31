@@ -2,23 +2,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { isEmpty } from 'lodash'
 
 
-const Icon = ({ icon, size, ...props }) => (
+const Icon = ({ className, icon, size, title }) => (
   <>
-    {props.title && <span className="visually-hidden">{props.title}</span>}
-    <span className={classNames('material-symbols-rounded align-self-center', {
-      [props.className]: !isEmpty(props.className),
+    {title && <span className="visually-hidden">{title}</span>}
+    <span className={classNames(className, 'material-symbols-rounded', {
       'material-symbols-rounded-sm': size == 'sm',
-      'material-symbols-rounded-lg': size == 'lg'
-    })} aria-hidden="true" {...props}>{icon}</span>
+      'material-symbols-rounded-lg': size == 'lg',
+      'material-symbols-rounded-xl': size == 'xl'
+    })} aria-hidden="true">{icon}</span>
   </>
 )
 
 Icon.propTypes = {
   icon: PropTypes.string.isRequired,
-  size: PropTypes.string
+  size: PropTypes.string,
+  title: PropTypes.string,
+  className: PropTypes.string
 }
 
 export default Icon

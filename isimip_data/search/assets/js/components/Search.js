@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
+import Icon from 'isimip_data/core/assets/js/components/Icon'
+
 
 const Search = ({ params, updateParams, resetParams }) => {
 
@@ -16,24 +18,26 @@ const Search = ({ params, updateParams, resetParams }) => {
   }
 
   return (
-    <div className="search card">
+    <div className="card pt-2 pb-2">
       <div className="card-body">
-        <h1 className="card-title">Search the ISIMIP Repository</h1>
+        <h1 className="card-title mb-2">Search the ISIMIP Repository</h1>
 
         <form onSubmit={handleSubmit}>
-          <div className="form-row">
-            <div className="col-12 mb-2 col-md mb-md-0">
+          <div className="d-md-flex">
+            <div className="flex-grow-1 mb-2 mb-md-0">
               <input className="form-control form-control-lg" type="text" placeholder="Enter search query"
                   onChange={(event) => setQuery(event.target.value)} value={query} />
             </div>
-            <div className="col-6 col-md-auto">
-              <button className="btn btn-outline-primary btn-lg w-100" type="button" onClick={handleSubmit}>
-                Search <span className="material-symbols-rounded symbols-search">search</span>
+            <div className="mb-2 mb-md-0 ms-md-2">
+              <button type="button" className="d-flex align-items-center btn btn-outline-primary btn-lg"
+                      aria-label="Search" onClick={handleSubmit}>
+                Search <Icon icon="search" size="lg" className="ms-1" />
               </button>
             </div>
-            <div className="col-6 col-md-auto">
-              <button className="btn btn-outline-secondary btn-lg w-100" type="button" onClick={resetParams}>
-                Reset <span className="material-symbols-rounded symbols-reset">close</span>
+            <div className="ms-md-2">
+              <button type="button" className="d-flex align-items-center btn btn-outline-secondary btn-lg"
+                      aria-label="Reset" onClick={resetParams}>
+                Reset <Icon icon="close" size="lg" className="ms-1" />
               </button>
             </div>
           </div>

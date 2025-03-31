@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty, isNil } from 'lodash'
+
+import { useLsState } from 'isimip_data/core/assets/js/hooks/ls'
 
 import { useDatasetsQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
 
@@ -13,9 +15,9 @@ import Suggestions from './Suggestions'
 
 const Results = ({ params, maxCount, glossary, updateParams }) => {
 
-  const [selected, setSelected] = useState([])  // todo lsstate
+  const [selected, setSelected] = useLsState('result.selected', [])  // todo lsstate
 
-  const { data, fetchNextPage, hasNextPage, isLoading } = useDatasetsQuery(params)
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetching } = useDatasetsQuery(params)
   const count = isNil(data) ? 0 : data.pages[0].count
   const results = isNil(data) ? [] : data.pages.reduce((results, page) => {
     return [...results, ...page.results]
@@ -49,7 +51,7 @@ const Results = ({ params, maxCount, glossary, updateParams }) => {
           )
         })
       }
-      {hasNextPage && <LoadMore onLoadMore={fetchNextPage} isLoading={isLoading} />}
+      {hasNextPage && <LoadMore onClick={fetchNextPage} isFetching={isFetching} />}
     </div>
   )
 }

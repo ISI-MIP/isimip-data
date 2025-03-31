@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty } from 'lodash'
 
+import Icon from 'isimip_data/core/assets/js/components/Icon'
+
 
 const Caveats = ({ dataset, toggleCaveats }) => {
 
@@ -21,9 +23,8 @@ const Caveats = ({ dataset, toggleCaveats }) => {
     return (
       <div className="float-right">
         <button className={`btn btn-link text-${color}`}>
-          <span className="material-symbols-rounded symbols-caveat"
-                title="There are issues or notes for this dataset."
-                onClick={toggleCaveats}>{symbol}</span>
+          <Icon icon={symbol} title="There are issues or notes for this dataset."
+                size="xl" onClick={toggleCaveats} />
         </button>
       </div>
     )
@@ -33,9 +34,8 @@ const Caveats = ({ dataset, toggleCaveats }) => {
     return (
       <div className="float-right">
         <button className="btn btn-link text-muted">
-          <span className="material-symbols-rounded symbols-caveat"
-                title="There are issues or notes for other versions of this dataset."
-                onClick={toggleCaveats}>{symbol}</span>
+          <Icon icon={symbol} title="There are issues or notes for other versions of this dataset."
+                size="xl" onClick={toggleCaveats} />
         </button>
       </div>
     )

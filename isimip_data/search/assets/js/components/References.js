@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import OverlayTrigger from "react-bootstrap/OverlayTrigger"
-import Tooltip from "react-bootstrap/Tooltip"
+
+import Icon from 'isimip_data/core/assets/js/components/Icon'
+import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
 
 const referenceTypes = ['OTHER', 'EVALUATION', 'ISIPEDIA']
 
@@ -20,42 +21,27 @@ const References = ({ dataset }) => {
 
   if (referenceType == 'ISIPEDIA') {
     return (
-      <OverlayTrigger placement="bottom" overlay={
-        <Tooltip>
-          There are articles on ISIpedia available for this dataset.
-        </Tooltip>
-      }>
-        <a className="float-right result-reference" href={`${dataset.metadata_url}#references`}
-           target="_blank" rel="noreferrer">
+      <Tooltip title="There are articles on ISIpedia available for this dataset.">
+        <a href={`${dataset.metadata_url}#references`} target="_blank" rel="noreferrer">
           <img className="isipedia-logo" src="/static/images/isipedia.png" alt="ISIpedia logo" />
         </a>
-      </OverlayTrigger>
+      </Tooltip>
     )
   } else if (referenceType == 'EVALUATION') {
     return (
-      <OverlayTrigger placement="bottom" overlay={
-        <Tooltip>
-          There are evaluation articles available for this dataset.
-        </Tooltip>
-      }>
-        <a className="float-right result-reference" href={`${dataset.metadata_url}#references`}
-           target="_blank" rel="noreferrer">
-          <span className="material-symbols-rounded symbols-reference">task_alt</span>
+      <Tooltip overlay="There are evaluation articles available for this dataset.">
+        <a href={`${dataset.metadata_url}#references`} target="_blank" rel="noreferrer">
+          <Icon icon="task_alt" />
         </a>
-      </OverlayTrigger>
+      </Tooltip>
     )
   } else if (referenceType == 'OTHER') {
     return (
-      <OverlayTrigger placement="bottom" overlay={
-        <Tooltip>
-          There are references to other publications for this dataset.
-        </Tooltip>
-      }>
-        <a className="float-right result-reference" href={`${dataset.metadata_url}#references`}
-           target="_blank" rel="noreferrer">
-          <span className="material-symbols-rounded symbols-reference">local_library</span>
+      <Tooltip placement="bottom" overlay="There are references to other publications for this dataset.">
+        <a href={`${dataset.metadata_url}#references`} target="_blank" rel="noreferrer">
+          <Icon icon="local_library" />
         </a>
-      </OverlayTrigger>
+      </Tooltip>
     )
   } else {
     return null
