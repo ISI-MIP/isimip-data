@@ -15,6 +15,10 @@ const baseConfig = {
       './isimip_data/core/assets/scss/bootstrap.scss',
       './isimip_data/core/assets/js/bootstrap.js',
     ],
+    caveats: [
+      './isimip_data/caveats/assets/scss/caveats.scss',
+      './isimip_data/caveats/assets/js/caveats.js',
+    ],
     download: [
       './isimip_data/download/assets/scss/download.scss',
       './isimip_data/download/assets/js/download.js',

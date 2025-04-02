@@ -1,6 +1,15 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'caveats.css' %}" />
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'caveats.js' %}"></script>
+{% endblock %}
+
 {% block main %}
 
 <div class="container">
@@ -20,9 +29,7 @@
         </p>
     </header>
 
-    {% if caveats %}
-    {% include 'caveats/cards/caveats.html' %}
-    {% endif %}
+    <div id="app"></div>
 </div>
 
 {% endblock %}

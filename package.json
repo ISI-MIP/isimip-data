@@ -25,6 +25,7 @@
     "local-storage": "^2.0.0",
     "lodash": "^4.17.21",
     "material-symbols": "^0.29.1",
+    "minisearch": "^7.1.2",
     "npm-font-open-sans": "^1.1.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",

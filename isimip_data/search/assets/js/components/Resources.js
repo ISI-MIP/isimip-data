@@ -2,13 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty } from 'lodash'
 
-import { useDropdown } from 'isimip_data/core/assets/js/hooks/dropdown'
-
-import Dropdown from 'isimip_data/core/assets/js/components/Dropdown'
 import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
 
 const Resources = ({ dataset }) => {
-  const dropdown = useDropdown()
   const resources = (dataset.resources || []).filter((resource) => (
     resource.new_version === null || !dataset.resources.map((r) => r.doi).includes(resource.new_version)
   ))
@@ -32,21 +28,26 @@ const Resources = ({ dataset }) => {
     )
   } else {
     return (
-      <Dropdown dropdown={dropdown} className="d-block link" label={<div className="d-inline-block doi"></div>}>
-        <h6 className="dropdown-header">
-          There are multiple DOI registered for this dataset, please use the citation that applies to your case.
-        </h6>
-        {
-          resources.map((resource, resourceIndex) => (
-            <Tooltip key={resourceIndex} title={getTooltip(resource)}>
-              <a className="dropdown-item"  href={resource.doi_url}>
-                <strong>{resource.title}</strong>
-                <span className="doi-link ms-2">{resource.doi_url}</span>
-              </a>
-            </Tooltip>
-          ))
-        }
-      </Dropdown>
+      <div className="dropdown">
+        <button type="button" className="d-block link" data-bs-toggle="dropdown" aria-expanded="false">
+          <div className="d-inline-block doi"></div>
+        </button>
+        <div className="dropdown-menu">
+          <h6 className="dropdown-header">
+            There are multiple DOI registered for this dataset, please use the citation that applies to your case.
+          </h6>
+          {
+            resources.map((resource, resourceIndex) => (
+              <Tooltip key={resourceIndex} title={getTooltip(resource)}>
+                <a className="dropdown-item"  href={resource.doi_url}>
+                  <strong>{resource.title}</strong>
+                  <span className="doi-link ms-2">{resource.doi_url}</span>
+                </a>
+              </Tooltip>
+            ))
+          }
+        </div>
+      </div>
     )
   }
 }

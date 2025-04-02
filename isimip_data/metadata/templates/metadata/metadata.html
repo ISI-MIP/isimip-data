@@ -1,5 +1,4 @@
 {% extends 'core/base.html' %}
-{% load i18n %}
 {% load static %}
 
 {% block style %}
@@ -15,7 +14,7 @@
 
 <div class="container">
     <header>
-        <h1>{% trans 'Metadata' %}</h1>
+        <h1>Metadata</h1>
 
         <p>
             Please give the <code>isimip_id</code> (e.g. <code>{{ example_file.id }}</code>, found in the NetCDF header), the SHA512 checksum (a long string, which can be computed with tools like <code>sha512sum</code>) or the path of a file to be redirected to the corresponding information page.

@@ -1,6 +1,7 @@
 import textwrap
 
 from django.conf import settings
+from django.template.defaultfilters import date
 from django.template.loader import get_template
 
 
@@ -52,3 +53,6 @@ def get_quote_text(head, text, level, add_newline=False):
         quote += f'\r\n{text_indent}'
 
     return quote
+
+def get_date_display(value):
+    return date(value, settings.DATETIME_FORMAT)

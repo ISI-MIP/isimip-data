@@ -91,6 +91,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+DATETIME_FORMAT = 'N j, Y, G:i'
+
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static_root/'
 STATICFILES_DIRS = [
