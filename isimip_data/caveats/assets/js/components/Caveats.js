@@ -14,7 +14,9 @@ const Caveats = () => {
 
   const { data: caveats } = useCaveatsQuery()
 
-  const search = useSearch(caveats, ['title', 'creators_str'])
+  const search = useSearch(caveats, {
+    fields: ['title', 'creators_str']
+  })
 
   const filteredCaveats = search.search(values.filterString).filter((caveat) => (
     values.category ? caveat.category == values.category : true

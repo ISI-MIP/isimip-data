@@ -5,11 +5,12 @@ import { isNil } from 'lodash'
 import Icon from 'isimip_data/core/assets/js/components/Icon'
 
 const orderings = {
-  last: 'Order by last updated',
+  paths: 'Order by paths',
+  title: 'Order by title',
   newest: 'Order by newest',
   oldest: 'Order by oldest',
-  title: 'Order by title',
 }
+
 
 const FilterOrder = ({ values, setValues }) => {
 
@@ -21,7 +22,7 @@ const FilterOrder = ({ values, setValues }) => {
     <div className="dropdown">
       <button type="button" className="d-block unstyled text-muted dropdown-toggle"
               data-bs-toggle="dropdown" aria-expanded="false">
-        {values.order ? orderings[values.order] : orderings.last}
+        {values.order ? orderings[values.order] : orderings.paths}
       </button>
       <div className="dropdown-menu">
         {

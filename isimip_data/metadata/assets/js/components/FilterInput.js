@@ -13,7 +13,7 @@ const FilterInput = ({ values, setValues }) => {
 
   const handleChange = (event) => {
     setInput(event.target.value)
-    debouncedSetValuesFilter({ ...values, filterString: event.target.value })
+    debouncedSetValuesFilter({ ...values, filter: event.target.value })
   }
 
   const handleReset = () => {
@@ -25,11 +25,11 @@ const FilterInput = ({ values, setValues }) => {
     <div className="d-flex">
       <div className="flex-grow-1">
           <input className="form-control form-control-lg mb-1" type="text"
-                 placeholder="Filter by title or creator"
+                 placeholder="Filter by DOI, title, creator, or path"
                  value={input} onChange={handleChange} />
       </div>
 
-      <div className="ms-md-2">
+      <div className="ms-2">
           <button role="button" className="d-flex align-items-center btn btn-outline-secondary btn-lg"
                   onClick={handleReset}>
             Reset <Icon icon="close" size="lg" />

@@ -8,7 +8,7 @@ import FilterSeverity from './FilterSeverity'
 import FilterStatus from './FilterStatus'
 
 const Filter = ({ values, setValues }) => (
-  <div className="filter card mb-1">
+  <div className="card mb-1">
     <div className="card-body">
       <FilterInput values={values} setValues={setValues} />
 

@@ -313,7 +313,8 @@ class ResourceIndexSerializer(serializers.ModelSerializer):
             'new_version',
             'is_external',
             'resource_url',
-            'creators_str'
+            'creators_str',
+            'publication_date'
         )
 
     def get_resource_url(self, obj):

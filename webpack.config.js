@@ -27,6 +27,7 @@ const baseConfig = {
       './isimip_data/metadata/assets/js/metadata.js',
     ],
     resources: [
+      './isimip_data/metadata/assets/scss/resources.scss',
       './isimip_data/metadata/assets/js/resources.js',
     ],
     search: [

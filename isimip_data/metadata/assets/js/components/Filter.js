@@ -1,53 +1,31 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { useDebouncedCallback } from 'use-debounce'
 
-import Icon from 'isimip_data/core/assets/js/components/Icon'
 import Checkbox from 'isimip_data/core/assets/js/components/Checkbox'
 
-const Filter = ({ values, setValues }) => {
+import FilterInput from './FilterInput'
+import FilterOrder from './FilterOrder'
 
-  const [filterString, setFilterString] = useState(values.filterString)
 
-  const debouncedSetValuesFilter = useDebouncedCallback((values) => setValues(values), 500)
+const Filter = ({ values, setValues }) => (
+  <div className="card mb-1">
+    <div className="card-body">
+      <FilterInput values={values} setValues={setValues} />
 
-  const handleChange = (event) => {
-    setFilterString(event.target.value)
-    debouncedSetValuesFilter({ ...values, filterString: event.target.value })
-  }
-
-  const handleReset = () => {
-    setFilterString('')
-    setValues({ ...values, filterString: '' })
-  }
-
-  return (
-    <div className="filter card mb-2">
-      <div className="card-body">
-        <div className="d-flex">
-          <div className="flex-grow-1">
-            <input className="form-control form-control-lg mb-1" type="text"
-                   placeholder="Filter by DOI, title, creator, or path"
-                   value={filterString} onChange={handleChange} />
-            <div className="float-md-end text-muted">
-              The list of DOI will update as you type.
-            </div>
-
-            <Checkbox checked={values.showAll} onChange={() => setValues({ ...values, showAll: !values.showAll })}>
-              Show older DOI versions as well
-            </Checkbox>
-          </div>
-
-          <div className="ms-md-2">
-            <button role="button" className="d-flex align-items-center btn btn-outline-secondary btn-lg" onClick={handleReset}>
-              Reset <Icon icon="close" size="lg" />
-            </button>
-          </div>
+      <div className="d-lg-flex gap-2">
+        <Checkbox checked={values.all || false}
+                  onChange={() => setValues({ ...values, all: !values.all })}>
+          Show previous DOI versions as well
+        </Checkbox>
+        <div className="d-none d-md-block me-2"></div>
+        <FilterOrder values={values} setValues={setValues} />
+        <div className="ms-auto text-muted">
+          The list of DOI will update as you type.
         </div>
       </div>
     </div>
-  )
-}
+  </div>
+)
 
 Filter.propTypes = {
   values: PropTypes.object.isRequired,

@@ -2,10 +2,10 @@ import { useMemo } from 'react'
 import MiniSearch from 'minisearch'
 import { isEmpty } from 'lodash'
 
-export const useSearch = (items, fields) => {
+export const useSearch = (items, options) => {
 
   const index = useMemo(() => {
-    const searchIndex = new MiniSearch({ fields })
+    const searchIndex = new MiniSearch(options)
     searchIndex.addAll(items)
     return searchIndex
   }, [items])
