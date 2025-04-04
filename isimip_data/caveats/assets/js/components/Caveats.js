@@ -27,14 +27,14 @@ const Caveats = () => {
   )).sort((a, b) => {
     switch (values.order) {
       case 'newest':
-        return a.id < b.id ? 1 : -1
+        return b.created.localeCompare(a.created)
       case 'oldest':
-        return a.id > b.id ? 1 : -1
+        return a.created.localeCompare(b.created)
       case 'title':
-        return a.title > b.title ? 1 : -1
+        return a.title.localeCompare(b.title)
       case 'last':
       default:
-        return a.updated < b.updated ? 1 : -1
+        return b.updated.localeCompare(a.updated)
     }
   })
 
