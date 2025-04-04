@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { isEmpty } from 'lodash'
 
 import { useDatasetSuggestionsQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
 
@@ -15,7 +16,7 @@ const Suggestions = ({ params, updateParams }) => {
       <div className="card-body">
         <strong>No results found</strong>
         {
-          suggestions.length > 0 && <>
+          !isEmpty(suggestions) && <>
             <span className="ml-2">Maybe you misspelled your query. Did you mean:</span>
             {
               suggestions.map((suggestion, index) => (

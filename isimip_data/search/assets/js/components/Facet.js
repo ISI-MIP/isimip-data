@@ -52,7 +52,7 @@ const Facet = ({ facet, params, glossary, updateParams }) => {
           filteredUrls.push(key)
         }
       })
-      if (filteredUrls.length == 0) {
+      if (isEmpty(filteredUrls)) {
         filteredUrls.push(Object.keys(urls).sort().at(-1))
       }
     }
