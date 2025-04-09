@@ -83,6 +83,26 @@
             .isipedia-logo {
                 height: 1.6rem;
             }
+
+            .tooltip-resources {
+                .tooltip-inner {
+                    font-weight: bold!important;
+                }
+            }
+
+            .dropdown-resources {
+                .dropdown-menu {
+                    max-width: 40rem;
+
+                    .dropdown-item {
+                        white-space: wrap;
+
+                        a {
+                            white-space: nowrap;
+                        }
+                    }
+                }
+            }
         }
     }
 }

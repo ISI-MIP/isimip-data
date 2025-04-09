@@ -28,9 +28,12 @@ const Resources = ({ dataset }) => {
     )
   } else {
     return (
-      <div className="dropdown">
+      <div className="dropdown dropdown-resources">
         <button type="button" className="d-block link" data-bs-toggle="dropdown" aria-expanded="false">
-          <div className="d-inline-block doi"></div>
+          <Tooltip title="There are multiple DOI registered for this dataset. Click for more information."
+                   placement="top" className="tooltip-resources">
+            <div className="d-inline-block doi"></div>
+          </Tooltip>
         </button>
         <div className="dropdown-menu">
           <h6 className="dropdown-header">
@@ -38,12 +41,12 @@ const Resources = ({ dataset }) => {
           </h6>
           {
             resources.map((resource, resourceIndex) => (
-              <Tooltip key={resourceIndex} title={getTooltip(resource)}>
-                <a className="dropdown-item"  href={resource.doi_url}>
-                  <strong>{resource.title}</strong>
-                  <span className="doi-link ms-2">{resource.doi_url}</span>
-                </a>
-              </Tooltip>
+              <a key={resourceIndex} className="dropdown-item" href={resource.doi_url}>
+                <em>{resource.creators_str} ({resource.publication_year}):</em>{' '}
+                <strong>{resource.title_with_version}</strong>{'. '}
+                {resource.publisher}{'. '}
+                <a className="doi-link" href={resource.doi_url}>{resource.doi_url}</a>
+              </a>
             ))
           }
         </div>
