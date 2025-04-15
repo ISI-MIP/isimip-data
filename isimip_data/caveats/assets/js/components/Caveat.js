@@ -8,7 +8,7 @@ const Caveat = ({ caveat }) => {
   return (
     <div className="card caveat mb-1">
       <div className="card-body">
-        <div className="d-flex gap-2 align-items-center mb-2">
+        <div className="d-flex gap-2 align-items-center mb-1">
           <h4 className="me-auto">
             <a href={caveat.url}>{caveat.title}</a>
             {' '}
@@ -20,7 +20,7 @@ const Caveat = ({ caveat }) => {
           <Badge label={caveat.status_display} color={caveat.status_color} />
         </div>
 
-        <p className="mb-2">
+        <p className="mb-1">
           <span className={`text-${caveat.severity_color}`}>
             {caveat.message_display}
           </span>

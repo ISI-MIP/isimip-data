@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 import { get, isEmpty, isNil, omit } from 'lodash'
 
 import Checkbox from 'isimip_data/core/assets/js/components/Checkbox'
+import Spinner from 'isimip_data/core/assets/js/components/Spinner'
 
-const Version = ({ params, updateParams }) => {
+const Version = ({ count, maxCount, isLoading, params, updateParams }) => {
 
   const [values, setValues] = useState({
     display: false,
@@ -42,10 +43,29 @@ const Version = ({ params, updateParams }) => {
       <ul className="list-group list-group-flush">
         <li className="list-group-item">
           <div className="d-md-flex">
-            <Checkbox className="mb-2 mb-md-0" checked={values.display} onChange={toggleVersion}>
-              Show specific versions with date constraints
+            <div className="me-md-auto mb-2 mb-md-0">
+              {
+                isLoading && (
+                  <div className="d-flex align-items-center version-spinner">
+                    <Spinner size="sm" className="text-secondary" />
+                  </div>
+                )
+              }
+              {
+                !isLoading && count >= 0 && count <= maxCount && (
+                  <div>{ count.toLocaleString('en-US') } datasets found</div>
+                )
+              }
+              {
+                !isLoading && count > maxCount && (
+                  <div>More than { maxCount.toLocaleString('en-US') } datasets found</div>
+                )
+              }
+            </div>
+            <Checkbox className="mb-2 mb-md-0 me-2" checked={values.display} onChange={toggleVersion}>
+              Show specific versions
             </Checkbox>
-            <Checkbox className="mb-0 ms-md-auto" checked={!isNil(get(params, 'all'))} onChange={toggleAll}>
+            <Checkbox checked={!isNil(get(params, 'all'))} onChange={toggleAll}>
               Show archived files
             </Checkbox>
           </div>
@@ -83,6 +103,9 @@ const Version = ({ params, updateParams }) => {
 }
 
 Version.propTypes = {
+  count: PropTypes.number.isRequired,
+  maxCount: PropTypes.number.isRequired,
+  isLoading: PropTypes.bool.isRequired,
   params: PropTypes.object.isRequired,
   updateParams: PropTypes.func.isRequired
 }

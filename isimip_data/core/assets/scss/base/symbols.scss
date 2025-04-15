@@ -10,7 +10,7 @@
     }
 
     &.material-symbols-rounded-xl {
-        font-size: 36px;
+        font-size: 24px;
     }
 }
 
@@ -18,11 +18,4 @@
     --bs-spinner-width: 0.75rem;
     --bs-spinner-height: 0.75rem;
     --bs-spinner-border-width: 0.1em;
-}
-
-.doi {
-    background-image: url('../../../core/assets/images/DOI.svg');
-    background-size: 100% 100%;
-    height: 24px;
-    width: 24px;
 }

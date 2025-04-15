@@ -6,12 +6,12 @@ import { useLs } from 'isimip_data/core/assets/js/hooks/ls'
 
 import { useDatasetsQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
 
+import LoadMore from './LoadMore'
 import Params from './Params'
 import Result from './Result'
 import Selection from './Selection'
-import LoadMore from './LoadMore'
 import Suggestions from './Suggestions'
-
+import Version from './Version'
 
 const Results = ({ params, maxCount, glossary, updateParams }) => {
 
@@ -25,15 +25,18 @@ const Results = ({ params, maxCount, glossary, updateParams }) => {
 
   return (
     <div className="results">
-      <Selection
-        selected={selected}
-        setSelected={setSelected}
+      <Version
         count={count}
         maxCount={maxCount}
         isLoading={isLoading}
+        params={params}
+        updateParams={updateParams}
       />
       {
         !isEmpty(params) && <Params params={params} count={count} updateParams={updateParams} />
+      }
+      {
+        !isEmpty(selected) && <Selection selected={selected} setSelected={setSelected} />
       }
       {
         !isLoading && (count == 0) && <Suggestions params={params} updateParams={updateParams} />

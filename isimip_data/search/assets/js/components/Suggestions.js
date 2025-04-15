@@ -14,18 +14,18 @@ const Suggestions = ({ params, updateParams }) => {
   return suggestions && (
     <div className="card suggestions">
       <div className="card-body">
-        <strong>No results found</strong>
+        <strong>No results found.</strong> Maybe you misspelled your query.
         {
-          !isEmpty(suggestions) && <>
-            <span className="ml-2">Maybe you misspelled your query. Did you mean:</span>
+          !isEmpty(suggestions.filter(s => !isEmpty(s))) && <div>
+            <span className="mt-2 me-2">Did you mean:</span>
             {
               suggestions.map((suggestion, index) => (
-                <button type="button" key={index} className="link ms-2" onClick={() => onClick(suggestion)}>
+                <button type="button" key={index} className="link me-2" onClick={() => onClick(suggestion)}>
                   {suggestion}
                 </button>
               ))
             }
-          </>
+          </div>
         }
       </div>
     </div>

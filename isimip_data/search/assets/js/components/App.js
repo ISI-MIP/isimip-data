@@ -10,7 +10,6 @@ import { useParams } from '../hooks/params'
 
 import Search from './Search'
 import Results from './Results'
-import Version from './Version'
 import Sidebar from './Sidebar'
 
 
@@ -63,10 +62,6 @@ const App = () => {
         />
       </div>
       <div className="col-lg-9">
-        <Version
-          params={params}
-          updateParams={updateParams}
-        />
         <Results
           params={params}
           pageSize={parseInt(settings.METADATA_PAGE_SIZE)}

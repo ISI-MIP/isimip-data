@@ -61,22 +61,14 @@ const Facet = ({ facet, params, glossary, updateParams }) => {
   }
 
   const renderHeader = () => (
-    <div className="card-body" onClick={() => setIsOpen(!isOpen)}>
+    <li className="list-group-item" onClick={() => setIsOpen(!isOpen)}>
       <div className="d-flex gap-1 align-items-center">
         <span className="flex-grow-1">{facet.title}</span>
         {isFetching && !hasNoItems && <Spinner size="xs" />}
         {isChecked && <Icon icon="check" />}
         <Icon icon={isOpen ? 'expand_less' : 'expand_more'} />
       </div>
-    </div>
-  )
-
-  const renderGroup = () => (
-    <ul className="list-group list-group-flush">
-      {
-        items.map((item, itemIndex) => renderItem(item, itemIndex))
-      }
-    </ul>
+    </li>
   )
 
   const renderItem = (item, itemIndex) => {
@@ -120,28 +112,28 @@ const Facet = ({ facet, params, glossary, updateParams }) => {
   }
 
   const renderEmpty = () => (
-    <div className="card-body">
-      <div className="d-flex justify-content-center align-items-center">
+    <li className="list-group-item">
+      <div className="d-flex justify-content-center align-items-center facet-empty">
         <Icon icon="block" label="Empty"/>
       </div>
-    </div>
+    </li>
   )
 
   const renderSpinner = () => (
-    <div className="card-body pt-2 pb-2">
-      <div className="d-flex justify-content-center align-items-center">
+    <li className="list-group-item">
+      <div className="d-flex justify-content-center align-items-center facet-spinner">
         <Spinner size="sm" className="text-secondary" />
       </div>
-    </div>
+    </li>
   )
 
   return (
-    <>
+    <ul className="list-group list-group-flush">
       {renderHeader()}
-      {isOpen && !isLoading && !hasNoItems && renderGroup()}
+      {isOpen && !isLoading && !hasNoItems && items.map((item, itemIndex) => renderItem(item, itemIndex))}
       {isOpen && !isLoading && hasNoItems && renderEmpty()}
       {isOpen && isLoading && renderSpinner()}
-    </>
+    </ul>
   )
 }
 

@@ -1,21 +1,19 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { isEmpty } from 'lodash'
+import classNames from 'classnames'
 
 import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
 
 import Icon from 'isimip_data/core/assets/js/components/Icon'
-import Spinner from 'isimip_data/core/assets/js/components/Spinner'
+import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
 
 import ConfigureDownload from './ConfigureDownload'
 
-import { getSize, handleDownload } from '../utils'
+import { addLineBreaks, getSize, handleDownload } from '../utils'
 
+const Selection = ({ selected, setSelected }) => {
 
-
-const Selection = ({ selected, count, maxCount, isLoading, setSelected }) => {
-
-  const [dropdown, setDropdown] = useState(null)
+  const [open, setOpen] = useState(false)
 
   const size = getSize(selected.reduce((accumulator, dataset) => {
     accumulator += dataset.size
@@ -33,107 +31,112 @@ const Selection = ({ selected, count, maxCount, isLoading, setSelected }) => {
     return files
   }, [])
 
-  const handleToggleDatasets = () => {
-    setDropdown(dropdown ? null : 'datasets')
-  }
-
   const handleReset = () => {
     setSelected([])
-    setDropdown(null)
+    setOpen(false)
   }
 
+  const renderOptions = () => (
+    <>
+      <Tooltip title="Reset selection">
+        <button type="button" className="d-flex align-items-center link me-1"
+          onClick={() => handleReset()}>
+          <Icon icon="close" />
+        </button>
+      </Tooltip>
+
+      <ConfigureDownload
+        title={'Configure the download for this selection, e.g. to only download a ' +
+               'specific country, a lat/lon box or landonly data.'}
+        files={files}
+      />
+
+      <Tooltip title="Download the file list for this selection.">
+        <a className="d-flex align-items-center ms-1"
+           href={`/api/v1/datasets/filelist/?${encodeParams(ids)}`}>
+          <Icon icon="description" />
+        </a>
+      </Tooltip>
+
+      <Tooltip title="Download all files in this selection at once.">
+        <button type="button" className="d-flex align-items-center link ms-1"
+                onClick={() => handleDownload(ids)}>
+          <Icon icon="file_copy" />
+        </button>
+      </Tooltip>
+    </>
+  )
+
   return (
-    <div className="card">
-      <div className="card-body">
-        <div className="d-md-flex">
-          <strong className="d-block me-2 mb-1 mb-md-0">Selection</strong>
-          <div className="d-md-inline mb-1 mb-md-0">
-            You selected {selected.length} {selected.length > 1 ? 'datasets' : 'dataset'} of {size} size.
-          </div>
-          <div className="d-md-inline-block ms-auto mb-1 mb-md-0">
-            {isLoading && <Spinner size="sm" className="text-secondary" />}
-            {
-              !isLoading && count >= 0 && count <= maxCount && (
-                <span>{ count.toLocaleString('en-US') } datasets found.</span>
-              )
-            }
-            {
-              !isLoading && count > maxCount && (
-                <span>More than { maxCount.toLocaleString('en-US') } datasets found.</span>
-              )
-            }
-          </div>
-        </div>
-        {
-          !isEmpty(selected) && (
-            <div className="d-md-flex gap-2 mt-md-1">
-              <button type="button" className="d-flex align-items-center link" onClick={handleToggleDatasets}>
-                {
-                  (dropdown == 'datasets') ? (
-                    <>
-                      Hide selected datasets <Icon icon="expand_less" />
-                    </>
-                  ) : (
-                    <>
-                      Show selected datasets <Icon icon="expand_more" />
-                    </>
-
-                  )
-                }
-              </button>
-
-              <button role="button" className="d-flex align-items-center link me-md-auto" onClick={handleReset}>
-                Reset selection <Icon icon="close" />
-              </button>
-
-              <ConfigureDownload files={files} />
-
-              <a className="d-block mb-1 mb-md-0" href={`/api/v1/datasets/filelist/?${encodeParams(ids)}`}
-                 title="Download the file list for this selection.">
-                Download file list
-              </a>
-
-              <button type="button" className="d-block link" onClick={() => handleDownload(ids)}
-                 title="Download all files in this selection at once.">
-                Download all files
+    <div className="card selection">
+      <ul className="list-group list-group-flush">
+        <li className="list-group-item">
+          <div className="position-relative">
+            <div className="d-none d-sm-flex position-absolute top-0 end-0">
+              <div className="d-flex align-items-center">
+                {renderOptions()}
+              </div>
+            </div>
+            <div className="d-flex align-items-center">
+              <button type="button" className="d-flex align-items-start link" onClick={() => setOpen(!open)}>
+                <div className="selection-toggle">
+                  <Icon className={classNames({'rotate-90': open})} icon="chevron_right" />
+                </div>
+                You selected {selected.length} {selected.length > 1 ? 'datasets' : 'dataset'} of {size} size.
               </button>
             </div>
+            <div className="d-flex justify-content-end align-items-center d-sm-none mt-2">
+              {renderOptions()}
+            </div>
+          </div>
+        </li>
+        {
+          open && (
+            <li className="list-group-item">
+              <table className="table align-top">
+                <thead>
+                  <tr>
+                    <th>Dataset</th>
+                    <th>Size</th>
+                    <th aria-label="Actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {
+                  selected.map(dataset => {
+                    return (
+                      <tr key={dataset.id}>
+                        <td>
+                          {addLineBreaks(dataset.name)}
+                        </td>
+                        <td className="text-nowrap text-end w-0">
+                          {getSize(dataset.size)}
+                        </td>
+                        <td className="text-nowrap text-end w-0">
+                          <div className="d-flex align-items-start">
+                            <Tooltip title="Visit dataset metadata page.">
+                              <a className="d-block" href={dataset.metadata_url} target="_blank" rel="noreferrer">
+                                <Icon className="d-block" icon="exit_to_app" />
+                              </a>
+                            </Tooltip>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })
+                }
+                </tbody>
+              </table>
+            </li>
           )
         }
-      </div>
-      {
-        !isEmpty(selected) && (dropdown == 'datasets') && (
-          <div className="card-body">
-            <table className="table table-sm mb-0">
-              <thead>
-                <tr>
-                  <th className="border-top-0">Dataset name</th>
-                  <th className="border-top-0" style={{width: '15%'}}>Size</th>
-                </tr>
-              </thead>
-              <tbody>
-              {
-                selected.map(dataset => (
-                  <tr key={dataset.id}>
-                    <td><a href={dataset.metadata_url} target="_blank" rel="noreferrer">{dataset.name}</a></td>
-                    <td>{getSize(dataset.size)}</td>
-                  </tr>
-                ))
-              }
-              </tbody>
-            </table>
-          </div>
-        )
-      }
+      </ul>
     </div>
   )
 }
 
 Selection.propTypes = {
   selected: PropTypes.array.isRequired,
-  count: PropTypes.number.isRequired,
-  maxCount: PropTypes.number.isRequired,
-  isLoading: PropTypes.bool.isRequired,
   setSelected: PropTypes.func.isRequired
 }
 

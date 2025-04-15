@@ -29,13 +29,13 @@ const Search = ({ params, updateParams, resetParams }) => {
                   onChange={(event) => setQuery(event.target.value)} value={query} />
             </div>
             <div className="mb-2 mb-md-0 ms-md-2">
-              <button type="button" className="d-flex align-items-center btn btn-outline-primary btn-lg"
+              <button type="button" className="d-flex align-items-center btn btn-outline-primary btn-lg search-button"
                       aria-label="Search" onClick={handleSubmit}>
                 Search <Icon icon="search" size="lg" className="ms-1" />
               </button>
             </div>
             <div className="ms-md-2">
-              <button type="button" className="d-flex align-items-center btn btn-outline-secondary btn-lg"
+              <button type="button" className="d-flex align-items-center btn btn-outline-secondary btn-lg reset-button"
                       aria-label="Reset" onClick={resetParams}>
                 Reset <Icon icon="close" size="lg" className="ms-1" />
               </button>

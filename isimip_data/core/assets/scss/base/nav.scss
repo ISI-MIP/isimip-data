@@ -1,4 +1,4 @@
-nav {
+nav.navbar {
     font-size: 14px;
 
     &.navbar {
@@ -101,6 +101,31 @@ nav {
                     }
                 }
             }
+        }
+    }
+}
+
+nav.nav.nav-underline {
+    row-gap: 0.25rem;
+    column-gap: 1rem;
+
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+
+    button.nav-link {
+        padding-top: 0;
+        font-weight: 600;  // matching a and .link
+
+        color: var(--isimip-color-blue);
+
+        .active {
+            border-bottom-color: var(--isimip-color-blue);
+        }
+
+        &:hover,
+        &:focus {
+            color: var(--isimip-color-dark-blue);
+            border-bottom-color: var(--isimip-color-dark-blue);
         }
     }
 }

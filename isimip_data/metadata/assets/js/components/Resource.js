@@ -5,22 +5,22 @@ import PropTypes from 'prop-types'
 const Resource = ({ resource, all }) => (
   <div className="card mb-2">
     <div className="card-body">
+      <h4 className="d-flex align-items-center mb-2">
+        <a className="d-block" href={resource.resource_url} target="_blank" rel="noreferrer">
+          {resource.title_with_version}
+        </a>
+        {
+          all && (
+            resource.new_version ? (
+              <div className="badge rounded-pill border border-secondary text-secondary ms-2">previous</div>
+            ) : (
+              <div className="badge rounded-pill border border-orange text-orange ms-2">current</div>
+            )
+          )
+        }
+      </h4>
       <div className="row">
         <div className="col-sm-8">
-          <div>
-            <a href={resource.resource_url} target="_blank" rel="noreferrer">
-              {resource.title_with_version}
-            </a>
-            {
-              all && (
-                resource.new_version ? (
-                  <div className="badge rounded-pill border border-secondary text-secondary ms-2">previous</div>
-                ) : (
-                  <div className="badge rounded-pill border border-orange text-orange ms-2">current</div>
-                )
-              )
-            }
-          </div>
           {
             resource.paths.map((path, pathIndex) => (
               <div key={pathIndex}>

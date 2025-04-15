@@ -1,3 +1,5 @@
+@import 'isimip_data/core/assets/scss/breakpoints';
+
 .search {
     margin-top: 2rem;
     min-height: 1400px;
@@ -9,15 +11,38 @@
 
     .card {
         margin-bottom: 0.5rem;
-
-        .card-body,
-        .list-group-item {
-            padding: 0.5rem 1.25rem;
-        }
     }
 
     span.badge {
         cursor: help;
+    }
+
+    .table {
+        margin-bottom: 0;
+
+        th,
+        td {
+            padding: 0.25rem;
+        }
+        th:first-child,
+        td:first-child {
+            padding-left: 0;
+        }
+        th:last-child,
+        td:last-child {
+            padding-left: 0;
+        }
+    }
+
+    .search-button,
+    .reset-button {
+        @media(max-width: $grid-breakpoint-md) {
+            width: 100%;
+        }
+    }
+
+    .version-spinner {
+        height: 1.25rem;
     }
 
     .facets,
@@ -25,7 +50,6 @@
         .card-header,
         .card-body,
         .list-group-item {
-            padding: 0.5rem 1.25rem;
             cursor: pointer;
         }
 
@@ -62,6 +86,11 @@
             border-top: none;
             border-bottom: none;
         }
+
+        .facet-empty,
+        .facet-spinner {
+            height: 1.5em;
+        }
     }
 
     .tree {
@@ -72,35 +101,41 @@
         }
     }
 
+    .selection {
+        .selection-toggle {
+            position: absolute;
+            display: block;
+            left: -1.2rem;
+            height: 1.2rem;
+            width: 1.2rem;
+            z-index: 5;
+            user-select: none;
+        }
+    }
+
     .results {
         .result {
-            h4 {
-                font-size: 1.2rem;
-                font-weight: 600;
-                word-break: break-all;
+            .result-toggle {
+                position: absolute;
+                display: block;
+                left: -1.2rem;
+                height: 1.2rem;
+                width: 1.2rem;
+                z-index: 5;
+                user-select: none;
             }
 
-            .isipedia-logo {
-                height: 1.6rem;
+            .result-select {
+                display: block;
+                margin-top: 0;
+                margin-right: 0.25rem;
+                height: 14px;
+                width: 14px;
             }
 
             .tooltip-resources {
                 .tooltip-inner {
                     font-weight: bold!important;
-                }
-            }
-
-            .dropdown-resources {
-                .dropdown-menu {
-                    max-width: 40rem;
-
-                    .dropdown-item {
-                        white-space: wrap;
-
-                        a {
-                            white-space: nowrap;
-                        }
-                    }
                 }
             }
         }

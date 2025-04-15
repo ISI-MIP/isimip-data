@@ -20,6 +20,7 @@ button.unstyled {
     font-family: inherit;
     font-size: inherit;
     vertical-align: inherit;
+    text-align: left;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -27,7 +28,7 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 
     a {
-        font-weight: inherit;
+        font-weight: 600;
         text-transform: inherit;
     }
 }

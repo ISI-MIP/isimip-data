@@ -6,6 +6,11 @@
     --bs-card-cap-padding-x: var(--bs-card-spacer-x);
     --bs-card-cap-padding-y: var(--bs-card-spacer-y);
 
+    .list-group {
+        --bs-list-group-item-padding-x: var(--bs-card-spacer-x);
+        --bs-list-group-item-padding-y: 0.5rem;
+    }
+
     margin-bottom: 2rem;
 
     font-size: 10pt;
@@ -15,6 +20,10 @@
         .card-body {
             font-size: 12pt;
         }
+    }
+
+    h4 {
+        font-size: 1rem;
     }
 
     h4, p, dl, dd {

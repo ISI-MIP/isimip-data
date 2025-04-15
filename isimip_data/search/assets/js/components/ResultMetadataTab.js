@@ -1,22 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import Icon from 'isimip_data/core/assets/js/components/Icon'
+import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
+
 import { getSize } from '../utils'
 
-
-const ResultAttributes = ({ dataset }) => {
+const ResultMetadataTab = ({ dataset }) => {
 
   const specifiers = dataset.pretty_specifiers
 
   return (
-    <li className="list-group-item">
-      <div>
-        <strong>Path</strong>
+    <div className="position-relative">
+      <div className="position-absolute top-0 end-0">
+        <Tooltip title="Visit dataset metadata page.">
+          <a className="d-block ms-auto" href={dataset.metadata_url} target="_blank" rel="noreferrer">
+            <Icon className="d-block" icon="exit_to_app" />
+          </a>
+        </Tooltip>
       </div>
-      <div>
-        {dataset.paths.map((path, index) => <div key={index}><code>{path}</code></div>)}
-      </div>
-      <hr className="mt-2 mb-2" />
       <div className="row">
         <div className="col-lg-4">
           <strong>ISIMIP ID</strong>
@@ -57,12 +59,19 @@ const ResultAttributes = ({ dataset }) => {
           )
         })
       }
-    </li>
+      <hr className="mt-2 mb-2" />
+      <div>
+        <strong>Path</strong>
+      </div>
+      <div>
+        {dataset.paths.map((path, index) => <div key={index}><code>{path}</code></div>)}
+      </div>
+    </div>
   )
 }
 
-ResultAttributes.propTypes = {
-  dataset: PropTypes.object.isRequired,
+ResultMetadataTab.propTypes = {
+  dataset: PropTypes.object.isRequired
 }
 
-export default ResultAttributes
+export default ResultMetadataTab
