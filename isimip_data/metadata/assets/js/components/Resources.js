@@ -30,9 +30,9 @@ const Resources = () => {
   )).sort((a, b) => {
     switch (values.order) {
       case 'newest':
-        return b.publication_date.localeCompare(a.publication_date) || a.doi.localeCompare(b.doi)
+        return (b.publication_date || '').localeCompare(a.publication_date || '') || a.doi.localeCompare(b.doi)
       case 'oldest':
-        return a.publication_date.localeCompare(b.publication_date) || a.doi.localeCompare(b.doi)
+        return (a.publication_date || '').localeCompare(b.publication_date || '') || a.doi.localeCompare(b.doi)
       case 'title':
         return a.title.localeCompare(b.title) || a.doi.localeCompare(b.doi)
       case 'paths':
