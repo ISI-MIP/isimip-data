@@ -33,7 +33,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.simulation_round && specifiers.simulation_round.map((simulation_round, index) =>
           <Tooltip key={index} title={getTooltip('simulation_round', simulation_round)}>
-            <span className="badge rounded-pill border border-orange text-orange">
+            <span className="badge badge-simulation_round rounded-pill border">
               {simulation_round}
             </span>
           </Tooltip>
@@ -42,7 +42,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.product && specifiers.product.map((product, index) =>
           <Tooltip key={index} title={getTooltip('product', product)}>
-            <span className="badge rounded-pill border border-secondary text-secondary">
+            <span className="badge badge-product rounded-pill border">
               {product}
             </span>
           </Tooltip>
@@ -51,7 +51,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.category && specifiers.category.map((category, index) =>
           <Tooltip key={index} title={getTooltip('category', category)}>
-            <span className="badge rounded-pill border border-success text-success">
+            <span className="badge badge-category rounded-pill border">
               {category}
             </span>
           </Tooltip>
@@ -60,7 +60,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.sector && specifiers.sector.map((sector, index) =>
           <Tooltip key={index} title={getTooltip('sector', sector)}>
-            <span className="badge rounded-pill border border-success text-success">
+            <span className="badge badge-sector rounded-pill border">
               {sector}
             </span>
           </Tooltip>
@@ -69,7 +69,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.publication && specifiers.publication.map((publication, index) =>
           <Tooltip key={index} title={getTooltip('publication', publication)}>
-            <span className="badge rounded-pill border border-success text-success">
+            <span className="badge badge-publication rounded-pill border">
               {publication}
             </span>
           </Tooltip>
@@ -78,7 +78,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.climate_forcing && specifiers.climate_forcing.map((climate_forcing, index) =>
           <Tooltip key={index} title={getTooltip('climate_forcing', climate_forcing)}>
-            <span className="badge rounded-pill border border-info text-info">
+            <span className="badge badge-climate_forcing rounded-pill border">
               {renderTitle('climate_forcing', climate_forcing)}
             </span>
           </Tooltip>
@@ -87,7 +87,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.period && specifiers.period.map((period, index) =>
           <Tooltip key={index} title={getTooltip('period', period)}>
-            <span className="badge rounded-pill border border-dark text-dark">
+            <span className="badge badge-period rounded-pill border">
               {period}
             </span>
           </Tooltip>
@@ -96,7 +96,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.model && specifiers.model.map((model, index) =>
           <Tooltip key={index} title={getTooltip('model', model)}>
-            <span className="badge rounded-pill border border-primary text-primary">
+            <span className="badge badge-model rounded-pill border">
               {renderTitle('model', model)}
             </span>
           </Tooltip>
@@ -105,7 +105,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.variable && specifiers.variable.map((variable, index) =>
           <Tooltip key={index} title={getTooltip('variable', variable)}>
-            <span className="badge rounded-pill border border-dark text-dark">{variable}</span>
+            <span className="badge badge-variable rounded-pill border">{variable}</span>
           </Tooltip>
         )
       }

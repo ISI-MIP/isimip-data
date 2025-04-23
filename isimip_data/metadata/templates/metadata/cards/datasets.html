@@ -4,76 +4,23 @@
     <ul class="list-group list-group-flush">
         {% for dataset in datasets %}
         <li class="list-group-item">
-            <div class="d-flex gap-1 align-items-center">
+            <div class="d-flex gap-1 align-items-center mb-1">
                 <div class="me-auto">
                     <a href="{% url 'dataset' dataset.id %}" target="_blank">
                         {{ dataset.name }}
                     </a>
-                    {% if dataset == current_version %}
-                    <span class="ms-2 me-2 badge rounded-pill border border-secondary text-secondary">this version</span>
-                    {% endif %}
                 </div>
-                <span class="me-2">
+
+                {% if dataset == current_version %}
+                <span class="badge rounded-pill border border-secondary text-secondary me-2">this version</span>
+                {% endif %}
+                <span>
                     {{ dataset.size|filesizeformat }}
                 </span>
-                {% for simulation_round in dataset.merged_specifiers.simulation_round %}
-                <span class="badge rounded-pill border border-orange text-orange"
-                    data-toggle="tooltip" data-placement="bottom" title="Simulation round">
-                    {{ simulation_round }}
-                </span>
-                {% endfor %}
-                {% for product in  dataset.merged_specifiers.product %}
-                <span class="badge rounded-pill border border-secondary text-secondary"
-                    data-toggle="tooltip" data-placement="bottom" title="Product">
-                    {{ product }}
-                </span>
-                {% endfor %}
-                {% for category in dataset.merged_specifiers.category %}
-                <span class="badge rounded-pill border border-success text-success"
-                    data-toggle="tooltip" data-placement="bottom" title="Category">
-                    {{ category }}
-                </span>
-                {% endfor %}
-                {% for sector in dataset.merged_specifiers.sector %}
-                <span class="badge rounded-pill border border-success text-success"
-                    data-toggle="tooltip" data-placement="bottom" title="Sector">
-                    {{ sector }}
-                </span>
-                {% endfor %}
-                {% for model in dataset.merged_specifiers.model %}
-                <span class="badge rounded-pill border border-primary text-primary"
-                    data-toggle="tooltip" data-placement="bottom" title="Impact model">
-                    {{ model }}
-                </span>
-                {% endfor %}
-                {% for climate_forcing in dataset.merged_specifiers.climate_forcing %}
-                <span class="badge rounded-pill border border-info text-info"
-                    data-toggle="tooltip" data-placement="bottom" title="Climate forcing">
-                    {{ climate_forcing }}
-                </span>
-                {% endfor %}
-                {% for period in dataset.merged_specifiers.period %}
-                <span class="badge rounded-pill border border-dark text-dark"
-                    data-toggle="tooltip" data-placement="bottom" title="Period">
-                    {{ period }}
-                </span>
-                {% endfor %}
-                {% if not dataset.public %}
-                <span class="badge rounded-pill border border-danger text-danger"
-                    data-toggle="tooltip" data-placement="bottom" title="This dataset is archived and currently not available for download. Please contact support if you need this version of the dataset.">
-                    Archived
-                </span>
-                {% endif %}
-                {% if dataset.public and dataset.restricted %}
-                <span class="badge rounded-pill border border-danger text-danger"
-                    data-toggle="tooltip" data-placement="bottom" title="Access to this dataset is restricted. Please contact support if you need this version of the dataset.">
-                    Restricted
-                </span>
-                {% endif %}
-                <span class="badge text-bg-dark"
-                    data-toggle="tooltip" data-placement="bottom" title="Version">
-                    {{ dataset.version }}
-                </span>
+            </div>
+
+            <div class="d-flex gap-1 align-items-center">
+                {% include 'metadata/snippets/badges.html' with obj=dataset %}
             </div>
         </li>
         {% endfor %}

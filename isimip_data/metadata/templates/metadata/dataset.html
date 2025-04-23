@@ -14,6 +14,9 @@
     <header class="wide">
         <h1>{% trans 'Dataset' %}</h1>
         <h2>{{ dataset.name }}</h2>
+        <div class="mt-2">
+            {% include 'metadata/snippets/badges.html' with obj=dataset %}
+        </div>
     </header>
 
     {% if public_version %}

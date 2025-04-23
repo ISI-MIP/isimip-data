@@ -4,7 +4,7 @@ RIGHTS = {
         'rights_uri': 'https://creativecommons.org/publicdomain/zero/1.0/',
         'short': 'CC0 1.0',
         'image': 'images/cc/cc0.png',
-        'color': 'info'
+        'color': 'primary'
     },
     'BY': {
         'rights': 'Attribution 4.0 International',

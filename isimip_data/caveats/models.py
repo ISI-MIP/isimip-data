@@ -66,15 +66,15 @@ class Caveat(models.Model):
     }
 
     SEVERITY_COLOR = {
-        SEVERITY_LOW: 'info',
+        SEVERITY_LOW: 'success',
         SEVERITY_HIGH: 'danger'
     }
 
     STATUS_COLOR = {
         STATUS_NEW: 'primary',
-        STATUS_ON_HOLD: 'info',
+        STATUS_ON_HOLD: 'secondary',
         STATUS_RESOLVED: 'success',
-        STATUS_WONT_FIX: 'secondary'
+        STATUS_WONT_FIX: 'dark'
     }
 
     objects = ModerationManager()

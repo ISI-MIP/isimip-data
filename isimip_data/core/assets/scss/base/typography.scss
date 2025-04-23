@@ -58,36 +58,8 @@ h4 {
     // font-weight: 600;
 }
 
-.text-orange {
-    color: var(--isimip-color-orange) !important;
-}
-
-.text-bg-orange {
-    color: var(--isimip-color-black);
-    background-color: var(--isimip-color-orange);
-}
-
-.text-bg-dark-orange {
-    color: var(--isimip-color-white);
-    background-color: var(--isimip-color-dark-orange);
-}
-
-.border-orange {
-    border-color: var(--isimip-color-orange) !important;
-}
-
-.border-gray {
-    border-color: var(--isimip-color-gray) !important;
-}
-
 .table {
     tr:last-child > td {
         border-bottom: none;
     }
-}
-
-.badge {
-    --bs-badge-padding-x: 0.4em;
-    --bs-badge-padding-y: 0.2em;
-    --bs-badge-border-radius: 0.2rem;
 }

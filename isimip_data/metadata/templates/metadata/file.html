@@ -14,6 +14,9 @@
     <header class="wide">
         <h1>{% trans 'File' %}</h1>
         <h2>{{ file.name }}</h2>
+        <div class="mt-2">
+            {% include 'metadata/snippets/badges.html' with obj=file %}
+        </div>
     </header>
 
     {% if public_version %}

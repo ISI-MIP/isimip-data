@@ -4,6 +4,7 @@ $FontPathOpenSans: ".~npm-font-open-sans/fonts/";
 $material-symbols-font-path: '~material-symbols/';
 @import '~material-symbols';
 
+@import 'base/badges';
 @import 'base/cards';
 @import 'base/dropdown';
 @import 'base/footer';
