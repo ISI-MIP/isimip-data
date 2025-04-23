@@ -17,3 +17,9 @@ def json(data):
 @stringfilter
 def split_br(string):
     return [paragraph for paragraph in string.split('<br>') if paragraph]
+
+
+@register.filter(is_safe=True)
+@stringfilter
+def add_line_breaks(string):
+    return mark_safe('<wbr />_'.join(string.split('_')))

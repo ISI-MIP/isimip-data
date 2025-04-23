@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load i18n %}
 {% load static %}
+{% load core_tags %}
 {% load metadata_tags %}
 
 {% block style %}
@@ -13,7 +14,7 @@
 <div class="container">
     <header class="wide">
         <h1>{% trans 'File' %}</h1>
-        <h2>{{ file.name }}</h2>
+        <h2>{{ file.name|add_line_breaks }}</h2>
         <div class="mt-2">
             {% include 'metadata/snippets/badges.html' with obj=file %}
         </div>

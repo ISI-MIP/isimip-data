@@ -1,25 +1,28 @@
 {% load i18n %}
+{% load core_tags %}
 
 <div class="card">
     <ul class="list-group list-group-flush">
         {% for dataset in datasets %}
         <li class="list-group-item">
-            <div class="d-flex gap-1 align-items-center mb-1">
-                <div class="me-auto">
-                    <a href="{% url 'dataset' dataset.id %}" target="_blank">
-                        {{ dataset.name }}
-                    </a>
-                </div>
+            <div class="d-md-flex gap-2 align-items-center mb-1">
+                <a class="d-block" href="{% url 'dataset' dataset.id %}" target="_blank">
+                    {{ dataset.name|add_line_breaks }}
+                </a>
+
+                <div class="d-none d-md-block me-auto"></div>
 
                 {% if dataset == current_version %}
-                <span class="badge rounded-pill border border-secondary text-secondary me-2">this version</span>
+                <div class="badge rounded-pill border border-secondary text-secondary mb-1 mb-md-0">
+                    this version
+                </div>
                 {% endif %}
-                <span>
+                <div>
                     {{ dataset.size|filesizeformat }}
-                </span>
+                </div>
             </div>
 
-            <div class="d-flex gap-1 align-items-center">
+            <div class="d-md-flex gap-1 align-items-center">
                 {% include 'metadata/snippets/badges.html' with obj=dataset %}
             </div>
         </li>
