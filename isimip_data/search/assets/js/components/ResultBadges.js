@@ -125,9 +125,10 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         dataset.rights && (
           <Tooltip placement="bottom" title={<>This dataset is published under the <i>{dataset.rights.rights}</i>.</>}>
-            <span className={`badge text-bg-${dataset.rights.color || 'light'}`}>
+            <a className={`badge text-bg-${dataset.rights.color || 'light'}`}
+               href={dataset.rights.rights_uri} target="_blank" rel="noreferrer">
               {dataset.rights.short}
-            </span>
+            </a>
           </Tooltip>
         )
       }
