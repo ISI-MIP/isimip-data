@@ -3,7 +3,10 @@
     --bs-badge-padding-y: 0.2em;
     --bs-badge-border-radius: 0.2rem;
 
-    cursor: help;
+    &:not(a) {
+        cursor: help;
+    }
+
     background-color: var(--isimip-color-white);
 
     &.badge-simulation_round {
