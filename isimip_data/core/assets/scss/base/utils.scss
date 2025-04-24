@@ -1,3 +1,7 @@
+.w-0 {
+    width: 0;
+}
+
 .rotate-90 {
     transform: rotate(90deg);
 }
@@ -7,6 +11,10 @@
 .rotate-270 {
     transform: rotate(90deg);
 }
-.w-0 {
-    width: 0;
+
+.cursor-help {
+    cursor: help !important;
+}
+.cursor-pointer {
+    cursor: pointer !important;
 }

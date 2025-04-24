@@ -33,7 +33,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.simulation_round && specifiers.simulation_round.map((simulation_round, index) =>
           <Tooltip key={index} title={getTooltip('simulation_round', simulation_round)}>
-            <span className="badge badge-simulation_round rounded-pill border">
+            <span className="badge badge-simulation_round rounded-pill">
               {simulation_round}
             </span>
           </Tooltip>
@@ -42,7 +42,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.product && specifiers.product.map((product, index) =>
           <Tooltip key={index} title={getTooltip('product', product)}>
-            <span className="badge badge-product rounded-pill border">
+            <span className="badge badge-product">
               {product}
             </span>
           </Tooltip>
@@ -51,7 +51,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.category && specifiers.category.map((category, index) =>
           <Tooltip key={index} title={getTooltip('category', category)}>
-            <span className="badge badge-category rounded-pill border">
+            <span className="badge badge-category">
               {category}
             </span>
           </Tooltip>
@@ -60,7 +60,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.sector && specifiers.sector.map((sector, index) =>
           <Tooltip key={index} title={getTooltip('sector', sector)}>
-            <span className="badge badge-sector rounded-pill border">
+            <span className="badge badge-sector">
               {sector}
             </span>
           </Tooltip>
@@ -69,7 +69,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.publication && specifiers.publication.map((publication, index) =>
           <Tooltip key={index} title={getTooltip('publication', publication)}>
-            <span className="badge badge-publication rounded-pill border">
+            <span className="badge badge-publication">
               {publication}
             </span>
           </Tooltip>
@@ -78,7 +78,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.climate_forcing && specifiers.climate_forcing.map((climate_forcing, index) =>
           <Tooltip key={index} title={getTooltip('climate_forcing', climate_forcing)}>
-            <span className="badge badge-climate_forcing rounded-pill border">
+            <span className="badge badge-climate_forcing">
               {renderTitle('climate_forcing', climate_forcing)}
             </span>
           </Tooltip>
@@ -87,7 +87,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.period && specifiers.period.map((period, index) =>
           <Tooltip key={index} title={getTooltip('period', period)}>
-            <span className="badge badge-period rounded-pill border">
+            <span className="badge badge-period">
               {period}
             </span>
           </Tooltip>
@@ -96,7 +96,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.model && specifiers.model.map((model, index) =>
           <Tooltip key={index} title={getTooltip('model', model)}>
-            <span className="badge badge-model rounded-pill border">
+            <span className="badge badge-model">
               {renderTitle('model', model)}
             </span>
           </Tooltip>
@@ -105,7 +105,7 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         specifiers.variable && specifiers.variable.map((variable, index) =>
           <Tooltip key={index} title={getTooltip('variable', variable)}>
-            <span className="badge badge-variable rounded-pill border">{variable}</span>
+            <span className="badge badge-variable">{variable}</span>
           </Tooltip>
         )
       }
@@ -135,20 +135,20 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         !dataset.public && (
           <Tooltip placement="bottom" title="This dataset is archived and currently not available for download. Please contact support if you need this version of the dataset.">
-            <span className="badge text-bg-danger">Archived</span>
+            <span className="badge text-bg-danger cursor-help">Archived</span>
           </Tooltip>
         )
       }
       {
         dataset.public && dataset.restricted && (
           <Tooltip placement="bottom" title="Access to this dataset is restricted. Please contact support if you need this version of the dataset.">
-            <span className="badge text-bg-danger">Restricted</span>
+            <span className="badge text-bg-danger cursor-help">Restricted</span>
           </Tooltip>
         )
       }
 
       <Tooltip placement="bottom" title="The version for this dataset (YYYYMMDD).">
-        <span className="badge text-bg-dark">{dataset.version}</span>
+        <span className="badge badge-version text-bg-dark cursor-help">{dataset.version}</span>
       </Tooltip>
     </React.Fragment>
   )

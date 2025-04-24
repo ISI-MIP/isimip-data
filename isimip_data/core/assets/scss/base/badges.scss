@@ -3,11 +3,21 @@
     --bs-badge-padding-y: 0.2em;
     --bs-badge-border-radius: 0.2rem;
 
-    &:not(a) {
+    &.badge-simulation_round,
+    &.badge-product,
+    &.badge-category,
+    &.badge-sector,
+    &.badge-publication,
+    &.badge-climate_forcing,
+    &.badge-period,
+    &.badge-model,
+    &.badge-variable {
         cursor: help;
+        border-width: var(--bs-border-width);
+        border-style: var(--bs-border-style);
+        border-radius: var(--bs-border-radius-pill);
+        background-color: var(--isimip-color-white);
     }
-
-    background-color: var(--isimip-color-white);
 
     &.badge-simulation_round {
         color: var(--isimip-color-orange) !important;
