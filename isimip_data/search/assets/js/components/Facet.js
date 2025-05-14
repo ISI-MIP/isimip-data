@@ -128,12 +128,20 @@ const Facet = ({ facet, params, glossary, updateParams }) => {
   )
 
   return (
-    <ul className="list-group list-group-flush">
-      {renderHeader()}
-      {isOpen && !isLoading && !hasNoItems && items.map((item, itemIndex) => renderItem(item, itemIndex))}
-      {isOpen && !isLoading && hasNoItems && renderEmpty()}
-      {isOpen && isLoading && renderSpinner()}
-    </ul>
+    <>
+      <ul className="list-group list-group-flush facet-header">
+        {renderHeader()}
+      </ul>
+      {
+        isOpen && (
+          <ul className="list-group list-group-flush">
+            {!isLoading && !hasNoItems && items.map((item, itemIndex) => renderItem(item, itemIndex))}
+            {!isLoading && hasNoItems && renderEmpty()}
+            {isLoading && renderSpinner()}
+          </ul>
+        )
+      }
+    </>
   )
 }
 
