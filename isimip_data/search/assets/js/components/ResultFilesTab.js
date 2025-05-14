@@ -4,9 +4,17 @@ import PropTypes from 'prop-types'
 import Icon from 'isimip_data/core/assets/js/components/Icon'
 import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
 
+import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
+
 import { addLineBreaks, getSize } from '../utils'
 
 const ResultFilesTab = ({ dataset }) => {
+
+  const handleDownload = (event, file) => {
+    event.preventDefault()
+    DatasetApi.downloadFile(file)
+  }
+
   return (
     <table className="table align-top">
       <thead>
@@ -35,7 +43,8 @@ const ResultFilesTab = ({ dataset }) => {
                     </a>
                   </Tooltip>
                   <Tooltip title="Download file">
-                    <a className="d-block" href={file.file_url} target="_blank" rel="noreferrer">
+                    <a className="d-block" href={file.file_url} target="_blank" rel="noreferrer"
+                       onClick={() => handleDownload(event, file)}>
                       <Icon className="d-block" icon="download" />
                     </a>
                   </Tooltip>
