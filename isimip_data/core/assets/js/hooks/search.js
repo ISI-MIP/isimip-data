@@ -2,6 +2,11 @@ import { useMemo } from 'react'
 import MiniSearch from 'minisearch'
 import { isEmpty } from 'lodash'
 
+const searchOptions = {
+  prefix: true,
+  combineWith: 'AND'
+}
+
 export const useSearch = (items, options) => {
 
   const index = useMemo(() => {
@@ -11,7 +16,7 @@ export const useSearch = (items, options) => {
   }, [items])
 
   const search = (string) => isEmpty(string) ? items : (
-    index.search(string, { prefix: true }).map((result) => items.find(item => item.id == result.id))
+    index.search(string, searchOptions).map((result) => items.find(item => item.id == result.id))
   )
 
   return { index, search }
