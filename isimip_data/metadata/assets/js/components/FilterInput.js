@@ -7,7 +7,7 @@ import Icon from 'isimip_data/core/assets/js/components/Icon'
 
 const FilterInput = ({ values, setValues }) => {
 
-  const [input, setInput] = useState(values.filterString || '')
+  const [input, setInput] = useState(values.filter || '')
 
   const debouncedSetValuesFilter = useDebouncedCallback((values) => setValues(values), 500)
 
