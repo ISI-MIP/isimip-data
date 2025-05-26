@@ -13,6 +13,7 @@ const Tooltip = ({ children, ...props }) => {
         title: renderToString(title),
         html: true,
         placement: 'bottom',
+        delay: 200,
         ...otherProps
       })
       return () => t.dispose()

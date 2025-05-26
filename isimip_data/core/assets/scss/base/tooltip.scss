@@ -1,4 +1,7 @@
 .tooltip {
+    --bs-tooltip-border-radius: 0;
+    --bs-tooltip-opacity: 0.8;
+
     .tooltip-inner {
         font-size: 10pt;
         text-align: left;
