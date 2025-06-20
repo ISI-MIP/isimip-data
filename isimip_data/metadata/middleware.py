@@ -12,12 +12,11 @@ from .models import Dataset, Resource
 class MetadataCacheMiddleware(CacheMiddleware):
 
     # paths where it only needs to be checked if the cache needs to be updated
-    update_patterns = (
-        re.compile(r'^/$'),
-    )
+    update_patterns = ()
 
     # paths which are actually cached (completely)
     path_patterns = (
+        re.compile(r'^/$'),
         re.compile(r'^/api/v1/datasets/'),
         re.compile(r'^/api/v1/files/')
     )
