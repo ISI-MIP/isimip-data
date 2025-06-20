@@ -5,6 +5,7 @@ django-debug-toolbar
 pre-commit
 pre-commit-update
 ruff
+rich
 
 pytest~=7.4.0
 pytest-cov~=4.1.0
