@@ -15,8 +15,9 @@ const Sidebar = ({ params, glossary, updateParams }) => {
     <div className="card">
       <ul className="list-group list-group-flush">
         <li className="list-group-item">
-          <div className="d-flex flex-wrap column-gap-3">
-            Sidebar View:
+          <div className="d-flex flex-wrap column-gap-2">
+            <span className="d-xxl-inline d-xl-none d-lg-none d-inline">Sidebar View:</span>
+            <span className="d-xxl-none d-xl-inline d-lg-inline d-none">Sidebar:</span>
             <div className="form-check form-check-inline me-0">
               <input className="form-check-input" type="radio" id="tree-radio"
                      onChange={() => setSidebar('tree')} checked={sidebar == 'tree'} />
