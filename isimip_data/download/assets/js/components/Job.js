@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 
 import { useJobQuery } from '../hooks/queries'
 
+import Spinner from 'isimip_data/core/assets/js/components/Spinner'
+
 const Job = ({ jobUrl }) => {
   const { data: job } = useJobQuery(jobUrl)
 
@@ -13,16 +15,18 @@ const Job = ({ jobUrl }) => {
         <div className="card-body">
           {
             job.status == 'queued' &&
-            <p className="text-success">
-              <span className="material-symbols-rounded symbols-spin">progress_activity</span>
-              The download has been queued on the server.
+            <p className="d-flex gap-2 align-items-center text-success">
+              <Spinner size="sm" />
+              <span>The download has been queued on the server.</span>
             </p>
           }
           {
             job.status == 'started' &&
-            <p className="text-success">
-              <span className="material-symbols-rounded symbols-spin">progress_activity</span>
-              The files are created on the server ({job.meta.created_files} of {job.meta.total_files} created).
+            <p className="d-flex gap-2 align-items-center text-success">
+              <Spinner size="sm" />
+              <span>
+                The files are created on the server ({job.meta.created_files} of {job.meta.total_files} created).
+              </span>
             </p>
           }
           {
