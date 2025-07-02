@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from isimip_data.annotations.models import Download, Figure
 from isimip_data.annotations.utils import query_datasets, query_resources
-from isimip_data.core.utils import get_full_name, get_quote_text
+from isimip_data.core.utils import get_date_display, get_full_name, get_quote_text
 from isimip_data.metadata.utils import prettify_specifiers
 
 from .managers import ModerationManager
@@ -49,6 +49,33 @@ class Caveat(models.Model):
         (MESSAGE_DO_NOT_USE, _('Affected datasets should not be used until this issue is resolved.')),
         (MESSAGE_REPLACED, _('Please use the replaced datasets for new simulations or research.'))
     )
+
+    CATEGORY_SYMBOL = {
+        CATEGORY_NOTE: 'info',
+        CATEGORY_ISSUE: 'warning'
+    }
+
+    CATEGORY_COLOR = {
+        CATEGORY_NOTE: 'light',
+        CATEGORY_ISSUE: 'dark'
+    }
+
+    SEVERITY_LEVEL = {
+        SEVERITY_LOW: 1,
+        SEVERITY_HIGH: 2
+    }
+
+    SEVERITY_COLOR = {
+        SEVERITY_LOW: 'success',
+        SEVERITY_HIGH: 'danger'
+    }
+
+    STATUS_COLOR = {
+        STATUS_NEW: 'primary',
+        STATUS_ON_HOLD: 'secondary',
+        STATUS_RESOLVED: 'success',
+        STATUS_WONT_FIX: 'dark'
+    }
 
     objects = ModerationManager()
 
@@ -105,42 +132,31 @@ class Caveat(models.Model):
     def get_creator_display(self):
         return get_full_name(self.creator)
 
+    def get_created_display(self):
+        return get_date_display(self.created)
+
+    def get_updated_display(self):
+        return get_date_display(self.created)
+
     @property
     def category_symbol(self):
-        return {
-            self.CATEGORY_NOTE: 'info',
-            self.CATEGORY_ISSUE: 'warning'
-        }.get(self.category)
+        return self.CATEGORY_SYMBOL.get(self.category)
 
     @property
     def category_color(self):
-        return {
-            self.CATEGORY_NOTE: 'light',
-            self.CATEGORY_ISSUE: 'dark'
-        }.get(self.category)
+        return self.CATEGORY_COLOR.get(self.category)
 
     @property
     def severity_level(self):
-        return {
-            self.SEVERITY_LOW: 1,
-            self.SEVERITY_HIGH: 2
-        }.get(self.severity, 0)
+        return self.SEVERITY_LEVEL.get(self.severity, 0)
 
     @property
     def severity_color(self):
-        return {
-            self.SEVERITY_LOW: 'info',
-            self.SEVERITY_HIGH: 'danger'
-        }.get(self.severity, 'default')
+        return self.SEVERITY_COLOR.get(self.severity, 'default')
 
     @property
     def status_color(self):
-        return {
-            self.STATUS_NEW: 'primary',
-            self.STATUS_ON_HOLD: 'info',
-            self.STATUS_RESOLVED: 'success',
-            self.STATUS_WONT_FIX: 'secondary'
-        }.get(self.status)
+        return self.STATUS_COLOR.get(self.status)
 
     @property
     def message_color(self):
@@ -185,6 +201,7 @@ class Caveat(models.Model):
     def get_quote(self, level):
         head = f'On {self.created.strftime("%B %d, %Y")}, {self.get_creator_display()} reported:'
         return get_quote_text(head, self.description, level)
+
 
 class Comment(models.Model):
 

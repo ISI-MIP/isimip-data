@@ -1,3 +1,7 @@
+import { isEmpty } from 'lodash'
+
+import { ValidationError, downloadFile } from 'isimip_data/core/assets/js/utils/api'
+
 class DownloadApi {
 
   static fetchCountries() {
@@ -11,29 +15,52 @@ class DownloadApi {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then(response => response.json())
+    }).then(response => response.json()).then(job => {
+      if (job.file_url) {
+        downloadFile(job.file_url)
+      }
+      return job
+    })
   }
 
-  static submitJob(url, data) {
-    return fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    }).then(response => response.json())
-  }
+  static submitJob(url, data, uploads) {
+    let promise
 
-  static downloadFile(file_url) {
-    const iframe = document.createElement('iframe')
-    iframe.style.display = 'none'
-    iframe.src = file_url
-    iframe.onload = function() {
-        this.parentNode.removeChild(this)
+    if (isEmpty(uploads)) {
+      promise = fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+    } else {
+      const formData = new FormData()
+
+      // append data as a JSON blob
+      formData.append('data', new Blob([JSON.stringify(data)]), {
+        type: "application/json"
+      })
+
+      // append each file
+      uploads.forEach(file => formData.append(file.name, file))
+
+      promise = fetch(url, {
+        method: 'POST',
+        body: formData
+      })
     }
-    document.body.appendChild(iframe)
-  }
 
+    return promise.then(response => {
+      if (response.ok) {
+        return response.json()
+      } else {
+        return response.json().then(data => {
+          throw new ValidationError(response.statusText, response.status, data.errors)
+        })
+      }
+    })
+  }
 }
 
 export default DownloadApi

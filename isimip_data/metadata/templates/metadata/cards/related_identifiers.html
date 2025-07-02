@@ -4,7 +4,7 @@
 <div class="card">
     <ul class="list-group list-group-flush">
         {% for related_identifier in related_identifiers %}
-        <li class="list-group-item related-identifier">
+        <li class="list-group-item">
             {% citation related_identifier.citation related_identifier.relatedIdentifier related_identifier.relatedIdentifierType %}
         </li>
         {% endfor %}

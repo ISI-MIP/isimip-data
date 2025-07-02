@@ -1,0 +1,77 @@
+@import '../breakpoints';
+
+footer {
+    background-color: var(--isimip-color-dark-gray);
+    color: var(--isimip-color-white);
+    overflow: auto;
+
+    a {
+        color: var(--isimip-color-white);
+
+        &:focus, &:hover {
+            color: var(--isimip-color-blue);
+        }
+    }
+
+    nav {
+        margin-top: 25px;
+        margin-bottom: 15px;
+
+        ul.nav {
+            justify-content: center;
+
+            li.nav-item {
+                a.nav-link {
+                    background-color: transparent;
+                    font-size: 16px;
+
+                    color: var(--isimip-color-white);
+
+                    &:focus, &:hover {
+                        color: var(--isimip-color-blue);
+                    }
+
+                    @media(min-width:992px) {
+                        padding: 10px 35px 10px 35px;
+                    }
+                }
+
+                &.active {
+                    a {
+                        color: var(--isimip-color-light-blue);
+
+                        &:focus, &:hover {
+                            background-color: transparent;
+                            color: var(--isimip-color-blue);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    hr {
+        // box-sizing: content-box;
+        // height: 0;
+        // overflow: ;overflow: visible;
+
+        margin: 15px 15px 25px 15px;
+        // border-width: 1;
+        border-color: var(--isimip-color-gray);
+        opacity: 1;
+    }
+
+    .logos {
+        font-size: 12px;
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+        @media(min-width: $grid-breakpoint-xs) {
+            margin-bottom: 15px;
+        }
+        @media(min-width: $grid-breakpoint-sm) {
+            margin-bottom: 30px;
+        }
+    }
+}

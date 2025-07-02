@@ -1,31 +1,32 @@
 {% load i18n %}
 
 <div class="card">
-    <div class="card-body">
-        <dl class="row">
-            <div class="col-sm-12">
-                <div class="mb-2"><strong>{% trans 'Path' %}</strong></div>
-                <div>
-                    {% for path in obj.paths %}
-                    <code>{{ path }}</code>
-                    {% endfor %}
-                </div>
-            <hr class="mt-3 mb-3" />
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <div class="mb-2"><strong>{% trans 'Path' %}</strong></div>
+            <div>
+                {% for path in obj.paths %}
+                <code>{{ path }}</code>
+                {% endfor %}
             </div>
-            <dt class="col-sm-4">{% trans 'ISIMIP ID' %}</dt>
-            <dd class="col-sm-8"><code>{{ obj.id }}</code></dd>
-            <dt class="col-sm-4">{% trans 'Size' %}</dt>
-            <dd class="col-sm-8">{{ obj.size|filesizeformat }}</dd>
-            {% if obj.checksum %}
-            <dt class="col-sm-4">{% trans 'Checksum' %} ({{ file.checksum_type }})</dt>
-            <dd class="col-sm-8">{{ file.checksum }}</dd>
-            {% endif %}
-            <dt class="col-sm-4">{% trans 'Version' %}</dt>
-            <dd class="col-sm-8">
-                <span class="badge badge-dark">
-                    {{ obj.version }}
-                </span>
-            </dd>
-        </dl>
-    </div>
+        </li>
+        <li class="list-group-item">
+            <dl class="row">
+                <dt class="col-sm-4">{% trans 'ISIMIP ID' %}</dt>
+                <dd class="col-sm-8"><code>{{ obj.id }}</code></dd>
+                <dt class="col-sm-4">{% trans 'Size' %}</dt>
+                <dd class="col-sm-8">{{ obj.size|filesizeformat }}</dd>
+                {% if obj.checksum %}
+                <dt class="col-sm-4">{% trans 'Checksum' %} ({{ file.checksum_type }})</dt>
+                <dd class="col-sm-8">{{ file.checksum }}</dd>
+                {% endif %}
+                <dt class="col-sm-4">{% trans 'Version' %}</dt>
+                <dd class="col-sm-8">
+                    <span class="badge text-bg-dark">
+                        {{ obj.version }}
+                    </span>
+                </dd>
+            </dl>
+        </li>
+    </ul>
 </div>

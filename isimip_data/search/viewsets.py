@@ -1,10 +1,12 @@
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from django.conf import settings
 
-from .models import Facet
+from rest_framework.mixins import ListModelMixin
+from rest_framework.viewsets import GenericViewSet
+
 from .serializers import FacetSerializer
 
 
-class FacetViewSet(ReadOnlyModelViewSet):
+class FacetViewSet(ListModelMixin, GenericViewSet):
 
     serializer_class = FacetSerializer
-    queryset = Facet.objects.all()
+    queryset = settings.SEARCH_FACETS

@@ -67,6 +67,9 @@ class AnnotationAdmin(admin.ModelAdmin):
         })
     )
 
+    class Media:
+        css = {'all': ('admin/css/specifier-widget.css',)}
+
     def affected_datasets(self, instance):
         return format_affected_datasets(instance.datasets)
 

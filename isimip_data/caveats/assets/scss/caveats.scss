@@ -1,0 +1,15 @@
+.caveats {
+    .caveat {
+        .card-body {
+            > :first-child {
+                .badge {
+                    --bs-badge-font-size: 1.25em;
+                }
+            }
+        }
+    }
+
+    .dropdown-menu {
+        --bs-dropdown-min-width: 0;
+    }
+}

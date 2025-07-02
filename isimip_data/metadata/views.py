@@ -5,7 +5,7 @@ from uuid import UUID
 from django.conf import settings
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect, render, reverse
+from django.shortcuts import Http404, get_object_or_404, redirect, render, reverse
 
 from datacite import schema43
 
@@ -34,6 +34,8 @@ def metadata(request):
         file = File.objects.using('metadata').filter(Q(id=uuid) | Q(path=query) | Q(checksum=query)).first()
         if file:
             return redirect('file', file.id)
+
+        raise Http404
 
     return render(request, 'metadata/metadata.html', {
         'title': 'Metadata',

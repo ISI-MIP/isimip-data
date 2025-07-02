@@ -1,17 +1,21 @@
 import 'bootstrap'
 
-import React from "react"
-import ReactDOM from "react-dom"
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import App from "./components/App.js"
 
-const appElement = document.getElementById('app')
+const queryClient = new QueryClient()
 
-if (appElement !== null) {
-  if (appElement.dataset.url) {
-    ReactDOM.render(<App url={appElement.dataset.url} files={[]} />, appElement)
-  } else {
-    const files = JSON.parse(document.getElementById('files').textContent)
-    ReactDOM.render(<App url={null} files={files}/>, appElement)
-  }
-}
+const appElement = document.getElementById('app')
+const filesElement = document.getElementById('files')
+
+const jobUrl = appElement.dataset.jobUrl
+const files = filesElement && JSON.parse(filesElement.textContent)
+
+createRoot(appElement).render(
+  <QueryClientProvider client={queryClient}>
+    <App jobUrl={jobUrl} files={files} />
+  </QueryClientProvider>
+)

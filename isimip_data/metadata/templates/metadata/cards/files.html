@@ -1,44 +1,35 @@
 {% load i18n %}
+{% load core_tags %}
 
 <div class="card">
     <ul class="list-group list-group-flush">
         {% for file in files %}
         <li class="list-group-item">
-            <div class="float-right">
-                <span class="mr-3">
-                    {{ file.size|filesizeformat }}
-                </span>
-
-                {% if file.public and not current_version %}
-                <a href="{{ file_base_url }}{{ file.path }}" target="_blank">
-                    Download file
+            <div class="d-md-flex gap-1 align-items-center">
+                <a class="d-block" href="{% url 'file' file.id %}" target="_blank">
+                    {{ file.name|add_line_breaks }}
                 </a>
-                {% endif %}
 
-                {% if not file.public %}
-                <span class="badge badge-danger"
-                    data-toggle="tooltip" data-placement="bottom" title="This dataset is archived and currently not available for download. Please contact support if you need this version of the dataset.">
-                    Archived
-                </span>
-                {% endif %}
+                <div class="d-none d-md-block me-auto"></div>
 
-                {% if current_version %}
-                <span class="badge badge-dark"
-                    data-toggle="tooltip" data-placement="bottom" title="Version">
-                    {{ file.version }}
-                </span>
+                {% if file == current_file %}
+                <div class="badge border border-secondary rounded-pill text-secondary mb-1 mb-md-0">
+                    this file
+                </div>
                 {% endif %}
+                {% if file == current_version %}
+                <div class="badge border border-secondary rounded-pill text-secondary mb-1 mb-md-0">
+                    this version
+                </div>
+                {% endif %}
+                <div>
+                    {{ file.size|filesizeformat }}
+                </div>
             </div>
 
-            <a href="{% url 'file' file.id %}" target="_blank">
-                {{ file.name }}
-            </a>
-            {% if file == current_file %}
-            <span class="mr-3 badge badge-light">this file</span>
-            {% endif %}
-            {% if file == current_version %}
-            <span class="mr-3 badge badge-light">this version</span>
-            {% endif %}
+            <div class="d-md-flex flex-wrap gap-1 align-items-center mt-1">
+                {% include 'metadata/snippets/badges.html' with obj=file %}
+            </div>
         </li>
         {% endfor %}
     </ul>

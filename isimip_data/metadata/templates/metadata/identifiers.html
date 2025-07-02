@@ -17,19 +17,21 @@
     {% for identifier, rows in identifiers %}
     <div class="card identifiers">
         <div class="card-header">
-            {{ identifier }}
+            <strong>{{ identifier }}</strong>
         </div>
         <div class="card-body">
-            <ul class="list-inline mb-0">
+            <div class="d-flex flex-wrap row-gap-1 column-gap-2">
             {% for specifier, count in rows %}
-            <li class="list-inline-item">
-                {{ specifier }}
-                <div class="badge badge-secondary badge-pill">
+            {% if count > 0 %}
+            <div class="d-flex gap-2 align-items-center border border-gray rounded ps-2 pe-2">
+                <strong>{{ specifier }}</strong>
+                <div class="badge rounded-pill text-bg-secondary">
                     {{ count }}
                 </div>
-            </li>
+            </div>
+            {% endif %}
             {% endfor %}
-            </ul>
+            </div>
         </div>
     </div>
     {% endfor %}

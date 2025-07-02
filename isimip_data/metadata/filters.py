@@ -1,7 +1,7 @@
 import logging
 
 from django.contrib.postgres.search import SearchQuery
-from django.core.exceptions import FieldError
+from django.core.exceptions import FieldError, ValidationError
 from django.db.models import Q
 
 from rest_framework.filters import BaseFilterBackend
@@ -20,7 +20,24 @@ class IdFilterBackend(BaseFilterBackend):
 
         ids = request.GET.getlist('id')
         if ids:
-            queryset = queryset.filter(id__in=ids)
+            try:
+                queryset = queryset.filter(id__in=ids)
+            except ValidationError:
+                pass
+
+        return queryset
+
+
+class DatasetFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
+        dataset_ids = request.GET.getlist('dataset')
+        print(request.GET)
+        if dataset_ids:
+            queryset = queryset.filter(dataset_id__in=dataset_ids)
 
         return queryset
 
@@ -60,7 +77,7 @@ class SearchFilterBackend(BaseFilterBackend):
         if view.detail:
             return queryset
 
-        # this is the compicated part, we use full text search here
+        # this is the complicated part, we use full text search here
         # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/search/
         # and http://rachbelaid.com/postgres-full-text-search-is-good-enough/
         query = request.GET.get('query')
@@ -146,5 +163,21 @@ class TreeFilterBackend(BaseFilterBackend):
                     q |= Q(tree_path__startswith=tree) | Q(links__tree_path__startswith=tree)
 
             queryset = queryset.filter(q)
+
+        return queryset
+
+
+class ChecksumFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
+        checksum = request.GET.get('checksum')
+        if checksum:
+            try:
+                queryset = queryset.filter(checksum=checksum)
+            except ValidationError:
+                pass
 
         return queryset

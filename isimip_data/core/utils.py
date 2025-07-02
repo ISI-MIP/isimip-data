@@ -1,6 +1,8 @@
 import textwrap
 
 from django.conf import settings
+from django.template.defaultfilters import date
+from django.template.loader import get_template
 
 
 def trailing_slash(string):
@@ -24,6 +26,15 @@ def get_file_api_url(request):
     url = settings.PROXY_FILES_API_URL if via_proxy(request) else settings.FILES_API_URL
     return trailing_slash(url)
 
+def get_download_operations(request):
+    return [
+        {
+            key: get_template(value).render(request=request)
+            if key == 'template' else value
+            for key, value in operation.items()
+        }
+        for operation in settings.DOWNLOAD_OPERATIONS
+    ]
 
 def get_full_name(user):
     if user.first_name and user.last_name:
@@ -42,3 +53,6 @@ def get_quote_text(head, text, level, add_newline=False):
         quote += f'\r\n{text_indent}'
 
     return quote
+
+def get_date_display(value):
+    return date(value, settings.DATETIME_FORMAT)

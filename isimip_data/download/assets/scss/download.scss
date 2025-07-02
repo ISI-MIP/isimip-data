@@ -1,37 +1,3 @@
-@import 'isimip_data/core/assets/scss/colors';
-@import 'isimip_data/core/assets/scss/base';
-
-.download-row {
-    min-height: 46px;
-}
-
-.card {
-    p {
-        margin-bottom: 0.5rem;
-    }
-    .card-header {
-        background-color: white;
-        padding: 0.5rem 1.25rem;
-    }
-}
-
-form .form-check {
-    margin-bottom: 0.5rem;
-
-    &:last-child {
-        margin-bottom: 0;
-    }
-
-    label.text-muted {
-        font-weight: normal;
-    }
-}
-
-.symbols-spin {
-    font-size: 24px;
-    margin: -1px 6px -1px 0;
-}
-
 .range {
     position: relative;
     padding-top: 10px;
@@ -59,7 +25,7 @@ form .form-check {
 
     /* For Chrome browsers */
     .thumb::-webkit-slider-thumb {
-        background-color: $color-primary;
+        background-color: var(--bs-primary);
         border: none;
         border-radius: 50%;
         box-shadow: 0 0 1px 1px #ced4da;
@@ -73,7 +39,7 @@ form .form-check {
 
     /* For Firefox browsers */
     .thumb::-moz-range-thumb {
-        background-color: #f1f5f7;
+        background-color: var(--bs-primary);
         border: none;
         border-radius: 50%;
         box-shadow: 0 0 1px 1px #ced4da;
@@ -109,5 +75,17 @@ form .form-check {
                 position: absolute;
             }
         }
+    }
+}
+
+.operation {
+    p {
+        margin-bottom: 0.5rem;
+    }
+
+    .close-operation {
+        position: absolute;
+        top: 6px;
+        right: 6px;
     }
 }

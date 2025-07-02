@@ -1,25 +1,25 @@
-@import 'colors';
+$FontPathOpenSans: ".~npm-font-open-sans/fonts/";
+@import "~npm-font-open-sans/open-sans";
 
-// match bootstap3's behavior
-$container-max-widths: (
-  sm: 540px,
-  md: 750px,
-  lg: 970px,
-  xl: 1170px
-);
+$material-symbols-font-path: '~material-symbols/';
+@import '~material-symbols';
 
-@import '~bootstrap/scss/bootstrap';
-
-@import 'caveats';
-@import 'fonts';
-@import 'footer';
-@import 'home';
-@import 'layout';
-@import 'messages';
-@import 'nav';
-@import 'page';
-@import 'style';
-@import 'symbols';
+@import 'base/badges';
+@import 'base/cards';
+@import 'base/dropdown';
+@import 'base/footer';
+@import 'base/forms';
+@import 'base/header';
+@import 'base/home';
+@import 'base/identifiers';
+@import 'base/layout';
+@import 'base/messages';
+@import 'base/nav';
+@import 'base/symbols';
+@import 'base/tooltip';
+@import 'base/typography';
+@import 'base/utils';
+@import 'base/variables';
 
 main {
     background-image: url('../../../core/assets/images/mountain-range.jpg');

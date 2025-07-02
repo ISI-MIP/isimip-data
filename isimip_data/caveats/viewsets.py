@@ -1,14 +1,15 @@
 from rest_framework.decorators import action
+from rest_framework.mixins import ListModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet
 
 from isimip_data.core.utils import get_file_base_url
 from isimip_data.metadata.models import Dataset, File
 
 from .models import Caveat
-from .serializers import CaveatIndexSerializer, CaveatSerializer
+from .serializers import CaveatChoicesSerializer, CaveatIndexSerializer, CaveatSerializer
 
 
 class CaveatViewSet(ReadOnlyModelViewSet):
@@ -69,3 +70,45 @@ class CaveatViewSet(ReadOnlyModelViewSet):
         }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
         response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.txt'
         return response
+
+
+class CategoryViewSet(ListModelMixin, GenericViewSet):
+
+    serializer_class = CaveatChoicesSerializer
+
+    def get_queryset(self):
+        return [
+            {
+                'value': category,
+                'display': category_display,
+                'color': Caveat.CATEGORY_COLOR.get(category)
+            } for category, category_display in Caveat.CATEGORY_CHOICES
+        ]
+
+
+class SeverityViewSet(ListModelMixin, GenericViewSet):
+
+    serializer_class = CaveatChoicesSerializer
+
+    def get_queryset(self):
+        return [
+            {
+                'value': severity,
+                'display': severity_display,
+                'color': Caveat.SEVERITY_COLOR.get(severity)
+            } for severity, severity_display in Caveat.SEVERITY_CHOICES
+        ]
+
+
+class StatusViewSet(ListModelMixin, GenericViewSet):
+
+    serializer_class = CaveatChoicesSerializer
+
+    def get_queryset(self):
+        return [
+            {
+                'value': status,
+                'display': status_display,
+                'color': Caveat.STATUS_COLOR.get(status),
+            } for status, status_display in Caveat.STATUS_CHOICES
+        ]

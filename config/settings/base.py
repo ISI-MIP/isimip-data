@@ -8,7 +8,6 @@ SITE_ID = 1
 
 INSTALLED_APPS = [
     # apps
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -21,6 +20,7 @@ INSTALLED_APPS = [
     'isimip_data.annotations',
     'isimip_data.caveats',
     'isimip_data.core',
+    'isimip_data.core.admin.AdminConfig',
     'isimip_data.download',
     'isimip_data.home',
     'isimip_data.metadata',
@@ -29,9 +29,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_cleanup',
-    'django_extensions',
-    'django_filters',
-    'adminsortable2'
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
@@ -92,6 +90,8 @@ TIME_ZONE = 'Europe/Berlin'
 USE_I18N = True
 
 USE_TZ = True
+
+DATETIME_FORMAT = 'N j, Y, G:i'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static_root/'
@@ -159,7 +159,7 @@ LOG_PATH = False
 SEARCH_SIMILARITY = 0.2
 SEARCH_SIMILARITY_LIMIT = 3
 
-METADATA_PAGE_SIZE = 10
+METADATA_PAGE_SIZE = 20
 METADATA_MAX_PAGE_SIZE = 1000
 METADATA_RESOURCE_MAX_DATASETS = 100
 METADATA_GLOSSARY_KEYS = ['title', 'description', 'warning', 'long_name', 'units', 'urls']
@@ -189,7 +189,7 @@ NAVIGATION = [
 ]
 
 FILES_BASE_URL = 'https://files.isimip.org'
-FILES_API_URL = 'https://files.isimip.org/api/v1'
+FILES_API_URL = 'https://files.isimip.org/api/v2'
 
 CAVEATS_REPLY_TO = (
     'ISIMIP data <isimip-data@pik-potsdam.de>',
@@ -212,82 +212,320 @@ PROTOCOL_LOCATIONS = [
     'https://protocol2.isimip.org'
 ]
 
-DOWNLOAD = {
-    'cutout': {
-        'help': 'You can cutout a specific bounding box given by its south, north, west,'
-                ' and east border. This is done on the server using the <code>ncks</code>'
-                ' command which is part of the <a href="http://nco.sourceforge.net"'
-                ' target="_blank">NCO toolkit</a>.'
+DOWNLOAD_OPERATIONS_HELP = '''
+Please select one of the operations using the button below. You can select multiple operations which are
+applied subsequently. If you are interested in a time series of a variable, please select the corresponding operation
+for corresponding area or point and then check the boxes for averaging and creating a CSV.
+'''
+
+DOWNLOAD_OPERATIONS = [
+    {
+        'operation': 'select_bbox',
+        'title': 'Select rectangular box',
+        'label': '**Select a rectangular box** using `cdo`.',
+        'template': 'download/operations/select_bbox.html',
+        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'bbox': [-180,180,-23.43651,23.43651],
+            'compute_mean': False,
+            'output_csv': False,
+        },
+        'next': [
+            'mask_mask',
+            'mask_shape',
+        ]
     },
-    'cutout_bbox': {
-        'label': 'Cut out bounding box',
-        'help': 'The files are cut out using the bounding box given by you (e.g. -23.43651,'
-                ' 23.43651, -180, 180) and the command: <code>ncks -O -h -d lat,SOUTH,NORTH'
-                ' -d lon,WEST,EAST IFILE OFILE</code>.',
+    {
+        'operation': 'select_point',
+        'title': 'Select point',
+        'label': '**Select a point** using `cdo`.',
+        'template': 'download/operations/select_point.html',
+        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'point': [13.064332, 52.38051],
+            'output_csv': False
+        }
+    },
+    {
+        'operation': 'mask_bbox',
+        'title': 'Mask by bounding box',
+        'label': '**Mask a rectangular box** using `cdo`,'
+                 ' keeping the grid and setting everything outside to `missing_value`.',
+        'template': 'download/operations/mask_bbox.html',
+        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'bbox': [-180,180,-23.43651,23.43651],
+            'compute_mean': False,
+            'output_csv': False
+        },
+        'next': [
+            'mask_country',
+            'mask_landonly',
+            'mask_mask',
+            'mask_shape'
+        ]
+    },
+    {
+        'operation': 'mask_country',
+        'title': 'Mask by country',
+        'label': '**Mask a country** using `cdo` and the ISIMIP countrymask,'
+                 ' keeping the grid and setting everything outside to `missing_value`.',
+        'template': 'download/operations/mask_country.html',
+        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'country': 'aus',
+            'compute_mean': False,
+            'output_csv': False
+        },
+        'next': [
+            'select_bbox',
+            'mask_bbox',
+            'mask_country',
+            'mask_landonly',
+            'mask_mask',
+            'mask_shape',
+        ]
+    },
+    {
+        'operation': 'mask_landonly',
+        'title': 'Mask only land data',
+        'label': '**Mask only the land data** using `cdo` and the ISIMIP landseamask,'
+                 ' keeping the grid and setting everything outside to `missing_value`.',
+        'template': 'download/operations/mask_landonly.html',
+        'resolutions': ['30arcmin'],
+        'next': [
+            'select_bbox',
+            'mask_bbox',
+            'mask_country',
+            'mask_landonly',
+            'mask_mask',
+            'mask_shape'
+        ]
+    },
+    {
+        'operation': 'mask_mask',
+        'title': 'Mask using a NetCDF custom mask',
+        'label': '**Mask using a custom NetCDF mask** using `cdo`,'
+                 ' keeping the grid and setting everything outside to `missing_value`.',
+        'template': 'download/operations/mask_mask.html',
+        'accept': {
+            'application/x-hdf': ['.nc', '.nc4']
+        },
         'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
-                        '15arcmin', '30arcmin', '60arcmin', '120arcmin']
+                        '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'mask': None,
+            'var': ''
+        },
+        'next': [
+            'select_bbox',
+            'mask_bbox',
+            'mask_country',
+            'mask_landonly',
+            'mask_mask',
+            'mask_shape'
+        ]
     },
-    'mask': {
-        'help': 'You can also mask all data outside of a certain country, bounding box,'
-                ' or by applying a land-sea-mask. The compression of the NetCDF file will'
-                ' then reduce the file size considerably. The resulting file will still'
-                ' have the same dimensions and metadata as the original. The extraction is'
-                ' done on the server using the <a href="https://code.mpimet.mpg.de/projects/cdo/"'
-                ' target="_blank">CDO toolkit</a>.'
+    {
+        'operation': 'mask_shape',
+        'title': 'Mask using a custom Shapefile or GeoJSON',
+        'label': '**Mask using a custom Shapefile or GeoJSON** using `cdo`,'
+                 ' keeping the grid and setting everything outside to `missing_value`.',
+        'template': 'download/operations/mask_shape.html',
+        'accept': {
+            'application/json': ['.json', '.geojson'],
+            'application/zip': ['.zip']
+        },
+        'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
+                        '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'shape': None,
+            'layer': 0
+        },
+        'next': [
+            'select_bbox',
+            'mask_bbox',
+            'mask_country',
+            'mask_landonly',
+            'mask_mask',
+            'mask_shape'
+        ]
     },
-    'mask_country': {
-        'label': 'Mask by country',
-        'help': 'The files are masked using the countrymask of the ISIPEDIA project'
-                ' (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc"'
-                ' target="_blank">available on GitHub</a>) and the command: <code>cdo -f nc4c -z zip_5'
-                ' -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK OFILE</code>.',
-        'resolutions': ['30arcmin']
+    {
+        'operation': 'cutout_bbox',
+        'title': 'Cut out bounding box',
+        'label': '**Cut out a rectangular box** using `ncks` (preferred for high-resolution datasets).',
+        'template': 'download/operations/cutout_bbox.html',
+        'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
+                        '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'bbox': [-180,180,-23.43651,23.43651],
+            'compute_mean': False,
+            'output_csv': False
+        },
+        'next': [
+            'mask_mask',
+            'mask_shape'
+        ]
     },
-    'mask_bbox': {
-        'label': 'Mask by bounding box',
-        'help': 'The files are masked using the bounding box given by you (e.g. -23.43651,'
-                ' 23.43651, -180, 180) and the command:  <code>cdo -f nc4c -z zip_5'
-                ' -masklonlatbox,WEST,EAST,SOUTH,NORTH IFILE OFILE</code>.',
-        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin']
-    },
-    'mask_landonly': {
-        'label': 'Mask only land data',
-        'help': 'The files are masked using the ISIMIP3 landseamask without Antarctica'
-                ' (<a href="https://doi.org/10.48364/ISIMIP.822294" target="_blank">'
-                'https://data.isimip.org/10.48364/ISIMIP.822294</a>) and the command:'
-                ' <code>cdo -f nc4c -z zip_5 -ifthen IFILE -selname,mask LANDSEAMASK OFILE</code>.',
-        'resolutions': ['30arcmin']
-    },
-    'select': {
-        'help': 'If you are interested in a time series for a certain region, you can extract'
-                ' the data for one point, for a country, or for a bounding box. The values are'
-                ' averaged over the selected area and CSV files containing dates and values is'
-                ' returned. The extraction is done on the server using the'
-                ' <a href="https://code.mpimet.mpg.de/projects/cdo/" target="_blank">CDO toolkit</a>.'
-    },
-    'select_country': {
-        'label': 'Select by country',
-        'help': 'The time series is extracted using the countrymask of the ISIPEDIA project'
-                ' (<a href="https://github.com/ISI-MIP/isipedia-countries/blob/master/countrymasks.nc"'
-                ' target="_blank">available on GitHub</a>) and the command: <code>cdo -s outputtab,date,value,nohead'
-                ' -fldmean -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK</code>.',
-        'resolutions': ['30arcmin']
-    },
-    'select_bbox': {
-        'label': 'Select by bounding box',
-        'help': 'The time series is extracted using the bounding box given by you (e.g. -23.43651,'
-                ' 23.43651, -180, 180) and the command: <code>cdo -s outputtab,date,value,nohead'
-                ' -fldmean -sellonlatbox,WEST,EAST,SOUTH,NORTH IFILE</code>.',
-        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin']
-    },
-    'select_point': {
-        'label': 'Select by point',
-        'help': 'The time series is extracted by calculating the grid index for the point'
-                ' given by you (e.g. 52.39, 13.06) and the command:'
-                ' <code>cdo -s outputtab,date,value,nohead -selindexbox,IX,IX,IY,IY IFILE</code>.',
-        'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin']
+    {
+        'operation': 'cutout_point',
+        'title': 'Cut out point',
+        'label': '**Cut out a point** using `ncks` (preferred for high-resolution datasets).',
+        'template': 'download/operations/cutout_point.html',
+        'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
+                        '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
+        'initial': {
+            'point': [13.064332, 52.38051],
+            'output_csv': False
+        }
     }
+]
+
+DOWNLOAD_ERRORS = {
+    'bbox': ['Please enter a valid bounding box.'],
+    'point': ['Please enter a valid point.'],
+    'country': ['Please select a country.'],
+    'mask': ['Please select a valid NetCDF file.'],
+    'shape': ['Please select a valid Shapefile or GeoJSON file.'],
+    'var': ['Please enter a valid name for a variable.'],
+    'layer': ['Please enter a layer.']
 }
+
+SEARCH_FACETS = [
+    [
+        {
+            'identifier': 'simulation_round',
+            'title': 'ISIMIP simulation round'
+        },
+        {
+            'identifier': 'product',
+            'title': 'Data product'
+        },
+        {
+            'identifier': 'period',
+            'title': 'Simulation period'
+        },
+        {
+            'identifier': 'sector',
+            'title': 'Sector'
+        }
+    ],
+    [
+        {
+            'identifier': 'climate_scenario',
+            'title': 'Climate related forcing'
+        },
+        {
+            'identifier': 'climate_forcing',
+            'title': 'Climate forcing dataset'
+        },
+        {
+            'identifier': 'soc_scenario',
+            'title': 'Direct human forcing'
+        },
+        {
+            'identifier': 'sens_forcing',
+            'title': 'Sensitivity experiment'
+        },
+    ],
+    [
+        {
+            'identifier': 'model',
+            'title': 'Impact model'
+        },
+        {
+            'identifier': 'variable',
+            'title': 'Output variable'
+        },
+        {
+            'identifier': 'pft',
+            'title': 'PFT'
+        },
+        {
+            'identifier': 'crop',
+            'title': 'Crop'
+        },
+        {
+            'identifier': 'irrigation',
+            'title': 'Irrigation'
+        },
+        {
+            'identifier': 'forest_stand',
+            'title': 'Forest stand'
+        },
+        {
+            'identifier': 'lake_site',
+            'title': 'Lake site'
+        },
+        {
+            'identifier': 'ocean_region',
+            'title': 'Ocean region'
+        },
+        {
+            'identifier': 'pool',
+            'title': 'Soil organic carbon pools'
+        },
+        {
+            'identifier': 'river',
+            'title': 'River'
+        },
+        {
+            'identifier': 'river_basin',
+            'title': 'River basin'
+        },
+        {
+            'identifier': 'species',
+            'title': 'Tree species'
+        }
+    ],
+    [
+        {
+            'identifier': 'frequency',
+            'title': 'Temporal resolution'
+        },
+        {
+            'identifier': 'resolution',
+            'title': 'Spatial resolution'
+        }
+    ],
+    [
+        {
+            'identifier': 'category',
+            'title': 'Input category'
+        },
+        {
+            'identifier': 'subcategory',
+            'title': 'Input subcategory '
+        },
+        {
+            'identifier': 'climate_variable',
+            'title': 'Climate variable'
+        },
+        {
+            'identifier': 'climate_dataset',
+            'title': 'Climate dataset'
+        },
+        {
+            'identifier': 'soc_variable',
+            'title': 'Direct human forcing variable'
+        },
+        {
+            'identifier': 'soc_dataset',
+            'title': 'Direct human forcing dataset'
+        },
+        {
+            'identifier': 'geo_dataset',
+            'title': 'Geographic dataset'
+        }
+    ],
+    [
+        {
+            'identifier': 'publication',
+            'title': 'Publication'
+        }
+    ]
+]
 
 RESTRICTED_MESSAGES = {}
 RESTRICTED_DEFAULT_MESSAGE = 'Please contact <a href="mailto:info@isimip.org">info@isimip.org</a>' \

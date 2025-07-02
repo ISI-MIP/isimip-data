@@ -1,90 +1,50 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import ls from 'local-storage'
+import { get, intersection, isEmpty, isNil } from 'lodash'
 
-import OverlayTrigger from "react-bootstrap/OverlayTrigger"
-import Tooltip from "react-bootstrap/Tooltip"
+import Icon from 'isimip_data/core/assets/js/components/Icon'
+import Spinner from 'isimip_data/core/assets/js/components/Spinner'
+import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
 
-import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
+import { useLs } from 'isimip_data/core/assets/js/hooks/ls'
+import { useDatasetsHistogramQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
 
-import { getValueOrNull } from 'isimip_data/core/assets/js/utils/object'
 
+const Facet = ({ facet, params, glossary, updateParams }) => {
 
-class Facet extends Component {
+  const [isOpen, setIsOpen] = useLs(`isimip.search.facet.${facet.identifier}`, false)
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      isOpen: false,
-      isLoading: false,
-      items: []
-    }
-    this.handleChange = this.handleChange.bind(this)
-    this.toggleFacet = this.toggleFacet.bind(this)
-    this.abortController = new AbortController()
-  }
+  const { data: items, isLoading, isFetching } = useDatasetsHistogramQuery(facet.identifier, params, isOpen)
 
-  componentDidMount() {
-    const { facet } = this.props
-    const isOpen = ls.get(`facet.${facet.identifier}.isOpen`)
+  const checked = params[facet.identifier] || []
+  const isChecked = checked.length > 0
+  const hasNoItems = isNil(items) || isEmpty(items) || (items.length == 1 && isNil(items[0][0]))
 
-    if (isOpen) {
-      this.toggleFacet()
-    }
-  }
-
-  componentWillUnmount(){
-    this.abortController.abort()
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.state.isOpen && this.props.params !== prevProps.params) {
-      this.fetch()
-    }
-  }
-
-  fetch() {
-    const { params, facet } = this.props
-    const { isOpen } = this.state
-
-    if (isOpen) {
-      this.setState({ isLoading: true })
-      DatasetApi.fetchDatasetsHistogram(facet.identifier, params, {
-        signal: this.abortController.signal
-      }).then(items => {
-        this.setState({
-          isLoading: false,
-          items: items
-        })
+  const handleChange = (event, specifier) => {
+    if (event.type == 'change' || isEmpty(
+      // do not react to click events on the checkbox or the label, those are handled by the change event
+      intersection(event.target.classList, ['form-check-input', 'form-check-label']))
+    ) {
+      updateParams({
+        [facet.identifier]: (
+          (params[facet.identifier] || []).includes(specifier) ? params[facet.identifier].filter(s => s != specifier)
+                                                               : [...(params[facet.identifier] || []), specifier]
+        )
       })
     }
   }
 
-  handleChange(key, e) {
-    const { facet, onChange } = this.props
-    onChange(facet.identifier, key, e.target.checked)
-  }
+  const renderTooltip = (properties) => (
+    (properties && (properties.long_name || properties.description || properties.warning)) && (
+      <span>
+        {properties.long_name}
+        {properties.description && (<p>{properties.description}</p>)}
+        {properties.warning && (<p>Warning: {properties.warning}</p>)}
+      </span>
+    )
+  )
 
-  toggleFacet() {
-    const { facet } = this.props
-    const { isOpen } = this.state
-    ls.set(`facet.${facet.identifier}.isOpen`, !isOpen)
-    this.setState({ isOpen: !isOpen }, this.fetch)
-  }
-
-  renderTooltip(properties) {
-    if (properties && (properties.long_name || properties.description || properties.warning)) {
-      return (
-        <Tooltip>
-          {properties.long_name}
-          {properties.description && (<p>{properties.description}</p>)}
-          {properties.warning && (<p>Warning: {properties.warning}</p>)}
-        </Tooltip>
-      )
-    }
-  }
-
-  filterUrls(urls) {
+  const filterUrls = (urls) => {
     let filteredUrls = []
     if (urls) {
       Object.keys(urls).forEach(key => {
@@ -92,7 +52,7 @@ class Facet extends Component {
           filteredUrls.push(key)
         }
       })
-      if (filteredUrls.length == 0) {
+      if (isEmpty(filteredUrls)) {
         filteredUrls.push(Object.keys(urls).sort().at(-1))
       }
     }
@@ -100,112 +60,96 @@ class Facet extends Component {
     return filteredUrls
   }
 
-  renderListItem(identifier, specifier, title, isChecked, urls, count) {
-    const id = 'facet-' + identifier + '-' + specifier
-    const filteredUrls = this.filterUrls(urls)
+  const renderHeader = () => (
+    <li className="list-group-item" onClick={() => setIsOpen(!isOpen)}>
+      <div className="d-flex gap-1 align-items-center">
+        <span className="flex-grow-1">{facet.title}</span>
+        {isFetching && !hasNoItems && <Spinner size="xs" />}
+        {isChecked && <Icon icon="check" />}
+        <Icon icon={isOpen ? 'expand_less' : 'expand_more'} />
+      </div>
+    </li>
+  )
 
-    return (
-      <li key={specifier} className="list-group-item facet-item d-flex align-items-center">
-        <label className="form-check-label" htmlFor={id}>
-          <input type="checkbox" className="form-check-input" id={id}
-                 checked={isChecked} onChange={e => this.handleChange(specifier, e)} />
-            {title || specifier}
-        </label>
-        {filteredUrls.map((key, index) => {
-          return (
-            <a key={index} className={'ml-1'.concat(index == 0 ? ' ml-auto' : '')} href={urls[key]}
-               target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}>
-              <OverlayTrigger placement="bottom" overlay={<Tooltip>More information is available in the {key} protocol.</Tooltip>}>
-                <span className="material-symbols-rounded">quick_reference_all</span>
-              </OverlayTrigger>
-            </a>
-          )
-        })}
-        <span className={'badge badge-secondary badge-pill '.concat(filteredUrls.length > 0 ? 'ml-1' : 'ml-auto')}>
-          {count}
-        </span>
+  const renderItem = (item, itemIndex) => {
+    const [specifier, count] = item
+    const properties = get(glossary, [facet.identifier, specifier], {})
+    const title = properties ? properties.title : null
+    const urls = properties ? properties.urls : null
+    const id = `${facet.identifier}-${specifier}`
+
+    return !isEmpty(specifier) && (
+      <li key={itemIndex} className="list-group-item" onClick={(event) => handleChange(event, specifier)}>
+        <Tooltip placement="right" title={renderTooltip(properties)}>
+          <div className="d-flex gap-1 align-items-center">
+            <input className="form-check-input me-1 mt-0" type="checkbox" id={id} checked={checked.includes(specifier)}
+                   onChange={(event) => handleChange(event, specifier)} />
+
+            <label className="form-check-label flex-grow-1" htmlFor={id}>
+             {title || specifier}
+            </label>
+
+            {
+              filterUrls(urls).map((key, index) => {
+                return (
+                  <Tooltip key={specifier} title={<>More information is available in the {specifier} protocol.</>}>
+                    <a key={index} href={urls[key]}
+                      target="_blank" rel="noreferrer" onClick={event => event.stopPropagation()}>
+                      <Icon className="d-block" icon="quick_reference_all" size="sm" />
+                    </a>
+                  </Tooltip>
+                )
+              })
+            }
+
+            <div className="badge rounded-pill text-bg-secondary">
+             {count}
+            </div>
+          </div>
+        </Tooltip>
       </li>
     )
   }
 
-  renderListGroup(identifier, items, checked) {
-    const { glossary } = this.props
+  const renderEmpty = () => (
+    <li className="list-group-item">
+      <div className="d-flex justify-content-center align-items-center facet-empty">
+        <Icon icon="block" label="Empty"/>
+      </div>
+    </li>
+  )
 
-    return (
-      <ul className="list-group list-group-flush">
-        {
-          items.map((item) => {
-            const [specifier, count] = item
-            const properties = getValueOrNull(glossary, identifier, specifier)
-            const title = properties ? properties.title : null
-            const urls = properties ? properties.urls : null
+  const renderSpinner = () => (
+    <li className="list-group-item">
+      <div className="d-flex justify-content-center align-items-center facet-spinner">
+        <Spinner size="sm" className="text-secondary" />
+      </div>
+    </li>
+  )
 
-            if (specifier !== null) {
-              const isChecked = (checked.indexOf(specifier) > -1)
-              const tooltip = this.renderTooltip(properties)
-
-              if (tooltip) {
-                return (
-                  <OverlayTrigger key={specifier} placement="right" overlay={tooltip}>
-                    {this.renderListItem(identifier, specifier, title, isChecked, urls, count)}
-                  </OverlayTrigger>
-                )
-              } else {
-                return this.renderListItem(identifier, specifier, title, isChecked, urls, count)
-              }
-            }
-          })
-        }
+  return (
+    <>
+      <ul className="list-group list-group-flush facet-header">
+        {renderHeader()}
       </ul>
-    )
-  }
-
-  renderEmpty() {
-    return (
-      <div className="card-body text-center">
-        <span className="material-symbols-rounded">block</span>
-      </div>
-    )
-  }
-
-  renderSpinner() {
-    return (
-      <div className="card-body text-center">
-        <span className="material-symbols-rounded symbols-spin">progress_activity</span>
-      </div>
-    )
-  }
-
-  render() {
-    const { params, facet } = this.props
-    const { isOpen, isLoading, items } = this.state
-    const checked = params[facet.identifier] || []
-    const isChecked = checked.length > 0
-    const isEmpty = (items.length == 0) || (items.length == 1 && items[0][0] == null)
-
-    return (
-      <div className="card facet">
-        <div className="card-header d-flex justify-content-between align-items-center" onClick={this.toggleFacet}>
-          {facet.title}
-          <div>
-            {isChecked && <span className="material-symbols-rounded symbols-check text-secondary">check_box</span>}
-            {isOpen ? <span className="material-symbols-rounded symbols-expand">expand_less</span>
-                    : <span className="material-symbols-rounded symbols-expand">expand_more</span>}
-          </div>
-        </div>
-        {isOpen && !isEmpty && this.renderListGroup(facet.identifier, items, checked)}
-        {isOpen && isEmpty && !isLoading && this.renderEmpty()}
-        {isOpen && isEmpty && isLoading && this.renderSpinner()}
-      </div>
-    )
-  }
+      {
+        isOpen && (
+          <ul className="list-group list-group-flush">
+            {!isLoading && !hasNoItems && items.map((item, itemIndex) => renderItem(item, itemIndex))}
+            {!isLoading && hasNoItems && renderEmpty()}
+            {isLoading && renderSpinner()}
+          </ul>
+        )
+      }
+    </>
+  )
 }
 
 Facet.propTypes = {
-  params: PropTypes.object.isRequired,
   facet: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
   glossary: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired
+  updateParams: PropTypes.func.isRequired
 }
 
 export default Facet

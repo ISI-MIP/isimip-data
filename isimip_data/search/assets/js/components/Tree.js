@@ -1,216 +1,127 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import { get, intersection, isEmpty, sortBy } from 'lodash'
 
-import OverlayTrigger from "react-bootstrap/OverlayTrigger"
-import Tooltip from "react-bootstrap/Tooltip"
+import Icon from 'isimip_data/core/assets/js/components/Icon'
+import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
 
-import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
-
-import { getValueOrNull } from 'isimip_data/core/assets/js/utils/object'
+import { useTreeQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
 
 
-class Tree extends Component {
+const Tree = ({ params, glossary, updateParams }) => {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      tree: []
-    }
-    this.toogleItem = this.toogleItem.bind(this)
-    this.handleClose = this.handleClose.bind(this)
-    this.handleOpen = this.handleOpen.bind(this)
-    this.abortController = new AbortController()
+  const { data: tree } = useTreeQuery(params)
+
+  const handleOpen = (item) => {
+    // if params.tree does not exist yet, set it to [item.tree]
+    // otherwise remove all "parent" items and add the item
+    updateParams({ tree: [...(params.tree || []).filter(t => !item.tree.startsWith(t)), item.tree] })
   }
 
-  componentDidMount() {
-    this.fetchTree()
-  }
+  const handleClose = (item) => {
+    // close the item and open the parent, unless there is no parent (top level),
+    // or a sibling or one of it's descendants (other) is open
+    const parent = item.tree.substring(0, item.tree.lastIndexOf('/'))
+    const other = params.tree.filter(t => (!isEmpty(parent) && t.startsWith(parent) && !t.startsWith(item.tree)))
 
-  componentDidUpdate(prevProps) {
-    if (this.props.params !== prevProps.params) {
-      this.fetchTree()
-    }
-  }
-
-  componentWillUnmount(){
-    this.abortController.abort()
-  }
-
-  fetchTree() {
-    const { params } = this.props
-
-    return DatasetApi.fetchTree({
-      tree: params.tree || ''
-    }, {
-      signal: this.abortController.signal
-    }).then(items => {
-      this.setState({ tree: items })
-    })
-  }
-
-  toogleItem(item) {
-    if (item.items) {
-      this.handleClose(item)
+    if (isEmpty(parent) || !isEmpty(other)) {
+      updateParams({ tree: params.tree.filter(t => !t.startsWith(item.tree)) })
     } else {
-      this.handleOpen(item)
+      updateParams({ tree: [...params.tree.filter(t => !t.startsWith(item.tree)), parent] })
     }
   }
 
-  handleOpen(item) {
-    const { params, onTreeChange } = this.props
-
-    // close all parents
-    if (params.tree) {
-      params.tree.map(treeParam => {
-        if (item.tree.indexOf(treeParam) == 0) {
-          onTreeChange('tree', treeParam, false)
-        }
-      })
-    }
-
-    // open item
-    onTreeChange('tree', item.tree, true)
-  }
-
-  handleClose(item) {
-    const { params, onTreeChange } = this.props
-    const parentTrail = item.tree.substring(0, item.tree.lastIndexOf('/'))
-
-    // close item
-    onTreeChange('tree', item.tree, false)
-
-    // close all children
-    params.tree.reduce((accumulator, tree) => {
-      if (tree.indexOf(item.tree) == 0) {
-        accumulator.push(tree)
-      }
-      return accumulator
-    }, []).map(tree => {
-      onTreeChange('tree', tree, false)
-    })
-
-    // open parent if no other child is open
-    if (parentTrail) {
-      const openParent = params.tree.reduce((accumulator, tree) => {
-        if (tree.indexOf(parentTrail) == 0) {
-          accumulator = false
-        }
-        return accumulator
-      }, true)
-      if (openParent) {
-        onTreeChange('tree', parentTrail, true)
+  const toggleItem = (event, item) => {
+    if (event.type == 'change' || isEmpty(
+      // do not react to click events on the checkbox or the label, those are handled by the change event
+      intersection(event.target.classList, ['form-check-input', 'form-check-label']))
+    ) {
+      if (item.items) {
+        handleClose(item)
+      } else {
+        handleOpen(item)
       }
     }
   }
 
-  updateItem(item) {
-    const { glossary } = this.props
-    const properties = getValueOrNull(glossary, item.identifier, item.specifier)
+  const renderTooltip = (properties) => (
+    (properties.long_name || properties.description || properties.warning) ? (
+      <>
+        {properties.long_name && (<strong>{properties.long_name}</strong>)}
+        {properties.description && (<p>{properties.description}</p>)}
+        {properties.warning && (<p>Warning: {properties.warning}</p>)}
+      </>
+    ) : null
+  )
 
-    if (properties) {
-      Object.keys(properties).forEach(key => {
-        item[key] = properties[key]
-      })
-    }
-
-    return item
-  }
-
-  renderTooltip(item) {
-    if (item.long_name || item.description || item.warning) {
-      return (
-        <Tooltip>
-          {item.long_name && (<strong>{item.long_name}</strong>)}
-          {item.description && (<p>{item.description}</p>)}
-          {item.warning && (<p>Warning: {item.warning}</p>)}
-        </Tooltip>
-      )
-    }
-  }
-
-  renderUrl(item) {
-    return Object.keys(item.urls).map((key, index) => {
+  const renderUrl = (item, properties) => (
+    Object.keys(properties.urls).map((key, index) => {
       if (item.tree.includes(key)) {
         return (
-          <a key={index} className="ml-auto" href={item.urls[key]} target="_blank" rel="noreferrer"
-             onClick={e => e.stopPropagation()}>
-            <OverlayTrigger placement="bottom" overlay={<Tooltip>More information is available in the {key} protocol.</Tooltip>}>
-              <span className="material-symbols-rounded symbols-protocol">quick_reference_all</span>
-            </OverlayTrigger>
-          </a>
+          <Tooltip key={index} title={<>More information is available in the {key} protocol.</>}>
+            <a className="d-block ms-auto" href={properties.urls[key]} target="_blank" rel="noreferrer"
+               onClick={e => e.stopPropagation()}>
+              <Icon className="d-block" icon="quick_reference_all" size="sm" />
+            </a>
+          </Tooltip>
         )
       } else {
         return null
       }
     })
-  }
+  )
 
-  renderItem(item) {
+  const renderItem = (item, level) => {
+    // try to get additional or updated properties from the glossary
+    const properties = get(glossary, [item.identifier, item.specifier], {})
+    const id = `${item.identifier}-${item.specifier}`
+
     return (
-      <div className="tree-item d-flex align-items-center"
-           onClick={() => this.toogleItem(item)}>
-        <input className="mr-2" type="checkbox" checked={item.items || false} readOnly />
-        <span>{item.title || item.specifier}</span>
-        {item.hasItems && <span className="material-symbols-rounded symbols-expand">expand_more</span>}
-        {item.urls && this.renderUrl(item)}
-      </div>
-    )
-  }
+      <li className="list-group-item" onClick={(event) => toggleItem(event, item)}>
+        <div className={`tree-level-${level}`}>
+          <Tooltip placement="right" title={renderTooltip(properties)}>
+            <div className="d-flex gap-1 align-items-center">
+              <input className="form-check-input me-1 mt-0" type="checkbox" id={id} checked={!isEmpty(item.items)}
+                     onChange={(event) => toggleItem(event, item)} />
 
-  renderItemWrapper(item, index) {
-    const tooltip = this.renderTooltip(item)
+              <label className="form-check-label flex-grow-1" htmlFor={id}>
+                {properties.title || item.specifier}
+              </label>
 
-    if (tooltip) {
-      return (
-        <li key={index}>
-          <OverlayTrigger placement="right" overlay={tooltip}>
-            {this.renderItem(item)}
-          </OverlayTrigger>
-          {item.items && this.renderItems(item.items)}
-        </li>
-      )
-    } else {
-      return (
-        <li key={index}>
-          {this.renderItem(item)}
-          {item.items && this.renderItems(item.items)}
-        </li>
-      )
-    }
-  }
-
-  renderItems(items) {
-    return (
-      <ul>
-        {
-          items.sort((a, b) => a.specifier > b.specifier ? 1 : -1).map((item, index) => {
-            item = this.updateItem(item)
-            return this.renderItemWrapper(item, index)
-          })
-        }
-      </ul>
-    )
-  }
-
-  render() {
-    const { tree } = this.state
-
-    if (tree.length > 0) {
-      return (
-        <div className="card tree">
-          {this.renderItems(tree)}
+              {properties.urls && renderUrl(item, properties)}
+            </div>
+          </Tooltip>
         </div>
-      )
-    } else {
-      return null
-    }
+      </li>
+    )
   }
+
+  const renderItems = (items, level = 0) => (
+    <>
+      {
+        sortBy(items, ['specifier']).map((item, index) => (
+          <React.Fragment key={index}>
+            {renderItem(item, level)}
+            {item.items && renderItems(item.items, level + 1)}
+          </React.Fragment>
+        ))
+      }
+    </>
+  )
+
+  return !isEmpty(tree) && (
+    <div className="card tree">
+      <ul className="list-group list-group-flush">
+        {renderItems(tree)}
+      </ul>
+    </div>
+  )
 }
 
 Tree.propTypes = {
   params: PropTypes.object.isRequired,
   glossary: PropTypes.object.isRequired,
-  onTreeChange: PropTypes.func.isRequired
+  updateParams: PropTypes.func.isRequired
 }
 
 export default Tree

@@ -1,79 +1,30 @@
 {% load i18n %}
+{% load core_tags %}
 
 <div class="card">
     <ul class="list-group list-group-flush">
         {% for dataset in datasets %}
         <li class="list-group-item">
-            <div class="float-right">
-                <span class="mr-3">
+            <div class="d-md-flex gap-2 align-items-center mb-1">
+                <a class="d-block" href="{% url 'dataset' dataset.id %}" target="_blank">
+                    {{ dataset.name|add_line_breaks }}
+                </a>
+
+                <div class="d-none d-md-block me-auto"></div>
+
+                {% if dataset == current_version %}
+                <div class="badge rounded-pill border border-secondary text-secondary mb-1 mb-md-0">
+                    this version
+                </div>
+                {% endif %}
+                <div>
                     {{ dataset.size|filesizeformat }}
-                </span>
-                {% for simulation_round in dataset.merged_specifiers.simulation_round %}
-                <span class="badge badge-isimip"
-                    data-toggle="tooltip" data-placement="bottom" title="Simulation round">
-                    {{ simulation_round }}
-                </span>
-                {% endfor %}
-                {% for product in  dataset.merged_specifiers.product %}
-                <span class="badge badge-secondary"
-                    data-toggle="tooltip" data-placement="bottom" title="Product">
-                    {{ product }}
-                </span>
-                {% endfor %}
-                {% for category in dataset.merged_specifiers.category %}
-                <span class="badge badge-success"
-                    data-toggle="tooltip" data-placement="bottom" title="Category">
-                    {{ category }}
-                </span>
-                {% endfor %}
-                {% for sector in dataset.merged_specifiers.sector %}
-                <span class="badge badge-success"
-                    data-toggle="tooltip" data-placement="bottom" title="Sector">
-                    {{ sector }}
-                </span>
-                {% endfor %}
-                {% for model in dataset.merged_specifiers.model %}
-                <span class="badge badge-primary"
-                    data-toggle="tooltip" data-placement="bottom" title="Impact model">
-                    {{ model }}
-                </span>
-                {% endfor %}
-                {% for climate_forcing in dataset.merged_specifiers.climate_forcing %}
-                <span class="badge badge-info"
-                    data-toggle="tooltip" data-placement="bottom" title="Climate forcing">
-                    {{ climate_forcing }}
-                </span>
-                {% endfor %}
-                {% for period in dataset.merged_specifiers.period %}
-                <span class="badge badge-light"
-                    data-toggle="tooltip" data-placement="bottom" title="Period">
-                    {{ period }}
-                </span>
-                {% endfor %}
-                {% if not dataset.public %}
-                <span class="badge badge-danger"
-                    data-toggle="tooltip" data-placement="bottom" title="This dataset is archived and currently not available for download. Please contact support if you need this version of the dataset.">
-                    Archived
-                </span>
-                {% endif %}
-                {% if dataset.public and dataset.restricted %}
-                <span class="badge badge-danger"
-                    data-toggle="tooltip" data-placement="bottom" title="Access to this dataset is restricted. Please contact support if you need this version of the dataset.">
-                    Restricted
-                </span>
-                {% endif %}
-                <span class="badge badge-dark"
-                    data-toggle="tooltip" data-placement="bottom" title="Version">
-                    {{ dataset.version }}
-                </span>
+                </div>
             </div>
 
-            <a href="{% url 'dataset' dataset.id %}" target="_blank">
-                {{ dataset.name }}
-            </a>
-            {% if dataset == current_version %}
-            <span class="mr-3 badge badge-light">this version</span>
-            {% endif %}
+            <div class="d-md-flex gap-1 align-items-center">
+                {% include 'metadata/snippets/badges.html' with obj=dataset %}
+            </div>
         </li>
         {% endfor %}
     </ul>

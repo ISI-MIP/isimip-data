@@ -1,17 +1,17 @@
 {% load i18n %}
 
 {% if caveat.version_after and caveat.version_before %}
-<span class="badge badge-dark">
+<span class="badge text-bg-dark">
     {{ caveat.version_after }}
-</span> - <span class="badge badge-dark">
+</span> - <span class="badge text-bg-dark">
     {{ caveat.version_before }}
 </span>
 {% elif caveat.version_after %}
-{% trans 'after' %} <span class="badge badge-dark">
+{% trans 'after' %} <span class="badge text-bg-dark">
     {{ caveat.version_after }}
 </span>
 {% elif caveat.version_before %}
-{% trans 'before' %} <span class="badge badge-dark">
+{% trans 'before' %} <span class="badge text-bg-dark">
     {{ caveat.version_before }}
 </span>
 {% else %}

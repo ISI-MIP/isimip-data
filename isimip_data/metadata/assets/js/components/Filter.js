@@ -1,48 +1,35 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
+import Checkbox from 'isimip_data/core/assets/js/components/Checkbox'
 
-class Filter extends Component {
+import FilterInput from './FilterInput'
+import FilterOrder from './FilterOrder'
 
-  render() {
-    const { filterString, showAll, onFilterStringChange, onShowAllChange } = this.props
 
-    return (
-      <div className="filter card mb-2">
-        <div className="card-body">
-          <div className="form-row">
-            <div className="col-12 mb-2 col-md mb-md-0">
-              <input className="form-control form-control-lg mb-1" type="text" placeholder="Filter by DOI, title, creator, or path"
-                     onChange={e => onFilterStringChange(e.target.value)} value={filterString} />
-              <div className="float-md-right text-muted">
-                The list of DOI will update as you type.
-              </div>
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" type="checkbox" id="show-all-checkbox"
-                       checked={showAll} onChange={() => onShowAllChange(!showAll)} />
-                <label className="form-check-label" htmlFor="show-all-checkbox">
-                  Show older DOI versions as well
-                </label>
-              </div>
-            </div>
-            <div className="col-6 col-md-auto">
-              <button className="btn btn-outline-secondary btn-lg w-100" type="button" onClick={() => onFilterStringChange('')}>
-                Reset <span className="material-symbols-rounded symbols-reset">close</span>
-              </button>
-            </div>
-          </div>
+const Filter = ({ values, setValues }) => (
+  <div className="card mb-1">
+    <div className="card-body">
+      <FilterInput values={values} setValues={setValues} />
+
+      <div className="d-lg-flex gap-2">
+        <Checkbox checked={values.all || false}
+                  onChange={() => setValues({ ...values, all: !values.all })}>
+          Show previous DOI versions as well
+        </Checkbox>
+        <div className="d-none d-md-block me-2"></div>
+        <FilterOrder values={values} setValues={setValues} />
+        <div className="ms-auto text-muted">
+          The list of DOI will update as you type.
         </div>
       </div>
-    )
-  }
-}
+    </div>
+  </div>
+)
 
 Filter.propTypes = {
-  filterString: PropTypes.string.isRequired,
-  showAll: PropTypes.bool.isRequired,
-  onFilterStringChange: PropTypes.func.isRequired,
-  onShowAllChange: PropTypes.func.isRequired
+  values: PropTypes.object.isRequired,
+  setValues: PropTypes.func.isRequired
 }
-
 
 export default Filter

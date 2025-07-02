@@ -1,0 +1,69 @@
+form {
+    label:not(.form-check-label) {
+        font-weight: bold;
+    }
+}
+
+label {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+.btn {
+    --bs-btn-border-radius: 0;
+}
+
+.btn-light {
+    --bs-btn-border-color: var(--isimip-color-gray);
+}
+
+.form-control {
+    --bs-border-radius: 0;
+    --bs-border-color: var(--isimip-color-gray);
+}
+
+.form-control-lg {
+    --bs-border-radius-lg: 0;
+}
+
+.form-control-sm {
+    --bs-border-radius-sm: 0;
+}
+
+.form-check-input[type=checkbox] {
+    border-radius: 0;
+
+    &:not(:checked) {
+        border: 1px solid var(--isimip-color-gray);
+    }
+}
+
+.form-check-input[type=radio] {
+    &:not(:checked) {
+        border: 1px solid var(--isimip-color-gray);
+    }
+}
+
+.file-control {
+    height: auto;
+
+    .file-control-inner {
+        cursor: pointer;
+
+        height: 5rem;
+        padding: 0.25rem 0.5rem;
+        border: 1px dashed silver;
+        border-radius: 4px;
+        font-size: small;
+    }
+}
+
+
+.form-check.form-check-inline {
+    margin-bottom: 0;
+}

@@ -1,0 +1,78 @@
+{% for simulation_round in obj.merged_specifiers.simulation_round %}
+<span class="badge badge-simulation_round"
+    data-bs-toggle="tooltip" data-bs-placement="bottom" title="Simulation round">
+    {{ simulation_round }}
+</span>
+{% endfor %}
+{% for product in  obj.merged_specifiers.product %}
+<span class="badge badge-product"
+      data-bs-toggle="tooltip" data-bs-placement="bottom" title="Product">
+    {{ product }}
+</span>
+{% endfor %}
+{% for category in obj.merged_specifiers.category %}
+<span class="badge badge-category"
+      data-bs-toggle="tooltip" data-bs-placement="bottom" title="Category">
+    {{ category }}
+</span>
+{% endfor %}
+{% for sector in obj.merged_specifiers.sector %}
+<span class="badge badge-sector"
+      data-bs-toggle="tooltip" data-bs-placement="bottom" title="Sector">
+    {{ sector }}
+</span>
+{% endfor %}
+{% for publication in obj.merged_specifiers.publication %}
+<span class="badge badge-publication"
+      data-bs-toggle="tooltip" data-bs-placement="bottom" title="Publication">
+    {{ publication }}
+</span>
+{% endfor %}
+{% for climate_forcing in obj.merged_specifiers.climate_forcing %}
+<span class="badge badge-climate_forcing"
+      data-bs-toggle="tooltip" data-bs-placement="bottom" title="Climate forcing">
+    {{ climate_forcing }}
+</span>
+{% endfor %}
+{% for period in obj.merged_specifiers.period %}
+<span class="badge badge-period"
+      data-bs-toggle="tooltip" data-bs-placement="bottom" title="Period">
+    {{ period }}
+</span>
+{% endfor %}
+{% for model in obj.merged_specifiers.model %}
+<span class="badge badge-model"
+      data-bs-toggle="tooltip" data-bs-placement="bottom" title="Impact model">
+    {{ model }}
+</span>
+{% endfor %}
+{% for variable in obj.merged_specifiers.variable %}
+<span class="badge badge-variable"
+      data-bs-toggle="tooltip" data-bs-placement="bottom" title="Variable">
+    {{ variable }}
+</span>
+{% endfor %}
+
+<span class="me-auto"></span>
+
+{% if not obj.public %}
+<span class="badge text-bg-danger cursor-help"
+      data-bs-toggle="tooltip" data-bs-placement="bottom" title="This dataset is archived and currently not available for download. Please contact support if you need this version of the dataset.">
+    Archived
+</span>
+{% endif %}
+
+{% if obj.public and obj.restricted %}
+<span class="badge border-danger text-danger cursor-help"
+      data-bs-toggle="tooltip" data-bs-placement="bottom"
+      title="Access to this dataset is restricted. Please contact support if you need this version of the dataset.">
+    Restricted
+</span>
+{% endif %}
+
+{% if obj.version %}
+<span class="badge text-bg-dark cursor-help"
+      data-bs-toggle="tooltip" data-bs-placement="bottom" title="Version">
+    {{ obj.version }}
+</span>
+{% endif %}

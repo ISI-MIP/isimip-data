@@ -1,5 +1,4 @@
 {% extends 'core/base.html' %}
-{% load i18n %}
 {% load static %}
 
 {% block style %}
@@ -14,31 +13,15 @@
 {% block main %}
 
 <div class="container">
-    <div class="row justify-content-md-center">
-        <div class="col-md-8">
-            <header>
-                <h1>{% trans 'Metadata' %}</h1>
+    <header>
+        <h1>Metadata</h1>
 
-                <p>
-                    Please give the <code>isimip_id</code> (e.g. <code>{{ example_file.id }}</code>, found in the NetCDF header), the SHA512 checksum (a long string, which can be computed with tools like <code>sha512sum</code>) or the path of a file to be redirected to the corresponding information page.
-                </p>
-                <p>
-                    You can also drag the file to the area below to compute its checksum automatically.
-                </p>
+        <p>
+            Please give the <code>isimip_id</code> (e.g. <code>{{ example_file.id }}</code>, found in the NetCDF header), the SHA512 checksum (a long string, which can be computed with tools like <code>sha512sum</code>) or the path of a file to be redirected to the corresponding information page.
+        </p>
+    </header>
 
-                <form id="metadata-form" class="text-center" method="GET">
-                    <div class="form-group" >
-                        <textarea id="metadata-form-query" class="form-control text-center sha1-drop" rows=6
-                            name="query" aria-describedby="metadata-form-help" autofocus></textarea>
-                        <small id="metadata-form-help" class="form-text text-muted">
-                             You can drag into the area to compute its checksum automatically (for files < 300M).
-                        </small>
-                    </div>
-                    <button id="metadata-form-submit" type="submit" class="btn btn-success">Go to metadata page</button>
-                </form>
-            </header>
-        </div>
-    </div>
+    <div id="app"></div>
 </div>
 
 {% endblock %}

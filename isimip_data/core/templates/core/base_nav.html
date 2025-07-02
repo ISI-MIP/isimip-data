@@ -7,7 +7,8 @@
             <img src="{% static 'images/logo-white.png' %}">
         </a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+                aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -17,7 +18,7 @@
                 {{ settings.LABEL|safe }}
             </span>
             {% endif %}
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item {% if request.resolver_match.url_name == 'search' %}active{% endif %}">
                     <a class="nav-link" href="{% url 'search' %}">Search</a>
                 </li>

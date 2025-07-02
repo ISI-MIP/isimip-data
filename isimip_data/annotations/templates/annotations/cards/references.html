@@ -5,7 +5,7 @@
         {% for reference in references %}
 
         {% if reference.identifier_type == reference.IDENTIFIER_TYPE_DOI %}
-        <li class="list-group-item related-identifier">
+        <li class="list-group-item">
             {% include 'annotations/snippets/isipedia.html' %}
 
             {{ reference.title }}&nbsp;
@@ -14,7 +14,7 @@
             </a>
         </li>
         {% elif reference.identifier_type == reference.IDENTIFIER_TYPE_URL %}
-        <li class="list-group-item related-identifier">
+        <li class="list-group-item">
             {% include 'annotations/snippets/isipedia.html' %}
 
             {{ reference.title }}&nbsp;&rarr;
@@ -23,7 +23,7 @@
             </a>
         </li>
         {% else %}
-        <li class="list-group-item related-identifier">
+        <li class="list-group-item">
             {{ reference.title }}
         </li>
         {% endif %}

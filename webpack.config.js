@@ -11,12 +11,19 @@ const baseConfig = {
       './isimip_data/core/assets/scss/base.scss',
       './isimip_data/core/assets/js/base.js',
     ],
+    bootstrap: [
+      './isimip_data/core/assets/scss/bootstrap.scss',
+      './isimip_data/core/assets/js/bootstrap.js',
+    ],
+    caveats: [
+      './isimip_data/caveats/assets/scss/caveats.scss',
+      './isimip_data/caveats/assets/js/caveats.js',
+    ],
     download: [
       './isimip_data/download/assets/scss/download.scss',
       './isimip_data/download/assets/js/download.js',
     ],
     metadata: [
-      './isimip_data/metadata/assets/scss/metadata.scss',
       './isimip_data/metadata/assets/js/metadata.js',
     ],
     resources: [
@@ -32,21 +39,18 @@ const baseConfig = {
     alias: {
       isimip_data: path.resolve(__dirname, './isimip_data/')
     },
-    extensions: ['*', '.js', '.jsx']
-  },
-  output: {
-    libraryTarget: 'this',
-    library: '[name]',
-    path: path.resolve('./static/'),
-    filename: '[name].js'
+    extensions: ['*', '.js', '.jsx'],
+    fallback: {
+      buffer: require.resolve('buffer/'),
+    }
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
-        loader: "babel-loader",
-        options: { presets: ["@babel/env"] }
+        loader: 'babel-loader',
+        options: { presets: ['@babel/env','@babel/preset-react'] }
       },
       {
         test: /\.s?css$/,
@@ -59,18 +63,26 @@ const baseConfig = {
       {
         test: /\.(woff2?|ttf|eot|otf)$/,
         loader: 'file-loader',
+        type: 'javascript/auto',
         options: {
-          name: 'fonts/[name].[ext]'
+          name: 'fonts/[name].[ext]',
+          esModule: false
         }
       },
       {
         test: /\.(svg|png|jpg)$/,
         loader: 'file-loader',
+        type: 'javascript/auto',
         options: {
-          name: 'images/[name].[ext]'
+          name: 'images/[name].[ext]',
+          esModule: false
         }
       }
     ]
+  },
+  output: {
+    path: path.resolve('./static/'),
+    filename: '[name].js'
   },
   plugins: [
     new MiniCssExtractPlugin({
@@ -87,9 +99,8 @@ const baseConfig = {
       ]
     }),
     new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery'
-    })
+      Buffer: ['buffer', 'Buffer'],
+    }),
   ]
 }
 

@@ -1,0 +1,66 @@
+.badge {
+    --bs-badge-padding-x: 0.4em;
+    --bs-badge-padding-y: 0.2em;
+    --bs-badge-border-radius: 0.2rem;
+
+    &.badge-simulation_round,
+    &.badge-product,
+    &.badge-category,
+    &.badge-sector,
+    &.badge-publication,
+    &.badge-climate_forcing,
+    &.badge-period,
+    &.badge-model,
+    &.badge-variable {
+        cursor: help;
+        border-width: var(--bs-border-width);
+        border-style: var(--bs-border-style);
+        border-radius: var(--bs-border-radius-pill);
+        background-color: var(--isimip-color-white);
+    }
+
+    &.badge-simulation_round {
+        color: var(--isimip-color-orange) !important;
+        border-color: var(--isimip-color-orange) !important;
+    }
+
+    &.badge-product {
+        color: var(--bs-secondary) !important;
+        border-color: var(--bs-secondary) !important;
+    }
+
+    &.badge-category {
+        color: var(--isimip-color-brown) !important;
+        border-color: var(--isimip-color-brown) !important;
+    }
+
+    &.badge-sector {
+        color: var(--bs-success) !important;
+        border-color: var(--bs-success) !important;
+    }
+
+    &.badge-publication {
+        color: var(--isimip-color-peru) !important;
+        border-color: var(--isimip-color-peru) !important;
+    }
+
+    &.badge-climate_forcing {
+        color: var(--bs-primary) !important;
+        border-color: var(--bs-primary) !important;
+    }
+
+    &.badge-period {
+        color: var(--isimip-color-deep-pink) !important;
+        border-color: var(--isimip-color-deep-pink) !important;
+    }
+
+    &.badge-model {
+        color: var(--isimip-color-purple) !important;
+        border-color: var(--isimip-color-purple) !important;
+    }
+
+    &.badge-variable {
+        color: var(--bs-dark) !important;
+        border-color: var(--bs-dark) !important;
+    }
+}

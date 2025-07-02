@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block style %}
+    {{ block.super }}
     <link rel="stylesheet" href="{% static 'download.css' %}" />
 {% endblock %}
 
@@ -12,28 +13,28 @@
 {% block main %}
 
 <div class="container">
-    <div class="row justify-content-md-center mb-3">
-        <div class="col-sm-8">
-            <header>
-                <h1>Configure download</h1>
+    <header>
+        <h1>Configure download</h1>
 
-                <p>
-                  Download file sizes can be reduced by either cutting out an area of a large file or by masking all data outside of a certain country, bounding box or by applying a land-sea-mask. This process is performed on the server and the download starts when the files are ready.
-                </p>
-                <p>
-                    Alternatively, if you are interested in a time series of a variable at a single point or avaraged over a country or bounding box, a CSV file can be created.
-                </p>
-                <p>
-                  Please note that this process can take a considerable amount of time. Depending on the size of the dataset, it can take tens of minutes to create the download. It is only possible to cut out global NetCDF files.
-                </p>
-            </header>
-        </div>
-    </div>
+        <p>
+          Download file sizes can be reduced by either cutting out an area of a large file or by masking all data outside of a certain country, bounding box or by applying a land-sea-mask. This process is performed on the server and the download starts when the files are ready.
+        </p>
+
+        <p>
+          Please note that this process can take a considerable amount of time. Depending on the size of the dataset, it can take tens of minutes to create the download. It is only possible to cut out global NetCDF files.
+        </p>
+
+        {% if not job_url and not files %}
+        <p class="text-danger">
+            No files where provided as POST data and no job id was given. Please note that this page needs to be accessed from a dataset or file metadata page, or directly from the search interface.
+        </p>
+        {% endif %}
+    </header>
 
     {% if job_url %}
 
     <div id="app"
-         data-url="{{ job_url }}">
+         data-job-url="{{ job_url }}">
     </div>
 
     {% elif files %}
@@ -41,16 +42,6 @@
     <div id="app"></div>
 
     {{ files|json_script:"files" }}
-
-    {% else %}
-
-    <div class="row justify-content-md-center mt-3">
-        <div class="col-sm-8">
-            <p class="text-center text-danger">
-                No files where provided as POST data and no job id was given. Please note that this page needs to be accessed from a dataset or file metadata page, or directly from the search interface.
-            </p>
-        </div>
-    </div>
 
     {% endif %}
 </div>

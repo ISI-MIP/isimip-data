@@ -54,19 +54,22 @@ jobs:
     - name: Run pytest
       run: |
         pytest --reuse-db --cov=isimip_data
-        coveralls --service=github
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        COVERALLS_PARALLEL: true
+    # - name: Run pytest
+    #   run: |
+    #     pytest --reuse-db --cov=isimip_data
+    #     coveralls --service=github
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     COVERALLS_PARALLEL: true
 
-  coveralls:
-    needs: pytest
-    runs-on: ubuntu-latest
-    container: python:3-slim
-    steps:
-    - name: Run coveralls finish
-      run: |
-        pip install coveralls
-        coveralls --service=github --finish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # coveralls:
+  #   needs: pytest
+  #   runs-on: ubuntu-latest
+  #   container: python:3-slim
+  #   steps:
+  #   - name: Run coveralls finish
+  #     run: |
+  #       pip install coveralls
+  #       coveralls --service=github --finish
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

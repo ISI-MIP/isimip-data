@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load i18n %}
 {% load static %}
+{% load core_tags %}
 {% load metadata_tags %}
 
 {% block style %}
@@ -11,9 +12,12 @@
 {% block main %}
 
 <div class="container">
-    <header>
+    <header class="wide">
         <h1>{% trans 'Dataset' %}</h1>
-        <h2>{{ dataset.name }}</h2>
+        <h2>{{ dataset.name|add_line_breaks }}</h2>
+        <div class="mt-2">
+            {% include 'metadata/snippets/badges.html' with obj=dataset %}
+        </div>
     </header>
 
     {% if public_version %}
@@ -86,7 +90,7 @@
                             {% for file in dataset.files.all %}
                             <input type="hidden" name="paths" value="{{ file.path }}">
                             {% endfor %}
-                            <button class="btn btn-link" type="submit">{% trans 'Configure download' %}</button>
+                            <button type="submit" class="link">{% trans 'Configure download' %}</button>
                         </form>
                     </li>
                     {% endif %}

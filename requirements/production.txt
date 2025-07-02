@@ -1,5 +1,5 @@
 -r common.txt
 
-# production only dependencies in aphabetical order
-gunicorn~=21.2.0
-django-redis~=5.3.0
+# production only dependencies in alphabetical order
+gunicorn~=23.0.0
+django-redis~=5.4.0

@@ -1,0 +1,65 @@
+a,
+button.link {
+    text-decoration: none;
+
+    color: var(--isimip-color-blue);
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--isimip-color-dark-blue);
+    }
+}
+
+button.link,
+button.unstyled {
+    background: none;
+    border: none;
+    padding: 0;
+
+    font-family: inherit;
+    font-size: inherit;
+    vertical-align: inherit;
+    text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--isimip-color-black);
+    margin: 0;
+
+    a {
+        font-weight: 600;
+        text-transform: inherit;
+    }
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.4rem;
+}
+
+h3 {
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    font-weight: 300;
+
+    margin-bottom: 0.5rem;
+
+    &.reference {
+        scroll-margin-top: 120px;
+    }
+}
+
+h4 {
+    font-size: 1.25rem;
+    // font-weight: 600;
+}
+
+.table {
+    tr:last-child > td {
+        border-bottom: none;
+    }
+}

@@ -1,0 +1,29 @@
+$grid-breakpoint-xs: 0;
+$grid-breakpoint-sm: 576px;
+$grid-breakpoint-md: 768px;
+$grid-breakpoint-lg: 992px;
+$grid-breakpoint-xl: 1200px;
+$grid-breakpoint-xxl: 1400px;
+
+$grid-breakpoints: (
+  xs: $grid-breakpoint-xs,
+  sm: $grid-breakpoint-sm,
+  md: $grid-breakpoint-md,
+  lg: $grid-breakpoint-lg,
+  xl: $grid-breakpoint-xl,
+  xxl: $grid-breakpoint-xxl
+);
+
+$container-max-width-sm: 540px;
+$container-max-width-md: 750px;
+$container-max-width-lg: 970px;
+$container-max-width-xl: 1070px;
+$container-max-width-xxl: 1170px;
+
+$container-max-widths: (
+  sm:  $container-max-width-sm,
+  md:  $container-max-width-md,
+  lg:  $container-max-width-lg,
+  xl:  $container-max-width-xl,
+  xxl: $container-max-width-xxl
+);

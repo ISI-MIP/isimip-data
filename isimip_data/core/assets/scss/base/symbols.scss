@@ -1,0 +1,21 @@
+.material-symbols-rounded {
+    font-size: 20px;
+
+    &.material-symbols-rounded-sm {
+        font-size: 16px;
+    }
+
+    &.material-symbols-rounded-lg {
+        font-size: 24px;
+    }
+
+    &.material-symbols-rounded-xl {
+        font-size: 24px;
+    }
+}
+
+.spinner-border-xs {
+    --bs-spinner-width: 0.75rem;
+    --bs-spinner-height: 0.75rem;
+    --bs-spinner-border-width: 0.1em;
+}

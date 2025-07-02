@@ -116,6 +116,9 @@ class CaveatAdmin(admin.ModelAdmin):
         })
     )
 
+    class Media:
+        css = {'all': ('admin/css/specifier-widget.css',)}
+
     def get_urls(self):
         view = self.admin_site.admin_view(self.caveats_caveat_send)
         return [path('<int:pk>/send/', view, name='caveats_caveat_send'), *super().get_urls()]
@@ -181,9 +184,9 @@ class CommentAdmin(admin.ModelAdmin):
 
         quotes = []
         level = 0
-        for prevous_comment in comment.caveat.comments.exclude(created__gte=comment.created) \
+        for previous_comment in comment.caveat.comments.exclude(created__gte=comment.created) \
                                                       .order_by('created'):
-            quotes.append(prevous_comment.get_quote(level=level))
+            quotes.append(previous_comment.get_quote(level=level))
             level += 1
         quotes.append(comment.caveat.get_quote(level=level))
 
