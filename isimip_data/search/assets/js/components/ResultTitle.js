@@ -9,7 +9,7 @@ import { addLineBreaks } from '../utils'
 const ResultTitle = ({ dataset, open, setOpen }) => {
   return (
     <h4 className="d-block me-auto mt-0 mb-0">
-      <button type="button" className="d-flex align-items-start position-relative link" onClick={() => setOpen(!open)}>
+      <button type="button" className="d-flex flex-wrap align-items-start position-relative link" onClick={() => setOpen(!open)}>
         <div className="result-toggle">
           <Icon className={classNames({'rotate-90': open})} icon="chevron_right" />
         </div>
