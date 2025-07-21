@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { isUndefined } from 'lodash'
 
 import Range from './widgets/Range'
 
@@ -41,8 +42,13 @@ const Paths = ({ files, errors, paths, setPaths }) => {
 
     setPaths(
       files.filter(file => (
-        (file.specifiers.start_year === undefined) ||
-        (file.specifiers.start_year >= startYear && file.specifiers.start_year <= endYear)
+        isUndefined(file.specifiers.start_year) ||
+        (
+          file.specifiers.start_year <= endYear && (
+            isUndefined(file.specifiers.end_year) ? file.specifiers.start_year >= startYear
+                                                  : file.specifiers.end_year >= startYear
+          )
+        )
       )).map(file => file.path)
     )
 
