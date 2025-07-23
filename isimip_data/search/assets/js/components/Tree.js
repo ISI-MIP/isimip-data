@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { get, intersection, isEmpty, sortBy } from 'lodash'
+import { get, intersection, isEmpty, isNil, sortBy } from 'lodash'
 
 import Icon from 'isimip_data/core/assets/js/components/Icon'
 import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
@@ -81,7 +81,7 @@ const Tree = ({ params, glossary, updateParams }) => {
         <div className={`tree-level-${level}`}>
           <Tooltip placement="right" title={renderTooltip(properties)}>
             <div className="d-flex gap-1 align-items-center">
-              <input className="form-check-input me-1 mt-0" type="checkbox" id={id} checked={!isEmpty(item.items)}
+              <input className="form-check-input me-1 mt-0" type="checkbox" id={id} checked={!isNil(item.items)}
                      onChange={(event) => toggleItem(event, item)} />
 
               <label className="form-check-label flex-grow-1" htmlFor={id}>
