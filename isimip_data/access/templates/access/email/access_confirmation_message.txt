@@ -1,0 +1,29 @@
+Dear ISIMIP data user,
+
+You are receiving this e-mail because you requested access to the resource:
+
+{{ resource.title }}
+
+Click the link below to set the access token in your browser:
+
+{{ token_url }}
+
+Afterwards, you should be able to download the files.
+
+If you want to download the data using a command line tool, you need to set
+a specific header which contains your token. E.g.:
+
+wget --header="Authorization: Bearer {{ token.as_jwt }}" URL
+
+curl -H "Authorization: Bearer {{ token.as_jwt }}" URL
+
+http URL "Authorization: Bearer {{ token.as_jwt }}"
+
+If you use the requests library in your Python script, you can use:
+
+response = requests.get(url, headers={"Authorization": "Bearer {{ token.as_jwt }}"})
+
+If you encounter any problems, please do not hesitate to contact us at info@isimip.org.
+
+Best wishes,
+The ISIMIP data team

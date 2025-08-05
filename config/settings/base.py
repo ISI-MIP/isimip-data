@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     # isimip_data apps
+    'isimip_data.access',
     'isimip_data.annotations',
     'isimip_data.caveats',
     'isimip_data.core',
@@ -190,6 +191,10 @@ NAVIGATION = [
 
 FILES_BASE_URL = 'https://files.isimip.org'
 FILES_API_URL = 'https://files.isimip.org/api/v2'
+
+ACCESS_REPLY_TO = (
+    'ISIMIP data <isimip-data@pik-potsdam.de>',
+)
 
 CAVEATS_REPLY_TO = (
     'ISIMIP data <isimip-data@pik-potsdam.de>',
@@ -526,7 +531,3 @@ SEARCH_FACETS = [
         }
     ]
 ]
-
-RESTRICTED_MESSAGES = {}
-RESTRICTED_DEFAULT_MESSAGE = 'Please contact <a href="mailto:info@isimip.org">info@isimip.org</a>' \
-                             ' if you need access to the dataset.'

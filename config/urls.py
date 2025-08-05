@@ -8,6 +8,7 @@ from django.views.generic.base import TemplateView
 
 from rest_framework import routers
 
+from isimip_data.access.views import access, token
 from isimip_data.caveats.sitemaps import CaveatSitemap
 from isimip_data.caveats.views import caveat, caveats
 from isimip_data.caveats.viewsets import CategoryViewSet, CaveatViewSet, SeverityViewSet, StatusViewSet
@@ -110,6 +111,9 @@ urlpatterns = [
     path('issues/<int:pk>/', caveat, name='issue'),
     path('notes/<int:pk>/', caveat, name='note'),
     path('caveats/<int:pk>/', caveat, name='caveat'),  # legacy
+
+    path('access/token/<str:jwt>/', token, name='token'),
+    path('access/<path:path>/', access, name='access'),
 
     path('', home, name='home'),
     path('robots.txt', TemplateView.as_view(template_name='core/robots.txt'), name='robots.txt'),

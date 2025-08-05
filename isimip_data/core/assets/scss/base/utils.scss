@@ -18,3 +18,8 @@
 .cursor-pointer {
     cursor: pointer !important;
 }
+
+.text-break-all {
+    word-break: break-all;
+    white-space: normal;
+}

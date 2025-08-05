@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block main %}
+
+<div class="container">
+    <header class="wide">
+        <h1>Access token</h1>
+    </header>
+
+    <div class="card">
+        <div class="card-body text-danger">
+            <p>
+                {% if error %}
+                {{ error }}
+                {% else %}
+                The provided token could not be validated.
+                {% endif %}
+            </p>
+            <p>
+                If the problem persists, please do not hesitate to contact us at
+                <a href="mailto:info@isimip.org">info@isimip.org</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

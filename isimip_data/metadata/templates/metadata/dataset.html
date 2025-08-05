@@ -73,9 +73,17 @@
             <h3>{% trans 'Restricted' %}</h3>
             <div class="card">
                 <div class="card-body">
-                    <p>
-                        Access to this dataset is restricted. {% restricted_message dataset %}
-                    </p>
+                    <div class="mb-2">
+                        {% blocktrans trimmed %}
+                        Access to this dataset is restricted. To gain access, please use the button below and
+                        acknowledge the additional terms of use.
+                        {% endblocktrans %}
+                    </div>
+                    <div>
+                        <a class="btn btn-success" href="{% url 'access' dataset.path %}">
+                            {% trans 'Request access' %}
+                        </a>
+                    </div>
                 </div>
             </div>
             {% endif %}

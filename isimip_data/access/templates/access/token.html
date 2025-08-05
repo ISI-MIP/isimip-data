@@ -1,0 +1,66 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block main %}
+
+<div class="container">
+    <header class="wide">
+        <h1>Access token</h1>
+        <h2>{{ resource.title }}</h2>
+    </header>
+
+    <div class="row">
+        <div class="col-md-8">
+            <h3>Terms of use</h3>
+            <div class="card">
+                <div class="card-body">
+                    {{ resource.description|linebreaksbr|urlize }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h3>Access token</h3>
+            <div class="card">
+                <div class="card-body">
+                    <pre class="text-break-all mb-1">{{ token.as_jwt }}</pre>
+                    <button type="button" class="link float-end copy-to-clipboard" title="Copy to clipboard">
+                        <span class="material-symbols-rounded symbols-copy">content_copy</span>
+                        <code class="d-none">{{ token.as_jwt }}</code>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Data Access</h3>
+    <div class="card">
+        <div class="card-body">
+            <p class="text-success">
+                A cookie containing the access token has been set in your browser, which should enable you to access this dataset. You can now download the files as usual.
+            </p>
+
+            <p>
+                If you want to download the data using a command line tool, you need to set
+                a specific header which contains your token. E.g.:
+            </p>
+
+            <pre class="text-break-all mb-2">wget --header="Authorization: Bearer {{ token.as_jwt }}" URL</pre>
+
+            <pre class="text-break-all mb-2">curl -H "Authorization: Bearer {{ token.as_jwt }}" URL</pre>
+
+            <pre class="text-break-all mb-2">http URL "Authorization: Bearer {{ token.as_jwt }}"</pre>
+
+            <p>
+                If you use the requests library in your Python script, you can use:
+            </p>
+
+            <pre class="text-break-all mb-2">response = requests.get(url, headers={"Authorization": "Bearer {{ token.as_jwt }}"})</pre>
+
+            If you encounter any problems, please do not hesitate to contact us at
+            <a href="mailto:info@isimip.org">info@isimip.org</a>.
+        </div>
+    </div>
+</div>
+
+{% endblock %}
