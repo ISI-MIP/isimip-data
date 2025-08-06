@@ -3,6 +3,7 @@ import { isNil } from 'lodash'
 
 import { getLocationParams, getLocationString } from 'isimip_data/metadata/assets/js/utils/location'
 
+import { useAccessQuery } from 'isimip_data/access/assets/js/hooks/queries'
 import { useSettingsQuery } from 'isimip_data/core/assets/js/hooks/queries'
 import { useGlossaryQuery, useIdentifiersQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
 
@@ -20,6 +21,7 @@ const App = () => {
   const { data: settings } = useSettingsQuery()
   const { data: glossary } = useGlossaryQuery()
   const { data: identifiers } = useIdentifiersQuery()
+  const { data: access } = useAccessQuery()
 
   // after the identifiers are fetched, parse the url and initialize params
   useEffect(() => {
@@ -67,6 +69,7 @@ const App = () => {
           pageSize={parseInt(settings.METADATA_PAGE_SIZE)}
           maxCount={parseInt(settings.METADATA_MAX_COUNT)}
           glossary={glossary}
+          access={access}
           updateParams={updateParams}
         />
       </div>

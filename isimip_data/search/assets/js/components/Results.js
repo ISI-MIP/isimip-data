@@ -13,7 +13,7 @@ import Selection from './Selection'
 import Suggestions from './Suggestions'
 import Version from './Version'
 
-const Results = ({ params, maxCount, glossary, updateParams }) => {
+const Results = ({ params, maxCount, glossary, access, updateParams }) => {
 
   const [selected, setSelected] = useLs('isimip.search.selected', [])  // todo lsstate
 
@@ -48,6 +48,7 @@ const Results = ({ params, maxCount, glossary, updateParams }) => {
               key={dataset.id}
               dataset={dataset}
               glossary={glossary}
+              access={access}
               selected={selected}
               setSelected={setSelected}
             />
@@ -63,6 +64,7 @@ Results.propTypes = {
   params: PropTypes.object.isRequired,
   maxCount: PropTypes.number.isRequired,
   glossary: PropTypes.object.isRequired,
+  access: PropTypes.array.isRequired,
   updateParams: PropTypes.func.isRequired
 }
 

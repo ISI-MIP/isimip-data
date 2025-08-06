@@ -7,23 +7,30 @@ import { handleDownload } from '../utils'
 
 import ConfigureDownload from './ConfigureDownload'
 
-const ResultDownloadsTab = ({ dataset, setTab }) => {
+const ResultDownloadsTab = ({ dataset, hasAccess, setTab }) => {
+
   return (
     <div>
       {
-        dataset.restricted ? (
-          <div className="mb-2 mb-md-0 pt-1 pb-1">
-            <div className="mb-1">
-              Access to this dataset is restricted. To gain access, please use the button
-              below and acknowledge the additional terms of use.
-            </div>
-            <div className="col-lg-3">
-              <a className="btn btn-success btn-sm" href={`/access/${dataset.path}`} target="_blank" rel="noreferrer">
-                Request access
-              </a>
-            </div>
+        dataset.restricted && (
+          <div className="mb-2">
+            {
+              hasAccess ? (
+                <div className="text-success">
+                  You already successfully requested access to this dataset and the access
+                  token is stored in this browser.
+                </div>
+              ) : (
+                <a className="btn btn-success btn-sm" href={`/access/${dataset.path}`} target="_blank" rel="noreferrer">
+                  Request access to this dataset
+                </a>
+              )
+            }
           </div>
-        ) : (
+        )
+      }
+      {
+        hasAccess && (
           <>
             <div className="row mb-2 mb-md-0 pt-1 pb-1">
               <div className="col-lg-4">
@@ -77,6 +84,7 @@ const ResultDownloadsTab = ({ dataset, setTab }) => {
 
 ResultDownloadsTab.propTypes = {
   dataset: PropTypes.object.isRequired,
+  hasAccess: PropTypes.bool.isRequired,
   setTab: PropTypes.func.isRequired
 }
 

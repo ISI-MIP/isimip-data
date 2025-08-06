@@ -7,9 +7,8 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.urls import reverse
 
-import jwt
-
 from .managers import ResourceManager
+from .utils import encode_token
 
 
 def generate_token():
@@ -68,7 +67,11 @@ class Token(models.Model):
 
     @property
     def as_jwt(self):
-        return jwt.encode(self.as_dict, settings.FILES_AUTH_SECRET, algorithm="HS256")
+        return encode_token(self.as_dict)
+
+    @property
+    def as_header(self):
+        return f'Authorization: Bearer {self.as_jwt}'
 
     def get_absolute_url(self, request):
         return request.build_absolute_uri(reverse('token', args=[self.as_jwt]))

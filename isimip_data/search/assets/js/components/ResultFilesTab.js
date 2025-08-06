@@ -8,7 +8,7 @@ import DatasetApi from 'isimip_data/metadata/assets/js/api/DatasetApi'
 
 import { addLineBreaks, getSize } from '../utils'
 
-const ResultFilesTab = ({ dataset }) => {
+const ResultFilesTab = ({ dataset, hasAccess }) => {
 
   const handleDownload = (event, file) => {
     event.preventDefault()
@@ -42,12 +42,16 @@ const ResultFilesTab = ({ dataset }) => {
                       <Icon className="d-block" icon="exit_to_app" />
                     </a>
                   </Tooltip>
-                  <Tooltip title="Download file">
-                    <a className="d-block" href={file.file_url} target="_blank" rel="noreferrer"
-                       onClick={() => handleDownload(event, file)}>
-                      <Icon className="d-block" icon="download" />
-                    </a>
-                  </Tooltip>
+                  {
+                    hasAccess && (
+                      <Tooltip title="Download file">
+                        <a className="d-block" href={file.file_url} target="_blank" rel="noreferrer"
+                           onClick={() => handleDownload(event, file)}>
+                          <Icon className="d-block" icon="download" />
+                        </a>
+                      </Tooltip>
+                    )
+                  }
                 </div>
               </td>
             </tr>
@@ -60,7 +64,8 @@ const ResultFilesTab = ({ dataset }) => {
 }
 
 ResultFilesTab.propTypes = {
-  dataset: PropTypes.object.isRequired
+  dataset: PropTypes.object.isRequired,
+  hasAccess: PropTypes.bool.isRequired
 }
 
 export default ResultFilesTab

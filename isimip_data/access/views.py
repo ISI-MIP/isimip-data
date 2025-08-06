@@ -2,12 +2,11 @@ from django.conf import settings
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
-import jwt as pyjwt
-
 from isimip_data.core.mail import send_mail
 
 from .forms import AccessForm
 from .models import Resource, Token
+from .utils import decode_token
 
 
 def access(request, path):
@@ -43,8 +42,13 @@ def access(request, path):
 
 
 def token(request, jwt):
+    payload, error = decode_token(jwt)
+    if not payload:
+        return render(request, 'access/token_error.html', {
+            'error': error
+        })
+
     try:
-        payload = pyjwt.decode(jwt, settings.FILES_AUTH_SECRET, algorithms=["HS256"])
         token = Token.objects.get(subject=payload['sub'], resource__paths=payload['paths'])
     except Token.DoesNotExist:
         return render(request, 'access/token_error.html', {
