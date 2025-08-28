@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Markdown from 'react-markdown'
 import { isEmpty, isUndefined, last } from 'lodash'
@@ -6,6 +6,8 @@ import { isEmpty, isUndefined, last } from 'lodash'
 import Operation from './Operation'
 
 const Operations = ({ operationsConfig, operationsHelp, operations, errors, setOperations }) => {
+
+  const [disabled, setDisabled] = useState(false)
 
   const lastOperation = last(operations)
   const lastOperationConfig = operationsConfig.find(operation => (
@@ -19,6 +21,16 @@ const Operations = ({ operationsConfig, operationsHelp, operations, errors, setO
       !lastOperationConfig.next.includes(operation.operation)
     )
   )).map(operation => operation.operation)
+
+  useEffect(() => {
+    setDisabled(
+      lastOperation && (
+        lastOperation.compute_mean || lastOperation.output_csv || (
+          disabledOperations.length == operationsConfig.length
+        )
+      )
+    )
+  }, [lastOperation, disabledOperations, operationsConfig])
 
   const addOperation = (operation) => {
     setOperations([
@@ -91,11 +103,7 @@ const Operations = ({ operationsConfig, operationsHelp, operations, errors, setO
           <button
             type="button" className="btn btn-success dropdown-toggle"
             data-bs-toggle="dropdown" aria-expanded="false"
-            disabled={lastOperation && (
-              lastOperation.compute_mean || lastOperation.output_csv || (
-                disabledOperations.length == operationsConfig.length
-              )
-            )}
+            disabled={disabled}
           >
             Add operation
           </button>
