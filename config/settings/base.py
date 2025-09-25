@@ -425,7 +425,7 @@ SEARCH_FACETS = [
             'title': 'Direct human forcing'
         },
         {
-            'identifier': 'sens_forcing',
+            'identifier': 'sens_scenario',
             'title': 'Sensitivity experiment'
         },
     ],
