@@ -9,6 +9,7 @@ from django.shortcuts import Http404, get_object_or_404, redirect, render, rever
 
 from datacite import schema43
 
+from isimip_data.access.utils import check_access
 from isimip_data.annotations.models import Download, Figure, Reference
 from isimip_data.caveats.models import Caveat
 from isimip_data.core.utils import get_file_base_url
@@ -81,6 +82,7 @@ def dataset(request, pk=None, path=None):
         'references': Reference.objects.filter(annotations__datasets__contains=[obj.id]),
         'caveats': caveats,
         'caveats_versions': caveats_versions,
+        'has_access': check_access(request, obj.path),
         'json_ld': obj.json_ld
     })
 
@@ -120,6 +122,7 @@ def file(request, pk=None, path=None):
         'public_version': versions.exclude(id=obj.id).filter(dataset__public=True).first(),
         'caveats': caveats,
         'caveats_versions': caveats_versions,
+        'has_access': check_access(request, obj.path),
         'json_ld': obj.json_ld
     })
 

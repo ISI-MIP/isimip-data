@@ -58,6 +58,10 @@ h4 {
     // font-weight: 600;
 }
 
+pre {
+    color: var(--bs-code-color);
+}
+
 .table {
     tr:last-child > td {
         border-bottom: none;

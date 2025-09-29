@@ -1,0 +1,86 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block main %}
+
+<div class="container">
+    <header class="wide">
+        <h1>Request access</h1>
+        <h2>{{ resource.title }}</h2>
+    </header>
+
+    <div class="row">
+        <div class="col-md-8">
+            <h3>Terms of use</h3>
+            <div class="card">
+                <div class="card-body">
+                    <p>
+                        In addition to our general <a href="{{ settings.TERMS_OF_USE_URL }}">terms of use</a>, the following terms apply:
+                    </p>
+
+                    {{ resource.description|linebreaksbr|urlize }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h3>Confirmation</h3>
+            <div class="card">
+                <div class="card-body">
+                    {% if form.is_bound and not form.errors %}
+                    <div class="text-success">
+                        {% blocktrans with email=form.instance trimmed %}
+                        We have sent an email to {{ email }}, containing instructions on how to access
+                        the data. If you do not receive it within a few minutes, please contact us.
+                        {% endblocktrans %}
+                    </div>
+                    {% else %}
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="{{ form.subject.id_for_label }}" class="mb-1 text-bold">
+                                {% trans 'Your email address' %}
+                            </label>
+
+                            <input type="{{ form.subject.widget_type }}" id="{{ form.subject.id_for_label }}"
+                                   name="{{ form.subject.name }}"
+                                   value="{{ form.subject.value|default_if_none:'' }}"
+                                   class="form-control {% if form.subject.errors %}is-invalid{% endif %}"
+                                   aria-describedby="{{ form.subject.id_for_label }}-help"
+                                   placeholder="{% trans 'Email' %}">
+
+                            {% for error in form.subject.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input type="checkbox" name="{{ form.consent.name }}" id="{{ form.consent.id_for_label }}"
+                                   {% if form.consent.value %}checked{% endif %}
+                                   class="form-check-input {% if form.consent.errors %}is-invalid{% endif %}"
+                                   aria-describedby="{{ form.consent.id_for_label }}-help">
+
+                            <label class="form-check-label" for="{{ form.consent.id_for_label }}">
+                                {% trans 'I agree to the <span id="show-terms-of-use">terms of use</span>.' %}
+                            </label>
+
+                            {% if form.consent.errors %}
+                            <div class="invalid-feedback">
+                                {% trans 'You need to agree to the terms of use to proceed.' %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-success">
+                            {% trans 'Sign' %}
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

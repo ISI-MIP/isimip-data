@@ -16,10 +16,15 @@ import ResultResourcesTab from './ResultResourcesTab'
 import ResultSelect from './ResultSelect'
 import ResultTitle from './ResultTitle'
 
-const Result = ({ dataset, glossary, selected, setSelected }) => {
+const Result = ({ dataset, glossary, access, selected, setSelected }) => {
 
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState('metadata')
+
+  // check if the user can download the data
+  const hasAccess = dataset.restricted ? access.some(resource => (
+    resource.paths.some(path => dataset.path.startsWith(path))
+  )) : true
 
   const handleButton = (tabKey) => {
     if (open && (tab == tabKey)) {
@@ -58,11 +63,11 @@ const Result = ({ dataset, glossary, selected, setSelected }) => {
 
               <div className="mb-1">
                 {tab == 'metadata' && <ResultMetadataTab dataset={dataset} />}
-                {tab == 'files' && <ResultFilesTab dataset={dataset} />}
+                {tab == 'files' && <ResultFilesTab dataset={dataset} hasAccess={hasAccess} />}
                 {tab == 'references' && <ResultReferencesTab dataset={dataset} />}
                 {tab == 'resources' && <ResultResourcesTab dataset={dataset} />}
                 {tab == 'caveats' && <ResultCaveatsTab dataset={dataset} />}
-                {tab == 'downloads' && <ResultDownloadsTab dataset={dataset} setTab={setTab} />}
+                {tab == 'downloads' && <ResultDownloadsTab dataset={dataset} hasAccess={hasAccess} setTab={setTab} />}
               </div>
             </li>
           )
@@ -75,6 +80,7 @@ const Result = ({ dataset, glossary, selected, setSelected }) => {
 Result.propTypes = {
   dataset: PropTypes.object.isRequired,
   glossary: PropTypes.object.isRequired,
+  access: PropTypes.array.isRequired,
   selected: PropTypes.array.isRequired,
   setSelected: PropTypes.func.isRequired
 }

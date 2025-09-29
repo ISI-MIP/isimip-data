@@ -68,9 +68,26 @@
             <h3>{% trans 'Restricted' %}</h3>
             <div class="card">
                 <div class="card-body">
-                    <p>
-                        Access to this file is restricted. {% restricted_message dataset %}
-                    </p>
+                    {% if has_access %}
+                    <div class="text-success">
+                        {% blocktrans trimmed %}
+                        You already successfully requested access to this file and the
+                        access token is stored in this browser.
+                        {% endblocktrans %}
+                    </div>
+                    {% else %}
+                    <div class="mb-2">
+                        {% blocktrans trimmed %}
+                        Access to this file is restricted. To gain access, please use the button below and
+                        acknowledge the additional terms of use.
+                        {% endblocktrans %}
+                    </div>
+                    <div>
+                        <a class="btn btn-success" href="{% url 'access' file.path %}">
+                            {% trans 'Request access' %}
+                        </a>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             {% endif %}
