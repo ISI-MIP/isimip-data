@@ -37,7 +37,8 @@ class DatasetFileSerializer(serializers.ModelSerializer):
 
     def get_file_url(self, obj):
         if obj.dataset.public:
-            return get_file_base_url(self.context['request']) + obj.path
+            base_url = get_file_base_url(self.context['request'])
+            return f'{base_url}restricted/{obj.path}' if obj.dataset.restricted else f'{base_url}{obj.path}'
 
 
 class DatasetResourceSerializer(serializers.ModelSerializer):
@@ -292,11 +293,13 @@ class FileSerializer(serializers.ModelSerializer):
 
     def get_file_url(self, obj):
         if obj.dataset.public:
-            return get_file_base_url(self.context['request']) + obj.path
+            base_url = get_file_base_url(self.context['request'])
+            return f'{base_url}restricted/{obj.path}' if obj.dataset.restricted else f'{base_url}{obj.path}'
 
     def get_json_url(self, obj):
         if obj.dataset.public:
-            return get_file_base_url(self.context['request']) + obj.json_path
+            base_url = get_file_base_url(self.context['request'])
+            return f'{base_url}restricted/{obj.json_path}' if obj.dataset.restricted else f'{base_url}{obj.json_path}'
 
 
 class ResourceIndexSerializer(serializers.ModelSerializer):

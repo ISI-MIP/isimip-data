@@ -32,14 +32,18 @@ const ResultDownloadsTab = ({ dataset, hasAccess, setTab }) => {
       {
         hasAccess && (
           <>
-            <div className="row mb-2 mb-md-0 pt-1 pb-1">
-              <div className="col-lg-4">
-                <ConfigureDownload label="Configure download" files={dataset.files} />
-              </div>
-              <div className="col-lg-8 text-muted">
-                Run operations on the server to, e.g. cut-out regions or selecting time series.
-              </div>
-            </div>
+            {
+              !dataset.restricted && (
+                <div className="row mb-2 mb-md-0 pt-1 pb-1">
+                  <div className="col-lg-4">
+                    <ConfigureDownload label="Configure download" files={dataset.files} />
+                  </div>
+                  <div className="col-lg-8 text-muted">
+                    Run operations on the server to, e.g. cut-out regions or selecting time series.
+                  </div>
+                </div>
+              )
+            }
             <div className="row mb-2 mb-md-0 pt-1 pb-1">
               <div className="col-lg-4">
                 <button type="button" className="d-flex align-items-center link" onClick={() => handleDownload({id: dataset.id})}>
