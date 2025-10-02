@@ -5,7 +5,6 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet
 
-from isimip_data.core.utils import get_file_base_url
 from isimip_data.metadata.models import Dataset, File
 
 from .models import Caveat
@@ -30,43 +29,47 @@ class CaveatViewSet(ReadOnlyModelViewSet):
     @action(detail=True, url_path='datasets', renderer_classes=[JSONRenderer])
     def detail_datasets(self, request, pk):
         caveat = self.get_object()
-        metadata_url_template = request.build_absolute_uri('/datasets/') + '{}/'
-        datasets = [
-            dict(**dataset, metadata_url=metadata_url_template.format(dataset['id']))
-            for dataset in Dataset.objects.using('metadata').filter(id__in=caveat.datasets)
-                                                            .values('id', 'path', 'version', 'public')
-        ]
-
-        response = Response(datasets)
+        base_url = request.build_absolute_uri()
+        datasets = Dataset.objects.using('metadata').filter(id__in=caveat.datasets)
+        response = Response([
+            {
+                'id': dataset.id,
+                'path': dataset.path,
+                'version': dataset.version,
+                'public': dataset.public,
+                'metadata_url': base_url + dataset.get_absolute_url(),
+            } for dataset in datasets
+        ])
         response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.datasets.json'
         return response
 
     @action(detail=True, url_path='files', renderer_classes=[JSONRenderer])
     def detail_files(self, request, pk):
         caveat = self.get_object()
-        metadata_url_template = request.build_absolute_uri('/files/') + '{}/'
-        file_url_template = get_file_base_url(request)
-        datasets = [
-            dict(
-                **file,
-                metadata_url=metadata_url_template.format(file['id']),
-                file_url=file_url_template + file['path']
-            )
-            for file in File.objects.using('metadata').filter(dataset__id__in=caveat.datasets)
-                                                      .values('id', 'dataset_id', 'path', 'version')
-        ]
-
-        response = Response(datasets)
+        base_url = request.build_absolute_uri()
+        files = File.objects.using('metadata').select_related('dataset').filter(dataset__id__in=caveat.datasets)
+        response = Response([
+            {
+                'id': file.id,
+                'dataset_id': file.dataset_id,
+                'path': file.path,
+                'version': file.version,
+                'public': file.public,
+                'metadata_url': base_url + file.get_absolute_url(),
+                'file_url': file.file_url,
+                'json_url': file.json_url
+            } for file in files
+        ])
         response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.files.json'
         return response
 
     @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])
     def detail_filelist(self, request, pk):
         caveat = self.get_object()
-
+        files = File.objects.using('metadata').select_related('dataset') \
+                            .filter(dataset__id__in=caveat.datasets, dataset__public=True)
         response = Response({
-            'file_base_url': get_file_base_url(request),
-            'files': File.objects.using('metadata').filter(dataset__id__in=caveat.datasets, dataset__public=True)
+            'files': files
         }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
         response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.txt'
         return response

@@ -3,7 +3,6 @@ from rest_framework.reverse import reverse
 
 from isimip_data.annotations.models import Annotation, Download, Figure, Reference
 from isimip_data.caveats.models import Caveat
-from isimip_data.core.utils import get_file_base_url
 
 from .models import Dataset, File, Identifier, Resource
 
@@ -11,7 +10,6 @@ from .models import Dataset, File, Identifier, Resource
 class DatasetFileSerializer(serializers.ModelSerializer):
 
     metadata_url = serializers.SerializerMethodField()
-    file_url = serializers.SerializerMethodField()
     rights = serializers.JSONField(source='rights_dict')
 
     class Meta:
@@ -28,17 +26,13 @@ class DatasetFileSerializer(serializers.ModelSerializer):
             'url',
             'metadata_url',
             'file_url',
+            'json_url',
             'rights',
             'terms_of_use'
         )
 
     def get_metadata_url(self, obj):
-        return reverse('file', args=[obj.id], request=self.context['request'])
-
-    def get_file_url(self, obj):
-        if obj.dataset.public:
-            base_url = get_file_base_url(self.context['request'])
-            return f'{base_url}restricted/{obj.path}' if obj.dataset.restricted else f'{base_url}{obj.path}'
+        return reverse('file', args=[obj.id], request=self.context.get('request'))
 
 
 class DatasetResourceSerializer(serializers.ModelSerializer):
@@ -204,11 +198,11 @@ class DatasetSerializer(serializers.ModelSerializer):
         )
 
     def get_metadata_url(self, obj):
-        return reverse('dataset', args=[obj.id], request=self.context['request'])
+        return reverse('dataset', args=[obj.id], request=self.context.get('request'))
 
     def get_filelist_url(self, obj):
         if obj.public:
-            return reverse('dataset-detail-filelist', args=[obj.id], request=self.context['request'])
+            return reverse('dataset-detail-filelist', args=[obj.id], request=self.context.get('request'))
 
     def get_caveats(self, obj):
         if self.context.get('request').GET.get('caveats'):
@@ -259,8 +253,6 @@ class FileSerializer(serializers.ModelSerializer):
     links = FileLinkSerializer(many=True)
     search_rank = serializers.FloatField(required=False, default=0.0)
     metadata_url = serializers.SerializerMethodField()
-    file_url = serializers.SerializerMethodField()
-    json_url = serializers.SerializerMethodField()
     rights = serializers.JSONField(source='rights_dict')
 
     class Meta:
@@ -289,17 +281,7 @@ class FileSerializer(serializers.ModelSerializer):
         )
 
     def get_metadata_url(self, obj):
-        return reverse('file', args=[obj.id], request=self.context['request'])
-
-    def get_file_url(self, obj):
-        if obj.dataset.public:
-            base_url = get_file_base_url(self.context['request'])
-            return f'{base_url}restricted/{obj.path}' if obj.dataset.restricted else f'{base_url}{obj.path}'
-
-    def get_json_url(self, obj):
-        if obj.dataset.public:
-            base_url = get_file_base_url(self.context['request'])
-            return f'{base_url}restricted/{obj.json_path}' if obj.dataset.restricted else f'{base_url}{obj.json_path}'
+        return reverse('file', args=[obj.id], request=self.context.get('request'))
 
 
 class ResourceIndexSerializer(serializers.ModelSerializer):
@@ -319,16 +301,19 @@ class ResourceIndexSerializer(serializers.ModelSerializer):
             'previous_version',
             'new_version',
             'is_external',
+            'url',
             'resource_url',
             'creators_str',
             'publication_date'
         )
 
     def get_resource_url(self, obj):
-        return reverse('resource', args=[str(obj.doi)], request=self.context['request'])
+        return reverse('resource', args=[str(obj.doi)], request=self.context.get('request'))
 
 
 class ResourceSerializer(serializers.ModelSerializer):
+
+    resource_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Resource
@@ -348,8 +333,13 @@ class ResourceSerializer(serializers.ModelSerializer):
             'previous_version',
             'new_version',
             'is_external',
+            'url',
+            'resource_url',
             'datacite',
         )
+
+    def get_resource_url(self, obj):
+        return reverse('resource', args=[str(obj.doi)], request=self.context.get('request'))
 
 
 class IdentifierSerializer(serializers.ModelSerializer):

@@ -1,2 +1,2 @@
-{% for file in files %}{{ file_base_url }}{{ file.path }}
+{% for file in files %}{{ file.file_url }}
 {% endfor %}

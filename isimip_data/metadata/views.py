@@ -12,7 +12,6 @@ from datacite import schema43
 from isimip_data.access.utils import check_access
 from isimip_data.annotations.models import Download, Figure, Reference
 from isimip_data.caveats.models import Caveat
-from isimip_data.core.utils import get_file_base_url
 
 from .models import Dataset, File, Identifier, Resource
 from .utils import render_bibtex
@@ -74,7 +73,6 @@ def dataset(request, pk=None, path=None):
     return render(request, 'metadata/dataset.html', {
         'title': f'Dataset {obj.name}',
         'dataset': obj,
-        'file_base_url': get_file_base_url(request),
         'versions': versions,
         'public_version': versions.exclude(id=obj.id).filter(public=True).first(),
         'figures': Figure.objects.filter(annotations__datasets__contains=[obj.id]),
@@ -116,7 +114,6 @@ def file(request, pk=None, path=None):
     return render(request, 'metadata/file.html', {
         'title': f'File {obj.name}',
         'file': obj,
-        'file_base_url': get_file_base_url(request),
         'parents': [obj.dataset],
         'versions': versions,
         'public_version': versions.exclude(id=obj.id).filter(dataset__public=True).first(),

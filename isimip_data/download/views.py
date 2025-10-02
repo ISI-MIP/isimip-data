@@ -1,7 +1,7 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-from isimip_data.core.utils import get_file_api_url
 from isimip_data.metadata.models import File
 
 
@@ -12,7 +12,7 @@ def download(request, job_id=None):
 
     return render(request, 'download/download.html', {
         'title': 'Configure download',
-        'job_url': get_file_api_url(request) + job_id if job_id else None,
+        'job_url': settings.FILE_API_URL + job_id if job_id else None,
         'files': [
             {
                 'path': file.path,

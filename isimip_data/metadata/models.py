@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
+from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.postgres.search import SearchVectorField
 from django.db import models
@@ -197,6 +198,20 @@ class File(models.Model):
             'isPartOf': self.dataset.json_ld
         }
 
+    @cached_property
+    def file_url(self):
+        if self.dataset.restricted:
+            return f'{settings.FILES_BASE_URL}/restricted/{self.path}'
+        else:
+            return f'{settings.FILES_BASE_URL}/{self.path}'
+
+    @cached_property
+    def json_url(self):
+        if self.dataset.restricted:
+            return f'{settings.FILES_BASE_URL}/restricted/{self.json_path}'
+        else:
+            return f'{settings.FILES_BASE_URL}/{self.json_path}'
+
     def get_absolute_url(self):
         return reverse('file', kwargs={'pk': self.pk})
 
@@ -333,9 +348,6 @@ class Resource(models.Model):
     def is_external(self):
         return self.datacite is None
 
-    def get_absolute_url(self):
-        return reverse('resource', kwargs={'doi': self.doi})
-
     @cached_property
     def json_ld(self):
         data = {
@@ -378,6 +390,9 @@ class Resource(models.Model):
             })
 
         return data
+
+    def get_absolute_url(self):
+        return reverse('resource', kwargs={'doi': self.doi})
 
 
 class Tree(models.Model):
