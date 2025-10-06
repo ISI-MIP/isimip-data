@@ -17,7 +17,7 @@ wget --header="{{ token.as_header }}" URL
 
 curl -H "{{ token.as_header }}" URL
 
-http URL "{{ token.as_header }}"
+http --download URL "{{ token.as_header }}"
 
 If you use the requests library in your Python script, you can use:
 
