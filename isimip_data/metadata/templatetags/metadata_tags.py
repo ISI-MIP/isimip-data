@@ -2,6 +2,7 @@ import re
 
 from django import template
 from django.conf import settings
+from django.template.defaultfilters import urlize
 from django.utils.safestring import mark_safe
 
 register = template.Library()
@@ -29,8 +30,15 @@ def restricted_message(obj):
 
 
 @register.filter
-def replace_caveats(value):
+def render_description(value):
+    description = urlize(value)
+
     # replaces, e.g. <a ...>https://data.isimip.org/issues/8/</a>
     # with <a ...>#8</a>
-    return mark_safe(re.sub(r'(<a.*?>)(https://data\.isimip\.org/(caveats|issues|notes)/.*?)(\d+)([/]*)(</a>)',
-                            r'\1#\4\6', value))
+    description = re.sub(r'(<a.*?>)(https://data\.isimip\.org/(caveats|issues|notes)/.*?)(\d+)([/]*)(</a>)',
+                         r'\1#\4\6', description)
+
+    if value.endswith('.') and not description.endswith('.'):
+        description += '.'
+
+    return mark_safe(description)
