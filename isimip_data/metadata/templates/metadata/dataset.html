@@ -112,7 +112,10 @@
                     </li>
                     {% endif %}
                     <li class="list-group-item">
-                        <a href="{% url 'dataset-detail-filelist' dataset.id %}">{% trans 'Download file list' %}</a>
+                        <a href="{% url 'dataset-detail-manifest' dataset.id %}">{% trans 'Download file manifest' %}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'dataset-detail-filelist' dataset.id %}">{% trans 'Download file list for Wget' %}</a>
                     </li>
                     {% for download in downloads %}
                     <li class="list-group-item">

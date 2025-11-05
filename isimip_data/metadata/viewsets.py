@@ -35,6 +35,12 @@ from .serializers import (
 from .utils import fetch_glossary, split_query_string
 
 
+class IndentedJSONRenderer(JSONRenderer):
+
+    def get_indent(self, *args, **kwargs):
+        return 4
+
+
 class Paginator(DjangoPaginator):
 
     @cached_property
@@ -127,6 +133,16 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         response['Content-Disposition'] = f'attachment; filename={dataset.name}.txt'
         return response
 
+    @action(detail=True, url_path='manifest', renderer_classes=[TemplateHTMLRenderer])
+    def detail_manifest(self, request, pk):
+        dataset = self.get_object()
+        files = File.objects.using('metadata').select_related('dataset').filter(dataset=dataset)
+        response = Response({
+            'files': files
+        }, template_name='metadata/manifest.txt', content_type='text/plain; charset=utf-8')
+        response['Content-Disposition'] = f'attachment; filename={dataset.name}-manifest.txt'
+        return response
+
 
 class FileViewSet(ReadOnlyModelViewSet):
 
@@ -166,7 +182,7 @@ class ResourceViewSet(ReadOnlyModelViewSet):
         serializer = ResourceIndexSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=True, url_path='datasets', renderer_classes=[JSONRenderer])
+    @action(detail=True, url_path='datasets', renderer_classes=[IndentedJSONRenderer])
     def detail_datasets(self, request, pk):
         resource = self.get_object()
         base_url = request.build_absolute_uri()
@@ -183,7 +199,7 @@ class ResourceViewSet(ReadOnlyModelViewSet):
         response['Content-Disposition'] = f'attachment; filename={resource.doi}.datasets.json'
         return response
 
-    @action(detail=True, url_path='files', renderer_classes=[JSONRenderer])
+    @action(detail=True, url_path='files', renderer_classes=[IndentedJSONRenderer])
     def detail_files(self, request, pk):
         resource = self.get_object()
         base_url = request.build_absolute_uri()
@@ -194,9 +210,12 @@ class ResourceViewSet(ReadOnlyModelViewSet):
                 'path': file.path,
                 'version': file.version,
                 'public': file.public,
+                'checksum': file.checksum,
+                'checksum_type': file.checksum_type,
                 'metadata_url': base_url + file.get_absolute_url(),
                 'file_url': file.file_url,
-                'json_url': file.json_url
+                'json_url': file.json_url,
+
             } for file in files
         ])
         response['Content-Disposition'] = f'attachment; filename={resource.doi}.files.json'
@@ -209,7 +228,17 @@ class ResourceViewSet(ReadOnlyModelViewSet):
         response = Response({
             'files': files
         }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
-        response['Content-Disposition'] = f'attachment; filename={resource.doi}.txt'
+        response['Content-Disposition'] = f'attachment; filename={resource.doi}-manifest.txt'
+        return response
+
+    @action(detail=True, url_path='manifest', renderer_classes=[TemplateHTMLRenderer])
+    def detail_manifest(self, request, pk):
+        resource = self.get_object()
+        files = File.objects.using('metadata').select_related('dataset').filter(dataset__resources=resource)
+        response = Response({
+            'files': files
+        }, template_name='metadata/manifest.txt', content_type='text/plain; charset=utf-8')
+        response['Content-Disposition'] = f'attachment; filename={resource.doi}-manifest.txt'
         return response
 
 

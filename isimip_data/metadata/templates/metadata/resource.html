@@ -167,6 +167,9 @@
                         <a href="{% url 'resource-detail-files' resource.id %}">{% trans 'Download file list as JSON' %}</a>
                     </li>
                     <li class="list-group-item">
+                        <a href="{% url 'resource-detail-manifest' resource.id %}">{% trans 'Download file manifest' %}</a>
+                    </li>
+                    <li class="list-group-item">
                         <a href="{% url 'resource-detail-filelist' resource.id %}">{% trans 'Download file list for Wget' %}</a>
                     </li>
                 </ul>
