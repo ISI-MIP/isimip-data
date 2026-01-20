@@ -476,8 +476,8 @@ SEARCH_FACETS = [
             'title': 'River'
         },
         {
-            'identifier': 'river_basin',
-            'title': 'River basin'
+            'identifier': 'station',
+            'title': 'River station'
         },
         {
             'identifier': 'species',
