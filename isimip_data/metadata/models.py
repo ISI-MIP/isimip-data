@@ -427,6 +427,9 @@ class Identifier(models.Model):
     def __str__(self):
         return self.identifier
 
+    def get_absolute_url(self):
+        return reverse('identifier', kwargs={'identifier': self.identifier})
+
 
 class Specifier(models.Model):
 

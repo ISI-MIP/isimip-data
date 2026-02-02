@@ -11,30 +11,25 @@
 
 <div class="container">
     <header>
-        <h1>{% trans 'Identifier statistics' %}</h1>
+        <h1>{% trans 'Identifiers' %}</h1>
     </header>
 
-    {% for identifier, rows in identifiers %}
     <div class="card identifiers">
-        <div class="card-header">
-            <strong>{{ identifier }}</strong>
-        </div>
-        <div class="card-body">
-            <div class="d-flex flex-wrap row-gap-1 column-gap-2">
-            {% for specifier, count in rows %}
-            {% if count > 0 %}
-            <div class="d-flex gap-2 align-items-center border border-gray rounded ps-2 pe-2">
-                <strong>{{ specifier }}</strong>
-                <div class="badge rounded-pill text-bg-secondary">
-                    {{ count }}
+        <ul class="list-group list-group-flush">
+            {% for identifier in identifiers %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-3">
+                        <a href="{{ identifier.get_absolute_url }}">{{ identifier.identifier }}</a>
+                    </div>
+                    <div class="col-9">
+                        <p>{{ identifier.specifiers|join:', ' }}</p>
+                    </div>
                 </div>
-            </div>
-            {% endif %}
+            </li>
             {% endfor %}
-            </div>
-        </div>
+        </ul>
     </div>
-    {% endfor %}
 </div>
 
 {% endblock %}

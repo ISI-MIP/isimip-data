@@ -21,6 +21,7 @@ from isimip_data.metadata.sitemaps import DatasetSitemap, FileSitemap, ResourceS
 from isimip_data.metadata.views import (
     dataset,
     file,
+    identifier,
     identifiers,
     metadata,
     resource,
@@ -99,6 +100,7 @@ urlpatterns = [
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)', resource, name='resource'),
 
     path('identifiers/', identifiers, name='identifiers'),
+    path('identifiers/<str:identifier>', identifier, name='identifier'),
 
     path('search/', search, name='search'),
     path('search/<path:path>/', search, name='search'),

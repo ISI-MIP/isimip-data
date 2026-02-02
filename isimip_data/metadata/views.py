@@ -194,11 +194,16 @@ def resource_json(request, doi=None):
 
 
 def identifiers(request):
-    identifiers_list = []
-    for identifier in Identifier.objects.using('metadata').identifiers():
-        identifiers_list.append((identifier, Dataset.objects.using('metadata').histogram(identifier)))
-
     return render(request, 'metadata/identifiers.html', {
         'title': 'Identifiers',
-        'identifiers': identifiers_list
+        'identifiers': Identifier.objects.using('metadata').all()
+    })
+
+
+def identifier(request, identifier=None):
+    identifier_instance = get_object_or_404(Identifier.objects.using('metadata'), identifier=identifier)
+    return render(request, 'metadata/identifier.html', {
+        'title': 'Identifiers',
+        'identifier': identifier_instance,
+        'histogram': Dataset.objects.using('metadata').histogram(identifier)
     })

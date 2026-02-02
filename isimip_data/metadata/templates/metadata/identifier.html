@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'metadata.css' %}" />
+{% endblock %}
+
+{% block main %}
+
+<div class="container">
+    <header>
+        <h1>{% trans 'Identifier statistics' %}</h1>
+    </header>
+
+    <div class="card identifier">
+        <div class="card-header">
+            <strong>{{ identifier.identifier }}</strong>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for specifier, count in histogram %}
+            {% if count > 0 %}
+            <li class="list-group-item">
+                <div class="d-flex gap-2 align-items-center">
+                    <strong>{{ specifier }}</strong>
+                    <div class="badge rounded-pill text-bg-secondary">
+                        {{ count }}
+                    </div>
+                </div>
+            </li>
+            {% endif %}
+            {% endfor %}
+            </div>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
