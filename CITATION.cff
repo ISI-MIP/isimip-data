@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+
+title: ISIMIP data
+abstract: Web application for the ISIMIP Repository, using a Django backend and a React frontend.
+
+authors:
+- family-names: Klar
+  given-names: Jochen
+  orcid: https://orcid.org/0000-0002-5883-4273
+
+license: MIT
+repository-code: https://github.com/ISI-MIP/isimip-data
