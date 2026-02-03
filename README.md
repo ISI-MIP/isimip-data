@@ -6,6 +6,7 @@ ISIMIP data
 [![License: MIT](http://img.shields.io/badge/license-MIT-yellow.svg)](https://github.com/ISI-MIP/isimip-data/blob/master/LICENSE)
 [![pytest Workflow Status](https://github.com/ISI-MIP/isimip-data/actions/workflows/pytest.yml/badge.svg)](https://github.com/ISI-MIP/isimip-data/actions/workflows/pytest.yml)
 [![Coverage Status](https://coveralls.io/repos/github/ISI-MIP/isimip-data/badge.svg?branch=master)](https://coveralls.io/github/ISI-MIP/isimip-data?branch=master)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18468008.svg)](https://doi.org/10.5281/zenodo.18468008)
 
 The [Django](https://www.djangoproject.com/) web app that powers the [ISIMIP repository](https://data.isimip.org).
 
