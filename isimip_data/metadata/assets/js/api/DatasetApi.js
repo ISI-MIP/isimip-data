@@ -92,13 +92,18 @@ class DatasetApi {
 
   static downloadFile(file) {
     if (file.file_url) {
-      const iframe = document.createElement('iframe')
-      iframe.style.display = 'none'
-      iframe.src = file.file_url
-      iframe.onload = function() {
-          this.parentNode.removeChild(this)
-      }
-      document.body.appendChild(iframe)
+      fetch(file.file_url)
+        .then(response => response.blob())
+        .then(blob => {
+          const url = URL.createObjectURL(blob)
+          const a = document.createElement('a')
+          a.href = url
+          a.download = file.name
+          document.body.appendChild(a)
+          a.click()
+          document.body.removeChild(a)
+          URL.revokeObjectURL(url)
+        })
     }
   }
 }
