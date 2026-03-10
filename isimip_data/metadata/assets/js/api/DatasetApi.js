@@ -92,18 +92,13 @@ class DatasetApi {
 
   static downloadFile(file) {
     if (file.file_url) {
-      fetch(file.file_url)
-        .then(response => response.blob())
-        .then(blob => {
-          const url = URL.createObjectURL(blob)
-          const a = document.createElement('a')
-          a.href = url
-          a.download = file.name
-          document.body.appendChild(a)
-          a.click()
-          document.body.removeChild(a)
-          URL.revokeObjectURL(url)
-        })
+      const a = document.createElement('a')
+      a.href = file.file_url + '?content_disposition=attachment'
+      a.download = file.name
+      a.rel = 'noopener noreferrer'
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
     }
   }
 }
