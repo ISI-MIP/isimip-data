@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - main
+    - test
+    tags:
+    - "*"
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  PYTHONDONTWRITEBYTECODE: 1
+  FORCE_COLOR: 1
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  pytest:
+    name: Run tests 🧪
+    runs-on: ubuntu-22.04
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: postgres_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout repo 🛎️
+      uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+
+    - name: Set up Python 🐍
+      uses: actions/setup-python@v6
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: pip
+
+    - name: Install package 📦
+      run: |
+        python3 -m pip install --upgrade pip setuptools
+        python3 -m pip install -r requirements/development.txt
+
+    - name: Prepare database 🗄️
+      run: |
+        psql postgres://postgres:postgres_password@localhost -c 'CREATE DATABASE test_isimip_data;'
+        psql postgres://postgres:postgres_password@localhost -c 'CREATE DATABASE test_isimip_metadata;'
+        psql postgres://postgres:postgres_password@localhost/test_isimip_metadata -f testing/sql/test_isimip_metadata.sql
+
+    - name: Setup config file ⚙️
+      run: |
+        cp config/settings/environments/github.py config/settings/local.py
+
+    - name: Run pytest 🧪
+      run: |
+        pytest --reuse-db --cov=isimip_data --cov-fail-under=80 --cov-report=term-missing
