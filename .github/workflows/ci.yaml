@@ -49,6 +49,10 @@ jobs:
       with:
         python-version: ${{ env.PYTHON_VERSION }}
         cache: pip
+        cache-dependency-path: |
+          requirements/common.txt
+          requirements/development.txt
+          requirements/production.txt
 
     - name: Install package 📦
       run: |
