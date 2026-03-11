@@ -23,7 +23,7 @@ def get_access_tokens(request):
         if cookie.startswith('isimip_access_token'):
             token = request.COOKIES.get(cookie)
             if token:
-                payload, error = decode_token(token)
+                payload, _ = decode_token(token)
                 if payload:
                     payloads.append(payload)
 
@@ -36,7 +36,7 @@ def parse_cookies(request):
         if cookie.startswith('isimip_access_token'):
             token = request.COOKIES.get(cookie)
             if token:
-                payload, error = decode_token(token)
+                payload, _ = decode_token(token)
                 if payload:
                     payloads.append(payload)
 
