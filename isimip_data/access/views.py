@@ -15,7 +15,7 @@ def access(request, path):
         form = AccessForm(request.POST or None)
 
         if request.method == 'POST' and form.is_valid():
-            token, created = Token.objects.update_or_create(
+            token, _ = Token.objects.update_or_create(
                 subject=form.cleaned_data['subject'],
                 resource=resource
             )
@@ -63,12 +63,13 @@ def token(request, jwt):
     for path in token.resource.paths:
         response.set_cookie(
             f'isimip_access_token_{token.as_jwt[-8:]}',
+            path=path,
             value=token.as_jwt,
             expires=token.expires,
             domain=settings.FILES_AUTH_DOMAIN,
-            secure=False,
+            secure=not settings.DEBUG,
             httponly=False,
-            samesite=None
+            samesite='Lax'
         )
 
     return response
