@@ -63,7 +63,6 @@ jobs:
       run: |
         psql postgres://postgres:postgres_password@localhost -c 'CREATE DATABASE test_isimip_data;'
         psql postgres://postgres:postgres_password@localhost -c 'CREATE DATABASE test_isimip_metadata;'
-        psql postgres://postgres:postgres_password@localhost/test_isimip_metadata -f testing/sql/test_isimip_metadata.sql
 
     - name: Setup config file ⚙️
       run: |

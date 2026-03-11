@@ -19,7 +19,9 @@ def django_db_setup(django_db_setup, django_db_blocker):
 
     with django_db_blocker.unblock():
         # setup the test_isimip_metadata database
-        subprocess.run(['psql', '-f', 'testing/sql/setup.sql'], check=True)
+        sql_path = Path(__file__).resolve().parent / 'testing' / 'sql' / 'setup.sql'
+
+        subprocess.run(['psql', '-f', str(sql_path)], check=True)
 
         # load the fixture
         call_command('loaddata', *[
