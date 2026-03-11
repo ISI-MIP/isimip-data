@@ -15,7 +15,10 @@ DATABASES = {
         'NAME': 'isimip_metadata',
         'USER': 'postgres',
         'PASSWORD': 'postgres_password',
-        'HOST': '127.0.0.1'
+        'HOST': '127.0.0.1',
+        'TEST': {
+            'NAME': 'test_isimip_metadata'
+        }
     }
 }
 
