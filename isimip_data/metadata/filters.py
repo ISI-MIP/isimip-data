@@ -177,6 +177,7 @@ class TreeFilterBackend(BaseFilterBackend):
         if tree_list:
             q = Q()
             for tree in tree_list:
+                tree = tree.rstrip('/') + '/'
                 if queryset.model == File:
                     q |= Q(dataset__tree_path__startswith=tree)
                     if getattr(view, 'filter_resolve_links', True):
