@@ -2,7 +2,7 @@ import logging
 
 from django.contrib.postgres.search import SearchQuery
 from django.core.exceptions import FieldError, ValidationError
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 
 from rest_framework.filters import BaseFilterBackend
 
@@ -35,7 +35,7 @@ class DatasetFilterBackend(BaseFilterBackend):
             return queryset
 
         dataset_ids = request.GET.getlist('dataset')
-        print(request.GET)
+
         if dataset_ids:
             queryset = queryset.filter(dataset_id__in=dataset_ids)
 
@@ -65,7 +65,12 @@ class PathFilterBackend(BaseFilterBackend):
         if path_list:
             q = Q()
             for path in path_list:
-                q |= Q(path__startswith=path) | Q(links__path__startswith=path)
+                q |= Q(path__startswith=path)
+                if getattr(view, 'filter_resolve_links', True):
+                    q |= Exists(
+                        queryset.model.objects.filter(target_id=OuterRef('pk'), path__startswith=path)
+                    )
+
             queryset = queryset.filter(q)
 
         return queryset
@@ -94,9 +99,19 @@ class SearchFilterBackend(BaseFilterBackend):
 
             # last, perform a full text search on the search_vector field
             if queryset.model == File:
-                queryset = queryset.filter(dataset__search__vector=search_query)
+                q = Q(dataset__search__vector=search_query)
+                if getattr(view, 'filter_resolve_links', True):
+                    q |= Exists(
+                        queryset.model.objects.filter(target_id=OuterRef('pk'), dataset__search__vector=search_query)
+                    )
             else:
-                queryset = queryset.filter(search__vector=search_query)
+                q = Q(search__vector=search_query)
+                if getattr(view, 'filter_resolve_links', True):
+                    q |= Exists(
+                        queryset.model.objects.filter(target_id=OuterRef('pk'), search__vector=search_query)
+                    )
+
+            queryset = queryset.filter(q)
 
         return queryset
 
@@ -132,16 +147,21 @@ class IdentifierFilterBackend(BaseFilterBackend):
         if view.detail:
             return queryset
 
-        # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#std:fieldlookup-hstorefield.contains
-        # and https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#containment-and-key-operations
-        # for optimal jsonb lookups: queryset.filter(field={'foo': 'bar', 'egg': 'spam'})
         for identifier in Identifier.objects.using('metadata').identifiers():
-            if identifier != getattr(view, 'identifier_filter_exclude', None):
+            if identifier != getattr(view, 'filter_exclude_identifier', None):
                 q = Q()
                 for value in request.GET.getlist(identifier):
                     if value:
                         q |= Q(specifiers__contains={identifier: value})
-                        q |= Q(links__specifiers__contains={identifier: value})
+
+                        if getattr(view, 'filter_resolve_links', True):
+                            q |= Exists(
+                                queryset.model.objects.filter(
+                                    target_id=OuterRef('pk'),
+                                    specifiers__contains={identifier: value}
+                                )
+                            )
+
                 queryset = queryset.filter(q)
 
         return queryset
@@ -158,9 +178,17 @@ class TreeFilterBackend(BaseFilterBackend):
             q = Q()
             for tree in tree_list:
                 if queryset.model == File:
-                    q |= Q(dataset__tree_path__startswith=tree) | Q(dataset__links__tree_path__startswith=tree)
+                    q |= Q(dataset__tree_path__startswith=tree)
+                    if getattr(view, 'filter_resolve_links', True):
+                        q |= Exists(
+                            queryset.model.objects.filter(target_id=OuterRef('pk'), dataset__tree_path__startswith=tree)
+                        )
                 else:
-                    q |= Q(tree_path__startswith=tree) | Q(links__tree_path__startswith=tree)
+                    q |= Q(tree_path__startswith=tree)
+                    if getattr(view, 'filter_resolve_links', True):
+                        q |= Exists(
+                            queryset.model.objects.filter(target_id=OuterRef('pk'), tree_path__startswith=tree)
+                        )
 
             queryset = queryset.filter(q)
 

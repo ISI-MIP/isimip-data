@@ -77,7 +77,6 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         IdentifierFilterBackend,
         TreeFilterBackend
     )
-    identifier_filter_exclude = None
 
     @action(detail=False)
     def suggestions(self, request):
@@ -106,9 +105,11 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     @action(detail=False, url_path='histogram/(?P<identifier>[A-Za-z0-9_]+)')
     def histogram(self, request, identifier):
         if Identifier.objects.using('metadata').filter(identifier=identifier).exists():
-            # exclude the identifier from IdentifierFilterBackend
-            self.identifier_filter_exclude = identifier
-            queryset = self.filter_queryset(Dataset.objects.using('metadata').filter(target=None))
+            # exclude the identifier from IdentifierFilterBackend and do not resolve links
+            self.filter_exclude_identifier = identifier
+            self.filter_resolve_links = False
+
+            queryset = self.filter_queryset(Dataset.objects.using('metadata'))
             values = queryset.histogram(identifier)
             return Response(values)
         else:

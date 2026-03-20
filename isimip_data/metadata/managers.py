@@ -6,7 +6,12 @@ class DatasetQuerySet(models.QuerySet):
 
     def histogram(self, identifier):
         field = f'specifiers__{identifier}'
-        return self.values_list(field).annotate(count=models.Count(field)).order_by(field)
+        return (
+            self.annotate(distinct_id=models.functions.Coalesce('target_id', 'id'))
+                .values_list(field)
+                .annotate(count=models.Count('distinct_id', distinct=True))
+                .order_by(field)
+        )
 
 
 class DatasetManager(models.Manager):
