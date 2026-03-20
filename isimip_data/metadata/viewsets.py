@@ -46,7 +46,7 @@ class Paginator(DjangoPaginator):
 
     @cached_property
     def count(self):
-        return self.object_list[:settings.METADATA_MAX_COUNT + 1].count()
+        return self.object_list.order_by()[:settings.METADATA_MAX_COUNT + 1].count()
 
 
 class Pagination(PageNumberPagination):
@@ -59,13 +59,16 @@ class Pagination(PageNumberPagination):
 
 class DatasetViewSet(ReadOnlyModelViewSet):
 
+    queryset = (
+        Dataset.objects.using('metadata').filter(target=None).prefetch_related(
+            'files',
+            'files__links',
+            'links',
+            'resources'
+        )
+    )
+
     serializer_class = DatasetSerializer
-    queryset = Dataset.objects.using('metadata').filter(target=None).prefetch_related(
-        'files',
-        'files__links',
-        'links',
-        'resources'
-    ).distinct('path', 'version')
     pagination_class = Pagination
 
     filter_backends = (
@@ -148,9 +151,11 @@ class DatasetViewSet(ReadOnlyModelViewSet):
 
 class FileViewSet(ReadOnlyModelViewSet):
 
+    queryset = (
+        File.objects.using('metadata').filter(target=None).select_related('dataset').prefetch_related('links')
+    )
+
     serializer_class = FileSerializer
-    queryset = File.objects.using('metadata').filter(target=None).select_related('dataset') \
-                           .prefetch_related('links').distinct('path', 'version')
     pagination_class = Pagination
 
     filter_backends = (
@@ -168,8 +173,8 @@ class FileViewSet(ReadOnlyModelViewSet):
 
 class ResourceViewSet(ReadOnlyModelViewSet):
 
-    serializer_class = ResourceSerializer
     queryset = Resource.objects.using('metadata')
+    serializer_class = ResourceSerializer
     pagination_class = Pagination
 
     filter_backends = (
@@ -302,8 +307,8 @@ class TreeViewSet(ViewSet):
 
 class IdentifierViewSet(ReadOnlyModelViewSet):
 
-    serializer_class = IdentifierSerializer
     queryset = Identifier.objects.using('metadata')
+    serializer_class = IdentifierSerializer
 
 
 class GlossaryViewSet(ViewSet):
