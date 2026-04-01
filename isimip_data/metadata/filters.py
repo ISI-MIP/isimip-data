@@ -1,8 +1,8 @@
 import logging
 
 from django.contrib.postgres.search import SearchQuery
-from django.core.exceptions import FieldError, ValidationError
-from django.db.models import Exists, OuterRef, Q
+from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 from rest_framework.filters import BaseFilterBackend
 
@@ -65,11 +65,13 @@ class PathFilterBackend(BaseFilterBackend):
         if path_list:
             q = Q()
             for path in path_list:
-                q |= Q(path__startswith=path)
+                filter_kwargs = {'path__startswith': path}
+
                 if getattr(view, 'filter_resolve_links', True):
-                    q |= Exists(
-                        queryset.model.objects.filter(target_id=OuterRef('pk'), path__startswith=path)
-                    )
+                    subquery = queryset.model.objects.filter(**filter_kwargs).values('root_id').order_by()
+                    q |= Q(root_id__in=subquery)
+                else:
+                    q |= Q(**filter_kwargs)
 
             queryset = queryset.filter(q)
 
@@ -99,19 +101,15 @@ class SearchFilterBackend(BaseFilterBackend):
 
             # last, perform a full text search on the search_vector field
             if queryset.model == File:
-                q = Q(dataset__search__vector=search_query)
-                if getattr(view, 'filter_resolve_links', True):
-                    q |= Exists(
-                        queryset.model.objects.filter(target_id=OuterRef('pk'), dataset__search__vector=search_query)
-                    )
+                filter_kwargs = {'dataset__search__vector': search_query}
             else:
-                q = Q(search__vector=search_query)
-                if getattr(view, 'filter_resolve_links', True):
-                    q |= Exists(
-                        queryset.model.objects.filter(target_id=OuterRef('pk'), search__vector=search_query)
-                    )
+                filter_kwargs = {'search__vector': search_query}
 
-            queryset = queryset.filter(q)
+            if getattr(view, 'filter_resolve_links', True):
+                subquery = queryset.model.objects.filter(**filter_kwargs).values('root_id').order_by()
+                queryset = queryset.filter(root_id__in=subquery)
+            else:
+                queryset = queryset.filter(**filter_kwargs)
 
         return queryset
 
@@ -123,12 +121,10 @@ class VersionFilterBackend(BaseFilterBackend):
             return queryset
 
         if request.GET.get('all') != 'true':
-            try:
-                # datasets have a public field
-                queryset = queryset.filter(public=True)
-            except FieldError:
-                # files need to check the public field of the corresponding dataset
+            if queryset.model == File:
                 queryset = queryset.filter(dataset__public=True)
+            else:
+                queryset = queryset.filter(public=True)
 
         after = request.GET.get('after')
         if after:
@@ -152,15 +148,13 @@ class IdentifierFilterBackend(BaseFilterBackend):
                 q = Q()
                 for value in request.GET.getlist(identifier):
                     if value:
-                        q |= Q(specifiers__contains={identifier: value})
+                        filter_kwargs = {'specifiers__contains': {identifier: value}}
 
                         if getattr(view, 'filter_resolve_links', True):
-                            q |= Exists(
-                                queryset.model.objects.filter(
-                                    target_id=OuterRef('pk'),
-                                    specifiers__contains={identifier: value}
-                                )
-                            )
+                            subquery = queryset.model.objects.filter(**filter_kwargs).values('root_id').order_by()
+                            q |= Q(root_id__in=subquery)
+                        else:
+                            q |= Q(**filter_kwargs)
 
                 queryset = queryset.filter(q)
 
@@ -178,18 +172,17 @@ class TreeFilterBackend(BaseFilterBackend):
             q = Q()
             for tree in tree_list:
                 tree = tree.rstrip('/') + '/'
+
                 if queryset.model == File:
-                    q |= Q(dataset__tree_path__startswith=tree)
-                    if getattr(view, 'filter_resolve_links', True):
-                        q |= Exists(
-                            queryset.model.objects.filter(target_id=OuterRef('pk'), dataset__tree_path__startswith=tree)
-                        )
+                    filter_kwargs = {'dataset__tree_path__startswith': tree}
                 else:
-                    q |= Q(tree_path__startswith=tree)
-                    if getattr(view, 'filter_resolve_links', True):
-                        q |= Exists(
-                            queryset.model.objects.filter(target_id=OuterRef('pk'), tree_path__startswith=tree)
-                        )
+                    filter_kwargs = {'tree_path__startswith': tree}
+
+                if getattr(view, 'filter_resolve_links', True):
+                    subquery = queryset.model.objects.filter(**filter_kwargs).values('root_id').order_by()
+                    q |= Q(root_id__in=subquery)
+                else:
+                    q |= Q(**filter_kwargs)
 
             queryset = queryset.filter(q)
 

@@ -38,6 +38,8 @@ class Dataset(models.Model):
     published = models.DateTimeField()
     archived = models.DateTimeField()
 
+    root_id = models.UUIDField(editable=False)
+
     class Meta:
         db_table = 'datasets'
         managed = False
@@ -130,6 +132,8 @@ class File(models.Model):
 
     created = models.DateTimeField()
     updated = models.DateTimeField()
+
+    root_id = models.UUIDField(editable=False)
 
     class Meta:
         db_table = 'files'
