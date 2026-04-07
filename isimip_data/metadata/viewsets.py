@@ -4,6 +4,7 @@ from pathlib import PurePath
 from django.conf import settings
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.paginator import Paginator as DjangoPaginator
+from django.http import StreamingHttpResponse
 from django.utils.functional import cached_property
 
 from rest_framework.decorators import action
@@ -308,3 +309,22 @@ class GlossaryViewSet(ViewSet):
 
     def list(self, request):
         return Response(fetch_glossary())
+
+
+class IdViewSet(ViewSet):
+
+    def list(self, request):
+        querysets = [
+            Dataset.objects.using('metadata'),
+            File.objects.using('metadata'),
+            Resource.objects.using('metadata'),
+        ]
+
+        return StreamingHttpResponse(
+            (
+                f"{uuid}\t{path}\n"
+                for queryset in querysets
+                for uuid, path in queryset.values_list('id', 'path').iterator(chunk_size=10000)
+            ),
+            content_type='text/plain'
+        )
