@@ -231,7 +231,7 @@ DOWNLOAD_OPERATIONS = [
         'template': 'download/operations/select_bbox.html',
         'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
-            'bbox': [-180,180,-23.43651,23.43651],
+            'bbox': [-180,180,-90,90],
             'compute_mean': False,
             'output_csv': False,
         },
@@ -259,7 +259,7 @@ DOWNLOAD_OPERATIONS = [
         'template': 'download/operations/mask_bbox.html',
         'resolutions': ['15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
-            'bbox': [-180,180,-23.43651,23.43651],
+            'bbox': [-180,180,-90,90],
             'compute_mean': False,
             'output_csv': False
         },
@@ -364,7 +364,7 @@ DOWNLOAD_OPERATIONS = [
         'resolutions': ['30arcsec', '90arcsec', '300arcsec', '1800arcsec',
                         '15arcmin', '30arcmin', '60arcmin', '120arcmin'],
         'initial': {
-            'bbox': [-180,180,-23.43651,23.43651],
+            'bbox': [-180,180,-90,90],
             'compute_mean': False,
             'output_csv': False
         },
