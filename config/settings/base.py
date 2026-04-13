@@ -486,7 +486,7 @@ SEARCH_FACETS = [
     ],
     [
         {
-            'identifier': 'frequency',
+            'identifier': 'time_step',
             'title': 'Temporal resolution'
         },
         {
