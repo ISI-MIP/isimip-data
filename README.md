@@ -1,7 +1,7 @@
 ISIMIP data
 ===========
 
-[![Python Version](https://img.shields.io/badge/python->=3.11-blue)](https://www.python.org/)
+[![Python Version](https://img.shields.io/badge/python->=3.12-blue)](https://www.python.org/)
 [![License](https://img.shields.io/github/license/ISI-MIP/isimip-data?style=flat)](https://github.com/ISI-MIP/isimip-data/blob/main/LICENSE)
 [![CI status](https://github.com/ISI-MIP/isimip-data/actions/workflows/ci.yaml/badge.svg)](https://github.com/ISI-MIP/isimip-data/actions/workflows/ci.yaml)
 [![Latest release](https://shields.io/github/v/release/ISI-MIP/isimip-data)](https://github.com/ISI-MIP/isimip-data/releases)
