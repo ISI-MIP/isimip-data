@@ -139,6 +139,12 @@ def resource(request, pk=None, doi=None):
     elif doi is not None:
         resource = get_object_or_404(queryset, doi=doi)
 
+    preferred_type = request.get_preferred_type(['text/html', 'application/xml', 'application/json'])
+    if preferred_type == 'application/xml':
+        return resource_xml(request, doi=resource.doi)
+    if preferred_type == 'application/json':
+        return resource_json(request, doi=resource.doi)
+
     references = defaultdict(list)
     if resource.datacite is not None:
         for identifier in resource.datacite.get('relatedIdentifiers', []):
