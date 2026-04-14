@@ -74,7 +74,10 @@ DATABASES = {
     },
     'metadata': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'isimip_metadata'
+        'NAME': 'isimip_metadata',
+        'TEST': {
+            'NAME': 'test_isimip_metadata'
+        }
     }
 }
 
