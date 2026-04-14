@@ -189,6 +189,15 @@ def resource_bibtex(request, doi=None):
 
 def resource_xml(request, doi=None):
     resource = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
+
+    # fix relatedIdentifiers for missing relatedIdentifier fields
+    if resource.datacite is not None and 'relatedIdentifiers' in resource.datacite:
+        resource.datacite['relatedIdentifiers'] = [
+            related_identifier
+            for related_identifier in resource.datacite['relatedIdentifiers']
+            if related_identifier.get('relatedIdentifier') is not None
+        ]
+
     xml_string = schema43.tostring(resource.datacite)
     response = HttpResponse(xml_string, content_type='application/xml')
     response['Content-Disposition'] = f'filename="{doi}.xml"'
