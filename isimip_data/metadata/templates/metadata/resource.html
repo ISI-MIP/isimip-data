@@ -222,6 +222,29 @@
     {% include 'metadata/cards/related_identifiers.html' with related_identifiers=references.IsNewVersionOf %}
     {% endif %}
 
+    {% if versions %}
+    <h3>{% trans 'Version History' %}</h3>
+    <div class="card">
+        <ul class="list-group list-group-flush  text-muted">
+            {% for version in versions %}
+            <li class="list-group-item">
+                <div class="d-flex align-items-center">
+                    <span>
+                        <a href="{% url 'resource' version.doi %}">Version {{ version.version }}</a>
+                        was created on {{ version.created|date }}.
+                    </span>
+                    {% if resource.id == version.id %}
+                    <div class="badge rounded-pill border border-secondary text-secondary ms-auto">
+                        this version
+                    </div>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
     {% if resource.datacite.subjects %}
     <h3>{% trans 'GCMD Keywords' %}</h3>
     {% include 'metadata/cards/keywords.html' with subjects=resource.datacite.subjects %}

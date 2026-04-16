@@ -157,9 +157,13 @@ def resource(request, pk=None, doi=None):
     count = resource.datasets.count()
     datasets = resource.datasets.prefetch_related('links').order_by('path')[:settings.METADATA_RESOURCE_MAX_DATASETS]
 
+    doi_root = doi if references.get('IsNewVersionOf') is None else '.'.join(doi.split(".")[:-1])
+    versions = Resource.objects.using('metadata').filter(doi__startswith=doi_root).order_by('-version')
+
     return render(request, 'metadata/resource.html', {
         'title': f'DOI {resource.doi}',
         'resource': resource,
+        'versions': versions,
         'references': references,
         'caveats': caveats,
         'datasets': datasets,

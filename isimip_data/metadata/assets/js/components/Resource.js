@@ -19,7 +19,7 @@ const Resource = ({ resource, all }) => (
           )
         }
       </h4>
-      <div className="row">
+      <div className="row mb-1">
         <div className="col-sm-8">
           {
             resource.paths.map((path, pathIndex) => (
@@ -34,6 +34,20 @@ const Resource = ({ resource, all }) => (
             {resource.doi_url}
           </a>
         </div>
+      </div>
+      <div className="text-muted">
+          <p className="me-auto mb-0">
+            {
+              resource.created_display && (
+                <>This DOI was first created on {resource.created_display}.</>
+              )
+            }
+            {
+              resource.updated_display && resource.created_display != resource.updated_display && (
+                <> It was last updated on {resource.updated_display}.</>
+              )
+            }
+          </p>
       </div>
     </div>
   </div>

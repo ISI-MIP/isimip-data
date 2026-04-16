@@ -8,6 +8,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 
+from isimip_data.core.utils import get_date_display
+
 from .constants import RIGHTS
 from .managers import DatasetManager, IdentifierManager, ResourceManager
 from .utils import get_json_ld_name, get_terms_of_use, merge_identifiers, merge_specifiers, prettify_specifiers
@@ -239,6 +241,14 @@ class Resource(models.Model):
 
     def __str__(self):
         return self.doi
+
+    @cached_property
+    def get_created_display(self):
+        return get_date_display(self.created)
+
+    @cached_property
+    def get_updated_display(self):
+        return get_date_display(self.created)
 
     @cached_property
     def major_version(self):

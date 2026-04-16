@@ -288,6 +288,9 @@ class ResourceIndexSerializer(serializers.ModelSerializer):
 
     resource_url = serializers.SerializerMethodField()
 
+    created_display = serializers.CharField(source='get_created_display')
+    updated_display = serializers.CharField(source='get_updated_display')
+
     class Meta:
         model = Resource
         fields = (
@@ -304,7 +307,11 @@ class ResourceIndexSerializer(serializers.ModelSerializer):
             'url',
             'resource_url',
             'creators_str',
-            'publication_date'
+            'publication_date',
+            'created',
+            'created_display',
+            'updated',
+            'updated_display',
         )
 
     def get_resource_url(self, obj):
