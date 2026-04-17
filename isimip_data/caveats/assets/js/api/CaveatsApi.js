@@ -4,7 +4,7 @@ import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
 class CaveatsApi {
 
   static fetchCaveats(params, fetchParams = {}) {
-    return fetch('/api/v1/caveats/?' + encodeParams(params), fetchParams).then(response => {
+    return fetch('/api/v1/caveats/index/?' + encodeParams(params), fetchParams).then(response => {
       if (response.ok) {
         return response.json()
       } else {

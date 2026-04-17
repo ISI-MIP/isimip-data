@@ -58,18 +58,40 @@ class CaveatIndexSerializer(serializers.ModelSerializer):
 
     creator_display = serializers.SerializerMethodField()
 
+    category_display = serializers.CharField(source='get_category_display')
+    severity_display = serializers.CharField(source='get_severity_display')
+    status_display = serializers.CharField(source='get_status_display')
+    message_display = serializers.CharField(source='get_message_display')
+    created_display = serializers.CharField(source='get_created_display')
+    updated_display = serializers.CharField(source='get_updated_display')
+
     class Meta:
         model = Caveat
         fields = (
             'id',
+            'url',
             'public',
             'title',
+            'description',
             'creator',
             'creator_display',
             'created',
+            'created_display',
             'updated',
+            'updated_display',
+            'category',
+            'category_color',
+            'category_display',
             'severity',
-            'status'
+            'severity_color',
+            'severity_display',
+            'status',
+            'status_color',
+            'status_display',
+            'message',
+            'message_display',
+            'version_after',
+            'version_before'
         )
 
     def get_creator_display(self, obj):
