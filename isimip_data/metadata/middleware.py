@@ -17,6 +17,7 @@ class MetadataCacheMiddleware(CacheMiddleware):
     # paths which are actually cached (completely)
     path_patterns = (
         re.compile(r'^/$'),
+        re.compile(r'^/sitemap'),
         re.compile(r'^/api/v1/datasets/'),
         re.compile(r'^/api/v1/files/')
     )
