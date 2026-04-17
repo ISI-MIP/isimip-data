@@ -1,3 +1,4 @@
+from collections import defaultdict
 from itertools import product
 from pathlib import PurePath
 
@@ -97,20 +98,27 @@ class DatasetViewSet(ReadOnlyModelViewSet):
             dataset_paths = [obj.path for obj in self.paginator.page.object_list]
 
             if self.request.GET.get('caveats'):
-                context['versions'] = (
+                versions = list(
                     Dataset.objects.using('metadata')
                     .filter(path__in=dataset_paths)
                     .exclude(id__in=dataset_ids)
+                    .only('id', 'path')
                 )
-                context['caveats'] = (
+
+                context['versions'] = defaultdict(set)
+                for version in versions:
+                    context['versions'][version.path].add(version.id)
+
+                context['caveats'] = list(
                     Caveat.objects
                     .filter(datasets__overlap=dataset_ids)
                     .exclude(public=False)
                     .public(self.request.user)
                 )
-                context['caveats_versions'] = (
+
+                context['caveats_versions'] = list(
                     Caveat.objects
-                    .filter(datasets__overlap=[version.id for version in context['versions']])
+                    .filter(datasets__overlap=[version.id for version in versions])
                     .exclude(public=False)
                     .exclude(id__in=[caveat.id for caveat in context['caveats']])
                     .public(self.request.user)

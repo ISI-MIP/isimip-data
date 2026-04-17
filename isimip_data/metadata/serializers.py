@@ -214,16 +214,10 @@ class DatasetSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def get_caveats_versions(self, obj):
-        versions = [
-            version
-            for version in self.context.get('versions', [])
-            if obj.path in version.path
-        ]
         caveats = [
             caveat
             for caveat in self.context.get('caveats_versions', [])
-            for version in versions
-            if version.id in caveat.datasets
+            if self.context.get('versions', {}).get(obj.path).intersection(caveat.datasets)
         ]
         serializer = DatasetCaveatSerializer(caveats, many=True)
         return serializer.data
