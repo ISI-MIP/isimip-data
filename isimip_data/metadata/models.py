@@ -37,6 +37,9 @@ class Dataset(models.Model):
     updated = models.DateTimeField()
     published = models.DateTimeField()
     archived = models.DateTimeField()
+    last_changed = models.DateTimeField()
+
+    root_id = models.UUIDField(editable=False)
 
     class Meta:
         db_table = 'datasets'
@@ -130,6 +133,9 @@ class File(models.Model):
 
     created = models.DateTimeField()
     updated = models.DateTimeField()
+    last_changed = models.DateTimeField()
+
+    root_id = models.UUIDField(editable=False)
 
     class Meta:
         db_table = 'files'
@@ -231,6 +237,7 @@ class Resource(models.Model):
 
     created = models.DateTimeField()
     updated = models.DateTimeField()
+    last_changed = models.DateTimeField()
 
     datasets = models.ManyToManyField(Dataset, related_name='resources')
 

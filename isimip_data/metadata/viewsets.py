@@ -1,3 +1,4 @@
+from collections import defaultdict
 from itertools import product
 from pathlib import PurePath
 
@@ -13,6 +14,9 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
+
+from isimip_data.annotations.models import Annotation
+from isimip_data.caveats.models import Caveat
 
 from .filters import (
     ChecksumFilterBackend,
@@ -46,7 +50,7 @@ class Paginator(DjangoPaginator):
 
     @cached_property
     def count(self):
-        return self.object_list[:settings.METADATA_MAX_COUNT + 1].count()
+        return self.object_list.order_by()[:settings.METADATA_MAX_COUNT + 1].count()
 
 
 class Pagination(PageNumberPagination):
@@ -59,13 +63,16 @@ class Pagination(PageNumberPagination):
 
 class DatasetViewSet(ReadOnlyModelViewSet):
 
+    queryset = (
+        Dataset.objects.using('metadata').filter(target=None).prefetch_related(
+            'files',
+            'files__links',
+            'links',
+            'resources'
+        )
+    )
+
     serializer_class = DatasetSerializer
-    queryset = Dataset.objects.using('metadata').filter(target=None).prefetch_related(
-        'files',
-        'files__links',
-        'links',
-        'resources'
-    ).distinct('path', 'version')
     pagination_class = Pagination
 
     filter_backends = (
@@ -77,7 +84,50 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         IdentifierFilterBackend,
         TreeFilterBackend
     )
-    identifier_filter_exclude = None
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+
+        if (
+            self.action == 'list' and
+            self.paginator is not None and
+            self.paginator.page is not None and
+            self.paginator.page.object_list
+        ):
+            dataset_ids = [obj.id for obj in self.paginator.page.object_list]
+            dataset_paths = [obj.path for obj in self.paginator.page.object_list]
+
+            if self.request.GET.get('caveats'):
+                versions = list(
+                    Dataset.objects.using('metadata')
+                    .filter(path__in=dataset_paths)
+                    .exclude(id__in=dataset_ids)
+                    .only('id', 'path')
+                )
+
+                context['versions'] = defaultdict(set)
+                for version in versions:
+                    context['versions'][version.path].add(version.id)
+
+                context['caveats'] = list(
+                    Caveat.objects
+                    .filter(datasets__overlap=dataset_ids)
+                    .exclude(public=False)
+                    .public(self.request.user)
+                )
+
+                context['caveats_versions'] = list(
+                    Caveat.objects
+                    .filter(datasets__overlap=[version.id for version in versions])
+                    .exclude(public=False)
+                    .exclude(id__in=[caveat.id for caveat in context['caveats']])
+                    .public(self.request.user)
+                )
+
+            if self.request.GET.get('annotations'):
+                context['annotations'] = Annotation.objects.filter(datasets__overlap=dataset_ids)
+
+        return context
 
     @action(detail=False)
     def suggestions(self, request):
@@ -106,9 +156,11 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     @action(detail=False, url_path='histogram/(?P<identifier>[A-Za-z0-9_]+)')
     def histogram(self, request, identifier):
         if Identifier.objects.using('metadata').filter(identifier=identifier).exists():
-            # exclude the identifier from IdentifierFilterBackend
-            self.identifier_filter_exclude = identifier
-            queryset = self.filter_queryset(Dataset.objects.using('metadata').filter(target=None))
+            # exclude the identifier from IdentifierFilterBackend and do not resolve links
+            self.filter_exclude_identifier = identifier
+            self.filter_resolve_links = False
+
+            queryset = self.filter_queryset(Dataset.objects.using('metadata'))
             values = queryset.histogram(identifier)
             return Response(values)
         else:
@@ -147,9 +199,11 @@ class DatasetViewSet(ReadOnlyModelViewSet):
 
 class FileViewSet(ReadOnlyModelViewSet):
 
+    queryset = (
+        File.objects.using('metadata').filter(target=None).select_related('dataset').prefetch_related('links')
+    )
+
     serializer_class = FileSerializer
-    queryset = File.objects.using('metadata').filter(target=None).select_related('dataset') \
-                           .prefetch_related('links').distinct('path', 'version')
     pagination_class = Pagination
 
     filter_backends = (
@@ -167,8 +221,8 @@ class FileViewSet(ReadOnlyModelViewSet):
 
 class ResourceViewSet(ReadOnlyModelViewSet):
 
-    serializer_class = ResourceSerializer
     queryset = Resource.objects.using('metadata')
+    serializer_class = ResourceSerializer
     pagination_class = Pagination
 
     filter_backends = (
@@ -301,8 +355,8 @@ class TreeViewSet(ViewSet):
 
 class IdentifierViewSet(ReadOnlyModelViewSet):
 
-    serializer_class = IdentifierSerializer
     queryset = Identifier.objects.using('metadata')
+    serializer_class = IdentifierSerializer
 
 
 class GlossaryViewSet(ViewSet):

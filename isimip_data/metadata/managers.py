@@ -1,12 +1,17 @@
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
+from django.db.models.fields.json import KeyTextTransform
 
 
 class DatasetQuerySet(models.QuerySet):
 
     def histogram(self, identifier):
-        field = f'specifiers__{identifier}'
-        return self.values_list(field).annotate(count=models.Count(field)).order_by(field)
+        return (
+            self.annotate(specifier=KeyTextTransform(identifier, 'specifiers'))
+                .values_list('specifier')
+                .annotate(count=models.Count('root_id', distinct=True))
+                .order_by('specifier')
+        )
 
 
 class DatasetManager(models.Manager):
