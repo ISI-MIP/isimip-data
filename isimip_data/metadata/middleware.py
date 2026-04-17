@@ -63,6 +63,10 @@ class MetadataCacheMiddleware(CacheMiddleware):
             File.objects.using('metadata').aggregate(latest=Max('last_changed'))['latest'],
             Resource.objects.using('metadata').aggregate(latest=Max('last_changed'))['latest'],
         ]
+
+        if not any(timestamps):
+            return
+
         timestamp = max(t for t in timestamps if t is not None)
 
         # check if the timestamp is later than cache_timestamp
