@@ -42,6 +42,7 @@ export const useDatasetsHistogramQuery = (identifier, params, enabled) => {
     queryKey: ['histogram', identifier, params],
     queryFn: () => DatasetApi.fetchDatasetsHistogram(identifier, params),
     placeholderData: keepPreviousData,
+    retry: false,
     enabled
   })
 }
