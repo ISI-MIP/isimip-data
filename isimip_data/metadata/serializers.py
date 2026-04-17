@@ -205,34 +205,37 @@ class DatasetSerializer(serializers.ModelSerializer):
             return reverse('dataset-detail-filelist', args=[obj.id], request=self.context.get('request'))
 
     def get_caveats(self, obj):
-        if self.context.get('request').GET.get('caveats'):
-            user = self.context['request'].user
-            queryset = Caveat.objects.exclude(public=False) \
-                                     .filter(datasets__contains=[obj.id]).public(user)
-            serializer = DatasetCaveatSerializer(queryset, many=True)
-            return serializer.data
-        else:
-            return []
+        caveats = [
+            caveat
+            for caveat in self.context.get('caveats', [])
+            if obj.id in caveat.datasets
+        ]
+        serializer = DatasetCaveatSerializer(caveats, many=True)
+        return serializer.data
 
     def get_caveats_versions(self, obj):
-        if self.context.get('request').GET.get('caveats'):
-            user = self.context['request'].user
-            versions = Dataset.objects.using('metadata').filter(path=obj.path).exclude(id=obj.id)
-            queryset = Caveat.objects.exclude(public=False) \
-                                     .exclude(datasets__contains=[obj.id]) \
-                                     .filter(datasets__overlap=[version.id for version in versions]).public(user)
-            serializer = DatasetCaveatSerializer(queryset, many=True)
-            return serializer.data
-        else:
-            return []
+        versions = [
+            version
+            for version in self.context.get('versions', [])
+            if obj.path in version.path
+        ]
+        caveats = [
+            caveat
+            for caveat in self.context.get('caveats_versions', [])
+            for version in versions
+            if version.id in caveat.datasets
+        ]
+        serializer = DatasetCaveatSerializer(caveats, many=True)
+        return serializer.data
 
     def get_annotations(self, obj):
-        if self.context.get('request').GET.get('annotations'):
-            queryset = Annotation.objects.filter(datasets__contains=[obj.id])
-            serializer = DatasetAnnotationSerializer(queryset, many=True)
-            return serializer.data
-        else:
-            return []
+        annotations = [
+            annotation
+            for annotation in self.context.get('annotations', [])
+            if obj.id in annotation.datasets
+        ]
+        serializer = DatasetAnnotationSerializer(annotations, many=True)
+        return serializer.data
 
 
 class FileLinkSerializer(serializers.ModelSerializer):

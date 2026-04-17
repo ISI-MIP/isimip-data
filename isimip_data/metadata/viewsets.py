@@ -14,6 +14,9 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 
+from isimip_data.annotations.models import Annotation
+from isimip_data.caveats.models import Caveat
+
 from .filters import (
     ChecksumFilterBackend,
     DatasetFilterBackend,
@@ -80,6 +83,43 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         IdentifierFilterBackend,
         TreeFilterBackend
     )
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+
+        if (
+            self.action == 'list' and
+            self.paginator is not None and
+            self.paginator.page is not None and
+            self.paginator.page.object_list
+        ):
+            dataset_ids = [obj.id for obj in self.paginator.page.object_list]
+            dataset_paths = [obj.path for obj in self.paginator.page.object_list]
+
+            if self.request.GET.get('caveats'):
+                context['versions'] = (
+                    Dataset.objects.using('metadata')
+                    .filter(path__in=dataset_paths)
+                    .exclude(id__in=dataset_ids)
+                )
+                context['caveats'] = (
+                    Caveat.objects
+                    .filter(datasets__overlap=dataset_ids)
+                    .exclude(public=False)
+                    .public(self.request.user)
+                )
+                context['caveats_versions'] = (
+                    Caveat.objects
+                    .filter(datasets__overlap=[version.id for version in context['versions']])
+                    .exclude(public=False)
+                    .exclude(id__in=[caveat.id for caveat in context['caveats']])
+                    .public(self.request.user)
+                )
+
+            if self.request.GET.get('annotations'):
+                context['annotations'] = Annotation.objects.filter(datasets__overlap=dataset_ids)
+
+        return context
 
     @action(detail=False)
     def suggestions(self, request):
