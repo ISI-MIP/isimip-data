@@ -2,12 +2,15 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.12 (Debian 11.12-0+deb10u1)
--- Dumped by pg_dump version 11.12 (Debian 11.12-0+deb10u1)
+\restrict dPJFFCfJXMLDwttGCodkeoRy9G8tlBo5vEOwdMopUctMQdQGi8lYbJPgSgRjJ4x
+
+-- Dumped from database version 18.0 (Debian 18.0-1.pgdg13+3)
+-- Dumped by pg_dump version 18.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -17,7 +20,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: 
+-- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
 --
 
 CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
@@ -32,7 +35,7 @@ COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: datasets; Type: TABLE; Schema: public; Owner: isimip_metadata
@@ -49,33 +52,19 @@ CREATE TABLE public.datasets (
     identifiers text[] NOT NULL,
     search_vector tsvector NOT NULL,
     public boolean NOT NULL,
-    restricted boolean NOT NULL default false,
+    restricted boolean DEFAULT false NOT NULL,
     tree_path text,
     rights text,
     created timestamp without time zone,
     updated timestamp without time zone,
     published timestamp without time zone,
-    archived timestamp without time zone
+    archived timestamp without time zone,
+    root_id uuid GENERATED ALWAYS AS (COALESCE(target_id, id)) STORED,
+    last_changed timestamp without time zone GENERATED ALWAYS AS (GREATEST(created, updated, published, archived)) STORED
 );
 
 
 ALTER TABLE public.datasets OWNER TO isimip_metadata;
-
---
--- Name: identifiers; Type: MATERIALIZED VIEW; Schema: public; Owner: isimip_metadata
---
-
-CREATE MATERIALIZED VIEW public.identifiers AS
- SELECT specifiers.key AS identifier,
-    array_agg(DISTINCT specifiers.value) AS specifiers
-   FROM public.datasets,
-    LATERAL jsonb_each_text(datasets.specifiers) specifiers(key, value)
-  GROUP BY specifiers.key
-  ORDER BY specifiers.key
-  WITH NO DATA;
-
-
-ALTER TABLE public.identifiers OWNER TO isimip_metadata;
 
 --
 -- Name: files; Type: TABLE; Schema: public; Owner: isimip_metadata
@@ -96,11 +85,29 @@ CREATE TABLE public.files (
     identifiers text[] NOT NULL,
     search_vector tsvector NOT NULL,
     created timestamp without time zone,
-    updated timestamp without time zone
+    updated timestamp without time zone,
+    root_id uuid GENERATED ALWAYS AS (COALESCE(target_id, id)) STORED,
+    last_changed timestamp without time zone GENERATED ALWAYS AS (GREATEST(created, updated)) STORED
 );
 
 
 ALTER TABLE public.files OWNER TO isimip_metadata;
+
+--
+-- Name: identifiers; Type: MATERIALIZED VIEW; Schema: public; Owner: isimip_metadata
+--
+
+CREATE MATERIALIZED VIEW public.identifiers AS
+ SELECT specifiers.key AS identifier,
+    array_agg(DISTINCT specifiers.value) AS specifiers
+   FROM public.datasets,
+    LATERAL jsonb_each_text(datasets.specifiers) specifiers(key, value)
+  GROUP BY specifiers.key
+  ORDER BY specifiers.key
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW public.identifiers OWNER TO isimip_metadata;
 
 --
 -- Name: resources; Type: TABLE; Schema: public; Owner: isimip_metadata
@@ -114,7 +121,8 @@ CREATE TABLE public.resources (
     paths text[] NOT NULL,
     datacite jsonb NOT NULL,
     created timestamp without time zone,
-    updated timestamp without time zone
+    updated timestamp without time zone,
+    last_changed timestamp without time zone GENERATED ALWAYS AS (GREATEST(created, updated)) STORED
 );
 
 
@@ -133,6 +141,20 @@ CREATE TABLE public.resources_datasets (
 ALTER TABLE public.resources_datasets OWNER TO isimip_metadata;
 
 --
+-- Name: specifiers; Type: MATERIALIZED VIEW; Schema: public; Owner: isimip_metadata
+--
+
+CREATE MATERIALIZED VIEW public.specifiers AS
+ SELECT DISTINCT specifiers.value AS specifier
+   FROM public.datasets,
+    LATERAL jsonb_each_text(datasets.specifiers) specifiers(key, value)
+  ORDER BY specifiers.value
+  WITH NO DATA;
+
+
+ALTER MATERIALIZED VIEW public.specifiers OWNER TO isimip_metadata;
+
+--
 -- Name: trees; Type: TABLE; Schema: public; Owner: isimip_metadata
 --
 
@@ -147,30 +169,16 @@ CREATE TABLE public.trees (
 ALTER TABLE public.trees OWNER TO isimip_metadata;
 
 --
--- Name: specifiers; Type: MATERIALIZED VIEW; Schema: public; Owner: isimip_metadata
---
-
-CREATE MATERIALIZED VIEW public.specifiers AS
- SELECT DISTINCT specifiers.value AS specifier
-   FROM public.datasets,
-    LATERAL jsonb_each_text(datasets.specifiers) specifiers(key, value)
-  ORDER BY specifiers.value
-  WITH NO DATA;
-
-
-ALTER TABLE public.specifiers OWNER TO isimip_metadata;
-
---
 -- Data for Name: datasets; Type: TABLE DATA; Schema: public; Owner: isimip_metadata
 --
 
-COPY public.datasets (id, target_id, name, path, version, size, specifiers, identifiers, search_vector, public, tree_path, rights, created, updated, published, archived) FROM stdin;
-84e86386-4ba2-45b2-92bc-615f4f0def34	\N	model_lorem_dolor_sit_amet_var_global_monthly	round/product/sector/model/model_lorem_dolor_sit_amet_var_global_monthly	20210818	21720	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':11A 'dolor':3A 'global':9A 'lorem':4A 'model':10A 'month':7A 'product':6A 'round':5A 'sector':8A 'sector2':1A 'sit':2A 'var':12A	t	model/lorem/dolor/sit/amet/var	\N	2021-08-18 12:30:38.874031	\N	2021-08-18 12:30:39.418248	\N
-7f05e9ad-ed3b-4f0e-93b5-5426c5a9089c	84e86386-4ba2-45b2-92bc-615f4f0def34	model_lorem_dolor_sit_amet_var_global_monthly	round/product/sector2/model/model_lorem_dolor_sit_amet_var_global_monthly	20210818	21720	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector2", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':10A 'dolor':3A 'global':8A 'lorem':4A 'model':9A 'month':7A 'product':6A 'round':2A 'sector2':1A 'sit':5A 'var':11A	t	model/lorem/dolor/sit/amet/var	\N	2021-08-18 12:30:41.037069	\N	\N	\N
-d0e89231-6932-4e02-8cf9-267862b12f3c	b9f8fbc2-d164-42a4-8eb4-2297edcee75b	model_ipsum_dolor_sit_amet_var_global_monthly	round/product/sector2/model/model_ipsum_dolor_sit_amet_var_global_monthly	20210818	21720	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector2", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':10A 'dolor':3A 'global':8A 'ipsum':5A 'model':9A 'month':7A 'product':6A 'round':2A 'sector2':1A 'sit':4A 'var':11A	t	model/ipsum/dolor/sit/amet/var	\N	2021-08-18 12:30:40.987957	\N	\N	\N
-b9f8fbc2-d164-42a4-8eb4-2297edcee75b	\N	model_ipsum_dolor_sit_amet_var_global_monthly	round/product/sector/model/model_ipsum_dolor_sit_amet_var_global_monthly	20210818	21720	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':11A 'dolor':3A 'global':9A 'ipsum':5A 'model':10A 'month':7A 'product':6A 'round':4A 'sector':8A 'sector2':1A 'sit':2A 'var':12A	t	model/ipsum/dolor/sit/amet/var	\N	2021-08-18 12:30:38.823243	\N	2021-08-18 12:30:39.410959	\N
-8503652b-0a06-4eac-9a3f-c230357f2ebc	\N	model2_ipsum_dolor_sit_amet_var_global_monthly	round/product/sector/model2/model2_ipsum_dolor_sit_amet_var_global_monthly	20210818	21726	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model2", "round": "round", "region": "global", "sector": "sector", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model2"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':7A 'dolor':8A 'global':10A 'ipsum':11A 'model2':5A 'month':4A 'product':9A 'round':6A 'sector':2A 'sit':1A 'var':3A	f	model2/ipsum/dolor/sit/amet/var	\N	2021-08-18 12:30:38.899118	\N	2021-08-18 12:30:39.422419	2021-08-18 12:30:43.191757
-121de27e-4639-46fa-af79-2028bffc8e4c	\N	model2_lorem_dolor_sit_amet_var_global_monthly	round/product/sector/model2/model2_lorem_dolor_sit_amet_var_global_monthly	20210818	21726	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model2", "round": "round", "region": "global", "sector": "sector", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model2"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':8A 'dolor':9A 'global':11A 'lorem':4A 'model2':6A 'month':5A 'product':10A 'round':7A 'sector':2A 'sit':1A 'var':3A	f	model2/lorem/dolor/sit/amet/var	\N	2021-08-18 12:30:38.922574	\N	2021-08-18 12:30:39.426895	2021-08-18 12:30:43.200038
+COPY public.datasets (id, target_id, name, path, version, size, specifiers, identifiers, search_vector, public, restricted, tree_path, rights, created, updated, published, archived) FROM stdin;
+84e86386-4ba2-45b2-92bc-615f4f0def34	\N	model_lorem_dolor_sit_amet_var_global_monthly	round/product/sector/model/model_lorem_dolor_sit_amet_var_global_monthly	20210818	21720	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':11A 'dolor':3A 'global':9A 'lorem':4A 'model':10A 'month':7A 'product':6A 'round':5A 'sector':8A 'sector2':1A 'sit':2A 'var':12A	t	f	model/lorem/dolor/sit/amet/var	\N	2021-08-18 12:30:38.874031	\N	2021-08-18 12:30:39.418248	\N
+7f05e9ad-ed3b-4f0e-93b5-5426c5a9089c	84e86386-4ba2-45b2-92bc-615f4f0def34	model_lorem_dolor_sit_amet_var_global_monthly	round/product/sector2/model/model_lorem_dolor_sit_amet_var_global_monthly	20210818	21720	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector2", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':10A 'dolor':3A 'global':8A 'lorem':4A 'model':9A 'month':7A 'product':6A 'round':2A 'sector2':1A 'sit':5A 'var':11A	t	f	model/lorem/dolor/sit/amet/var	\N	2021-08-18 12:30:41.037069	\N	\N	\N
+d0e89231-6932-4e02-8cf9-267862b12f3c	b9f8fbc2-d164-42a4-8eb4-2297edcee75b	model_ipsum_dolor_sit_amet_var_global_monthly	round/product/sector2/model/model_ipsum_dolor_sit_amet_var_global_monthly	20210818	21720	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector2", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':10A 'dolor':3A 'global':8A 'ipsum':5A 'model':9A 'month':7A 'product':6A 'round':2A 'sector2':1A 'sit':4A 'var':11A	t	f	model/ipsum/dolor/sit/amet/var	\N	2021-08-18 12:30:40.987957	\N	\N	\N
+b9f8fbc2-d164-42a4-8eb4-2297edcee75b	\N	model_ipsum_dolor_sit_amet_var_global_monthly	round/product/sector/model/model_ipsum_dolor_sit_amet_var_global_monthly	20210818	21720	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model", "round": "round", "region": "global", "sector": "sector", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':11A 'dolor':3A 'global':9A 'ipsum':5A 'model':10A 'month':7A 'product':6A 'round':4A 'sector':8A 'sector2':1A 'sit':2A 'var':12A	t	f	model/ipsum/dolor/sit/amet/var	\N	2021-08-18 12:30:38.823243	\N	2021-08-18 12:30:39.410959	\N
+8503652b-0a06-4eac-9a3f-c230357f2ebc	\N	model2_ipsum_dolor_sit_amet_var_global_monthly	round/product/sector/model2/model2_ipsum_dolor_sit_amet_var_global_monthly	20210818	21726	{"beta": "dolor", "alpha": "ipsum", "delta": "amet", "gamma": "sit", "model": "model2", "round": "round", "region": "global", "sector": "sector", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model2"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':7A 'dolor':8A 'global':10A 'ipsum':11A 'model2':5A 'month':4A 'product':9A 'round':6A 'sector':2A 'sit':1A 'var':3A	f	f	model2/ipsum/dolor/sit/amet/var	\N	2021-08-18 12:30:38.899118	\N	2021-08-18 12:30:39.422419	2021-08-18 12:30:43.191757
+121de27e-4639-46fa-af79-2028bffc8e4c	\N	model2_lorem_dolor_sit_amet_var_global_monthly	round/product/sector/model2/model2_lorem_dolor_sit_amet_var_global_monthly	20210818	21726	{"beta": "dolor", "alpha": "lorem", "delta": "amet", "gamma": "sit", "model": "model2", "round": "round", "region": "global", "sector": "sector", "product": "product", "timestep": "monthly", "variable": "var", "modelname": "model2"}	{round,product,sector,model,modelname,alpha,beta,gamma,delta,variable,region,timestep}	'amet':8A 'dolor':9A 'global':11A 'lorem':4A 'model2':6A 'month':5A 'product':10A 'round':7A 'sector':2A 'sit':1A 'var':3A	f	f	model2/lorem/dolor/sit/amet/var	\N	2021-08-18 12:30:38.922574	\N	2021-08-18 12:30:39.426895	2021-08-18 12:30:43.200038
 \.
 
 
@@ -261,10 +269,45 @@ ALTER TABLE ONLY public.trees
 
 
 --
--- Name: attributes_identifier_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: datasets_name_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
 --
 
-CREATE INDEX identifiers_identifier_idx ON public.identifiers USING btree (identifier);
+CREATE INDEX datasets_name_idx ON public.datasets USING btree (name text_pattern_ops);
+
+
+--
+-- Name: datasets_name_public_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX datasets_name_public_idx ON public.datasets USING btree (name text_pattern_ops) WHERE (public = true);
+
+
+--
+-- Name: datasets_path_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX datasets_path_idx ON public.datasets USING btree (path text_pattern_ops);
+
+
+--
+-- Name: datasets_path_public_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX datasets_path_public_idx ON public.datasets USING btree (path text_pattern_ops) WHERE (public = true);
+
+
+--
+-- Name: datasets_path_public_root_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX datasets_path_public_root_idx ON public.datasets USING btree (path) WHERE ((public = true) AND (target_id IS NULL));
+
+
+--
+-- Name: datasets_root_id_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX datasets_root_id_idx ON public.datasets USING btree (root_id);
 
 
 --
@@ -275,6 +318,76 @@ CREATE INDEX datasets_search_vector_idx ON public.datasets USING gin (search_vec
 
 
 --
+-- Name: datasets_specifiers_public_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX datasets_specifiers_public_idx ON public.datasets USING gin (specifiers) WHERE (public = true);
+
+
+--
+-- Name: datasets_tree_path_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX datasets_tree_path_idx ON public.datasets USING btree (tree_path text_pattern_ops);
+
+
+--
+-- Name: datasets_tree_path_public_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX datasets_tree_path_public_idx ON public.datasets USING btree (tree_path text_pattern_ops) WHERE (public = true);
+
+
+--
+-- Name: datasets_version_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX datasets_version_idx ON public.datasets USING btree (version);
+
+
+--
+-- Name: datasets_version_public_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX datasets_version_public_idx ON public.datasets USING btree (version) WHERE (public = true);
+
+
+--
+-- Name: files_checksum_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX files_checksum_idx ON public.files USING btree (checksum);
+
+
+--
+-- Name: files_name_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX files_name_idx ON public.files USING btree (name text_pattern_ops);
+
+
+--
+-- Name: files_path_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX files_path_idx ON public.files USING btree (path text_pattern_ops);
+
+
+--
+-- Name: files_path_root_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX files_path_root_idx ON public.datasets USING btree (path) WHERE ((public = true) AND (target_id IS NULL));
+
+
+--
+-- Name: files_root_id_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
+--
+
+CREATE INDEX files_root_id_idx ON public.files USING btree (root_id);
+
+
+--
 -- Name: files_search_vector_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
 --
 
@@ -282,17 +395,17 @@ CREATE INDEX files_search_vector_idx ON public.files USING gin (search_vector);
 
 
 --
--- Name: ix_datasets_name; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: files_version_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
 --
 
-CREATE INDEX ix_datasets_name ON public.datasets USING btree (name);
+CREATE INDEX files_version_idx ON public.files USING btree (version);
 
 
 --
--- Name: ix_datasets_path; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: identifiers_identifier_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
 --
 
-CREATE INDEX ix_datasets_path ON public.datasets USING btree (path);
+CREATE INDEX identifiers_identifier_idx ON public.identifiers USING btree (identifier);
 
 
 --
@@ -303,45 +416,17 @@ CREATE INDEX ix_datasets_tree_path ON public.datasets USING btree (tree_path);
 
 
 --
--- Name: ix_datasets_version; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: resources_doi_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
 --
 
-CREATE INDEX ix_datasets_version ON public.datasets USING btree (version);
-
-
---
--- Name: ix_files_name; Type: INDEX; Schema: public; Owner: isimip_metadata
---
-
-CREATE INDEX ix_files_name ON public.files USING btree (name);
+CREATE INDEX resources_doi_idx ON public.resources USING btree (doi);
 
 
 --
--- Name: ix_files_path; Type: INDEX; Schema: public; Owner: isimip_metadata
+-- Name: resources_paths_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
 --
 
-CREATE INDEX ix_files_path ON public.files USING btree (path);
-
-
---
--- Name: ix_files_version; Type: INDEX; Schema: public; Owner: isimip_metadata
---
-
-CREATE INDEX ix_files_version ON public.files USING btree (version);
-
-
---
--- Name: ix_resources_doi; Type: INDEX; Schema: public; Owner: isimip_metadata
---
-
-CREATE INDEX ix_resources_doi ON public.resources USING btree (doi);
-
-
---
--- Name: ix_resources_paths; Type: INDEX; Schema: public; Owner: isimip_metadata
---
-
-CREATE INDEX ix_resources_paths ON public.resources USING btree (paths);
+CREATE INDEX resources_paths_idx ON public.resources USING btree (paths);
 
 
 --
@@ -392,6 +477,62 @@ ALTER TABLE ONLY public.resources_datasets
 
 
 --
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pg_database_owner
+--
+
+GRANT ALL ON SCHEMA public TO isimip_data;
+
+
+--
+-- Name: TABLE datasets; Type: ACL; Schema: public; Owner: isimip_metadata
+--
+
+GRANT SELECT ON TABLE public.datasets TO isimip_data;
+
+
+--
+-- Name: TABLE files; Type: ACL; Schema: public; Owner: isimip_metadata
+--
+
+GRANT SELECT ON TABLE public.files TO isimip_data;
+
+
+--
+-- Name: TABLE identifiers; Type: ACL; Schema: public; Owner: isimip_metadata
+--
+
+GRANT SELECT ON TABLE public.identifiers TO isimip_data;
+
+
+--
+-- Name: TABLE resources; Type: ACL; Schema: public; Owner: isimip_metadata
+--
+
+GRANT SELECT ON TABLE public.resources TO isimip_data;
+
+
+--
+-- Name: TABLE resources_datasets; Type: ACL; Schema: public; Owner: isimip_metadata
+--
+
+GRANT SELECT ON TABLE public.resources_datasets TO isimip_data;
+
+
+--
+-- Name: TABLE specifiers; Type: ACL; Schema: public; Owner: isimip_metadata
+--
+
+GRANT SELECT ON TABLE public.specifiers TO isimip_data;
+
+
+--
+-- Name: TABLE trees; Type: ACL; Schema: public; Owner: isimip_metadata
+--
+
+GRANT SELECT ON TABLE public.trees TO isimip_data;
+
+
+--
 -- Name: identifiers; Type: MATERIALIZED VIEW DATA; Schema: public; Owner: isimip_metadata
 --
 
@@ -408,4 +549,6 @@ REFRESH MATERIALIZED VIEW public.specifiers;
 --
 -- PostgreSQL database dump complete
 --
+
+\unrestrict dPJFFCfJXMLDwttGCodkeoRy9G8tlBo5vEOwdMopUctMQdQGi8lYbJPgSgRjJ4x
 
