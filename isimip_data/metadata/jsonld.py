@@ -55,7 +55,7 @@ def get_jsonld_name(obj, append_name=True):
     for identifier in ['simulation_round', 'product', 'category', 'sector', 'publication']:
         specifier = obj.specifiers.get(identifier)
         if specifier:
-            title = glossary[identifier][specifier].get('title')
+            title = glossary.get('identifier', {}).get('specifier', {}).get('title')
             if title:
                 if identifier == 'product':
                     title = title.lower().replace('data', obj._meta.model_name)
@@ -69,7 +69,7 @@ def get_jsonld_name(obj, append_name=True):
                 parts.append(title)
 
     name = ' '.join(parts)
-    if append_name:
+    if name and append_name:
         name += f': {obj.name}'
 
     return name
