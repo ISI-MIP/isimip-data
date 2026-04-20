@@ -3,7 +3,7 @@ from collections import defaultdict
 from uuid import UUID
 
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Prefetch, Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import Http404, get_object_or_404, redirect, render, reverse
 
@@ -45,7 +45,13 @@ def metadata(request):
 
 
 def dataset(request, pk=None, path=None):
-    queryset = Dataset.objects.using('metadata').prefetch_related('files', 'links')
+    queryset_datasets = Dataset.objects.using('metadata')
+    queryset_files = File.objects.using('metadata')
+    queryset = queryset_datasets.prefetch_related(
+        Prefetch('files', queryset=queryset_files),
+        Prefetch('files__links', queryset=queryset_files),
+        Prefetch('links', queryset=queryset_datasets),
+    )
 
     if pk is not None:
         obj = get_object_or_404(queryset, id=pk)
@@ -87,7 +93,15 @@ def dataset(request, pk=None, path=None):
 
 
 def file(request, pk=None, path=None):
-    queryset = File.objects.using('metadata').prefetch_related('links')
+    queryset_files = File.objects.using('metadata')
+    queryset = queryset_files.select_related('dataset').prefetch_related(
+        Prefetch(
+            'dataset__files',
+            queryset=queryset_files.prefetch_related(
+                Prefetch('links', queryset=queryset_files)
+            ),
+        ),
+    )
 
     if pk is not None:
         obj = get_object_or_404(queryset, id=pk)
