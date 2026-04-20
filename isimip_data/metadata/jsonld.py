@@ -48,7 +48,7 @@ def get_jsonld(request, obj):
     return data
 
 
-def get_jsonld_name(obj):
+def get_jsonld_name(obj, append_name=True):
     glossary = fetch_glossary()
 
     parts = []
@@ -59,6 +59,8 @@ def get_jsonld_name(obj):
             if title:
                 if identifier == 'product':
                     title = title.lower().replace('data', obj._meta.model_name)
+                if identifier == 'sector':
+                    title = f'from the {title.lower()} sector'
                 elif identifier == 'category':
                     title = f'({title.lower()})'
                 elif identifier == 'publication':
@@ -66,16 +68,18 @@ def get_jsonld_name(obj):
 
                 parts.append(title)
 
-    return ' '.join(parts) + f': {obj.name}'
+    name = ' '.join(parts)
+    if append_name:
+        name += f': {obj.name}'
+
+    return name
 
 
 def get_jsonld_description(obj, resources=None):
     if resources:
-        description = 'Part of ' + ', '.join([resource.get("identifier") for resource in resources])
+        return 'Part of ' + ', '.join([resource.get("identifier") for resource in resources])
     else:
-        description = 'LOL'
-
-    return description
+        return f'{get_jsonld_name(obj, append_name=False)}. No DOI assigned yet.'
 
 
 def get_jsonld_datacite(obj):
