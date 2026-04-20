@@ -12,7 +12,7 @@ from isimip_data.core.utils import get_date_display
 
 from .constants import RIGHTS
 from .managers import DatasetManager, IdentifierManager, ResourceManager
-from .utils import get_json_ld_name, get_terms_of_use, merge_identifiers, merge_specifiers, prettify_specifiers
+from .utils import get_terms_of_use, merge_identifiers, merge_specifiers, prettify_specifiers
 
 
 class Dataset(models.Model):
@@ -96,20 +96,6 @@ class Dataset(models.Model):
         return [resource for resource in resources if (
             (resource.new_version is None) or (resource.new_version not in resource_dois)
         )]
-
-    @cached_property
-    def json_ld(self):
-        data = {
-            '@context': 'https://schema.org/',
-            '@type': 'Dataset',
-            'name': self.path
-        }
-
-        resources = self.resources.order_by('-doi')
-        if resources:
-            data['isPartOf'] = [resource.json_ld for resource in resources]
-
-        return data
 
     def get_absolute_url(self):
         return reverse('dataset', kwargs={'pk': self.pk})
@@ -196,15 +182,6 @@ class File(models.Model):
     @cached_property
     def terms_of_use(self):
         return get_terms_of_use()
-
-    @cached_property
-    def json_ld(self):
-        return {
-            '@context': 'https://schema.org/',
-            '@type': 'Dataset',
-            'name': self.path,
-            'isPartOf': self.dataset.json_ld
-        }
 
     @cached_property
     def file_url(self):
@@ -364,49 +341,6 @@ class Resource(models.Model):
     @cached_property
     def is_external(self):
         return self.datacite is None
-
-    @cached_property
-    def json_ld(self):
-        data = {
-            '@context': 'https://schema.org/',
-            '@type': 'Dataset',
-            'name': self.title,
-            'identifier': self.doi_url,
-        }
-
-        if self.datacite:
-            data.update({
-                'description': self.abstract,
-                'version': self.datacite.get('version'),
-                'keywords': [
-                    subject['subject']
-                    for subject in self.datacite.get('subjects', [])
-                    if subject.get('subject')
-                ],
-                'publisher': {
-                    '@type': 'Organization',
-                    'name': self.datacite.get('publisher')
-                },
-                'datePublished': self.publication_date.isoformat(),
-                'license': [
-                    {
-                        '@type': 'CreativeWork',
-                        'name': rights.get('rights'),
-                        'url': rights.get('rights_uri')
-                    } for rights in self.rights_list
-                ],
-                'isAccessibleForFree': True,
-                'creator': [
-                    get_json_ld_name(creator)
-                    for creator in self.datacite.get('creators', [])
-                ],
-                'contributor': [
-                    get_json_ld_name(contributor)
-                    for contributor in self.datacite.get('contributors', [])
-                ]
-            })
-
-        return data
 
     def get_absolute_url(self):
         return reverse('resource', kwargs={'doi': self.doi})

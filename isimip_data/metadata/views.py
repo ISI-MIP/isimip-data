@@ -13,6 +13,7 @@ from isimip_data.access.utils import check_access
 from isimip_data.annotations.models import Download, Figure, Reference
 from isimip_data.caveats.models import Caveat
 
+from .jsonld import get_jsonld
 from .models import Dataset, File, Identifier, Resource
 from .utils import render_bibtex
 
@@ -81,7 +82,7 @@ def dataset(request, pk=None, path=None):
         'caveats': caveats,
         'caveats_versions': caveats_versions,
         'has_access': check_access(request, obj.path),
-        'json_ld': obj.json_ld
+        'json_ld': get_jsonld(request, obj)
     })
 
 
@@ -120,7 +121,7 @@ def file(request, pk=None, path=None):
         'caveats': caveats,
         'caveats_versions': caveats_versions,
         'has_access': check_access(request, obj.path),
-        'json_ld': obj.json_ld
+        'json_ld': get_jsonld(request, obj)
     })
 
 
@@ -175,7 +176,7 @@ def resource(request, pk=None, doi=None):
         'datasets': datasets,
         'count': count,
         'search_url': request.build_absolute_uri(reverse('search')) + 'query/' + resource.doi + '/',
-        'json_ld': resource.json_ld
+        'json_ld': get_jsonld(request, resource)
     })
 
 
