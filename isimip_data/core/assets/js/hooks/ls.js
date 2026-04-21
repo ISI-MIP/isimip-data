@@ -48,7 +48,7 @@ const loadFile = (fileName) => {
     const match = lsString.match(/^data:(?<mimeType>[a-z/\-+]+);\w+,(?<base64>.*?)$/)
     if (match) {
       const { mimeType, base64 } = match.groups
-      const buffer = Buffer.from(base64, 'base64')
+      const buffer = Uint8Array.from(atob(base64), c => c.charCodeAt(0))
       return new File([buffer], fileName, {type: mimeType})
     }
   }

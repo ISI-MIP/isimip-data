@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import '../scss/download.scss'
 
-import App from "./components/App"
+import App from './components/App'
 
 const queryClient = new QueryClient()
 

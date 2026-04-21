@@ -1,10 +1,12 @@
 {
   "name": "isimip-data",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "build": "vite build",
     "watch": "vite build --watch --mode development",
-    "lint": "eslint isimip_data/**/*.js"
+    "lint": "eslint isimip_data/**/*.js",
+    "fix": "eslint isimip_data/**/*.js --fix"
   },
   "author": "Potsdam Institute for Climate Impact Research",
   "license": "MIT",
