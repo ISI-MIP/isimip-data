@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_cleanup',
-    'django_extensions'
+    'django_extensions',
+    'django_vite',
 ]
 
 MIDDLEWARE = [
@@ -110,6 +111,12 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
+DJANGO_VITE = {
+    'default': {
+        'manifest_path': BASE_DIR / 'static' / '.vite' / 'manifest.json',
+    }
+}
 
 FIXTURE_DIRS = (
    BASE_DIR / 'testing' / 'fixtures',

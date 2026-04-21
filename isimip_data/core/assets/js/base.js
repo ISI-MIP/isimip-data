@@ -1,3 +1,5 @@
+import '../scss/base.scss'
+
 document.addEventListener('DOMContentLoaded', () => {
     for (const element of document.getElementsByClassName('copy-to-clipboard')) {
         element.addEventListener('click', () => {

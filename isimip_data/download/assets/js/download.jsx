@@ -4,7 +4,9 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-import App from "./components/App.js"
+import '../scss/download.scss'
+
+import App from "./components/App"
 
 const queryClient = new QueryClient()
 

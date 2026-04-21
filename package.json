@@ -2,9 +2,8 @@
   "name": "isimip-data",
   "version": "1.0.0",
   "scripts": {
-    "build:prod": "webpack --config webpack.config.js --mode production",
-    "build": "webpack --config webpack.config.js --mode development",
-    "watch": "webpack --config webpack.config.js --mode development --watch",
+    "build": "vite build",
+    "watch": "vite build --watch --mode development",
     "lint": "eslint isimip_data/**/*.js"
   },
   "author": "Potsdam Institute for Climate Impact Research",
@@ -35,21 +34,18 @@
     "use-debounce": "^10.0.4"
   },
   "devDependencies": {
-    "@babel/cli": "^7.23.9",
-    "@babel/core": "^7.24.0",
-    "@babel/preset-env": "^7.24.0",
-    "@babel/preset-react": "^7.23.3",
-    "babel-loader": "^9.1.3",
-    "copy-webpack-plugin": "^12.0.2",
-    "css-loader": "^6.10.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.34.0",
-    "file-loader": "^6.2.0",
-    "mini-css-extract-plugin": "^2.8.1",
-    "sass": "^1.71.1",
-    "sass-loader": "^14.1.1",
-    "webpack": "^5.90.3",
-    "webpack-cli": "^5.1.4",
-    "webpack-merge": "^5.10.0"
+    "@eslint/js": "^9.39.4",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^17.4.0",
+    "sass-embedded": "^1.99.0",
+    "vite": "^8.0.3",
+    "vite-plugin-static-copy": "^4.0.1"
   }
 }
