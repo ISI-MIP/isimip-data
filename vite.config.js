@@ -29,6 +29,7 @@ export default defineConfig(({ mode }) => {
       outDir: 'static',
       emptyOutDir: true,
       manifest: true,
+      sourcemap: isDev,
       rollupOptions: {
         input: {
           'base': resolve('isimip_data/core/assets/js/base.js'),
