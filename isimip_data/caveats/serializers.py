@@ -4,7 +4,6 @@ from .models import Caveat
 
 
 class CaveatSerializer(serializers.ModelSerializer):
-
     creator_display = serializers.SerializerMethodField()
 
     url = serializers.URLField(source='get_absolute_url')
@@ -47,7 +46,7 @@ class CaveatSerializer(serializers.ModelSerializer):
             'datasets',
             'resources',
             'version_after',
-            'version_before'
+            'version_before',
         )
 
     def get_creator_display(self, obj):
@@ -55,7 +54,6 @@ class CaveatSerializer(serializers.ModelSerializer):
 
 
 class CaveatIndexSerializer(serializers.ModelSerializer):
-
     creator_display = serializers.SerializerMethodField()
 
     url = serializers.URLField(source='get_absolute_url')
@@ -93,7 +91,7 @@ class CaveatIndexSerializer(serializers.ModelSerializer):
             'message',
             'message_display',
             'version_after',
-            'version_before'
+            'version_before',
         )
 
     def get_creator_display(self, obj):
@@ -101,7 +99,6 @@ class CaveatIndexSerializer(serializers.ModelSerializer):
 
 
 class CaveatChoicesSerializer(serializers.Serializer):
-
     value = serializers.CharField()
     display = serializers.CharField()
     color = serializers.CharField()

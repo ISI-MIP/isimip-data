@@ -11,6 +11,6 @@ def send_mail(subject, message, from_email=None, to=None, cc=None, bcc=None, rep
         cc=cc or [],
         bcc=bcc or [],
         reply_to=reply_to or [],
-        attachments=attachments or []
+        attachments=attachments or [],
     )
     mail.send()

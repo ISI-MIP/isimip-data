@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 
 class IdFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
@@ -29,7 +28,6 @@ class IdFilterBackend(BaseFilterBackend):
 
 
 class DatasetFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
@@ -43,7 +41,6 @@ class DatasetFilterBackend(BaseFilterBackend):
 
 
 class NameFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
@@ -56,7 +53,6 @@ class NameFilterBackend(BaseFilterBackend):
 
 
 class PathFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
@@ -79,7 +75,6 @@ class PathFilterBackend(BaseFilterBackend):
 
 
 class SearchFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
@@ -115,7 +110,6 @@ class SearchFilterBackend(BaseFilterBackend):
 
 
 class VersionFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
@@ -138,7 +132,6 @@ class VersionFilterBackend(BaseFilterBackend):
 
 
 class IdentifierFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
@@ -162,7 +155,6 @@ class IdentifierFilterBackend(BaseFilterBackend):
 
 
 class TreeFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
@@ -190,7 +182,6 @@ class TreeFilterBackend(BaseFilterBackend):
 
 
 class ChecksumFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset

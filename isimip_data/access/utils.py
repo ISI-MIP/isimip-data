@@ -4,17 +4,17 @@ import jwt
 
 
 def encode_token(payload):
-    return jwt.encode(payload, settings.FILES_AUTH_SECRET, algorithm="HS256")
+    return jwt.encode(payload, settings.FILES_AUTH_SECRET, algorithm='HS256')
 
 
 def decode_token(jwt_string):
     try:
-        payload = jwt.decode(jwt_string, settings.FILES_AUTH_SECRET, algorithms=["HS256"])
+        payload = jwt.decode(jwt_string, settings.FILES_AUTH_SECRET, algorithms=['HS256'])
         return payload, None
     except jwt.ExpiredSignatureError:
-        return None, "The provided token is expired."
+        return None, 'The provided token is expired.'
     except jwt.InvalidTokenError:
-        return None, "The provided token is invalid."
+        return None, 'The provided token is invalid.'
 
 
 def get_access_tokens(request):

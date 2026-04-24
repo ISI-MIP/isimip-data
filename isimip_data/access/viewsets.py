@@ -6,7 +6,6 @@ from .utils import parse_cookies
 
 
 class AccessViewSet(ListModelMixin, GenericViewSet):
-
     serializer_class = AccessSerializer
 
     def get_queryset(self):

@@ -2,7 +2,6 @@ from urllib.request import HTTPError
 
 
 class MockResponse:
-
     def __init__(self, read_data='', http_error=False):
         self.read_data = read_data
         self.http_error = http_error

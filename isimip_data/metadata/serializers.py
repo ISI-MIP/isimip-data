@@ -8,7 +8,6 @@ from .models import Dataset, File, Identifier, Resource
 
 
 class DatasetFileSerializer(serializers.ModelSerializer):
-
     metadata_url = serializers.SerializerMethodField()
     rights = serializers.JSONField(source='rights_dict')
 
@@ -28,7 +27,7 @@ class DatasetFileSerializer(serializers.ModelSerializer):
             'file_url',
             'json_url',
             'rights',
-            'terms_of_use'
+            'terms_of_use',
         )
 
     def get_metadata_url(self, obj):
@@ -36,7 +35,6 @@ class DatasetFileSerializer(serializers.ModelSerializer):
 
 
 class DatasetResourceSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Resource
         fields = (
@@ -49,12 +47,11 @@ class DatasetResourceSerializer(serializers.ModelSerializer):
             'creators_str',
             'publication_year',
             'publisher',
-            'new_version'
+            'new_version',
         )
 
 
 class DatasetCaveatSerializer(serializers.ModelSerializer):
-
     url = serializers.CharField(source='get_absolute_url')
     category_display = serializers.CharField(source='get_category_display')
     severity_display = serializers.CharField(source='get_severity_display')
@@ -80,12 +77,11 @@ class DatasetCaveatSerializer(serializers.ModelSerializer):
             'status_color',
             'message',
             'message_display',
-            'message_color'
+            'message_color',
         )
 
 
 class DatasetAnnotationFigureSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Figure
         fields = (
@@ -93,12 +89,11 @@ class DatasetAnnotationFigureSerializer(serializers.ModelSerializer):
             'title',
             'image',
             'caption',
-            'credits'
+            'credits',
         )
 
 
 class DatasetAnnotationDownloadSerializer(serializers.ModelSerializer):
-
     file_url = serializers.CharField(source='file.url')
 
     class Meta:
@@ -106,12 +101,11 @@ class DatasetAnnotationDownloadSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'file_url'
+            'file_url',
         )
 
 
 class DatasetAnnotationReferenceSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Reference
         fields = (
@@ -119,12 +113,11 @@ class DatasetAnnotationReferenceSerializer(serializers.ModelSerializer):
             'title',
             'identifier',
             'identifier_type',
-            'reference_type'
+            'reference_type',
         )
 
 
 class DatasetAnnotationSerializer(serializers.ModelSerializer):
-
     figures = DatasetAnnotationFigureSerializer(many=True)
     downloads = DatasetAnnotationDownloadSerializer(many=True)
     references = DatasetAnnotationReferenceSerializer(many=True)
@@ -136,12 +129,11 @@ class DatasetAnnotationSerializer(serializers.ModelSerializer):
             'title',
             'figures',
             'downloads',
-            'references'
+            'references',
         )
 
 
 class DatasetLinkSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Dataset
         fields = (
@@ -149,12 +141,11 @@ class DatasetLinkSerializer(serializers.ModelSerializer):
             'name',
             'path',
             'specifiers',
-            'identifiers'
+            'identifiers',
         )
 
 
 class DatasetSerializer(serializers.ModelSerializer):
-
     files = DatasetFileSerializer(many=True)
     links = DatasetLinkSerializer(many=True)
     resources = DatasetResourceSerializer(many=True)
@@ -194,7 +185,7 @@ class DatasetSerializer(serializers.ModelSerializer):
             'annotations',
             'terms_of_use',
             'is_global',
-            'is_netcdf'
+            'is_netcdf',
         )
 
     def get_metadata_url(self, obj):
@@ -205,11 +196,7 @@ class DatasetSerializer(serializers.ModelSerializer):
             return reverse('dataset-detail-filelist', args=[obj.id], request=self.context.get('request'))
 
     def get_caveats(self, obj):
-        caveats = [
-            caveat
-            for caveat in self.context.get('caveats', [])
-            if obj.id in caveat.datasets
-        ]
+        caveats = [caveat for caveat in self.context.get('caveats', []) if obj.id in caveat.datasets]
         serializer = DatasetCaveatSerializer(caveats, many=True)
         return serializer.data
 
@@ -224,16 +211,13 @@ class DatasetSerializer(serializers.ModelSerializer):
 
     def get_annotations(self, obj):
         annotations = [
-            annotation
-            for annotation in self.context.get('annotations', [])
-            if obj.id in annotation.datasets
+            annotation for annotation in self.context.get('annotations', []) if obj.id in annotation.datasets
         ]
         serializer = DatasetAnnotationSerializer(annotations, many=True)
         return serializer.data
 
 
 class FileLinkSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Dataset
         fields = (
@@ -241,12 +225,11 @@ class FileLinkSerializer(serializers.ModelSerializer):
             'name',
             'path',
             'specifiers',
-            'identifiers'
+            'identifiers',
         )
 
 
 class FileSerializer(serializers.ModelSerializer):
-
     links = FileLinkSerializer(many=True)
     search_rank = serializers.FloatField(required=False, default=0.0)
     metadata_url = serializers.SerializerMethodField()
@@ -282,7 +265,6 @@ class FileSerializer(serializers.ModelSerializer):
 
 
 class ResourceIndexSerializer(serializers.ModelSerializer):
-
     resource_url = serializers.SerializerMethodField()
 
     created_display = serializers.CharField(source='get_created_display')
@@ -316,7 +298,6 @@ class ResourceIndexSerializer(serializers.ModelSerializer):
 
 
 class ResourceSerializer(serializers.ModelSerializer):
-
     resource_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -347,10 +328,9 @@ class ResourceSerializer(serializers.ModelSerializer):
 
 
 class IdentifierSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Identifier
         fields = (
             'identifier',
-            'specifiers'
+            'specifiers',
         )

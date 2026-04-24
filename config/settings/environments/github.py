@@ -8,7 +8,7 @@ DATABASES = {
         'NAME': 'isimip_data',
         'USER': 'postgres',
         'PASSWORD': 'postgres_password',
-        'HOST': '127.0.0.1'
+        'HOST': '127.0.0.1',
     },
     'metadata': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -16,10 +16,8 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'postgres_password',
         'HOST': '127.0.0.1',
-        'TEST': {
-            'NAME': 'test_isimip_metadata'
-        }
-    }
+        'TEST': {'NAME': 'test_isimip_metadata'},
+    },
 }
 
 FILES_BASE_URL = 'http://isimip/'

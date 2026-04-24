@@ -38,10 +38,14 @@ def metadata(request):
 
         raise Http404
 
-    return render(request, 'metadata/metadata.html', {
-        'title': 'Metadata',
-        'example_file': File.objects.using('metadata').first()
-    })
+    return render(
+        request,
+        'metadata/metadata.html',
+        {
+            'title': 'Metadata',
+            'example_file': File.objects.using('metadata').first(),
+        },
+    )
 
 
 def dataset(request, pk=None, path=None):
@@ -65,31 +69,35 @@ def dataset(request, pk=None, path=None):
     except Dataset.DoesNotExist:
         pass
 
-    versions = Dataset.objects.using('metadata').filter(path=obj.path) \
-                                                .order_by('-version')
+    versions = Dataset.objects.using('metadata').filter(path=obj.path).order_by('-version')
 
     caveats = Caveat.objects.filter(datasets__contains=[obj.id]).public(request.user)
 
     if versions:
         caveats_datasets = list(versions.exclude(id=obj.id).values_list('id', flat=True))
-        caveats_versions = Caveat.objects.exclude(datasets__contains=[obj.id]) \
-                                         .filter(datasets__overlap=caveats_datasets)
+        caveats_versions = Caveat.objects.exclude(datasets__contains=[obj.id]).filter(
+            datasets__overlap=caveats_datasets
+        )
     else:
         caveats_versions = None
 
-    return render(request, 'metadata/dataset.html', {
-        'title': f'Dataset {obj.name}',
-        'dataset': obj,
-        'versions': versions,
-        'public_version': versions.exclude(id=obj.id).filter(public=True).first(),
-        'figures': Figure.objects.filter(annotations__datasets__contains=[obj.id]),
-        'downloads': Download.objects.filter(annotations__datasets__contains=[obj.id]),
-        'references': Reference.objects.filter(annotations__datasets__contains=[obj.id]),
-        'caveats': caveats,
-        'caveats_versions': caveats_versions,
-        'has_access': check_access(request, obj.path),
-        'json_ld': get_jsonld(request, obj)
-    })
+    return render(
+        request,
+        'metadata/dataset.html',
+        {
+            'title': f'Dataset {obj.name}',
+            'dataset': obj,
+            'versions': versions,
+            'public_version': versions.exclude(id=obj.id).filter(public=True).first(),
+            'figures': Figure.objects.filter(annotations__datasets__contains=[obj.id]),
+            'downloads': Download.objects.filter(annotations__datasets__contains=[obj.id]),
+            'references': Reference.objects.filter(annotations__datasets__contains=[obj.id]),
+            'caveats': caveats,
+            'caveats_versions': caveats_versions,
+            'has_access': check_access(request, obj.path),
+            'json_ld': get_jsonld(request, obj),
+        },
+    )
 
 
 def file(request, pk=None, path=None):
@@ -98,7 +106,7 @@ def file(request, pk=None, path=None):
         Prefetch(
             'dataset__files',
             queryset=queryset_files.prefetch_related(
-                Prefetch('links', queryset=queryset_files)
+                Prefetch('links', queryset=queryset_files),
             ),
         ),
     )
@@ -121,29 +129,38 @@ def file(request, pk=None, path=None):
 
     if versions:
         caveats_datasets = list(versions.exclude(id=obj.id).values_list('dataset_id', flat=True))
-        caveats_versions = Caveat.objects.exclude(datasets__contains=[obj.id]) \
-                                         .filter(datasets__overlap=caveats_datasets)
+        caveats_versions = Caveat.objects.exclude(datasets__contains=[obj.id]).filter(
+            datasets__overlap=caveats_datasets
+        )
     else:
         caveats_versions = None
 
-    return render(request, 'metadata/file.html', {
-        'title': f'File {obj.name}',
-        'file': obj,
-        'parents': [obj.dataset],
-        'versions': versions,
-        'public_version': versions.exclude(id=obj.id).filter(dataset__public=True).first(),
-        'caveats': caveats,
-        'caveats_versions': caveats_versions,
-        'has_access': check_access(request, obj.path),
-        'json_ld': get_jsonld(request, obj)
-    })
+    return render(
+        request,
+        'metadata/file.html',
+        {
+            'title': f'File {obj.name}',
+            'file': obj,
+            'parents': [obj.dataset],
+            'versions': versions,
+            'public_version': versions.exclude(id=obj.id).filter(dataset__public=True).first(),
+            'caveats': caveats,
+            'caveats_versions': caveats_versions,
+            'has_access': check_access(request, obj.path),
+            'json_ld': get_jsonld(request, obj),
+        },
+    )
 
 
 def resources(request):
-    return render(request, 'metadata/resources.html', {
-        'title': 'DOI',
-        'count': Resource.objects.using('metadata').count()
-    })
+    return render(
+        request,
+        'metadata/resources.html',
+        {
+            'title': 'DOI',
+            'count': Resource.objects.using('metadata').count(),
+        },
+    )
 
 
 def resource(request, pk=None, doi=None):
@@ -168,7 +185,7 @@ def resource(request, pk=None, doi=None):
                 'IsPreviousVersionOf',
                 'IsDocumentedBy',
                 'Cites',
-                'IsDerivedFrom'
+                'IsDerivedFrom',
             ]:
                 references[identifier.get('relationType')].append(identifier)
             else:
@@ -176,28 +193,32 @@ def resource(request, pk=None, doi=None):
 
     caveats = Caveat.objects.filter(resources__contains=[str(resource.id)]).public(request.user)
     count = resource.datasets.count()
-    datasets = resource.datasets.prefetch_related('links').order_by('path')[:settings.METADATA_RESOURCE_MAX_DATASETS]
+    datasets = resource.datasets.prefetch_related('links').order_by('path')[: settings.METADATA_RESOURCE_MAX_DATASETS]
 
-    doi_root = doi if references.get('IsNewVersionOf') is None else '.'.join(doi.split(".")[:-1])
+    doi_root = doi if references.get('IsNewVersionOf') is None else '.'.join(doi.split('.')[:-1])
     versions = Resource.objects.using('metadata').filter(doi__startswith=doi_root).order_by('-version')
 
-    return render(request, 'metadata/resource.html', {
-        'title': f'DOI {resource.doi}',
-        'resource': resource,
-        'versions': versions,
-        'references': references,
-        'caveats': caveats,
-        'datasets': datasets,
-        'count': count,
-        'search_url': request.build_absolute_uri(reverse('search')) + 'query/' + resource.doi + '/',
-        'json_ld': get_jsonld(request, resource)
-    })
+    return render(
+        request,
+        'metadata/resource.html',
+        {
+            'title': f'DOI {resource.doi}',
+            'resource': resource,
+            'versions': versions,
+            'references': references,
+            'caveats': caveats,
+            'datasets': datasets,
+            'count': count,
+            'search_url': request.build_absolute_uri(reverse('search')) + 'query/' + resource.doi + '/',
+            'json_ld': get_jsonld(request, resource),
+        },
+    )
 
 
 def resource_bibtex(request, doi=None):
     resource = get_object_or_404(Resource.objects.using('metadata'), doi=doi)
     bibtex = render_bibtex(resource)
-    response = HttpResponse(bibtex, content_type="application/x-bibtex")
+    response = HttpResponse(bibtex, content_type='application/x-bibtex')
     response['Content-Disposition'] = f'filename="{doi}.bib"'
     return response
 
@@ -228,16 +249,21 @@ def resource_json(request, doi=None):
 
 
 def identifiers(request):
-    return render(request, 'metadata/identifiers.html', {
-        'title': 'Identifiers',
-        'identifiers': Identifier.objects.using('metadata').all()
-    })
+    return render(
+        request,
+        'metadata/identifiers.html',
+        {'title': 'Identifiers', 'identifiers': Identifier.objects.using('metadata').all()},
+    )
 
 
 def identifier(request, identifier=None):
     identifier_instance = get_object_or_404(Identifier.objects.using('metadata'), identifier=identifier)
-    return render(request, 'metadata/identifier.html', {
-        'title': 'Identifiers',
-        'identifier': identifier_instance,
-        'histogram': Dataset.objects.using('metadata').histogram(identifier)
-    })
+    return render(
+        request,
+        'metadata/identifier.html',
+        {
+            'title': 'Identifiers',
+            'identifier': identifier_instance,
+            'histogram': Dataset.objects.using('metadata').histogram(identifier),
+        },
+    )

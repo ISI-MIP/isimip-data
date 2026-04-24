@@ -8,7 +8,6 @@ from .models import Dataset, File, Resource
 
 
 class MetadataCacheMiddleware(CacheMiddleware):
-
     # paths where it only needs to be checked if the cache needs to be updated
     update_patterns = ()
 
@@ -17,7 +16,7 @@ class MetadataCacheMiddleware(CacheMiddleware):
         re.compile(r'^/$'),
         re.compile(r'^/sitemap'),
         re.compile(r'^/api/v1/datasets/'),
-        re.compile(r'^/api/v1/files/')
+        re.compile(r'^/api/v1/files/'),
     )
 
     def process_request(self, request):
