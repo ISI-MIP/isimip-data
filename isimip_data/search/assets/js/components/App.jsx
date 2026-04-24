@@ -24,12 +24,12 @@ const App = () => {
   // after the identifiers are fetched, parse the url and initialize params
   useEffect(() => {
     if (!isNil(identifiers)) {
-      setParams({
-        ...params,
+      setParams(prevParams => ({
+        ...prevParams,
         ...getLocationParams('/search/', window.location.pathname, identifiers.map(i => i.identifier))
-      })
+      }))
     }
-  }, [identifiers])
+  }, [identifiers, setParams])
 
   // update the url everytime params change
   useEffect(() => {
