@@ -4,7 +4,6 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import Icon from 'isimip_data/core/assets/js/components/Icon'
 
-
 const FilterInput = ({ values, setValues }) => {
 
   const [input, setInput] = useState(values.filterString || '')
@@ -24,16 +23,20 @@ const FilterInput = ({ values, setValues }) => {
   return (
     <div className="d-flex">
       <div className="flex-grow-1">
-          <input className="form-control form-control-lg mb-1" type="text"
-                 placeholder="Filter by title or creator"
-                 value={input} onChange={handleChange} />
+        <input
+          className="form-control form-control-lg mb-1" type="text"
+          placeholder="Filter by title or creator"
+          value={input} onChange={handleChange}
+        />
       </div>
 
       <div className="ms-md-2">
-          <button role="button" className="d-flex align-items-center btn btn-outline-secondary btn-lg"
-                  onClick={handleReset}>
+        <button
+          role="button" className="d-flex align-items-center btn btn-outline-secondary btn-lg"
+          onClick={handleReset}
+        >
             Reset <Icon icon="close" size="lg" />
-          </button>
+        </button>
       </div>
     </div>
   )

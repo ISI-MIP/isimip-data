@@ -1,12 +1,11 @@
-import 'bootstrap'
-
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-import '../scss/caveats.scss'
-
 import Caveats from './components/Caveats'
+
+import 'bootstrap'
+import '../scss/caveats.scss'
 
 const queryClient = new QueryClient()
 

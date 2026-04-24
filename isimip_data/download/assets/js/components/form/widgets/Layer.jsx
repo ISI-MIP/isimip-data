@@ -10,9 +10,11 @@ const Layer = ({ value, errors, onChange }) => {
   return (
     <div className="col-lg-4">
       <label className="mb-0" htmlFor={id}>Layer</label>
-      <input className={'form-control mb-2 ' +  (!isEmpty(errors) && 'is-invalid')}
-          type="number" id={id} placeholder="Layer"
-          value={value} onChange={event => onChange(Number(event.target.value))} />
+      <input
+        className={'form-control mb-2 ' +  (!isEmpty(errors) && 'is-invalid')}
+        type="number" id={id} placeholder="Layer"
+        value={value} onChange={event => onChange(Number(event.target.value))}
+      />
       <Errors errors={errors} />
     </div>
   )

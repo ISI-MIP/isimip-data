@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { omit } from 'lodash'
 
-import { useSeverityQuery } from '../hooks/queries'
-
 import Icon from 'isimip_data/core/assets/js/components/Icon'
+
+import { useSeverityQuery } from '../hooks/queries'
 
 import Badge from './Badge'
 
@@ -27,15 +27,19 @@ const FilterSeverity = ({ values, setValues }) => {
 
   return severities && (
     <div className="dropdown">
-      <button type="button" className="d-block unstyled text-muted dropdown-toggle"
-              data-bs-toggle="dropdown" aria-expanded="false">
+      <button
+        type="button" className="d-block unstyled text-muted dropdown-toggle"
+        data-bs-toggle="dropdown" aria-expanded="false"
+      >
         {renderLabel()}
       </button>
       <div className="dropdown-menu">
         {
           severities.map((severity, severityIndex) => (
-            <button key={severityIndex} type="button" className="d-flex align-items-center dropdown-item"
-                    onClick={() => handleClick(severity.value)}>
+            <button
+              key={severityIndex} type="button" className="d-flex align-items-center dropdown-item"
+              onClick={() => handleClick(severity.value)}
+            >
               {<Badge label={severity.display} color={severity.color} />}
               {values.severity && (values.severity == severity.value) && <Icon icon="check" size="sm" />}
             </button>

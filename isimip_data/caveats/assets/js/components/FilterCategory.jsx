@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { omit } from 'lodash'
 
-import { useCategoryQuery } from '../hooks/queries'
-
 import Icon from 'isimip_data/core/assets/js/components/Icon'
+
+import { useCategoryQuery } from '../hooks/queries'
 
 import Badge from './Badge'
 
@@ -27,15 +27,19 @@ const FilterCategory = ({ values, setValues }) => {
 
   return categories && (
     <div className="dropdown">
-      <button type="button" className="d-block unstyled text-muted dropdown-toggle"
-              data-bs-toggle="dropdown" aria-expanded="false">
+      <button
+        type="button" className="d-block unstyled text-muted dropdown-toggle"
+        data-bs-toggle="dropdown" aria-expanded="false"
+      >
         {renderLabel()}
       </button>
       <div className="dropdown-menu">
         {
           categories.map((category, categoryIndex) => (
-            <button key={categoryIndex} type="button" className="d-flex align-items-center dropdown-item"
-                    onClick={() => handleClick(category.value)}>
+            <button
+              key={categoryIndex} type="button" className="d-flex align-items-center dropdown-item"
+              onClick={() => handleClick(category.value)}
+            >
               {<Badge label={category.display} color={category.color} />}
               {values.category && (values.category == category.value) && <Icon icon="check" size="sm" />}
             </button>

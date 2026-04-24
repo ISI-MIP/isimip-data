@@ -4,7 +4,6 @@ import { isEmpty } from 'lodash'
 
 import { useDatasetSuggestionsQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
 
-
 const Suggestions = ({ params, updateParams }) => {
 
   const { data: suggestions } = useDatasetSuggestionsQuery(params)

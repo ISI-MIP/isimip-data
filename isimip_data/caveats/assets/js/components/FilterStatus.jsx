@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { omit } from 'lodash'
 
-import { useStatusQuery } from '../hooks/queries'
-
 import Icon from 'isimip_data/core/assets/js/components/Icon'
+
+import { useStatusQuery } from '../hooks/queries'
 
 import Badge from './Badge'
 
@@ -27,15 +27,19 @@ const FilterStatus = ({ values, setValues }) => {
 
   return status && (
     <div className="dropdown">
-      <button type="button" className="d-block unstyled text-muted dropdown-toggle"
-              data-bs-toggle="dropdown" aria-expanded="false">
+      <button
+        type="button" className="d-block unstyled text-muted dropdown-toggle"
+        data-bs-toggle="dropdown" aria-expanded="false"
+      >
         {renderLabel()}
       </button>
       <div className="dropdown-menu">
         {
           status.map((status, statusIndex) => (
-            <button key={statusIndex} type="button" className="d-flex align-items-center dropdown-item"
-                    onClick={() => handleClick(status.value)}>
+            <button
+              key={statusIndex} type="button" className="d-flex align-items-center dropdown-item"
+              onClick={() => handleClick(status.value)}
+            >
               {<Badge label={status.display} color={status.color} />}
               {values.status && (values.status == status.value) && <Icon icon="check" size="sm" />}
             </button>

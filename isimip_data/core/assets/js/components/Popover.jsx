@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import { renderToString } from 'react-dom/server'
 import PropTypes from 'prop-types'
+import { renderToString } from 'react-dom/server'
 import { Popover as BootstrapPopover } from 'bootstrap'
 
 const Popover = ({ children, ...props }) => {

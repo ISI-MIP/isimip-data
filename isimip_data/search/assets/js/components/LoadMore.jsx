@@ -3,20 +3,21 @@ import PropTypes from 'prop-types'
 
 import Spinner from 'isimip_data/core/assets/js/components/Spinner'
 
-
 const LoadMore = ({ onClick, isFetching }) => (
   <div className="d-flex justify-content-center">
-    {isFetching ? <Spinner className="mt-2" /> : (
-      <div className="card">
-        <div className="card-body">
-          <div className="d-flex justify-content-center">
-            <button type="button" className="link" onClick={onClick}>
+    {
+      isFetching ? <Spinner className="mt-2" /> : (
+        <div className="card">
+          <div className="card-body">
+            <div className="d-flex justify-content-center">
+              <button type="button" className="link" onClick={onClick}>
               Load more datasets
-            </button>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    )}
+      )
+    }
   </div>
 )
 

@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-
 const Badge = ({ label, color }) => (
   <div className={`badge rounded-pill text-bg-${color}`}>
     {label}

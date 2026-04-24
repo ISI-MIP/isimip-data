@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-
 const Resource = ({ resource, all }) => (
   <div className="card mb-2">
     <div className="card-body">
@@ -36,18 +35,18 @@ const Resource = ({ resource, all }) => (
         </div>
       </div>
       <div className="text-muted">
-          <p className="me-auto mb-0">
-            {
-              resource.created_display && (
-                <>This DOI was first created on {resource.created_display}.</>
-              )
-            }
-            {
-              resource.updated_display && resource.created_display != resource.updated_display && (
-                <> It was last updated on {resource.updated_display}.</>
-              )
-            }
-          </p>
+        <p className="me-auto mb-0">
+          {
+            resource.created_display && (
+              <>This DOI was first created on {resource.created_display}.</>
+            )
+          }
+          {
+            resource.updated_display && resource.created_display != resource.updated_display && (
+              <> It was last updated on {resource.updated_display}.</>
+            )
+          }
+        </p>
       </div>
     </div>
   </div>

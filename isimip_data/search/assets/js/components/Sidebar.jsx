@@ -6,7 +6,6 @@ import { useLs } from 'isimip_data/core/assets/js/hooks/ls'
 import Facets from './Facets'
 import Tree from './Tree'
 
-
 const Sidebar = ({ params, glossary, updateParams }) => {
 
   const [sidebar, setSidebar] = useLs('isimip.search.sidebar', 'tree')
@@ -19,13 +18,17 @@ const Sidebar = ({ params, glossary, updateParams }) => {
             <span className="d-xxl-inline d-xl-none d-lg-none d-inline">Sidebar View:</span>
             <span className="d-xxl-none d-xl-inline d-lg-inline d-none">Sidebar:</span>
             <div className="form-check form-check-inline me-0">
-              <input className="form-check-input" type="radio" id="tree-radio"
-                     onChange={() => setSidebar('tree')} checked={sidebar == 'tree'} />
+              <input
+                className="form-check-input" type="radio" id="tree-radio"
+                onChange={() => setSidebar('tree')} checked={sidebar == 'tree'}
+              />
               <label className="form-check-label" htmlFor="tree-radio">Tree</label>
             </div>
             <div className="form-check form-check-inline me-0">
-              <input className="form-check-input" type="radio" id="facets-radio"
-                     onChange={() => setSidebar('facets')} checked={sidebar == 'facets'} />
+              <input
+                className="form-check-input" type="radio" id="facets-radio"
+                onChange={() => setSidebar('facets')} checked={sidebar == 'facets'}
+              />
               <label className="form-check-label" htmlFor="facets-radio">Facets</label>
             </div>
           </div>
@@ -40,7 +43,6 @@ const Sidebar = ({ params, glossary, updateParams }) => {
     }
   </>
 }
-
 
 Sidebar.propTypes = {
   params: PropTypes.object.isRequired,

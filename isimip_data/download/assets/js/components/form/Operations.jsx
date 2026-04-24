@@ -120,9 +120,11 @@ const Operations = ({ operationsConfig, operationsHelp, operations, errors, setO
             }
             {
               operationsConfig.map(operation => (
-                <button key={operation.operation} className="dropdown-item" type="button"
-                        disabled={disabledOperations.includes(operation.operation)}
-                        onClick={() => addOperation(operation)}>
+                <button
+                  key={operation.operation} className="dropdown-item" type="button"
+                  disabled={disabledOperations.includes(operation.operation)}
+                  onClick={() => addOperation(operation)}
+                >
                   <small>
                     <Markdown className="mb-0">{operation.label}</Markdown>
                   </small>

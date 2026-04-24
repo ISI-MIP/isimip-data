@@ -8,7 +8,6 @@ import { useResourcesQuery } from '../hooks/queries'
 import Filter from './Filter'
 import Resource from './Resource'
 
-
 const Resources = () => {
 
   const [values, setValues] = useLs('isimip.resources', {

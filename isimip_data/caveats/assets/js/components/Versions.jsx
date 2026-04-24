@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-
 const Versions = ({ caveat }) => {
   if (caveat.version_after && caveat.version_before) {
     return (

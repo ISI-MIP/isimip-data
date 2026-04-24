@@ -10,9 +10,11 @@ const Var = ({ value, errors, onChange }) => {
   return (
     <div className="col-lg-4">
       <label className="mb-0" htmlFor={id}>Mask variable</label>
-      <input className={'form-control mb-2 ' +  (!isEmpty(errors) && 'is-invalid')}
-          type="text" id={id} placeholder="Mask variable"
-          value={value} onChange={event => onChange(event.target.value)} />
+      <input
+        className={'form-control mb-2 ' +  (!isEmpty(errors) && 'is-invalid')}
+        type="text" id={id} placeholder="Mask variable"
+        value={value} onChange={event => onChange(event.target.value)}
+      />
       <Errors errors={errors} />
     </div>
   )

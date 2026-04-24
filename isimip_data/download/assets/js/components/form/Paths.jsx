@@ -45,8 +45,11 @@ const Paths = ({ files, errors, paths, setPaths }) => {
         isUndefined(file.specifiers.start_year) ||
         (
           file.specifiers.start_year <= endYear && (
-            isUndefined(file.specifiers.end_year) ? file.specifiers.start_year >= startYear
-                                                  : file.specifiers.end_year >= startYear
+            isUndefined(file.specifiers.end_year) ? (
+              file.specifiers.start_year >= startYear
+            ) : (
+              file.specifiers.end_year >= startYear
+            )
           )
         )
       )).map(file => file.path)
@@ -78,15 +81,19 @@ const Paths = ({ files, errors, paths, setPaths }) => {
       <div className="card mb-2">
         <div className="card-body">
           <div className="form-check form-check-inline mb-0">
-            <input className="form-check-input" type="radio" id="range-radio"
-                   onChange={() => setState({...state, mode: 'range'})} checked={state.mode == 'range'} />
+            <input
+              className="form-check-input" type="radio" id="range-radio"
+              onChange={() => setState({...state, mode: 'range'})} checked={state.mode == 'range'}
+            />
             <label className="form-check-label" htmlFor="range-radio">
               Select files by time range
             </label>
           </div>
           <div className="form-check form-check-inline">
-            <input className="form-check-input" type="radio" id="files-radio"
-                   onChange={() => setState({...state, mode: 'files'})} checked={state.mode == 'files'} />
+            <input
+              className="form-check-input" type="radio" id="files-radio"
+              onChange={() => setState({...state, mode: 'files'})} checked={state.mode == 'files'}
+            />
             <label className="form-check-label" htmlFor="files-radio">
               Select individual files
             </label>
@@ -109,9 +116,11 @@ const Paths = ({ files, errors, paths, setPaths }) => {
           {
             state.mode == 'files' && <>
               <div className="form-check">
-                <input className="form-check-input" type="checkbox" id="check-all"
-                       checked={allChecked}
-                       onChange={() => toggleAll()} />
+                <input
+                  className="form-check-input" type="checkbox" id="check-all"
+                  checked={allChecked}
+                  onChange={() => toggleAll()}
+                />
                 <label className="form-check-label text-muted" htmlFor="check-all">
                   {allChecked ? <span>Uncheck all</span> : <span>Check all</span>}
                 </label>
@@ -120,9 +129,11 @@ const Paths = ({ files, errors, paths, setPaths }) => {
                 files.map((file, index) => {
                   return (
                     <div className="form-check mt-2" key={index}>
-                      <input className="form-check-input" type="checkbox" id={index}
-                             checked={paths.includes(file.path)}
-                             onChange={() => togglePath(file.path)} />
+                      <input
+                        className="form-check-input" type="checkbox" id={index}
+                        checked={paths.includes(file.path)}
+                        onChange={() => togglePath(file.path)}
+                      />
                       <label className="form-check-label" htmlFor={index}>{file.path}</label>
                     </div>
                   )

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { isEmpty, isNil, isNumber, isUndefined } from 'lodash'
 
 import { useLs } from 'isimip_data/core/assets/js/hooks/ls'
 import { useSettingsQuery } from 'isimip_data/core/assets/js/hooks/queries'
 
+import { useSubmitJobMutation } from '../hooks/mutations'
+
 import Errors from './form/Errors'
 import Note from './form/Note'
 import Operations from './form/Operations'
 import Paths from './form/Paths'
-
-import { useSubmitJobMutation } from '../hooks/mutations'
 
 const Form = ({ files, setJob }) => {
   const { data: settings } = useSettingsQuery()
@@ -120,7 +120,7 @@ const Form = ({ files, setJob }) => {
   return settings && (
     isEmpty(operationsConfig) ? (
       <Note files={files} resolutions={resolutions}/>
-    ): (
+    ) : (
       <form onSubmit={handleSubmit} noValidate>
         <Paths
           files={files}

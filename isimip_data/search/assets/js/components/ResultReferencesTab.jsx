@@ -16,8 +16,10 @@ const ResultReferencesTab = ({ dataset }) => {
           <div key={referenceIndex} className="mb-2">
             {reference.title}
             {reference.identifier_type != 'doi' && ' → '}
-            <a className={classNames({'doi-link ms-2': reference.identifier_type == 'doi'})}
-               href={reference.identifier} target="_blank" rel="noreferrer">
+            <a
+              className={classNames({'doi-link ms-2': reference.identifier_type == 'doi'})}
+              href={reference.identifier} target="_blank" rel="noreferrer"
+            >
               {reference.identifier}
             </a>
           </div>

@@ -30,8 +30,11 @@ const Note = ({ files, resolutions }) => {
           }
         </ul>
         <p className="mb-0">
-          The Files API supports: {resolutions.map((r, i) => (<span key={i} className="text-success">{r}</span>))
-                                              .reduce((s, r) => [s, ', ', r])}.
+          The Files API supports: {
+            resolutions
+              .map((r, i) => (<span key={i} className="text-success">{r}</span>))
+              .reduce((s, r) => [s, ', ', r])
+          }.
         </p>
       </div>
     </div>

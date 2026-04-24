@@ -115,8 +115,10 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         dataset.terms_of_use && (
           <Tooltip placement="bottom" title={dataset.terms_of_use.terms_of_use}>
-            <a className="badge text-bg-secondary" href={dataset.terms_of_use.terms_of_use_url}
-               target="_blank" rel="noreferrer">
+            <a
+              className="badge text-bg-secondary" href={dataset.terms_of_use.terms_of_use_url}
+              target="_blank" rel="noreferrer"
+            >
               ToU
             </a>
           </Tooltip>
@@ -125,8 +127,10 @@ const ResultBadges = ({ glossary, dataset }) => {
       {
         dataset.rights && (
           <Tooltip placement="bottom" title={<>This dataset is published under the <i>{dataset.rights.rights}</i>.</>}>
-            <a className={`badge text-bg-${dataset.rights.color || 'light'}`}
-               href={dataset.rights.rights_uri} target="_blank" rel="noreferrer">
+            <a
+              className={`badge text-bg-${dataset.rights.color || 'light'}`}
+              href={dataset.rights.rights_uri} target="_blank" rel="noreferrer"
+            >
               {dataset.rights.short}
             </a>
           </Tooltip>

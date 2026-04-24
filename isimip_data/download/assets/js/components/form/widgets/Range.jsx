@@ -7,10 +7,14 @@ const Range = ({ domain, values, onChange }) => {
 
   return (
     <div className="range">
-      <input type="range" value={startYear} min={min} max={max} className="thumb thumb-3"
-             onChange={e => onChange('start_year', e.target.value)} />
-      <input type="range" value={endYear} min={min} max={max} className="thumb thumb-4"
-             onChange={e => onChange('end_year', e.target.value)} />
+      <input
+        type="range" value={startYear} min={min} max={max} className="thumb thumb-3"
+        onChange={e => onChange('start_year', e.target.value)}
+      />
+      <input
+        type="range" value={endYear} min={min} max={max} className="thumb thumb-4"
+        onChange={e => onChange('end_year', e.target.value)}
+      />
       <div className="slider">
         <div className="track"/>
         <div className="ticks">

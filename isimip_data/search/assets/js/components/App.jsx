@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react'
 import { isNil } from 'lodash'
 
-import { getLocationParams, getLocationString } from 'isimip_data/metadata/assets/js/utils/location'
-
 import { useAccessQuery } from 'isimip_data/access/assets/js/hooks/queries'
 import { useSettingsQuery } from 'isimip_data/core/assets/js/hooks/queries'
 import { useGlossaryQuery, useIdentifiersQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
+import { getLocationParams, getLocationString } from 'isimip_data/metadata/assets/js/utils/location'
 
 import { useParams } from '../hooks/params'
 
-import Search from './Search'
 import Results from './Results'
+import Search from './Search'
 import Sidebar from './Sidebar'
-
 
 const App = () => {
 

@@ -15,8 +15,10 @@ const ResultSelect = ({ dataset, selected, setSelected }) => {
 
   return dataset.public && (
     <Tooltip title="Add this dataset to the selection.">
-      <input className="form-check-input result-select" type="checkbox"
-             checked={isSelected} onChange={handleSelection} />
+      <input
+        className="form-check-input result-select" type="checkbox"
+        checked={isSelected} onChange={handleSelection}
+      />
     </Tooltip>
   )
 }

@@ -42,7 +42,7 @@ const Caveats = () => {
     <div className="caveats">
       <Filter values={values} setValues={setValues} />
       {
-          filteredCaveats.map((caveat, caveatIndex) => <Caveat key={caveatIndex} caveat={caveat} />)
+        filteredCaveats.map((caveat, caveatIndex) => <Caveat key={caveatIndex} caveat={caveat} />)
       }
     </div>
   )

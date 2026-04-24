@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { isEmpty, first, trim } from 'lodash'
 import classNames from 'classnames'
 import sha512 from 'js-sha512'
+import { first, isEmpty, trim } from 'lodash'
 
 import DatasetApi from '../api/DatasetApi'
-
 
 const Metadata = () => {
 
@@ -73,9 +72,11 @@ const Metadata = () => {
               <label className="form-label" htmlFor="metadata-query">UUID or Checksum</label>
               <textarea
                 id="metadata-query"
-                className={classNames('form-control mb-2', {
-                  'is-invalid': !isEmpty(queryError)
-                })}
+                className={
+                  classNames('form-control mb-2', {
+                    'is-invalid': !isEmpty(queryError)
+                  })
+                }
                 name="query"
                 rows="2"
                 value={query}

@@ -8,8 +8,10 @@ const Mean = ({ checked, onChange }) => {
   return (
     <div className="col-lg-12">
       <div className="form-check mb-2">
-        <input className="form-check-input" type="checkbox" id={id} checked={checked}
-               onChange={event => onChange(event.target.checked)} />
+        <input
+          className="form-check-input" type="checkbox" id={id} checked={checked}
+          onChange={event => onChange(event.target.checked)}
+        />
         <label className="form-check-label font-weight-normal" htmlFor={id}>
           Compute the field mean using the <code>-fldmean</code> operator
         </label>

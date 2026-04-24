@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { isEmpty, isNil } from 'lodash'
 
 import { useLs } from 'isimip_data/core/assets/js/hooks/ls'
-
 import { useDatasetsQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
 
 import LoadMore from './LoadMore'

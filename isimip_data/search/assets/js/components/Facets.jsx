@@ -6,7 +6,6 @@ import { useFacetsQuery } from '../hooks/queries'
 
 import Facet from './Facet'
 
-
 const Facets = ({ params, glossary, updateParams }) => {
 
   const { data: facets } = useFacetsQuery()
@@ -16,11 +15,11 @@ const Facets = ({ params, glossary, updateParams }) => {
       {
         facets.map((facetGroup, facetGroupIndex) => (
           <div key={facetGroupIndex} className="card">
-          {
-            facetGroup.map((facet, facetIndex) => (
-              <Facet key={facetIndex} facet={facet} params={params} glossary={glossary} updateParams={updateParams} />
-            ))
-          }
+            {
+              facetGroup.map((facet, facetIndex) => (
+                <Facet key={facetIndex} facet={facet} params={params} glossary={glossary} updateParams={updateParams} />
+              ))
+            }
           </div>
         ))
       }

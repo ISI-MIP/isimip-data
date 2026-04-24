@@ -53,12 +53,12 @@ const Version = ({ count, maxCount, isLoading, params, updateParams }) => {
               }
               {
                 !isLoading && count >= 0 && count <= maxCount && (
-                  <div>{ count.toLocaleString('en-US') } datasets found</div>
+                  <div>{count.toLocaleString('en-US')} datasets found</div>
                 )
               }
               {
                 !isLoading && count > maxCount && (
-                  <div>More than { maxCount.toLocaleString('en-US') } datasets found</div>
+                  <div>More than {maxCount.toLocaleString('en-US')} datasets found</div>
                 )
               }
             </div>
@@ -78,17 +78,21 @@ const Version = ({ count, maxCount, isLoading, params, updateParams }) => {
                   <label className="form-check-label">Version range:</label>
                 </div>
                 <div className="col-12 col-md mb-2 mb-md-0">
-                  <input type="number" className="form-control form-control-sm" placeholder="After YYYYMMDD"
-                         value={values.after}
-                         onChange={(event) => setValues({...values, after: event.target.value})} />
+                  <input
+                    type="number" className="form-control form-control-sm" placeholder="After YYYYMMDD"
+                    value={values.after}
+                    onChange={(event) => setValues({...values, after: event.target.value})}
+                  />
                 </div>
                 <div className="col-12 col-md-auto mb-2 mb-md-0">
                   <label className="form-check-label">≤ Dataset version ≤</label>
                 </div>
                 <div className="col-12 col-md mb-2 mb-md-0">
-                  <input type="number" className="form-control form-control-sm" placeholder="Before YYYYMMDD"
-                         value={values.before}
-                         onChange={(event) => setValues({...values, before: event.target.value})} />
+                  <input
+                    type="number" className="form-control form-control-sm" placeholder="Before YYYYMMDD"
+                    value={values.before}
+                    onChange={(event) => setValues({...values, before: event.target.value})}
+                  />
                 </div>
                 <div className="col-12 col-md-auto">
                   <button className="btn btn-outline-secondary btn-sm" onClick={handleApply}>Apply range</button>

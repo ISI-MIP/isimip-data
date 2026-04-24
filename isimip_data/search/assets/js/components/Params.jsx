@@ -4,7 +4,6 @@ import { isArray, isEmpty } from 'lodash'
 
 import Icon from 'isimip_data/core/assets/js/components/Icon'
 import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
-
 import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
 
 import { handleDownload } from '../utils'
@@ -54,8 +53,10 @@ const Params = ({ params, count, updateParams }) => {
               {
                 items.map(([key, value], index) => {
                   return !isEmpty(value) && (
-                    <button type="button" key={index} className="d-flex align-items-center link"
-                            onClick={() => handleRemove(key, value)}>
+                    <button
+                      type="button" key={index} className="d-flex align-items-center link"
+                      onClick={() => handleRemove(key, value)}
+                    >
                       {key} = {value} <Icon icon="close" size="sm" />
                     </button>
                   )

@@ -5,10 +5,8 @@ import { get, intersection, isEmpty, isNil } from 'lodash'
 import Icon from 'isimip_data/core/assets/js/components/Icon'
 import Spinner from 'isimip_data/core/assets/js/components/Spinner'
 import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
-
 import { useLs } from 'isimip_data/core/assets/js/hooks/ls'
 import { useDatasetsHistogramQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
-
 
 const Facet = ({ facet, params, glossary, updateParams }) => {
 
@@ -27,8 +25,7 @@ const Facet = ({ facet, params, glossary, updateParams }) => {
     ) {
       updateParams({
         [facet.identifier]: (
-          (params[facet.identifier] || []).includes(specifier) ? params[facet.identifier].filter(s => s != specifier)
-                                                               : [...(params[facet.identifier] || []), specifier]
+          (params[facet.identifier] || []).includes(specifier) ? params[facet.identifier].filter(s => s != specifier) : [...(params[facet.identifier] || []), specifier]
         )
       })
     }
@@ -82,19 +79,23 @@ const Facet = ({ facet, params, glossary, updateParams }) => {
       <li key={itemIndex} className="list-group-item" onClick={(event) => handleChange(event, specifier)}>
         <Tooltip placement="right" title={renderTooltip(properties)}>
           <div className="d-flex gap-1 align-items-center">
-            <input className="form-check-input me-1 mt-0" type="checkbox" id={id} checked={checked.includes(specifier)}
-                   onChange={(event) => handleChange(event, specifier)} />
+            <input
+              className="form-check-input me-1 mt-0" type="checkbox" id={id} checked={checked.includes(specifier)}
+              onChange={(event) => handleChange(event, specifier)}
+            />
 
             <label className="form-check-label flex-grow-1" htmlFor={id}>
-             {title || specifier}
+              {title || specifier}
             </label>
 
             {
               filterUrls(urls).map((key, index) => {
                 return (
                   <Tooltip key={specifier} title={<>More information is available in the {specifier} protocol.</>}>
-                    <a key={index} href={urls[key]}
-                      target="_blank" rel="noreferrer" onClick={event => event.stopPropagation()}>
+                    <a
+                      key={index} href={urls[key]}
+                      target="_blank" rel="noreferrer" onClick={event => event.stopPropagation()}
+                    >
                       <Icon className="d-block" icon="quick_reference_all" size="sm" />
                     </a>
                   </Tooltip>
@@ -103,7 +104,7 @@ const Facet = ({ facet, params, glossary, updateParams }) => {
             }
 
             <div className="badge rounded-pill text-bg-secondary">
-             {count}
+              {count}
             </div>
           </div>
         </Tooltip>

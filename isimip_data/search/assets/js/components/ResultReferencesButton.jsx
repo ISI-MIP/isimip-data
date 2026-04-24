@@ -9,11 +9,11 @@ const referenceTypes = ['OTHER', 'EVALUATION', 'ISIPEDIA']
 const ResultReferencesButton = ({ dataset, onClick }) => {
 
   const referenceTypeIndex = dataset.annotations.reduce((acc, cur) => {
-      const index = cur.references.reduce((a, c) => {
-          const i = referenceTypes.indexOf(c.reference_type)
-          return (i > a) ? i : a
-      }, -1)
-      return (index > acc) ? index : acc
+    const index = cur.references.reduce((a, c) => {
+      const i = referenceTypes.indexOf(c.reference_type)
+      return (i > a) ? i : a
+    }, -1)
+    return (index > acc) ? index : acc
   }, -1)
 
   const referenceType = referenceTypes[referenceTypeIndex]

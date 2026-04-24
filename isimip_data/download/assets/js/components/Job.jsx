@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { useJobQuery } from '../hooks/queries'
-
 import Spinner from 'isimip_data/core/assets/js/components/Spinner'
+
+import { useJobQuery } from '../hooks/queries'
 
 const Job = ({ jobUrl }) => {
   const { data: job } = useJobQuery(jobUrl)
@@ -94,7 +94,7 @@ const Job = ({ jobUrl }) => {
                 </a>.
               </p>
               <p>
-                After completion, the files will be stored on the server for {job.ttl/60.0/60.0} hours.
+                After completion, the files will be stored on the server for {job.ttl / 60.0 / 60.0} hours.
               </p>
             </>
           }

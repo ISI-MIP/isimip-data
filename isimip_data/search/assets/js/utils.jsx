@@ -13,7 +13,10 @@ export const handleDownload = (params) => {
 
 export const addLineBreaks = (string) => (
   string.split('_').reduce((name, token, index) => (
-    (index == 0) ? [<React.Fragment key={index}>{token}</React.Fragment>]
-                 : [...name, <React.Fragment key={index}>_<wbr />{token}</React.Fragment>]
+    (index == 0) ? (
+      [<React.Fragment key={index}>{token}</React.Fragment>]
+    ) : (
+      [...name, <React.Fragment key={index}>_<wbr />{token}</React.Fragment>]
+    )
   ), [])
 )

@@ -2,14 +2,13 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
-
 import Icon from 'isimip_data/core/assets/js/components/Icon'
 import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
-
-import ConfigureDownload from './ConfigureDownload'
+import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
 
 import { addLineBreaks, getSize, handleDownload } from '../utils'
+
+import ConfigureDownload from './ConfigureDownload'
 
 const Selection = ({ selected, setSelected }) => {
 
@@ -39,28 +38,36 @@ const Selection = ({ selected, setSelected }) => {
   const renderOptions = () => (
     <>
       <Tooltip title="Reset selection">
-        <button type="button" className="d-flex align-items-center link me-1"
-          onClick={() => handleReset()}>
+        <button
+          type="button" className="d-flex align-items-center link me-1"
+          onClick={() => handleReset()}
+        >
           <Icon icon="close" />
         </button>
       </Tooltip>
 
       <ConfigureDownload
-        title={'Configure the download for this selection, e.g. to only download a ' +
-               'specific country, a lat/lon box or landonly data.'}
+        title={
+          'Configure the download for this selection, e.g. to only download a ' +
+          'specific country, a lat/lon box or landonly data.'
+        }
         files={files}
       />
 
       <Tooltip title="Download the file list for this selection.">
-        <a className="d-flex align-items-center ms-1"
-           href={`/api/v1/datasets/filelist/?${encodeParams(ids)}`}>
+        <a
+          className="d-flex align-items-center ms-1"
+          href={`/api/v1/datasets/filelist/?${encodeParams(ids)}`}
+        >
           <Icon icon="description" />
         </a>
       </Tooltip>
 
       <Tooltip title="Download all files in this selection at once.">
-        <button type="button" className="d-flex align-items-center link ms-1"
-                onClick={() => handleDownload(ids)}>
+        <button
+          type="button" className="d-flex align-items-center link ms-1"
+          onClick={() => handleDownload(ids)}
+        >
           <Icon icon="file_copy" />
         </button>
       </Tooltip>
@@ -102,29 +109,29 @@ const Selection = ({ selected, setSelected }) => {
                   </tr>
                 </thead>
                 <tbody>
-                {
-                  selected.map(dataset => {
-                    return (
-                      <tr key={dataset.id}>
-                        <td>
-                          {addLineBreaks(dataset.name)}
-                        </td>
-                        <td className="text-nowrap text-end w-0">
-                          {getSize(dataset.size)}
-                        </td>
-                        <td className="text-nowrap text-end w-0">
-                          <div className="d-flex align-items-start">
-                            <Tooltip title="Visit dataset metadata page.">
-                              <a className="d-block" href={dataset.metadata_url} target="_blank" rel="noreferrer">
-                                <Icon className="d-block" icon="exit_to_app" />
-                              </a>
-                            </Tooltip>
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  })
-                }
+                  {
+                    selected.map(dataset => {
+                      return (
+                        <tr key={dataset.id}>
+                          <td>
+                            {addLineBreaks(dataset.name)}
+                          </td>
+                          <td className="text-nowrap text-end w-0">
+                            {getSize(dataset.size)}
+                          </td>
+                          <td className="text-nowrap text-end w-0">
+                            <div className="d-flex align-items-start">
+                              <Tooltip title="Visit dataset metadata page.">
+                                <a className="d-block" href={dataset.metadata_url} target="_blank" rel="noreferrer">
+                                  <Icon className="d-block" icon="exit_to_app" />
+                                </a>
+                              </Tooltip>
+                            </div>
+                          </td>
+                        </tr>
+                      )
+                    })
+                  }
                 </tbody>
               </table>
             </li>
