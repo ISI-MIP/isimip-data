@@ -14,7 +14,7 @@ import Sidebar from './Sidebar'
 
 const App = () => {
 
-  const [params, setParams, updateParams, resetParams] = useParams({})
+  const [params, setParams, updateParams, resetParams] = useParams()
 
   const { data: settings } = useSettingsQuery()
   const { data: glossary } = useGlossaryQuery()
@@ -41,7 +41,7 @@ const App = () => {
     }
   }, [params, identifiers])
 
-  if (isNil(settings) || isNil(glossary) || isNil(identifiers)) {
+  if (isNil(settings) || isNil(glossary) || isNil(identifiers) || isNil(params)) {
     return null
   }
 
