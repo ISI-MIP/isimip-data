@@ -41,7 +41,7 @@ const Form = ({ files, setJob }) => {
         operationsConfig.map(o => o.operation).includes(operation.operation)
       )))
     }
-  }, [settings])
+  }, [settings, operations, operationsConfig, setOperations])
 
   const handleSubmit = (event) => {
     event.preventDefault()

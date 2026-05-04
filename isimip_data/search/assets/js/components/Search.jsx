@@ -8,6 +8,7 @@ const Search = ({ params, updateParams, resetParams }) => {
   const [query, setQuery] = useState('')
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setQuery(params.query || '')
   }, [params])
 

@@ -28,6 +28,19 @@ repos:
     args: [--fix, --exit-non-zero-on-fix]
   - id: ruff-format
 
+- repo: https://github.com/pre-commit/mirrors-eslint
+  rev: d72e5408a82df0b0cb6b9c878fb8cb4e947c1859  # frozen: v10.2.0
+  hooks:
+  - id: eslint
+    args: [--fix, --color]
+    files: \.[j]sx?$  # *.js, *.jsx
+    types: [file]
+    additional_dependencies:
+    - eslint@9.39.4
+    - eslint-plugin-react@7.37.5
+    - eslint-plugin-simple-import-sort@12.1.1
+    - react@18.3.1
+
 - repo: https://github.com/crate-ci/typos
   rev: 5745f2a8dd91cd7b684680e2e10a2b388ba6e5cf  # frozen: v1
   hooks:

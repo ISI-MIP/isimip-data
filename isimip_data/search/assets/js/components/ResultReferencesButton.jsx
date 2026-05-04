@@ -36,7 +36,11 @@ const ResultReferencesButton = ({ dataset, onClick }) => {
     )
   } else if (referenceType == 'OTHER') {
     return (
-      <Tooltip placement="bottom" overlay="There are references to other publications for this dataset. Click for more information.">
+      <Tooltip
+        placement="bottom" overlay={
+          'There are references to other publications for this dataset. Click for more information.'
+        }
+      >
         <button type="button" className="d-block link" onClick={onClick}>
           <Icon icon="local_library" />
         </button>

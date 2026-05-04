@@ -25,7 +25,11 @@ const Facet = ({ facet, params, glossary, updateParams }) => {
     ) {
       updateParams({
         [facet.identifier]: (
-          (params[facet.identifier] || []).includes(specifier) ? params[facet.identifier].filter(s => s != specifier) : [...(params[facet.identifier] || []), specifier]
+          (params[facet.identifier] || []).includes(specifier) ? (
+            params[facet.identifier].filter(s => s != specifier)
+          ) : (
+            [...(params[facet.identifier] || []), specifier]
+          )
         )
       })
     }

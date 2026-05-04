@@ -23,6 +23,7 @@ const Operations = ({ operationsConfig, operationsHelp, operations, errors, setO
   )).map(operation => operation.operation)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDisabled(
       lastOperation && (
         lastOperation.compute_mean || lastOperation.output_csv || (

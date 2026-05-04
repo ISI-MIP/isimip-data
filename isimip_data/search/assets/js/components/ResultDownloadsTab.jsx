@@ -46,7 +46,10 @@ const ResultDownloadsTab = ({ dataset, hasAccess, setTab }) => {
             }
             <div className="row mb-2 mb-md-0 pt-1 pb-1">
               <div className="col-lg-4">
-                <button type="button" className="d-flex align-items-center link" onClick={() => handleDownload({id: dataset.id})}>
+                <button
+                  type="button" className="d-flex align-items-center link"
+                  onClick={() => handleDownload({id: dataset.id})}
+                >
                   <Icon className="me-2" icon="file_copy" /> Download all files
                 </button>
               </div>

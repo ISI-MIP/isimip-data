@@ -14,6 +14,7 @@ const Version = ({ count, maxCount, isLoading, params, updateParams }) => {
   })
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setValues({
       display: !isEmpty(params.after) || !isEmpty(params.before),
       after: params.after || '',

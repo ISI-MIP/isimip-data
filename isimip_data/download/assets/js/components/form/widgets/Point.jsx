@@ -11,8 +11,9 @@ const Point = ({ point, errors, onChange }) => {
   const lonId = uniqueId('download-form-input-point-lon-')
 
   const handleChange = (event, index) => {
-    point[index] = (event.target.value) ? parseFloat(event.target.value) : ''
-    onChange(point)
+    const copy = [...point]
+    copy[index] = (event.target.value) ? parseFloat(event.target.value) : ''
+    onChange(copy)
   }
 
   return <>

@@ -138,14 +138,26 @@ const ResultBadges = ({ glossary, dataset }) => {
       }
       {
         !dataset.public && (
-          <Tooltip placement="bottom" title="This dataset is archived and currently not available for download. Please contact support if you need this version of the dataset.">
+          <Tooltip
+            placement="bottom"
+            title={
+              'This dataset is archived and currently not available for download. ' +
+              'Please contact support if you need this version of the dataset.'
+            }
+          >
             <span className="badge text-bg-danger cursor-help">Archived</span>
           </Tooltip>
         )
       }
       {
         dataset.public && dataset.restricted && (
-          <Tooltip placement="bottom" title="Access to this dataset is restricted. Please contact support if you need this version of the dataset.">
+          <Tooltip
+            placement="bottom"
+            title={
+              'Access to this dataset is restricted. ' +
+              'Please contact support if you need this version of the dataset.'
+            }
+          >
             <span className="badge text-bg-danger cursor-help">Restricted</span>
           </Tooltip>
         )

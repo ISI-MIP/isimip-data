@@ -13,8 +13,9 @@ const BBox = ({ bbox, errors, onChange }) => {
   const northId = uniqueId('download-form-input-bbox-north-')
 
   const handleChange = (event, index) => {
-    bbox[index] = (event.target.value) ? parseFloat(event.target.value) : ''
-    onChange(bbox)
+    const copy = [...bbox]
+    copy[index] = (event.target.value) ? parseFloat(event.target.value) : ''
+    onChange(copy)
   }
 
   const handleWheel = (event) => {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDropzone } from 'react-dropzone'
+import classNames from 'classnames'
 import { isEmpty, isNil, uniqueId } from 'lodash'
 
 import Errors from './Errors'
@@ -30,7 +31,11 @@ const Mask = ({ file, accept, errors, onChange }) => {
   return (
     <div className="col-lg-8">
       <label className="mb-0" htmlFor={fileId}>Mask file</label>
-      <div className={'form-control file-control mb-2 ' +  ((!isEmpty(errors) || !isEmpty(dropzoneError)) && 'is-invalid')}>
+      <div
+        className={
+          classNames('form-control file-control mb-2', {'is-invalid': !isEmpty(errors) || !isEmpty(dropzoneError)})
+        }
+      >
         <div {...getRootProps({className: 'dropzone'})}>
           <input id={fileId} {...getInputProps()} />
           <div className="file-control-inner">
