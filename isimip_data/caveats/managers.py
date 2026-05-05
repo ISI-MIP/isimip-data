@@ -2,7 +2,6 @@ from django.db import models
 
 
 class ModerationQuerySet(models.QuerySet):
-
     def public(self, user):
         if user.is_authenticated and user.is_staff:
             return self.all()
@@ -15,7 +14,6 @@ class ModerationQuerySet(models.QuerySet):
 
 
 class ModerationManager(models.Manager):
-
     def public(self, user):
         return self.get_queryset().public(user)
 

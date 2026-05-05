@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash'
 
-import { ValidationError, downloadFile } from 'isimip_data/core/assets/js/utils/api'
+import { downloadFile, ValidationError } from 'isimip_data/core/assets/js/utils/api'
 
 class DownloadApi {
 
@@ -39,7 +39,7 @@ class DownloadApi {
 
       // append data as a JSON blob
       formData.append('data', new Blob([JSON.stringify(data)]), {
-        type: "application/json"
+        type: 'application/json'
       })
 
       // append each file

@@ -7,7 +7,8 @@ __pycache__/
 *.save
 .DS_Store
 
-/config/settings/local.py
+/config/settings/local*
+
 /static
 /static_root
 /media_root

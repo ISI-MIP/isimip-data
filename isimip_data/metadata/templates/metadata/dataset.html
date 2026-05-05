@@ -1,13 +1,7 @@
 {% extends 'core/base.html' %}
 {% load i18n %}
-{% load static %}
 {% load core_tags %}
 {% load metadata_tags %}
-
-{% block style %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{% static 'metadata.css' %}" />
-{% endblock %}
 
 {% block main %}
 

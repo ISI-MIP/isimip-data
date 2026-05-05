@@ -1,34 +1,34 @@
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
+from django.db.models.fields.json import KeyTextTransform
 
 
 class DatasetQuerySet(models.QuerySet):
-
     def histogram(self, identifier):
-        field = f'specifiers__{identifier}'
-        return self.values_list(field).annotate(count=models.Count(field)).order_by(field)
+        return (
+            self.annotate(specifier=KeyTextTransform(identifier, 'specifiers'))
+            .values_list('specifier')
+            .annotate(count=models.Count('root_id', distinct=True))
+            .order_by('specifier')
+        )
 
 
 class DatasetManager(models.Manager):
-
     def get_queryset(self):
         return DatasetQuerySet(self.model, using=self._db)
 
 
 class IdentifierQuerySet(models.QuerySet):
-
     def identifiers(self):
         return self.distinct().values_list('identifier', flat=True)
 
 
 class IdentifierManager(models.Manager):
-
     def get_queryset(self):
         return IdentifierQuerySet(self.model, using=self._db)
 
 
 class ResourceQuerySet(models.QuerySet):
-
     def filter_by_tree(self, tree, product=None):
         if tree:
             if product is not None:
@@ -41,6 +41,5 @@ class ResourceQuerySet(models.QuerySet):
 
 
 class ResourceManager(models.Manager):
-
     def get_queryset(self):
         return ResourceQuerySet(self.model, using=self._db)

@@ -1,13 +1,9 @@
 {% extends 'core/base.html' %}
-{% load static %}
+{% load django_vite %}
 
-{% block style %}
+{% block assets %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'resources.css' %}" />
-{% endblock %}
-
-{% block script %}
-    <script src="{% static 'resources.js' %}"></script>
+    {% vite_asset 'isimip_data/metadata/assets/js/resources.jsx' %}
 {% endblock %}
 
 {% block main %}

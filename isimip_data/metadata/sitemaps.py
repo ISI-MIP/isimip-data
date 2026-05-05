@@ -1,64 +1,36 @@
 from django.contrib.sitemaps import Sitemap
-from django.db.models.functions import Greatest
 
 from .models import Dataset, File, Resource
 
 
 class DatasetSitemap(Sitemap):
     changefreq = 'never'
-    limit = 50_000
+    limit = 10_000
 
     def items(self):
-        return (
-            Dataset.objects
-            .using('metadata')
-            .order_by('id')
-            .annotate(last_changed=Greatest('created', 'updated', 'published', 'archived'))
-            .values('id', 'last_changed')
-        )
+        return Dataset.objects.using('metadata').order_by('id').only('id', 'last_changed')
 
     def lastmod(self, obj):
-        return obj['last_changed']
-
-    def location(self, obj):
-        return f'/datasets/{obj["id"]}/'
+        return obj.last_changed
 
 
 class FileSitemap(Sitemap):
     changefreq = 'never'
-    limit = 50_000
+    limit = 10_000
 
     def items(self):
-        return (
-            File.objects
-            .using('metadata')
-            .order_by('id')
-            .annotate(last_changed=Greatest('created', 'updated'))
-            .values('id', 'last_changed')
-        )
+        return File.objects.using('metadata').order_by('id').only('id', 'last_changed')
 
     def lastmod(self, obj):
-        return obj['last_changed']
-
-    def location(self, obj):
-        return f'/files/{obj["id"]}/'
+        return obj.last_changed
 
 
 class ResourceSitemap(Sitemap):
     changefreq = 'never'
-    limit = 50_000
+    limit = 10_000
 
     def items(self):
-        return (
-            Resource.objects
-            .using('metadata')
-            .order_by('id')
-            .annotate(last_changed=Greatest('created', 'updated'))
-            .values('id', 'doi', 'last_changed')
-        )
+        return Resource.objects.using('metadata').order_by('id').only('id', 'last_changed')
 
     def lastmod(self, obj):
-        return obj['last_changed']
-
-    def location(self, obj):
-        return f'/{obj["doi"]}/'
+        return obj.last_changed

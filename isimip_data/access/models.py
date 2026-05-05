@@ -16,7 +16,6 @@ def generate_token():
 
 
 class Resource(models.Model):
-
     objects = ResourceManager()
 
     title = models.CharField(max_length=512)
@@ -27,14 +26,13 @@ class Resource(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ('title', )
+        ordering = ('title',)
 
     def __str__(self):
         return self.title
 
 
 class Token(models.Model):
-
     resource = models.ForeignKey('Resource', null=True, on_delete=models.SET_NULL, related_name='tokens')
     subject = models.EmailField()
 
@@ -42,7 +40,7 @@ class Token(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ('subject', )
+        ordering = ('subject',)
 
     def __str__(self):
         return self.subject
@@ -55,10 +53,10 @@ class Token(models.Model):
     @property
     def as_dict(self):
         return {
-            "sub": self.subject,
-            "iat": self.updated,
-            "exp": self.expires,
-            "paths": self.resource.paths if self.resource else [],
+            'sub': self.subject,
+            'iat': self.updated,
+            'exp': self.expires,
+            'paths': self.resource.paths if self.resource else [],
         }
 
     @property

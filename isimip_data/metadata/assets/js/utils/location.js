@@ -29,7 +29,7 @@ const getLocationParams = (path, pathname, identifiers) => {
   }, [])
 
   const params = {}
-  let key = null, value = null
+  let key = null; let value = null
   for (let i = 0; i < tokens.length; i++) {
     const token = decodeURIComponent(tokens[i])
 

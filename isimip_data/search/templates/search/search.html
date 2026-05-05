@@ -1,13 +1,9 @@
 {% extends 'core/base.html' %}
-{% load static %}
+{% load django_vite %}
 
-{% block style %}
+{% block assets %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'search.css' %}" />
-{% endblock %}
-
-{% block script %}
-    <script src="{% static 'search.js' %}"></script>
+    {% vite_asset 'isimip_data/search/assets/js/search.jsx' %}
 {% endblock %}
 
 {% block main %}

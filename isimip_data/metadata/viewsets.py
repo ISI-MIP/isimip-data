@@ -1,3 +1,4 @@
+from collections import defaultdict
 from itertools import product
 from pathlib import PurePath
 
@@ -13,6 +14,9 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
+
+from isimip_data.annotations.models import Annotation
+from isimip_data.caveats.models import Caveat
 
 from .filters import (
     ChecksumFilterBackend,
@@ -37,16 +41,14 @@ from .utils import fetch_glossary, split_query_string
 
 
 class IndentedJSONRenderer(JSONRenderer):
-
     def get_indent(self, *args, **kwargs):
         return 4
 
 
 class Paginator(DjangoPaginator):
-
     @cached_property
     def count(self):
-        return self.object_list[:settings.METADATA_MAX_COUNT + 1].count()
+        return self.object_list.order_by()[: settings.METADATA_MAX_COUNT + 1].count()
 
 
 class Pagination(PageNumberPagination):
@@ -58,14 +60,13 @@ class Pagination(PageNumberPagination):
 
 
 class DatasetViewSet(ReadOnlyModelViewSet):
+    queryset = (
+        Dataset.objects.using('metadata')
+        .filter(target=None)
+        .prefetch_related('files', 'files__links', 'links', 'resources')
+    )
 
     serializer_class = DatasetSerializer
-    queryset = Dataset.objects.using('metadata').filter(target=None).prefetch_related(
-        'files',
-        'files__links',
-        'links',
-        'resources'
-    ).distinct('path', 'version')
     pagination_class = Pagination
 
     filter_backends = (
@@ -75,9 +76,48 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         SearchFilterBackend,
         VersionFilterBackend,
         IdentifierFilterBackend,
-        TreeFilterBackend
+        TreeFilterBackend,
     )
-    identifier_filter_exclude = None
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+
+        if (
+            self.action == 'list'
+            and self.paginator is not None
+            and self.paginator.page is not None
+            and self.paginator.page.object_list
+        ):
+            dataset_ids = [obj.id for obj in self.paginator.page.object_list]
+            dataset_paths = [obj.path for obj in self.paginator.page.object_list]
+
+            if self.request.GET.get('caveats'):
+                versions = list(
+                    Dataset.objects.using('metadata')
+                    .filter(path__in=dataset_paths)
+                    .exclude(id__in=dataset_ids)
+                    .only('id', 'path')
+                )
+
+                context['versions'] = defaultdict(set)
+                for version in versions:
+                    context['versions'][version.path].add(version.id)
+
+                context['caveats'] = list(
+                    Caveat.objects.filter(datasets__overlap=dataset_ids).exclude(public=False).public(self.request.user)
+                )
+
+                context['caveats_versions'] = list(
+                    Caveat.objects.filter(datasets__overlap=[version.id for version in versions])
+                    .exclude(public=False)
+                    .exclude(id__in=[caveat.id for caveat in context['caveats']])
+                    .public(self.request.user)
+                )
+
+            if self.request.GET.get('annotations'):
+                context['annotations'] = Annotation.objects.filter(datasets__overlap=dataset_ids)
+
+        return context
 
     @action(detail=False)
     def suggestions(self, request):
@@ -87,28 +127,33 @@ class DatasetViewSet(ReadOnlyModelViewSet):
 
             specifiers = []
             for query_string in query_strings:
-                query_string_specifiers = \
-                    Specifier.objects.using('metadata') \
-                                     .annotate(similarity=TrigramSimilarity('specifier', query_string)) \
-                                     .filter(similarity__gt=settings.SEARCH_SIMILARITY) \
-                                     .order_by('-similarity') \
-                                     .values_list('specifier', flat=True)[:settings.SEARCH_SIMILARITY_LIMIT]
+                query_string_specifiers = (
+                    Specifier.objects.using('metadata')
+                    .annotate(similarity=TrigramSimilarity('specifier', query_string))
+                    .filter(similarity__gt=settings.SEARCH_SIMILARITY)
+                    .order_by('-similarity')
+                    .values_list('specifier', flat=True)[: settings.SEARCH_SIMILARITY_LIMIT]
+                )
                 if query_string_specifiers:
                     specifiers.append(query_string_specifiers)
 
-            return Response([
-                ' '.join(permutation)
-                for permutation in list(product(*specifiers))[:settings.METADATA_MAX_SUGGESTIONS]
-            ])
+            return Response(
+                [
+                    ' '.join(permutation)
+                    for permutation in list(product(*specifiers))[: settings.METADATA_MAX_SUGGESTIONS]
+                ]
+            )
         else:
             return Response([])
 
     @action(detail=False, url_path='histogram/(?P<identifier>[A-Za-z0-9_]+)')
     def histogram(self, request, identifier):
         if Identifier.objects.using('metadata').filter(identifier=identifier).exists():
-            # exclude the identifier from IdentifierFilterBackend
-            self.identifier_filter_exclude = identifier
-            queryset = self.filter_queryset(Dataset.objects.using('metadata').filter(target=None))
+            # exclude the identifier from IdentifierFilterBackend and do not resolve links
+            self.filter_exclude_identifier = identifier
+            self.filter_resolve_links = False
+
+            queryset = self.filter_queryset(Dataset.objects.using('metadata'))
             values = queryset.histogram(identifier)
             return Response(values)
         else:
@@ -118,9 +163,9 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     def filelist(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         files = File.objects.using('metadata').select_related('dataset').filter(dataset__in=queryset)
-        response = Response({
-            'files': files
-        }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
+        response = Response(
+            {'files': files}, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8'
+        )
         response['Content-Disposition'] = 'attachment; filename=filelist.txt'
         return response
 
@@ -128,9 +173,9 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     def detail_filelist(self, request, pk):
         dataset = self.get_object()
         files = File.objects.using('metadata').select_related('dataset').filter(dataset=dataset)
-        response = Response({
-            'files': files
-        }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
+        response = Response(
+            {'files': files}, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8'
+        )
         response['Content-Disposition'] = f'attachment; filename={dataset.name}.txt'
         return response
 
@@ -138,18 +183,17 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     def detail_manifest(self, request, pk):
         dataset = self.get_object()
         files = File.objects.using('metadata').select_related('dataset').filter(dataset=dataset)
-        response = Response({
-            'files': files
-        }, template_name='metadata/manifest.txt', content_type='text/plain; charset=utf-8')
+        response = Response(
+            {'files': files}, template_name='metadata/manifest.txt', content_type='text/plain; charset=utf-8'
+        )
         response['Content-Disposition'] = f'attachment; filename={dataset.name}-manifest.txt'
         return response
 
 
 class FileViewSet(ReadOnlyModelViewSet):
+    queryset = File.objects.using('metadata').filter(target=None).select_related('dataset').prefetch_related('links')
 
     serializer_class = FileSerializer
-    queryset = File.objects.using('metadata').filter(target=None).select_related('dataset') \
-                           .prefetch_related('links').distinct('path', 'version')
     pagination_class = Pagination
 
     filter_backends = (
@@ -161,21 +205,16 @@ class FileViewSet(ReadOnlyModelViewSet):
         VersionFilterBackend,
         IdentifierFilterBackend,
         TreeFilterBackend,
-        ChecksumFilterBackend
+        ChecksumFilterBackend,
     )
 
 
 class ResourceViewSet(ReadOnlyModelViewSet):
-
-    serializer_class = ResourceSerializer
     queryset = Resource.objects.using('metadata')
+    serializer_class = ResourceSerializer
     pagination_class = Pagination
 
-    filter_backends = (
-        IdFilterBackend,
-        PathFilterBackend,
-        SearchFilterBackend
-    )
+    filter_backends = (IdFilterBackend, PathFilterBackend, SearchFilterBackend)
 
     @action(detail=False)
     def index(self, request):
@@ -188,15 +227,18 @@ class ResourceViewSet(ReadOnlyModelViewSet):
         resource = self.get_object()
         base_url = request.build_absolute_uri()
         datasets = Dataset.objects.using('metadata').filter(resources=resource)
-        response = Response([
-            {
-                'id': dataset.id,
-                'path': dataset.path,
-                'version': dataset.version,
-                'public': dataset.public,
-                'metadata_url': base_url + dataset.get_absolute_url(),
-            } for dataset in datasets
-        ])
+        response = Response(
+            [
+                {
+                    'id': dataset.id,
+                    'path': dataset.path,
+                    'version': dataset.version,
+                    'public': dataset.public,
+                    'metadata_url': base_url + dataset.get_absolute_url(),
+                }
+                for dataset in datasets
+            ]
+        )
         response['Content-Disposition'] = f'attachment; filename={resource.doi}.datasets.json'
         return response
 
@@ -205,20 +247,22 @@ class ResourceViewSet(ReadOnlyModelViewSet):
         resource = self.get_object()
         base_url = request.build_absolute_uri()
         files = File.objects.using('metadata').select_related('dataset').filter(dataset__resources=resource)
-        response = Response([
-            {
-                'id': file.id,
-                'path': file.path,
-                'version': file.version,
-                'public': file.public,
-                'checksum': file.checksum,
-                'checksum_type': file.checksum_type,
-                'metadata_url': base_url + file.get_absolute_url(),
-                'file_url': file.file_url,
-                'json_url': file.json_url,
-
-            } for file in files
-        ])
+        response = Response(
+            [
+                {
+                    'id': file.id,
+                    'path': file.path,
+                    'version': file.version,
+                    'public': file.public,
+                    'checksum': file.checksum,
+                    'checksum_type': file.checksum_type,
+                    'metadata_url': base_url + file.get_absolute_url(),
+                    'file_url': file.file_url,
+                    'json_url': file.json_url,
+                }
+                for file in files
+            ]
+        )
         response['Content-Disposition'] = f'attachment; filename={resource.doi}.files.json'
         return response
 
@@ -226,9 +270,9 @@ class ResourceViewSet(ReadOnlyModelViewSet):
     def detail_filelist(self, request, pk):
         resource = self.get_object()
         files = File.objects.using('metadata').select_related('dataset').filter(dataset__resources=resource)
-        response = Response({
-            'files': files
-        }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
+        response = Response(
+            {'files': files}, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8'
+        )
         response['Content-Disposition'] = f'attachment; filename={resource.doi}-manifest.txt'
         return response
 
@@ -236,29 +280,31 @@ class ResourceViewSet(ReadOnlyModelViewSet):
     def detail_manifest(self, request, pk):
         resource = self.get_object()
         files = File.objects.using('metadata').select_related('dataset').filter(dataset__resources=resource)
-        response = Response({
-            'files': files
-        }, template_name='metadata/manifest.txt', content_type='text/plain; charset=utf-8')
+        response = Response(
+            {'files': files}, template_name='metadata/manifest.txt', content_type='text/plain; charset=utf-8'
+        )
         response['Content-Disposition'] = f'attachment; filename={resource.doi}-manifest.txt'
         return response
 
 
 class TreeViewSet(ViewSet):
-
     def list(self, request):
-        raw_queryset = Tree.objects.using('metadata').raw('''
+        raw_queryset = Tree.objects.using('metadata').raw("""
             SELECT
               id, obj.value->'identifier' as identifier, obj.value->'specifier' as specifier
             FROM
               trees,
               jsonb_each(tree_dict) as obj;
-        ''')
+        """)
 
-        response_list = [{
+        response_list = [
+            {
                 'identifier': row.identifier.strip('"'),
                 'specifier': row.specifier.strip('"'),
-                'tree': row.specifier.strip('"')
-        } for row in raw_queryset]
+                'tree': row.specifier.strip('"'),
+            }
+            for row in raw_queryset
+        ]
 
         # loop over path list arguments
         tree_list = [PurePath(tree) for tree in request.GET.getlist('tree', [])]
@@ -278,20 +324,26 @@ class TreeViewSet(ViewSet):
 
                 if 'items' not in response_node:
                     placeholder = ', '.join(['%s' for element in current_tree_elements])
-                    raw_queryset = Tree.objects.using('metadata').raw(f'''
+                    raw_queryset = Tree.objects.using('metadata').raw(
+                        f"""
                         SELECT
                           id, obj.value->'identifier' as identifier, obj.value->'specifier' as specifier
                         FROM
                           trees,
                           jsonb_extract_path(tree_dict, {placeholder}) as parent,
                           jsonb_each(parent->'items')  as obj;
-                    ''', current_tree_elements)
+                    """,
+                        current_tree_elements,
+                    )
 
-                    response_node['items'] = [{
-                        'identifier': row.identifier.strip('"'),
-                        'specifier': row.specifier.strip('"'),
-                        'tree': (current_tree / row.specifier.strip('"')).as_posix()
-                    } for row in raw_queryset]
+                    response_node['items'] = [
+                        {
+                            'identifier': row.identifier.strip('"'),
+                            'specifier': row.specifier.strip('"'),
+                            'tree': (current_tree / row.specifier.strip('"')).as_posix(),
+                        }
+                        for row in raw_queryset
+                    ]
 
                 current_tree_elements.append('items')
                 current_response_list = response_node['items']
@@ -300,19 +352,16 @@ class TreeViewSet(ViewSet):
 
 
 class IdentifierViewSet(ReadOnlyModelViewSet):
-
-    serializer_class = IdentifierSerializer
     queryset = Identifier.objects.using('metadata')
+    serializer_class = IdentifierSerializer
 
 
 class GlossaryViewSet(ViewSet):
-
     def list(self, request):
         return Response(fetch_glossary())
 
 
 class IdViewSet(ViewSet):
-
     def list(self, request):
         querysets = [
             Dataset.objects.using('metadata'),
@@ -322,9 +371,9 @@ class IdViewSet(ViewSet):
 
         return StreamingHttpResponse(
             (
-                f"{uuid}\t{path}\n"
+                f'{uuid}\t{path}\n'
                 for queryset in querysets
                 for uuid, path in queryset.values_list('id', 'path').iterator(chunk_size=10000)
             ),
-            content_type='text/plain'
+            content_type='text/plain',
         )

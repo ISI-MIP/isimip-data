@@ -12,13 +12,11 @@ from .serializers import CaveatChoicesSerializer, CaveatIndexSerializer, CaveatS
 
 
 class CaveatViewSet(ReadOnlyModelViewSet):
-
     serializer_class = CaveatSerializer
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        return Caveat.objects.public(self.request.user) \
-                             .select_related('creator')
+        return Caveat.objects.public(self.request.user).select_related('creator')
 
     @action(detail=False)
     def index(self, request):
@@ -31,15 +29,18 @@ class CaveatViewSet(ReadOnlyModelViewSet):
         caveat = self.get_object()
         base_url = request.build_absolute_uri()
         datasets = Dataset.objects.using('metadata').filter(id__in=caveat.datasets)
-        response = Response([
-            {
-                'id': dataset.id,
-                'path': dataset.path,
-                'version': dataset.version,
-                'public': dataset.public,
-                'metadata_url': base_url + dataset.get_absolute_url(),
-            } for dataset in datasets
-        ])
+        response = Response(
+            [
+                {
+                    'id': dataset.id,
+                    'path': dataset.path,
+                    'version': dataset.version,
+                    'public': dataset.public,
+                    'metadata_url': base_url + dataset.get_absolute_url(),
+                }
+                for dataset in datasets
+            ]
+        )
         response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.datasets.json'
         return response
 
@@ -48,35 +49,40 @@ class CaveatViewSet(ReadOnlyModelViewSet):
         caveat = self.get_object()
         base_url = request.build_absolute_uri()
         files = File.objects.using('metadata').select_related('dataset').filter(dataset__id__in=caveat.datasets)
-        response = Response([
-            {
-                'id': file.id,
-                'dataset_id': file.dataset_id,
-                'path': file.path,
-                'version': file.version,
-                'public': file.public,
-                'metadata_url': base_url + file.get_absolute_url(),
-                'file_url': file.file_url,
-                'json_url': file.json_url
-            } for file in files
-        ])
+        response = Response(
+            [
+                {
+                    'id': file.id,
+                    'dataset_id': file.dataset_id,
+                    'path': file.path,
+                    'version': file.version,
+                    'public': file.public,
+                    'metadata_url': base_url + file.get_absolute_url(),
+                    'file_url': file.file_url,
+                    'json_url': file.json_url,
+                }
+                for file in files
+            ]
+        )
         response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.files.json'
         return response
 
     @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])
     def detail_filelist(self, request, pk):
         caveat = self.get_object()
-        files = File.objects.using('metadata').select_related('dataset') \
-                            .filter(dataset__id__in=caveat.datasets, dataset__public=True)
-        response = Response({
-            'files': files
-        }, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8')
+        files = (
+            File.objects.using('metadata')
+            .select_related('dataset')
+            .filter(dataset__id__in=caveat.datasets, dataset__public=True)
+        )
+        response = Response(
+            {'files': files}, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8'
+        )
         response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.txt'
         return response
 
 
 class CategoryViewSet(ListModelMixin, GenericViewSet):
-
     serializer_class = CaveatChoicesSerializer
 
     def get_queryset(self):
@@ -84,13 +90,13 @@ class CategoryViewSet(ListModelMixin, GenericViewSet):
             {
                 'value': category,
                 'display': category_display,
-                'color': Caveat.CATEGORY_COLOR.get(category)
-            } for category, category_display in Caveat.CATEGORY_CHOICES
+                'color': Caveat.CATEGORY_COLOR.get(category),
+            }
+            for category, category_display in Caveat.CATEGORY_CHOICES
         ]
 
 
 class SeverityViewSet(ListModelMixin, GenericViewSet):
-
     serializer_class = CaveatChoicesSerializer
 
     def get_queryset(self):
@@ -98,13 +104,13 @@ class SeverityViewSet(ListModelMixin, GenericViewSet):
             {
                 'value': severity,
                 'display': severity_display,
-                'color': Caveat.SEVERITY_COLOR.get(severity)
-            } for severity, severity_display in Caveat.SEVERITY_CHOICES
+                'color': Caveat.SEVERITY_COLOR.get(severity),
+            }
+            for severity, severity_display in Caveat.SEVERITY_CHOICES
         ]
 
 
 class StatusViewSet(ListModelMixin, GenericViewSet):
-
     serializer_class = CaveatChoicesSerializer
 
     def get_queryset(self):
@@ -113,5 +119,6 @@ class StatusViewSet(ListModelMixin, GenericViewSet):
                 'value': status,
                 'display': status_display,
                 'color': Caveat.STATUS_COLOR.get(status),
-            } for status, status_display in Caveat.STATUS_CHOICES
+            }
+            for status, status_display in Caveat.STATUS_CHOICES
         ]

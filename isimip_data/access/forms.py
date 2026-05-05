@@ -4,9 +4,8 @@ from .models import Token
 
 
 class AccessForm(forms.ModelForm):
-
     consent = forms.BooleanField(required=True)
 
     class Meta:
         model = Token
-        fields = ["subject"]
+        fields = ['subject']

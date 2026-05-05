@@ -1,13 +1,10 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load django_vite %}
 
-{% block style %}
+{% block assets %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'metadata.css' %}" />
-{% endblock %}
-
-{% block script %}
-    <script src="{% static 'metadata.js' %}"></script>
+    {% vite_asset 'isimip_data/metadata/assets/js/metadata.jsx' %}
 {% endblock %}
 
 {% block main %}

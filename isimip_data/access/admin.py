@@ -42,7 +42,7 @@ class ResourceAdmin(admin.ModelAdmin):
 class TokenAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'subject')
     list_display = ('id', 'subject', 'resource', 'created')
-    readonly_fields =  ('created', 'updated', 'as_json_pre', 'as_jwt_pre')
+    readonly_fields = ('created', 'updated', 'as_json_pre', 'as_jwt_pre')
 
     def as_json_pre(self, obj):
         return mark_safe(f'<pre>{obj.as_json}</pre>')

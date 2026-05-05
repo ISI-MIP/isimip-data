@@ -212,5 +212,5 @@ COUNTRIES = [
     {'key': 'esh', 'long_name': 'Western Sahara'},
     {'key': 'yem', 'long_name': 'Yemen'},
     {'key': 'zmb', 'long_name': 'Zambia'},
-    {'key': 'zwe', 'long_name': 'Zimbabwe'}
+    {'key': 'zwe', 'long_name': 'Zimbabwe'},
 ]

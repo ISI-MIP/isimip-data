@@ -35,8 +35,11 @@ def render_description(value):
 
     # replaces, e.g. <a ...>https://data.isimip.org/issues/8/</a>
     # with <a ...>#8</a>
-    description = re.sub(r'(<a.*?>)(https://data\.isimip\.org/(caveats|issues|notes)/.*?)(\d+)([/]*)(</a>)',
-                         r'\1#\4\6', description)
+    description = re.sub(
+        r'(<a.*?>)(https://data\.isimip\.org/(caveats|issues|notes)/.*?)(\d+)([/]*)(</a>)',
+        r'\1#\4\6',
+        description,
+    )
 
     if value.endswith('.') and not description.endswith('.'):
         description += '.'
