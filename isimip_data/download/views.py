@@ -15,7 +15,7 @@ def download(request, job_id=None):
         'download/download.html',
         {
             'title': 'Configure download',
-            'job_url': settings.FILE_API_URL + job_id if job_id else None,
+            'job_url': f'{settings.FILES_API_URL}/{job_id}' if job_id else None,
             'files': [{'path': file.path, 'specifiers': file.specifiers} for file in files],
         },
     )
