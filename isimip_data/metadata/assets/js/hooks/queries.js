@@ -1,4 +1,4 @@
-import { useInfiniteQuery, keepPreviousData, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { isNil } from 'lodash'
 
 import DatasetApi from '../api/DatasetApi'
@@ -42,6 +42,7 @@ export const useDatasetsHistogramQuery = (identifier, params, enabled) => {
     queryKey: ['histogram', identifier, params],
     queryFn: () => DatasetApi.fetchDatasetsHistogram(identifier, params),
     placeholderData: keepPreviousData,
+    retry: false,
     enabled
   })
 }

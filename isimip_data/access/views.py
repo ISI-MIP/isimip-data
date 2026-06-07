@@ -17,48 +17,32 @@ def access(request, path):
         if request.method == 'POST' and form.is_valid():
             token, _ = Token.objects.update_or_create(
                 subject=form.cleaned_data['subject'],
-                resource=resource
+                resource=resource,
             )
             token.save()
 
-            context = {
-                'resource': resource,
-                'token': token,
-                'token_url': token.get_absolute_url(request)
-            }
+            context = {'resource': resource, 'token': token, 'token_url': token.get_absolute_url(request)}
             subject = render_to_string('access/email/access_confirmation_subject.txt', context)
             message = render_to_string('access/email/access_confirmation_message.txt', context)
 
             send_mail(subject, message, to=[form.instance.subject], reply_to=settings.ACCESS_REPLY_TO)
 
-        return render(request, 'access/access.html', {
-            'resource': resource,
-            'form': form
-        })
+        return render(request, 'access/access.html', {'resource': resource, 'form': form})
     else:
-        return render(request, 'access/access_error.html', {
-            'path': path
-        })
+        return render(request, 'access/access_error.html', {'path': path})
 
 
 def token(request, jwt):
     payload, error = decode_token(jwt)
     if not payload:
-        return render(request, 'access/token_error.html', {
-            'error': error
-        })
+        return render(request, 'access/token_error.html', {'error': error})
 
     try:
         token = Token.objects.get(subject=payload['sub'], resource__paths=payload['paths'])
     except Token.DoesNotExist:
-        return render(request, 'access/token_error.html', {
-            'error': 'The no matching token was found in our database.'
-        })
+        return render(request, 'access/token_error.html', {'error': 'The no matching token was found in our database.'})
 
-    response = render(request, 'access/token.html', {
-        'resource': token.resource,
-        'token': token
-    })
+    response = render(request, 'access/token.html', {'resource': token.resource, 'token': token})
 
     for path in token.resource.paths:
         response.set_cookie(
@@ -69,7 +53,7 @@ def token(request, jwt):
             domain=settings.FILES_AUTH_DOMAIN,
             secure=not settings.DEBUG,
             httponly=False,
-            samesite='Lax'
+            samesite='Lax',
         )
 
     return response

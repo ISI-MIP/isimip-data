@@ -1,8 +1,8 @@
-$FontPathOpenSans: ".~npm-font-open-sans/fonts/";
-@import "~npm-font-open-sans/open-sans";
+$FontPathOpenSans: "npm-font-open-sans/fonts/";
+@import "npm-font-open-sans/open-sans";
 
-$material-symbols-font-path: '~material-symbols/';
-@import '~material-symbols';
+$material-symbols-font-path: 'material-symbols/';
+@import 'material-symbols';
 
 @import 'base/badges';
 @import 'base/cards';
@@ -22,7 +22,7 @@ $material-symbols-font-path: '~material-symbols/';
 @import 'base/variables';
 
 main {
-    background-image: url('../../../core/assets/images/mountain-range.jpg');
+    background-image: url('../images/mountain-range.jpg');
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;

@@ -7,15 +7,17 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-
     def add_arguments(self, parser):
-        parser.add_argument('command', choices=[
-            'all',
-            'media',
-            'npm',
-            'python',
-            'static',
-        ])
+        parser.add_argument(
+            'command',
+            choices=[
+                'all',
+                'media',
+                'npm',
+                'python',
+                'static',
+            ],
+        )
 
     def handle(self, *args, **options):
         if options['command'] in ['all', 'media']:

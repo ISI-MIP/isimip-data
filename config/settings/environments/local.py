@@ -5,7 +5,7 @@ SECRET_KEY = 'this is not a very secret key'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'isimip-data'
+        'LOCATION': 'isimip-data',
     }
 }
 
@@ -19,15 +19,12 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'handlers': {
-        'rich': {
-            'level': 'DEBUG',
-            'class': 'rich.logging.RichHandler'
-        }
+        'rich': {'level': 'DEBUG', 'class': 'rich.logging.RichHandler'},
     },
     'loggers': {
         'django': {
             'handlers': ['rich'],
-            'level': 'INFO'
+            'level': 'INFO',
         },
         'django.db.backends': {
             'handlers': ['rich'],
@@ -35,7 +32,7 @@ LOGGING = {
         },
         'isimip_data': {
             'handlers': ['rich'],
-            'level': 'DEBUG'
-        }
-    }
+            'level': 'DEBUG',
+        },
+    },
 }

@@ -1,16 +1,13 @@
 import re
-from datetime import UTC
 
 from django.db.models import Max
 from django.middleware.cache import CacheMiddleware
 from django.utils.cache import learn_cache_key
-from django.utils.timezone import make_aware
 
-from .models import Dataset, Resource
+from .models import Dataset, File, Resource
 
 
 class MetadataCacheMiddleware(CacheMiddleware):
-
     # paths where it only needs to be checked if the cache needs to be updated
     update_patterns = ()
 
@@ -19,23 +16,23 @@ class MetadataCacheMiddleware(CacheMiddleware):
         re.compile(r'^/$'),
         re.compile(r'^/sitemap'),
         re.compile(r'^/api/v1/datasets/'),
-        re.compile(r'^/api/v1/files/')
+        re.compile(r'^/api/v1/files/'),
     )
 
     def process_request(self, request):
-        self.update = self.check_path_info(request.path_info, self.update_patterns)
-        self.path = self.check_path_info(request.path_info, self.path_patterns)
+        request._in_update_patterns = self._check_path_info(request.path_info, self.update_patterns)
+        request._in_path_patterns = self._check_path_info(request.path_info, self.path_patterns)
 
-        if self.update or self.path:
-            self.update_cache()
+        if request._in_update_patterns or request._in_path_patterns:
+            self._check_cache_invalidation()
 
-        if self.path:
+        if request._in_path_patterns:
             return super().process_request(request)
         else:
             return None
 
     def process_response(self, request, response):
-        if self.path:
+        if getattr(request, '_in_path_patterns', False):
             # this is a limited version of process_response in UpdateCacheMiddleware
             # which does not set the headers to let the client cache the response as well
             if not self._should_update_cache(request, response):
@@ -48,31 +45,34 @@ class MetadataCacheMiddleware(CacheMiddleware):
 
         return response
 
-    def check_path_info(self, path_info, patterns):
+    def _check_path_info(self, path_info, patterns):
         return any(pattern.search(path_info) for pattern in patterns)
 
-    def update_cache(self):
+    def _check_cache_invalidation(self):
+        # skip check if we checked recently
+        if self.cache.get('invalidation_checked'):
+            return
+
         # get the cache_timestamp from the cache
         cache_timestamp = self.cache.get('timestamp')
 
         # get the latest timestamp from the datasets and resources table
-        timestamp_values = [
-            make_aware(value, UTC) for value in Dataset.objects.using('metadata').aggregate(
-                Max('created'),
-                Max('updated'),
-                Max('published'),
-                Max('archived')
-            ).values() if value is not None
-        ] + [
-            make_aware(value, UTC) for value in Resource.objects.using('metadata').aggregate(
-                Max('created'),
-                Max('updated')
-            ).values() if value is not None
+        timestamps = [
+            Dataset.objects.using('metadata').aggregate(latest=Max('last_changed'))['latest'],
+            File.objects.using('metadata').aggregate(latest=Max('last_changed'))['latest'],
+            Resource.objects.using('metadata').aggregate(latest=Max('last_changed'))['latest'],
         ]
-        timestamp = max(timestamp_values) if timestamp_values else None
+
+        if not any(timestamps):
+            return
+
+        timestamp = max(t for t in timestamps if t is not None)
 
         # check if the timestamp is later than cache_timestamp
-        if cache_timestamp is None or timestamp is None or timestamp > cache_timestamp:
+        if cache_timestamp is None or timestamp > cache_timestamp:
             # the datasets table has changed, clear the cache and set a new timestamp
             self.cache.clear()
             self.cache.set('timestamp', timestamp, self.cache_timeout)
+
+        # mark that we just checked, regardless of whether we invalidated
+        self.cache.set('invalidation_checked', True, 30)

@@ -1,6 +1,5 @@
 import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
 
-
 class CaveatsApi {
 
   static fetchCaveats(params, fetchParams = {}) {

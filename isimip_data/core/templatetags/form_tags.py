@@ -19,13 +19,9 @@ def bootstrap_form_field(field):
     except AttributeError:
         pass
 
-    return {
-        'field': field
-    }
+    return {'field': field}
 
 
 @register.inclusion_tag('core/tags/bootstrap_form_errors.html')
 def bootstrap_form_errors(form):
-    return {
-        'errors': form.non_field_errors
-    }
+    return {'errors': form.non_field_errors}

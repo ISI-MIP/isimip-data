@@ -20,7 +20,7 @@ class Annotation(models.Model):
     references = models.ManyToManyField('Reference', related_name='annotations')
 
     class Meta:
-        ordering = ('title', )
+        ordering = ('title',)
 
     def __str__(self):
         return self.title
@@ -45,7 +45,7 @@ class Figure(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ('title', )
+        ordering = ('title',)
 
     def __str__(self):
         return self.title
@@ -69,19 +69,18 @@ class Download(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ('title', )
+        ordering = ('title',)
 
     def __str__(self):
         return self.title
 
 
 class Reference(models.Model):
-
     IDENTIFIER_TYPE_DOI = 'doi'
     IDENTIFIER_TYPE_URL = 'url'
     IDENTIFIER_TYPE_CHOICES = (
         (IDENTIFIER_TYPE_DOI, _('DOI')),
-        (IDENTIFIER_TYPE_URL, _('URL'))
+        (IDENTIFIER_TYPE_URL, _('URL')),
     )
 
     REFERENCE_TYPE_ISIPEDIA = 'ISIPEDIA'
@@ -90,7 +89,7 @@ class Reference(models.Model):
     REFERENCE_TYPE_CHOICES = (
         (REFERENCE_TYPE_ISIPEDIA, _('ISIpedia')),
         (REFERENCE_TYPE_EVALUATION, _('Evaluation')),
-        (REFERENCE_TYPE_OTHER, _('Other'))
+        (REFERENCE_TYPE_OTHER, _('Other')),
     )
 
     title = models.TextField()
@@ -99,7 +98,7 @@ class Reference(models.Model):
     reference_type = models.TextField(choices=REFERENCE_TYPE_CHOICES)
 
     class Meta:
-        ordering = ('title', )
+        ordering = ('title',)
 
     def __str__(self):
         return self.title

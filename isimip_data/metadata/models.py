@@ -12,11 +12,10 @@ from isimip_data.core.utils import get_date_display
 
 from .constants import RIGHTS
 from .managers import DatasetManager, IdentifierManager, ResourceManager
-from .utils import get_json_ld_name, get_terms_of_use, merge_identifiers, merge_specifiers, prettify_specifiers
+from .utils import get_terms_of_use, merge_identifiers, merge_specifiers, prettify_specifiers
 
 
 class Dataset(models.Model):
-
     objects = DatasetManager()
 
     id = models.UUIDField(primary_key=True)
@@ -37,11 +36,14 @@ class Dataset(models.Model):
     updated = models.DateTimeField()
     published = models.DateTimeField()
     archived = models.DateTimeField()
+    last_changed = models.DateTimeField()
+
+    root_id = models.UUIDField(editable=False)
 
     class Meta:
         db_table = 'datasets'
         managed = False
-        ordering = ('path', )
+        ordering = ('path',)
 
     def __str__(self):
         return self.path
@@ -90,30 +92,17 @@ class Dataset(models.Model):
     def current_resources(self):
         resources = self.resources.order_by('paths', 'doi')
         resource_dois = {resource.doi for resource in resources}
-        return [resource for resource in resources if (
-            (resource.new_version is None) or (resource.new_version not in resource_dois)
-        )]
-
-    @cached_property
-    def json_ld(self):
-        data = {
-            '@context': 'https://schema.org/',
-            '@type': 'Dataset',
-            'name': self.path
-        }
-
-        resources = self.resources.order_by('-doi')
-        if resources:
-            data['isPartOf'] = [resource.json_ld for resource in resources]
-
-        return data
+        return [
+            resource
+            for resource in resources
+            if ((resource.new_version is None) or (resource.new_version not in resource_dois))
+        ]
 
     def get_absolute_url(self):
         return reverse('dataset', kwargs={'pk': self.pk})
 
 
 class File(models.Model):
-
     id = models.UUIDField(primary_key=True)
     dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE, related_name='files')
     target = models.ForeignKey('File', on_delete=models.CASCADE, related_name='links')
@@ -130,11 +119,14 @@ class File(models.Model):
 
     created = models.DateTimeField()
     updated = models.DateTimeField()
+    last_changed = models.DateTimeField()
+
+    root_id = models.UUIDField(editable=False)
 
     class Meta:
         db_table = 'files'
         managed = False
-        ordering = ('path', )
+        ordering = ('path',)
 
     def __str__(self):
         return self.path
@@ -192,15 +184,6 @@ class File(models.Model):
         return get_terms_of_use()
 
     @cached_property
-    def json_ld(self):
-        return {
-            '@context': 'https://schema.org/',
-            '@type': 'Dataset',
-            'name': self.path,
-            'isPartOf': self.dataset.json_ld
-        }
-
-    @cached_property
     def file_url(self):
         if self.dataset.restricted:
             return f'{settings.FILES_BASE_URL}/restricted/{self.path}'
@@ -219,7 +202,6 @@ class File(models.Model):
 
 
 class Resource(models.Model):
-
     objects = ResourceManager()
 
     id = models.UUIDField(primary_key=True)
@@ -231,13 +213,14 @@ class Resource(models.Model):
 
     created = models.DateTimeField()
     updated = models.DateTimeField()
+    last_changed = models.DateTimeField()
 
     datasets = models.ManyToManyField(Dataset, related_name='resources')
 
     class Meta:
         db_table = 'resources'
         managed = False
-        ordering = ('paths', )
+        ordering = ('paths',)
 
     def __str__(self):
         return self.doi
@@ -259,8 +242,9 @@ class Resource(models.Model):
     @cached_property
     def previous_version(self):
         try:
-            related_identifier = next(i for i in self.datacite.get('relatedIdentifiers', [])
-                                      if i.get('relationType') == 'IsNewVersionOf')
+            related_identifier = next(
+                i for i in self.datacite.get('relatedIdentifiers', []) if i.get('relationType') == 'IsNewVersionOf'
+            )
             return related_identifier.get('relatedIdentifier').replace('https://doi.org/', '')
         except StopIteration:
             return None
@@ -268,8 +252,9 @@ class Resource(models.Model):
     @cached_property
     def new_version(self):
         try:
-            related_identifier = next(i for i in self.datacite.get('relatedIdentifiers', [])
-                                      if i.get('relationType') == 'IsPreviousVersionOf')
+            related_identifier = next(
+                i for i in self.datacite.get('relatedIdentifiers', []) if i.get('relationType') == 'IsPreviousVersionOf'
+            )
             return related_identifier.get('relatedIdentifier').replace('https://doi.org/', '')
         except (AttributeError, StopIteration):
             return None
@@ -279,8 +264,10 @@ class Resource(models.Model):
         if self.is_external:
             return f'{self.title}. {self.doi_url}'
         else:
-            return f'{self.creators_str} ({self.publication_year}): ' \
-                   f'{self.title_with_version}. {self.publisher}. {self.doi_url}'
+            return (
+                f'{self.creators_str} ({self.publication_year}): '
+                f'{self.title_with_version}. {self.publisher}. {self.doi_url}'
+            )
 
     @cached_property
     def creators_str(self):
@@ -308,7 +295,8 @@ class Resource(models.Model):
     @cached_property
     def contact_persons(self):
         return [
-            contributor for contributor in self.datacite.get('contributors', [])
+            contributor
+            for contributor in self.datacite.get('contributors', [])
             if contributor.get('contributorType') == 'ContactPerson'
         ]
 
@@ -358,55 +346,11 @@ class Resource(models.Model):
     def is_external(self):
         return self.datacite is None
 
-    @cached_property
-    def json_ld(self):
-        data = {
-            '@context': 'https://schema.org/',
-            '@type': 'Dataset',
-            'name': self.title,
-            'identifier': self.doi_url,
-        }
-
-        if self.datacite:
-            data.update({
-                'description': self.abstract,
-                'version': self.datacite.get('version'),
-                'keywords': [
-                    subject['subject']
-                    for subject in self.datacite.get('subjects', [])
-                    if subject.get('subject')
-                ],
-                'publisher': {
-                    '@type': 'Organization',
-                    'name': self.datacite.get('publisher')
-                },
-                'datePublished': self.publication_date.isoformat(),
-                'license': [
-                    {
-                        '@type': 'CreativeWork',
-                        'name': rights.get('rights'),
-                        'url': rights.get('rights_uri')
-                    } for rights in self.rights_list
-                ],
-                'isAccessibleForFree': True,
-                'creator': [
-                    get_json_ld_name(creator)
-                    for creator in self.datacite.get('creators', [])
-                ],
-                'contributor': [
-                    get_json_ld_name(contributor)
-                    for contributor in self.datacite.get('contributors', [])
-                ]
-            })
-
-        return data
-
     def get_absolute_url(self):
         return reverse('resource', kwargs={'doi': self.doi})
 
 
 class Tree(models.Model):
-
     id = models.UUIDField(primary_key=True)
     tree_dict = models.JSONField()
 
@@ -416,14 +360,13 @@ class Tree(models.Model):
     class Meta:
         db_table = 'trees'
         managed = False
-        ordering = ('id', )
+        ordering = ('id',)
 
     def __str__(self):
         return str(self.id)
 
 
 class Identifier(models.Model):
-
     objects = IdentifierManager()
 
     identifier = models.TextField(primary_key=True)
@@ -432,7 +375,7 @@ class Identifier(models.Model):
     class Meta:
         db_table = 'identifiers'
         managed = False
-        ordering = ('identifier', )
+        ordering = ('identifier',)
 
     def __str__(self):
         return self.identifier
@@ -442,20 +385,18 @@ class Identifier(models.Model):
 
 
 class Specifier(models.Model):
-
     specifier = models.TextField(primary_key=True)
 
     class Meta:
         db_table = 'specifiers'
         managed = False
-        ordering = ('specifier', )
+        ordering = ('specifier',)
 
     def __str__(self):
         return self.specifier
 
 
 class Search(models.Model):
-
     dataset = models.ForeignKey('Dataset', on_delete=models.CASCADE, related_name='search')
     vector = SearchVectorField()
 

@@ -45,11 +45,13 @@ def query_resources(datasets):
 
 
 def format_affected_datasets(dataset_ids):
-    datasets = Dataset.objects.using('metadata').filter(target=None, id__in=dataset_ids[:settings.CAVEATS_MAX_DATASETS])
+    datasets = Dataset.objects.using('metadata').filter(
+        target=None, id__in=dataset_ids[: settings.CAVEATS_MAX_DATASETS]
+    )
     lines = format_html_join(
         mark_safe('<br>'),
         '{}#{}',
-        ((dataset.path, dataset.version) for dataset in datasets)
+        ((dataset.path, dataset.version) for dataset in datasets),
     )
 
     count = len(dataset_ids)
@@ -64,5 +66,5 @@ def format_affected_resources(resources):
     return format_html_join(
         mark_safe('<br>'),
         '{}',
-        ((resource.doi, ) for resource in resources)
+        ((resource.doi,) for resource in resources),
     )

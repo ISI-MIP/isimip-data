@@ -5,9 +5,8 @@ from django.core.management.base import BaseCommand, CommandError
 
 
 class Command(BaseCommand):
-
     def add_arguments(self, parser):
-        parser.add_argument('command', nargs="*")
+        parser.add_argument('command', nargs='*')
 
     def handle(self, *args, **options):
         nvm_dir = os.getenv('NVM_DIR')

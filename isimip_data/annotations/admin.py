@@ -8,7 +8,6 @@ from .widgets import SpecifierWidget
 
 
 class AnnotationAdminForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['specifiers'].widget = SpecifierWidget()
@@ -44,27 +43,37 @@ class AnnotationAdmin(admin.ModelAdmin):
     form = AnnotationAdminForm
     inlines = [FigureInline, DownloadInline, ReferenceInline]
 
-    search_fields = ('title', )
-    list_display = ('title', )
-    readonly_fields = ('affected_datasets', )
+    search_fields = ('title',)
+    list_display = ('title',)
+    readonly_fields = ('affected_datasets',)
     exclude = ('datasets', 'figures', 'downloads')
 
     fieldsets = (
-        (None, {
-            'fields': ('title', )
-        }),
-        ('Specifiers', {
-            'classes': ('collapse',),
-            'fields': ('specifiers', ),
-        }),
-        ('Versions', {
-            'classes': ('collapse',),
-            'fields': ('version_after', 'version_before'),
-        }),
-        ('Datasets', {
-            'classes': ('collapse',),
-            'fields': ('affected_datasets', ),
-        })
+        (
+            None,
+            {'fields': ('title',)},
+        ),
+        (
+            'Specifiers',
+            {
+                'classes': ('collapse',),
+                'fields': ('specifiers',),
+            },
+        ),
+        (
+            'Versions',
+            {
+                'classes': ('collapse',),
+                'fields': ('version_after', 'version_before'),
+            },
+        ),
+        (
+            'Datasets',
+            {
+                'classes': ('collapse',),
+                'fields': ('affected_datasets',),
+            },
+        ),
     )
 
     class Media:
@@ -75,7 +84,7 @@ class AnnotationAdmin(admin.ModelAdmin):
 
 
 class DownloadAdmin(admin.ModelAdmin):
-    search_fields = ('title', )
+    search_fields = ('title',)
     list_display = ('title', 'created', 'updated')
 
 

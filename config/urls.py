@@ -59,8 +59,8 @@ router.register(r'severities', SeverityViewSet, basename='severity')
 router.register(r'settings', SettingsViewSet, basename='setting')
 router.register(r'access', AccessViewSet, basename='access')
 
-class StaticSitemap(Sitemap):
 
+class StaticSitemap(Sitemap):
     def items(self):
         return [
             'metadata',
@@ -69,7 +69,7 @@ class StaticSitemap(Sitemap):
             'download',
             'issues-and-notes',
             'caveats',  # legacy
-            'home'
+            'home',
         ]
 
     def location(self, item):
@@ -82,50 +82,52 @@ sitemaps = {
     'caveats': CaveatSitemap,
     'datasets': DatasetSitemap,
     'files': FileSitemap,
-    'resources': ResourceSitemap
+    'resources': ResourceSitemap,
 }
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/v1/', include(router.urls)),
-
+    # home app
+    path('', home, name='home'),
+    # metadata app
     path('metadata/', metadata, name='metadata'),
     path('doi/', resources, name='resources'),
-
     path('datasets/<uuid:pk>/', dataset, name='dataset'),
     path('files/<uuid:pk>/', file, name='file'),
     path('resources/<uuid:pk>/', resource, name='resource'),
-
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).bib', resource_bibtex, name='resource_bibtex'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).xml', resource_xml, name='resource_xml'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+).json', resource_json, name='resource_json'),
     re_path(r'^(?P<doi>\d{2}\.\d+\/[A-Za-z0-9_.\-\/]+)', resource, name='resource'),
-
     path('identifiers/', identifiers, name='identifiers'),
     path('identifiers/<str:identifier>', identifier, name='identifier'),
-
+    # search app
     path('search/', search, name='search'),
     path('search/<path:path>/', search, name='search'),
-
+    # download app
     path('download/', download, name='download'),
     path('download/<str:job_id>/', download, name='download'),
-
+    # caveats app
     path('issues-and-notes/', caveats, name='issues_and_notes'),
     path('caveats/', caveats, name='caveats'),  # legacy
-
     path('issues/<int:pk>/', caveat, name='issue'),
     path('notes/<int:pk>/', caveat, name='note'),
     path('caveats/<int:pk>/', caveat, name='caveat'),  # legacy
-
+    # access app
     path('access/token/<str:jwt>/', token, name='token'),
     path('access/<path:path>/', access, name='access'),
-
-    path('', home, name='home'),
+    # admin
+    path('admin/', admin.site.urls),
+    # api
+    path('api/v1/', include(router.urls)),
+    # robots and sitemap
     path('robots.txt', TemplateView.as_view(template_name='core/robots.txt'), name='robots.txt'),
-
     path('sitemap.xml', sitemaps_views.index, {'sitemaps': sitemaps}),
-    path('sitemap-<section>.xml', sitemaps_views.sitemap, {'sitemaps': sitemaps},
-         name='django.contrib.sitemaps.views.sitemap')
+    path(
+        'sitemap-<section>.xml',
+        sitemaps_views.sitemap,
+        {'sitemaps': sitemaps},
+        name='django.contrib.sitemaps.views.sitemap',
+    ),
 ]
 
 handler400 = 'isimip_data.core.views.bad_request'
@@ -135,8 +137,9 @@ handler500 = 'isimip_data.core.views.internal_server_error'
 
 if settings.DEBUG_TOOLBAR:
     import debug_toolbar
+
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
         *urlpatterns,
-        *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+        *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
     ]

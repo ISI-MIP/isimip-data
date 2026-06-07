@@ -147,16 +147,16 @@ def get_search_url(specifiers, identifiers):
 def get_terms_of_use():
     return {
         'terms_of_use': settings.TERMS_OF_USE,
-        'terms_of_use_url': settings.TERMS_OF_USE_URL
+        'terms_of_use_url': settings.TERMS_OF_USE_URL,
     }
 
 
 def render_bibtex(resource):
-    authors = ' and '.join([creator.get('name')
-                            for creator in resource.datacite.get('creators', [])
-                            if creator.get('name')])
+    authors = ' and '.join(
+        [creator.get('name') for creator in resource.datacite.get('creators', []) if creator.get('name')]
+    )
 
-    return '''
+    return """
 @misc{{{doi},
     author = {{{authors}}},
     year = {{{year}}},
@@ -166,29 +166,12 @@ def render_bibtex(resource):
     doi = {{{doi}}},
     url = {{{doi_url}}}
 }}
-'''.format(
-            authors=authors,
-            year=resource.datacite.get('publicationYear'),
-            title=resource.title,
-            version=resource.major_version,
-            publisher=resource.datacite.get('publisher'),
-            doi=resource.doi,
-            doi_url=resource.doi_url
-        ).strip()
-
-
-def get_json_ld_name(name):
-    json_ld_name = {
-        '@type': 'Organization' if name.get('nameType') == 'Organizational' else 'Person'
-    }
-
-    try:
-        json_ld_name['@id'] = name['nameIdentifiers'][0]['nameIdentifiers']
-    except (KeyError, IndexError):
-        pass
-
-    for key in ['name', 'givenName', 'familyName']:
-        if key in name:
-            json_ld_name[key] = name[key]
-
-    return json_ld_name
+""".format(
+        authors=authors,
+        year=resource.datacite.get('publicationYear'),
+        title=resource.title,
+        version=resource.major_version,
+        publisher=resource.datacite.get('publisher'),
+        doi=resource.doi,
+        doi_url=resource.doi_url,
+    ).strip()

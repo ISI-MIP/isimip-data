@@ -52,31 +52,31 @@ def test_fetch_glossary_type_error(mocker):
         {
             'terms': {
                 'alpha': {
-                    'lorem': {}
-                }
-            }
+                    'lorem': {},
+                },
+            },
         },
         {
             'terms': {
                 'alpha': {
-                    'ipsum': {}
-                }
-            }
-        }
+                    'ipsum': {},
+                },
+            },
+        },
     ]
 
     assert fetch_glossary() == {
         'alpha': {
             'lorem': {},
-            'ipsum': {}
-        }
+            'ipsum': {},
+        },
     }
 
 
 def test_fetch_glossary_attribute_error(mocker):
     mocked_fetch_json = mocker.patch('isimip_data.metadata.utils.fetch_json')
     mocked_fetch_json.return_value = {
-        'terms': []
+        'terms': [],
     }
 
     assert fetch_glossary() == {}

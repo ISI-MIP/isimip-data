@@ -19,13 +19,14 @@ from .models import Caveat, Comment
 
 
 class CaveatAdminForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['description'].help_text = 'Please describe only the initial problem. Subsequent updates ' \
-                                               'should be added as comments. For the information on whether ' \
-                                               'the data should be used for simulations or research, use the ' \
-                                               'severity field.'
+        self.fields['description'].help_text = (
+            'Please describe only the initial problem. Subsequent updates '
+            'should be added as comments. For the information on whether '
+            'the data should be used for simulations or research, use the '
+            'severity field.'
+        )
         self.fields['specifiers'].widget = SpecifierWidget()
         self.fields['specifiers'].required = False
 
@@ -49,19 +50,20 @@ class DownloadInline(admin.TabularInline):
 
 
 class AnnouncementAdminForm(forms.Form):
-    subject = forms.CharField(widget=forms.Textarea(attrs={
-        'class': 'vLargeTextField',
-        'rows': 2
-    }), required=True)
-    message = forms.CharField(widget=forms.Textarea(attrs={
-        'class': 'vLargeTextField',
-        'rows': 20
-    }), required=True)
-    recipients = forms.CharField(widget=forms.Textarea(attrs={
-        'class': 'vLargeTextField',
-        'rows': 4
-    }), required=True, help_text=_('You can add multiple recipients line by line.'),
-        initial='\n'.join(settings.CAVEATS_DEFAULT_RECIPIENTS))
+    subject = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'vLargeTextField', 'rows': 2}),
+        required=True,
+    )
+    message = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'vLargeTextField', 'rows': 20}),
+        required=True,
+    )
+    recipients = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'vLargeTextField', 'rows': 4}),
+        required=True,
+        help_text=_('You can add multiple recipients line by line.'),
+        initial='\n'.join(settings.CAVEATS_DEFAULT_RECIPIENTS),
+    )
 
     def __init__(self, *args, **kwargs):
         self.object = kwargs.pop('object')
@@ -90,30 +92,57 @@ class CaveatAdmin(admin.ModelAdmin):
     exclude = ('datasets', 'figures', 'downloads')
 
     fieldsets = (
-        (None, {
-            'fields': ('public', 'email', 'title', 'description', 'creator', 'category',
-                       'severity', 'status', 'message')
-        }),
-        ('Specifiers', {
-            'classes': ('collapse',),
-            'fields': ('specifiers', ),
-        }),
-        ('Versions', {
-            'classes': ('collapse',),
-            'fields': ('version_after', 'version_before'),
-        }),
-        ('Include/Exclude', {
-            'classes': ('collapse',),
-            'fields': ('include', 'exclude'),
-        }),
-        ('Affected datasets', {
-            'classes': ('collapse',),
-            'fields': ('affected_datasets', ),
-        }),
-        ('Affected resources', {
-            'classes': ('collapse',),
-            'fields': ('affected_resources', ),
-        })
+        (
+            None,
+            {
+                'fields': (
+                    'public',
+                    'email',
+                    'title',
+                    'description',
+                    'creator',
+                    'category',
+                    'severity',
+                    'status',
+                    'message',
+                )
+            },
+        ),
+        (
+            'Specifiers',
+            {
+                'classes': ('collapse',),
+                'fields': ('specifiers',),
+            },
+        ),
+        (
+            'Versions',
+            {
+                'classes': ('collapse',),
+                'fields': ('version_after', 'version_before'),
+            },
+        ),
+        (
+            'Include/Exclude',
+            {
+                'classes': ('collapse',),
+                'fields': ('include', 'exclude'),
+            },
+        ),
+        (
+            'Affected datasets',
+            {
+                'classes': ('collapse',),
+                'fields': ('affected_datasets',),
+            },
+        ),
+        (
+            'Affected resources',
+            {
+                'classes': ('collapse',),
+                'fields': ('affected_resources',),
+            },
+        ),
     )
 
     class Media:
@@ -131,16 +160,15 @@ class CaveatAdmin(admin.ModelAdmin):
         context = {
             'caveat': caveat,
             'caveat_url': request.build_absolute_uri(caveat.get_absolute_url()),
-            'datasets': datasets
+            'datasets': datasets,
         }
 
         subject = render_to_string('caveats/email/caveat_announcement_subject.txt', context, request=request)
         message = render_to_string('caveats/email/caveat_announcement_message.txt', context, request=request)
 
-        form = AnnouncementAdminForm(request.POST or None, object=caveat, initial={
-            'subject': subject,
-            'message': message
-        })
+        form = AnnouncementAdminForm(
+            request.POST or None, object=caveat, initial={'subject': subject, 'message': message}
+        )
 
         if request.method == 'POST':
             if '_back' in request.POST:
@@ -151,15 +179,17 @@ class CaveatAdmin(admin.ModelAdmin):
                 caveat.save()
 
                 for recipient in form.cleaned_data['recipients']:
-                    send_mail(form.cleaned_data['subject'], form.cleaned_data['message'],
-                              to=[recipient], reply_to=settings.CAVEATS_REPLY_TO)
+                    send_mail(
+                        form.cleaned_data['subject'],
+                        form.cleaned_data['message'],
+                        to=[recipient],
+                        reply_to=settings.CAVEATS_REPLY_TO,
+                    )
 
                 self.message_user(request, 'An email has been send.', level=INFO)
                 return redirect('admin:caveats_caveat_change', object_id=caveat.id)
 
-        return render(request, 'admin/caveats/caveat_send.html', context={
-            'form': form
-        })
+        return render(request, 'admin/caveats/caveat_send.html', context={'form': form})
 
     def affected_datasets(self, instance):
         return format_affected_datasets(instance.datasets)
@@ -172,8 +202,8 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ('caveat', 'creator', 'text')
     list_display = ('id', 'caveat', 'creator', 'created', 'public', 'email')
     list_display_links = ('id', 'caveat')
-    list_filter = ('public', )
-    readonly_fields = ('created', )
+    list_filter = ('public',)
+    readonly_fields = ('created',)
 
     def get_urls(self):
         view = self.admin_site.admin_view(self.caveats_comment_send)
@@ -184,8 +214,7 @@ class CommentAdmin(admin.ModelAdmin):
 
         quotes = []
         level = 0
-        for previous_comment in comment.caveat.comments.exclude(created__gte=comment.created) \
-                                                      .order_by('created'):
+        for previous_comment in comment.caveat.comments.exclude(created__gte=comment.created).order_by('created'):
             quotes.append(previous_comment.get_quote(level=level))
             level += 1
         quotes.append(comment.caveat.get_quote(level=level))
@@ -193,16 +222,15 @@ class CommentAdmin(admin.ModelAdmin):
         context = {
             'comment': comment,
             'caveat_url': request.build_absolute_uri(comment.get_absolute_url()),
-            'quotes': quotes
+            'quotes': quotes,
         }
 
         subject = render_to_string('caveats/email/comment_announcement_subject.txt', context, request=request)
         message = render_to_string('caveats/email/comment_announcement_message.txt', context, request=request)
 
-        form = AnnouncementAdminForm(request.POST or None, object=comment, initial={
-            'subject': subject,
-            'message': message
-        })
+        form = AnnouncementAdminForm(
+            request.POST or None, object=comment, initial={'subject': subject, 'message': message}
+        )
 
         if request.method == 'POST':
             if '_back' in request.POST:
@@ -213,15 +241,17 @@ class CommentAdmin(admin.ModelAdmin):
                 comment.save()
 
                 for recipient in form.cleaned_data['recipients']:
-                    send_mail(form.cleaned_data['subject'], form.cleaned_data['message'],
-                              to=[recipient], reply_to=settings.CAVEATS_REPLY_TO)
+                    send_mail(
+                        form.cleaned_data['subject'],
+                        form.cleaned_data['message'],
+                        to=[recipient],
+                        reply_to=settings.CAVEATS_REPLY_TO,
+                    )
 
                 self.message_user(request, 'An email has been send.', level=INFO)
                 return redirect('admin:caveats_comment_change', object_id=comment.id)
 
-        return render(request, 'admin/caveats/comment_send.html', context={
-            'form': form
-        })
+        return render(request, 'admin/caveats/comment_send.html', context={'form': form})
 
 
 admin.site.register(Caveat, CaveatAdmin)

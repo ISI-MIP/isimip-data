@@ -1,6 +1,5 @@
 import { encodeParams } from 'isimip_data/core/assets/js/utils/api'
 
-
 class DatasetApi {
 
   static fetchDatasets(params, fetchParams = {}) {
@@ -57,12 +56,12 @@ class DatasetApi {
 
   static fetchIdentifiers(fetchParams = {}) {
     return fetch('/api/v1/identifiers/', fetchParams).then(response => {
-        if (response.ok) {
-          return response.json()
-        } else {
-          throw new Error(response.statusText)
-        }
-      })
+      if (response.ok) {
+        return response.json()
+      } else {
+        throw new Error(response.statusText)
+      }
+    })
   }
 
   static fetchGlossary(fetchParams = {}) {

@@ -15,19 +15,18 @@ from .managers import ModerationManager
 
 
 class Caveat(models.Model):
-
     CATEGORY_NOTE = 'note'
     CATEGORY_ISSUE = 'issue'
     CATEGORY_CHOICES = (
         (CATEGORY_NOTE, _('note')),
-        (CATEGORY_ISSUE, _('issue'))
+        (CATEGORY_ISSUE, _('issue')),
     )
 
     SEVERITY_LOW = 'low'
     SEVERITY_HIGH = 'high'
     SEVERITY_CHOICES = (
         (SEVERITY_LOW, _('low')),
-        (SEVERITY_HIGH, _('high'))
+        (SEVERITY_HIGH, _('high')),
     )
 
     STATUS_NEW = 'new'
@@ -38,7 +37,7 @@ class Caveat(models.Model):
         (STATUS_NEW, _('new')),
         (STATUS_ON_HOLD, _('on hold')),
         (STATUS_RESOLVED, _('resolved')),
-        (STATUS_WONT_FIX, _('won\'t fix')),
+        (STATUS_WONT_FIX, _("won't fix")),
     )
 
     MESSAGE_CAN_BE_USED = 'can_be_used'
@@ -47,45 +46,41 @@ class Caveat(models.Model):
     MESSAGE_CHOICES = (
         (MESSAGE_CAN_BE_USED, _('Affected datasets can still be used for simulations or research.')),
         (MESSAGE_DO_NOT_USE, _('Affected datasets should not be used until this issue is resolved.')),
-        (MESSAGE_REPLACED, _('Please use the replaced datasets for new simulations or research.'))
+        (MESSAGE_REPLACED, _('Please use the replaced datasets for new simulations or research.')),
     )
 
     CATEGORY_SYMBOL = {
         CATEGORY_NOTE: 'info',
-        CATEGORY_ISSUE: 'warning'
+        CATEGORY_ISSUE: 'warning',
     }
 
     CATEGORY_COLOR = {
         CATEGORY_NOTE: 'light',
-        CATEGORY_ISSUE: 'dark'
+        CATEGORY_ISSUE: 'dark',
     }
 
     SEVERITY_LEVEL = {
         SEVERITY_LOW: 1,
-        SEVERITY_HIGH: 2
+        SEVERITY_HIGH: 2,
     }
 
     SEVERITY_COLOR = {
         SEVERITY_LOW: 'success',
-        SEVERITY_HIGH: 'danger'
+        SEVERITY_HIGH: 'danger',
     }
 
     STATUS_COLOR = {
         STATUS_NEW: 'primary',
         STATUS_ON_HOLD: 'secondary',
         STATUS_RESOLVED: 'success',
-        STATUS_WONT_FIX: 'dark'
+        STATUS_WONT_FIX: 'dark',
     }
 
     objects = ModerationManager()
 
-    public = models.BooleanField(
-        default=False,
-        help_text=_('Designates whether this caveat is publicly visible.')
-    )
+    public = models.BooleanField(default=False, help_text=_('Designates whether this caveat is publicly visible.'))
     email = models.BooleanField(
-        default=False,
-        help_text=_('Designates whether an announcement mail for this caveat has been send.')
+        default=False, help_text=_('Designates whether an announcement mail for this caveat has been send.')
     )
     title = models.CharField(max_length=512)
     description = models.TextField()
@@ -100,11 +95,13 @@ class Caveat(models.Model):
     include = models.TextField(
         blank=True,
         help_text='You can add multiple paths line by line. If paths are provided, datasets will '
-                  'only be included if their path starts with one of the paths given.')
+        'only be included if their path starts with one of the paths given.',
+    )
     exclude = models.TextField(
         blank=True,
         help_text='You can add multiple paths line by line. Datasets will be excluded '
-                  'if their path starts with one of the paths given.')
+        'if their path starts with one of the paths given.',
+    )
     datasets = ArrayField(models.UUIDField(), blank=True, default=list)
     resources = ArrayField(models.UUIDField(), blank=True, default=list)
     version_after = models.CharField(max_length=8, blank=True)
@@ -113,14 +110,19 @@ class Caveat(models.Model):
     downloads = models.ManyToManyField(Download, related_name='caveats')
 
     class Meta:
-        ordering = ('-created', )
+        ordering = ('-created',)
 
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
-        self.datasets = query_datasets(self.specifiers, self.version_after, self.version_before,
-                                       self.include, self.exclude)
+        self.datasets = query_datasets(
+            self.specifiers,
+            self.version_after,
+            self.version_before,
+            self.include,
+            self.exclude,
+        )
         self.resources = query_resources(self.datasets)
         cache.clear()
         super().save(*args, **kwargs)
@@ -204,16 +206,11 @@ class Caveat(models.Model):
 
 
 class Comment(models.Model):
-
     objects = ModerationManager()
 
-    public = models.BooleanField(
-        default=False,
-        help_text=_('Designates whether this comment is publicly visible.')
-    )
+    public = models.BooleanField(default=False, help_text=_('Designates whether this comment is publicly visible.'))
     email = models.BooleanField(
-        default=False,
-        help_text=_('Designates whether an announcement mail for this comment has been send.')
+        default=False, help_text=_('Designates whether an announcement mail for this comment has been send.')
     )
     text = models.TextField()
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='comments')
@@ -222,7 +219,7 @@ class Comment(models.Model):
     caveat = models.ForeignKey(Caveat, on_delete=models.CASCADE, related_name='comments')
 
     class Meta:
-        ordering = ('-created', )
+        ordering = ('-created',)
 
     def __str__(self):
         return f'{self.caveat} {self.creator} {self.created}'

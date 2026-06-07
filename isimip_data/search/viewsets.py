@@ -7,6 +7,5 @@ from .serializers import FacetSerializer
 
 
 class FacetViewSet(ListModelMixin, GenericViewSet):
-
     serializer_class = FacetSerializer
     queryset = settings.SEARCH_FACETS

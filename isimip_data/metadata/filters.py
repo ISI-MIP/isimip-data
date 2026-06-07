@@ -1,7 +1,7 @@
 import logging
 
 from django.contrib.postgres.search import SearchQuery
-from django.core.exceptions import FieldError, ValidationError
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 
 from rest_framework.filters import BaseFilterBackend
@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 
 class IdFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
@@ -29,13 +28,12 @@ class IdFilterBackend(BaseFilterBackend):
 
 
 class DatasetFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
 
         dataset_ids = request.GET.getlist('dataset')
-        print(request.GET)
+
         if dataset_ids:
             queryset = queryset.filter(dataset_id__in=dataset_ids)
 
@@ -43,7 +41,6 @@ class DatasetFilterBackend(BaseFilterBackend):
 
 
 class NameFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
@@ -56,7 +53,6 @@ class NameFilterBackend(BaseFilterBackend):
 
 
 class PathFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
@@ -65,14 +61,20 @@ class PathFilterBackend(BaseFilterBackend):
         if path_list:
             q = Q()
             for path in path_list:
-                q |= Q(path__startswith=path) | Q(links__path__startswith=path)
+                filter_kwargs = {'path__startswith': path}
+
+                if getattr(view, 'filter_resolve_links', True):
+                    subquery = queryset.model.objects.filter(**filter_kwargs).values('root_id').order_by()
+                    q |= Q(root_id__in=subquery)
+                else:
+                    q |= Q(**filter_kwargs)
+
             queryset = queryset.filter(q)
 
         return queryset
 
 
 class SearchFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
@@ -94,26 +96,29 @@ class SearchFilterBackend(BaseFilterBackend):
 
             # last, perform a full text search on the search_vector field
             if queryset.model == File:
-                queryset = queryset.filter(dataset__search__vector=search_query)
+                filter_kwargs = {'dataset__search__vector': search_query}
             else:
-                queryset = queryset.filter(search__vector=search_query)
+                filter_kwargs = {'search__vector': search_query}
+
+            if getattr(view, 'filter_resolve_links', True):
+                subquery = queryset.model.objects.filter(**filter_kwargs).values('root_id').order_by()
+                queryset = queryset.filter(root_id__in=subquery)
+            else:
+                queryset = queryset.filter(**filter_kwargs)
 
         return queryset
 
 
 class VersionFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
 
         if request.GET.get('all') != 'true':
-            try:
-                # datasets have a public field
-                queryset = queryset.filter(public=True)
-            except FieldError:
-                # files need to check the public field of the corresponding dataset
+            if queryset.model == File:
                 queryset = queryset.filter(dataset__public=True)
+            else:
+                queryset = queryset.filter(public=True)
 
         after = request.GET.get('after')
         if after:
@@ -127,28 +132,29 @@ class VersionFilterBackend(BaseFilterBackend):
 
 
 class IdentifierFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
 
-        # see https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#std:fieldlookup-hstorefield.contains
-        # and https://docs.djangoproject.com/en/2.2/ref/contrib/postgres/fields/#containment-and-key-operations
-        # for optimal jsonb lookups: queryset.filter(field={'foo': 'bar', 'egg': 'spam'})
         for identifier in Identifier.objects.using('metadata').identifiers():
-            if identifier != getattr(view, 'identifier_filter_exclude', None):
+            if identifier != getattr(view, 'filter_exclude_identifier', None):
                 q = Q()
                 for value in request.GET.getlist(identifier):
                     if value:
-                        q |= Q(specifiers__contains={identifier: value})
-                        q |= Q(links__specifiers__contains={identifier: value})
+                        filter_kwargs = {'specifiers__contains': {identifier: value}}
+
+                        if getattr(view, 'filter_resolve_links', True):
+                            subquery = queryset.model.objects.filter(**filter_kwargs).values('root_id').order_by()
+                            q |= Q(root_id__in=subquery)
+                        else:
+                            q |= Q(**filter_kwargs)
+
                 queryset = queryset.filter(q)
 
         return queryset
 
 
 class TreeFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
@@ -157,10 +163,18 @@ class TreeFilterBackend(BaseFilterBackend):
         if tree_list:
             q = Q()
             for tree in tree_list:
+                tree = tree.rstrip('/') + '/'
+
                 if queryset.model == File:
-                    q |= Q(dataset__tree_path__startswith=tree) | Q(dataset__links__tree_path__startswith=tree)
+                    filter_kwargs = {'dataset__tree_path__startswith': tree}
                 else:
-                    q |= Q(tree_path__startswith=tree) | Q(links__tree_path__startswith=tree)
+                    filter_kwargs = {'tree_path__startswith': tree}
+
+                if getattr(view, 'filter_resolve_links', True):
+                    subquery = queryset.model.objects.filter(**filter_kwargs).values('root_id').order_by()
+                    q |= Q(root_id__in=subquery)
+                else:
+                    q |= Q(**filter_kwargs)
 
             queryset = queryset.filter(q)
 
@@ -168,7 +182,6 @@ class TreeFilterBackend(BaseFilterBackend):
 
 
 class ChecksumFilterBackend(BaseFilterBackend):
-
     def filter_queryset(self, request, queryset, view):
         if view.detail:
             return queryset
