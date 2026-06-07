@@ -65,10 +65,9 @@ jobs:
         python3 -m pip install --upgrade pip setuptools
         python3 -m pip install -r requirements/development.txt
 
-    - name: Install and build frontend 🏗️
+    - name: Install node modules 🌐
       run: |
         npm ci
-        npm run build
 
     - name: Prepare database 🗄️
       run: |
@@ -79,6 +78,14 @@ jobs:
     - name: Setup config file ⚙️
       run: |
         cp config/settings/environments/github.py config/settings/local.py
+
+    - name: Run subset_fonts 🔡
+      run: |
+        python3 manage.py subset_fonts
+
+    - name: Build frontend 🏗️
+      run: |
+        npm run build
 
     - name: Run pytest 🧪
       run: |
