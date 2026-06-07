@@ -18,12 +18,12 @@ permissions:
 env:
   PYTHONDONTWRITEBYTECODE: 1
   FORCE_COLOR: 1
-  PYTHON_VERSION: "3.12"
+  PYTHON_VERSION: "3.13"
 
 jobs:
   pytest:
     name: Run tests 🧪
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     services:
       postgres:
