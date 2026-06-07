@@ -1,8 +1,7 @@
-$FontPathOpenSans: "npm-font-open-sans/fonts/";
-@import "npm-font-open-sans/open-sans";
-
-$material-symbols-font-path: 'material-symbols/';
-@import 'material-symbols';
+@import '@fontsource/open-sans/latin-400.css';
+@import '@fontsource/open-sans/latin-400-italic.css';
+@import '@fontsource/open-sans/latin-600.css';
+@import '@fontsource/open-sans/latin-600-italic.css';
 
 @import 'base/badges';
 @import 'base/cards';

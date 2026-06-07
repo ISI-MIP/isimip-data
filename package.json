@@ -15,6 +15,7 @@
     "url": "https://github.com/ISI-MIP/isimip-data"
   },
   "dependencies": {
+    "@fontsource/open-sans": "^5.2.7",
     "@popperjs/core": "^2.11.8",
     "@tanstack/react-query": "^5.56.2",
     "bootstrap": "^5.3.3",
@@ -27,7 +28,6 @@
     "lodash": "^4.17.21",
     "material-symbols": "^0.29.1",
     "minisearch": "^7.1.2",
-    "npm-font-open-sans": "^1.1.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
