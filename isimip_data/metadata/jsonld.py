@@ -76,7 +76,7 @@ def get_jsonld_name(obj, append_name=True):
 def get_jsonld_description(obj, resources=None):
     if resources:
         return (
-            f'This {obj._meta.model_name.lower()} is part of '
+            f'This {obj._meta.model_name.lower()} can be cited using a Digital Object Identifier (DOI): '
             + ', '.join([resource.get('identifier') for resource in resources])
             + '.'
         )
