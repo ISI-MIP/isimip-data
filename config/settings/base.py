@@ -112,7 +112,7 @@ STATICFILES_FINDERS = (
 
 DJANGO_VITE = {
     'default': {
-        'manifest_path': BASE_DIR / 'static' / '.vite' / 'manifest.json',
+        'manifest_path': BASE_DIR / 'static' / '_vite' / 'manifest.json',
     }
 }
 

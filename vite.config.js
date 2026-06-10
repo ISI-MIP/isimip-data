@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'static',
       emptyOutDir: true,
-      manifest: true,
+      manifest: '_vite/manifest.json',
       sourcemap: isDev,
       rollupOptions: {
         input: {
