@@ -35,7 +35,7 @@ def get_jsonld(request, obj):
             '@context': 'https://schema.org/',
             '@type': 'Dataset',
             'name': get_jsonld_name(obj),
-            'description': f'Part of {dataset.get("identifier")}',
+            'description': f'This file is part of {dataset.get("identifier")}',
             'identifier': request.build_absolute_uri(obj.get_absolute_url()),
             'isPartOf': [dataset],
         }
