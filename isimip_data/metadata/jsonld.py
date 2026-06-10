@@ -75,7 +75,11 @@ def get_jsonld_name(obj, append_name=True):
 
 def get_jsonld_description(obj, resources=None):
     if resources:
-        return 'Part of ' + ', '.join([resource.get('identifier') for resource in resources])
+        return (
+            f'This {obj._meta.model_name.lower()} is part of '
+            + ', '.join([resource.get('identifier') for resource in resources])
+            + '.'
+        )
     else:
         return f'{get_jsonld_name(obj, append_name=False)}. No DOI assigned yet.'
 
