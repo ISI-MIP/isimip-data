@@ -18,4 +18,4 @@ class Command(BaseCommand):
             raise CommandError('NVM_DIR does not exist, is nvm.sh installed?')
 
         command = ' '.join(options['command'])
-        subprocess.call(['/bin/bash', '-c', f'source {nvm_dir}/nvm.sh; nvm use; npm {command}'])
+        subprocess.call(['/bin/bash', '-c', f'source {nvm_dir}/nvm.sh; nvm use && npm {command}'])
