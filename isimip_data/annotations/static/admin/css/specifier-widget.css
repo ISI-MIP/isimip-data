@@ -2,12 +2,21 @@
     line-height: 40px;
 }
 
+.field-identifier + hr {
+    display: none;
+}
+
+.field-specifier {
+    white-space: nowrap;
+}
+
 .field-specifier input[type="checkbox"] {
     margin-top: -2px; margin-left: 8px;
 }
 
 .field-specifier label.vCheckboxLabel {
+    display: inline-block;
     min-width: 0;
+    width: auto;
     vertical-align: 0;
-    padding: 0;
 }
