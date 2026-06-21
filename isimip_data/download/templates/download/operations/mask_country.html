@@ -1,7 +1,7 @@
 <p>
     The files are masked using the command:
     <code>cdo -f nc4c -z zip_5 -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK OFILE</code>
-    and the <a href="https://doi.org/10.48364/ISIMIP.635131.2" target="_blank">ISIMIP countrymask</a>.
+    and the <a href="https://doi.org/10.48364/ISIMIP.154869" target="_blank">ISIMIP countrymask</a>.
 </p>
 
 <p>
@@ -13,4 +13,10 @@
     by the country is fully counted for that country. One effect of this is that grid cells may
     belong to more than one country. Also, the calculation of the field mean for the country
     will be different than when using a fractional mask.
+</p>
+
+<p>
+    <b>Important:</b> Before June 21, 2026, we used the older
+    <a href="https://doi.org/10.48364/ISIMIP.635131.2" target="_blank">ISIpedia country masks</a>.
+    The new masks could lead to different, more accurate results, in particular with smaller countries.
 </p>
