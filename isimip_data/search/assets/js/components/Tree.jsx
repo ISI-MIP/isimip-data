@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { get, intersection, isEmpty, isNil, sortBy } from 'lodash'
+import { get, isEmpty, isNil, sortBy } from 'lodash'
 
 import Icon from 'isimip_data/core/assets/js/components/Icon'
 import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
@@ -29,17 +29,14 @@ const Tree = ({ params, glossary, updateParams }) => {
     }
   }
 
-  const toggleItem = (event, item) => {
-    if (event.type == 'change' || isEmpty(
-      // do not react to click events on the checkbox or the label, those are handled by the change event
-      intersection(event.target.classList, ['form-check-input', 'form-check-label']))
-    ) {
-      if (item.items) {
-        handleClose(item)
-      } else {
-        handleOpen(item)
-      }
-    }
+  const handleClick = (event, item) => {
+    // separate handler for the (padding of the) li, to prevent bubbling
+    if (event.target.closest('.form-check-input, .form-check-label')) return
+    toggleItem(item)
+  }
+
+  const toggleItem = (item) => {
+    item.items ? handleClose(item) : handleOpen(item)
   }
 
   const renderTooltip = (properties) => (
@@ -74,16 +71,16 @@ const Tree = ({ params, glossary, updateParams }) => {
   const renderItem = (item, level) => {
     // try to get additional or updated properties from the glossary
     const properties = get(glossary, [item.identifier, item.specifier], {})
-    const id = `${item.identifier}-${item.specifier}`
+    const id = `tree-${item.tree.replace(/\//g, '-')}`
 
     return (
-      <li className="list-group-item" onClick={(event) => toggleItem(event, item)}>
+      <li className="list-group-item" onClick={(event) => handleClick(event, item)}>
         <div className={`tree-level-${level}`}>
           <Tooltip placement="right" title={renderTooltip(properties)}>
             <div className="d-flex gap-1 align-items-center">
               <input
                 className="form-check-input me-1 mt-0" type="checkbox" id={id} checked={!isNil(item.items)}
-                onChange={(event) => toggleItem(event, item)}
+                onChange={() => toggleItem(item)}
               />
 
               <label className="form-check-label flex-grow-1" htmlFor={id}>
