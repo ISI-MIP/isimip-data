@@ -10,7 +10,7 @@ const Country = ({ country, errors, onChange }) => {
   const { data: countries } = useCountriesQuery()
 
   return countries && <>
-    <div className="col-lg-4">
+    <div className="col-lg-8">
       <select
         className={'form-control download-form-input-country mb-2 ' + (!isEmpty(errors) && 'is-invalid')}
         value={country} onChange={event => onChange(event.target.value)}
