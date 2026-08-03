@@ -1,7 +1,6 @@
 <p>
     The files are masked using the command:
-    <code>cdo -f nc4c -z zip_5 -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK OFILE</code>
-    and the <a href="https://doi.org/10.48364/ISIMIP.154869" target="_blank">ISIMIP countrymask</a>.
+    <code>cdo -f nc4c -z zip_5 -ifthen IFILE -selname,m_COUNTRY COUNTRYMASK OFILE</code>.
 </p>
 
 <p>
@@ -9,14 +8,17 @@
 </p>
 
 <p>
-    Note that our binary country mask is constructed in such a way that any grid cell touched
-    by the country is fully counted for that country. One effect of this is that grid cells may
-    belong to more than one country. Also, the calculation of the field mean for the country
-    will be different than when using a fractional mask.
+    By default, we are using the <a href="https://doi.org/10.48364/ISIMIP.154869" target="_blank">
+    ISIMIP3 countrymask</a>, which was also used for the ISIMIP3 population and GDP data.
+    Before Aug 3, 2026, we used the older
+    <a href="https://doi.org/10.48364/ISIMIP.635131.2" target="_blank">ISIpedia country masks (v2.6)</a>.
+    The new mask differs in ~500 pixels, making 110 of the countries slightly smaller. This can lead to different,
+    more accurate results, in particular with smaller countries. If you still need to access the old mask, you can select it below.
 </p>
 
 <p>
-    <b>Important:</b> Before June 21, 2026, we used the older
-    <a href="https://doi.org/10.48364/ISIMIP.635131.2" target="_blank">ISIpedia country masks</a>.
-    The new masks could lead to different, more accurate results, in particular with smaller countries.
+    <b>Important:</b> Our binary country masks are constructed in such a way that any grid cell touched
+    by the country is fully counted for that country. One effect of this is that grid cells may
+    belong to more than one country. Also, the calculation of the field mean for the country
+    will be different than when using a fractional mask.
 </p>

@@ -301,6 +301,7 @@ DOWNLOAD_OPERATIONS = [
         ],
         'initial': {
             'country': 'aus',
+            'country_mask': 'isimip3',
             'compute_mean': False,
             'output_csv': False,
         },
@@ -440,6 +441,11 @@ DOWNLOAD_OPERATIONS = [
         },
     },
 ]
+
+DOWNLOAD_COUNTRY_MASKS = {
+    'isimip3': 'ISIMIP3 country masks',
+    'isipedia': 'ISIpedia country masks (v2.6)',
+}
 
 DOWNLOAD_ERRORS = {
     'bbox': ['Please enter a valid bounding box.'],

@@ -6,6 +6,7 @@ import Html from 'isimip_data/core/assets/js/components/Html'
 
 import BBox from './widgets/BBox'
 import Country from './widgets/Country'
+import CountryMask from './widgets/CountryMask'
 import Csv from './widgets/Csv'
 import Layer from './widgets/Layer'
 import Mask from './widgets/Mask'
@@ -51,6 +52,15 @@ const Operation = ({ operation, index, isLast, values, errors, updateOperation, 
                 country={values.country}
                 errors={errors.country}
                 onChange={country => updateOperation(index, {...values, country})}
+              />
+            )
+          }
+          {
+            !isUndefined(values.country_mask) && (
+              <CountryMask
+                countryMask={values.country_mask}
+                errors={errors.country_mask}
+                onChange={countryMask => updateOperation(index, {...values, country_mask: countryMask})}
               />
             )
           }
