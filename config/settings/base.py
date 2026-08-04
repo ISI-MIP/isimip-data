@@ -306,6 +306,7 @@ DOWNLOAD_OPERATIONS = [
             'output_csv': False,
         },
         'next': [
+            'cutout_bbox',
             'select_bbox',
             'mask_bbox',
             'mask_country',
@@ -329,6 +330,7 @@ DOWNLOAD_OPERATIONS = [
             'output_csv': False,
         },
         'next': [
+            'cutout_bbox',
             'select_bbox',
             'mask_bbox',
             'mask_country',
@@ -359,6 +361,7 @@ DOWNLOAD_OPERATIONS = [
             'var': '',
         },
         'next': [
+            'cutout_bbox',
             'select_bbox',
             'mask_bbox',
             'mask_country',
@@ -392,6 +395,7 @@ DOWNLOAD_OPERATIONS = [
             'layer': 0,
         },
         'next': [
+            'cutout_bbox',
             'select_bbox',
             'mask_bbox',
             'mask_country',
