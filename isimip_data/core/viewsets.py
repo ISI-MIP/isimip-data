@@ -28,6 +28,7 @@ class SettingsViewSet(ListModelMixin, GenericViewSet):
                 'METADATA_MAX_COUNT',
                 'DOWNLOAD_OPERATIONS_HELP',
                 'DOWNLOAD_COUNTRY_MASKS',
+                'DOWNLOAD_LAND_SEA_MASKS',
                 'DOWNLOAD_ERRORS',
             ]
         ]

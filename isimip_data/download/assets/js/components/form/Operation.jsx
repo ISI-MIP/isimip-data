@@ -8,6 +8,7 @@ import BBox from './widgets/BBox'
 import Country from './widgets/Country'
 import CountryMask from './widgets/CountryMask'
 import Csv from './widgets/Csv'
+import LandSeaMask from './widgets/LandSeaMask'
 import Layer from './widgets/Layer'
 import Mask from './widgets/Mask'
 import Mean from './widgets/Mean'
@@ -61,6 +62,15 @@ const Operation = ({ operation, index, isLast, values, errors, updateOperation, 
                 countryMask={values.country_mask}
                 errors={errors.country_mask}
                 onChange={countryMask => updateOperation(index, {...values, country_mask: countryMask})}
+              />
+            )
+          }
+          {
+            !isUndefined(values.land_sea_mask) && (
+              <LandSeaMask
+                landSeaMask={values.land_sea_mask}
+                errors={errors.land_sea_mask}
+                onChange={landSeaMask => updateOperation(index, {...values, land_sea_mask: landSeaMask})}
               />
             )
           }

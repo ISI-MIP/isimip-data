@@ -317,12 +317,17 @@ DOWNLOAD_OPERATIONS = [
     {
         'operation': 'mask_landonly',
         'title': 'Mask only land data',
-        'label': '**Mask only the land data** using `cdo` and the ISIMIP landseamask,'
+        'label': '**Mask only the land data** using `cdo` and the ISIMIP3 land-sea mask,'
         ' keeping the grid and setting everything outside to `missing_value`.',
         'template': 'download/operations/mask_landonly.html',
         'resolutions': [
             '30arcmin',
         ],
+        'initial': {
+            'land_sea_mask': 'landseamask_no-ant',
+            'compute_mean': False,
+            'output_csv': False,
+        },
         'next': [
             'select_bbox',
             'mask_bbox',
@@ -445,6 +450,11 @@ DOWNLOAD_OPERATIONS = [
 DOWNLOAD_COUNTRY_MASKS = {
     'isimip3': 'ISIMIP3 country masks',
     'isipedia': 'ISIpedia country masks (v2.6)',
+}
+
+DOWNLOAD_LAND_SEA_MASKS = {
+    'landseamask_no-ant': 'ISIMIP3 land-sea mask (without Antarctica)',
+    'landseamask': 'ISIMIP3 land-sea mask',
 }
 
 DOWNLOAD_ERRORS = {

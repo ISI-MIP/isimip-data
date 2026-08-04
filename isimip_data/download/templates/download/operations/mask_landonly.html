@@ -1,9 +1,17 @@
 <p>
     The files are masked using the command:
-    <code>cdo -f nc4c -z zip_5 -ifthen IFILE -selname,mask LANDSEAMASK OFILE</code>
-    and the <a href="https://doi.org/10.48364/ISIMIP.822294" target="_blank">ISIMIP landseamask without Antarctica</a>.
+    <code>cdo -f nc4c -z zip_5 -ifthen IFILE -selname,mask LANDSEAMASK OFILE</code>.
 </p>
 
 <p>
     Everything outside is set to <code>missing_value</code> and the grid is kept.
+</p>
+
+<p>
+    We are using the <a href="https://data.isimip.org/10.48364/ISIMIP.822294" target="_blank">
+    ISIMIP3 land-sea mask</a>, which is the land-sea mask of the W5E5 dataset.
+</p>
+
+<p>
+    By default, we are using the version without Antarctica. The version including Antarctica can be selected below.
 </p>
