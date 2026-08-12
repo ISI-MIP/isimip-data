@@ -5,9 +5,9 @@ from pathlib import PurePath
 from django.conf import settings
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.paginator import Paginator as DjangoPaginator
-from django.http import StreamingHttpResponse
 from django.utils.functional import cached_property
 
+from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
@@ -362,18 +362,13 @@ class GlossaryViewSet(ViewSet):
 
 
 class IdViewSet(ViewSet):
-    def list(self, request):
-        querysets = [
-            Dataset.objects.using('metadata'),
-            File.objects.using('metadata'),
-            Resource.objects.using('metadata'),
-        ]
+    def create(self, request):
+        field = serializers.ListField(child=serializers.UUIDField(), allow_empty=False)
+        data = field.run_validation(request.data)
 
-        return StreamingHttpResponse(
-            (
-                f'{uuid}\t{path}\n'
-                for queryset in querysets
-                for uuid, path in queryset.values_list('id', 'path').iterator(chunk_size=10000)
-            ),
-            content_type='text/plain',
-        )
+        response = [
+            *Dataset.objects.using('metadata').filter(id__in=data).values('id', 'path'),
+            *File.objects.using('metadata').filter(id__in=data).values('id', 'path'),
+            *Resource.objects.using('metadata').filter(id__in=data).values('id', 'doi'),
+        ]
+        return Response(response)
