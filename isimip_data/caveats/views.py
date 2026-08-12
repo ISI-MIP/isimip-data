@@ -23,6 +23,7 @@ def caveat(request, pk=None):
         return redirect(caveat)
 
     comments = caveat.comments.public(request.user)
+    count = Dataset.objects.using('metadata').filter(target=None, id__in=caveat.datasets).count()
     datasets = (
         Dataset.objects.using('metadata')
         .filter(target=None, id__in=caveat.datasets[: settings.CAVEATS_MAX_DATASETS])
@@ -36,7 +37,7 @@ def caveat(request, pk=None):
             'title': caveat.title,
             'caveat': caveat,
             'comments': comments,
-            'count': len(caveat.datasets),
+            'count': count,
             'datasets': datasets,
             'search_url': request.build_absolute_uri(caveat.get_search_url()),
         },
