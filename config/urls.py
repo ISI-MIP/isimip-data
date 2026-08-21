@@ -31,6 +31,7 @@ from isimip_data.metadata.views import (
     resources,
 )
 from isimip_data.metadata.viewsets import (
+    ChecksumViewSet,
     DatasetViewSet,
     FileViewSet,
     GlossaryViewSet,
@@ -51,6 +52,7 @@ router.register(r'files', FileViewSet, basename='file')
 router.register(r'resources', ResourceViewSet, basename='resource')
 router.register(r'identifiers', IdentifierViewSet, basename='identifier')
 router.register(r'ids', IdViewSet, basename='id')
+router.register(r'checksums', ChecksumViewSet, basename='checksum')
 router.register(r'facets', FacetViewSet, basename='facet')
 router.register(r'caveats', CaveatViewSet, basename='caveat')
 router.register(r'categories', CategoryViewSet, basename='category')

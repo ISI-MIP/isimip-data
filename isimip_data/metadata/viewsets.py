@@ -372,3 +372,12 @@ class IdViewSet(ViewSet):
             *Resource.objects.using('metadata').filter(id__in=data).values('id', 'doi'),
         ]
         return Response(response)
+
+
+class ChecksumViewSet(ViewSet):
+    def create(self, request):
+        field = serializers.ListField(child=serializers.CharField(), allow_empty=False)
+        data = field.run_validation(request.data)
+
+        response = File.objects.using('metadata').filter(checksum__in=data).values('checksum', 'path')
+        return Response(response)
