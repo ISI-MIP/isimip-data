@@ -225,6 +225,7 @@ PROXY_FILES_BASE_URL = None
 PROXY_FILES_API_URL = None
 
 PROTOCOL_LOCATIONS = [
+    'https://protocol4.isimip.org',
     'https://protocol.isimip.org',
     'https://protocol2.isimip.org',
 ]
