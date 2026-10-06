@@ -63,7 +63,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     queryset = (
         Dataset.objects.using('metadata')
         .filter(target=None)
-        .prefetch_related('files', 'files__links', 'links', 'resources')
+        .prefetch_related('files', 'files__datasets', 'files__links', 'links', 'resources')
     )
 
     serializer_class = DatasetSerializer
@@ -191,7 +191,14 @@ class DatasetViewSet(ReadOnlyModelViewSet):
 
 
 class FileViewSet(ReadOnlyModelViewSet):
-    queryset = File.objects.using('metadata').filter(target=None).select_related('dataset').prefetch_related('links')
+    queryset = (
+        File.objects.using('metadata')
+        .filter(target=None)
+        .prefetch_related(
+            'datasets',
+            'links',
+        )
+    )
 
     serializer_class = FileSerializer
     pagination_class = Pagination
@@ -207,6 +214,8 @@ class FileViewSet(ReadOnlyModelViewSet):
         TreeFilterBackend,
         ChecksumFilterBackend,
     )
+
+    filter_exclude_identifier = 'dataset'
 
 
 class ResourceViewSet(ReadOnlyModelViewSet):

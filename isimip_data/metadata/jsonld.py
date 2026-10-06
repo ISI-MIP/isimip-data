@@ -29,15 +29,16 @@ def get_jsonld(request, obj):
             data['isPartOf'] = resources
 
     elif isinstance(obj, File):
-        dataset = get_jsonld(request, obj.dataset)
+        datasets = [get_jsonld(request, dataset) for dataset in obj.datasets.order_by('version')]
+        identifiers = [dataset.get('identifier') for dataset in datasets]
 
         data = {
             '@context': 'https://schema.org/',
             '@type': 'Dataset',
             'name': get_jsonld_name(obj),
-            'description': f'This file is part of {dataset.get("identifier")}',
+            'description': f'This file is part of {", ".join(identifiers)}',
             'identifier': request.build_absolute_uri(obj.get_absolute_url()),
-            'isPartOf': [dataset],
+            'isPartOf': [datasets],
         }
 
     else:
