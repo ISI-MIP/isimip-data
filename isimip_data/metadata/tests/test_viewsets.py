@@ -76,13 +76,13 @@ def test_file_list(db, client):
 
 
 def test_file_detail(db, client):
-    file = File.objects.using('metadata').filter(dataset__target=None).first()
+    file = File.objects.using('metadata').filter(datasets__target=None).first()
     response = client.get(reverse('file-detail', args=[file.id]))
     assert response.status_code == 200
 
 
 def test_file_detail_target(db, client):
-    file = File.objects.using('metadata').exclude(dataset__target=None).first()
+    file = File.objects.using('metadata').exclude(datasets__target=None).first()
     response = client.get(reverse('file-detail', args=[file.id]))
     assert response.status_code == 404
 
