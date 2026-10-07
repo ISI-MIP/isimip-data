@@ -182,7 +182,7 @@ class File(models.Model):
 
     @cached_property
     def rights(self):
-        return self.datasets.values_list('rights', flat=True)
+        return [dataset.rights for dataset in self.datasets.all()]
 
     @cached_property
     def rights_list(self):

@@ -5,6 +5,7 @@ from pathlib import PurePath
 from django.conf import settings
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.paginator import Paginator as DjangoPaginator
+from django.db.models import Prefetch
 from django.utils.functional import cached_property
 
 from rest_framework import serializers
@@ -60,12 +61,6 @@ class Pagination(PageNumberPagination):
 
 
 class DatasetViewSet(ReadOnlyModelViewSet):
-    queryset = (
-        Dataset.objects.using('metadata')
-        .filter(target=None)
-        .prefetch_related('files', 'files__datasets', 'files__links', 'links', 'resources')
-    )
-
     serializer_class = DatasetSerializer
     pagination_class = Pagination
 
@@ -78,6 +73,23 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         IdentifierFilterBackend,
         TreeFilterBackend,
     )
+
+    def get_queryset(self):
+        datasets = Dataset.objects.using('metadata').filter(target=None)
+        files = File.objects.using('metadata')
+        resources = Resource.objects.using('metadata')
+
+        return datasets.prefetch_related(
+            Prefetch('links', queryset=datasets),
+            Prefetch(
+                'files',
+                queryset=files.prefetch_related(
+                    Prefetch('links', queryset=files),
+                    Prefetch('datasets', queryset=datasets),
+                ),
+            ),
+            Prefetch('resources', queryset=resources),
+        )
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
