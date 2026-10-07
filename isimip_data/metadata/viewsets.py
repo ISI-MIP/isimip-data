@@ -162,7 +162,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     @action(detail=False, renderer_classes=[TemplateHTMLRenderer])
     def filelist(self, request):
         queryset = self.filter_queryset(self.get_queryset())
-        files = File.objects.using('metadata').select_related('dataset').filter(dataset__in=queryset)
+        files = File.objects.using('metadata').filter(datasets__in=queryset).distinct()
         response = Response(
             {'files': files}, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8'
         )
@@ -172,7 +172,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])
     def detail_filelist(self, request, pk):
         dataset = self.get_object()
-        files = File.objects.using('metadata').select_related('dataset').filter(dataset=dataset)
+        files = File.objects.using('metadata').filter(datasets=dataset).distinct()
         response = Response(
             {'files': files}, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8'
         )
@@ -278,7 +278,7 @@ class ResourceViewSet(ReadOnlyModelViewSet):
     @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])
     def detail_filelist(self, request, pk):
         resource = self.get_object()
-        files = File.objects.using('metadata').select_related('dataset').filter(dataset__resources=resource)
+        files = File.objects.using('metadata').filter(datasets__resources=resource).distinct()
         response = Response(
             {'files': files}, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8'
         )
