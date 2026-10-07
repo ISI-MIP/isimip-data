@@ -38,7 +38,7 @@ def get_jsonld(request, obj):
             'name': get_jsonld_name(obj),
             'description': f'This file is part of {", ".join(identifiers)}',
             'identifier': request.build_absolute_uri(obj.get_absolute_url()),
-            'isPartOf': [datasets],
+            'isPartOf': datasets,
         }
 
     else:

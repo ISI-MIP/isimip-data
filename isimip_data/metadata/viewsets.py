@@ -18,6 +18,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ViewSet
 
 from isimip_data.annotations.models import Annotation
 from isimip_data.caveats.models import Caveat
+from isimip_data.core.response import AttachmentResponse
 
 from .filters import (
     ChecksumFilterBackend,
@@ -75,7 +76,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     )
 
     def get_queryset(self):
-        datasets = Dataset.objects.using('metadata').filter(target=None)
+        datasets = Dataset.objects.using('metadata')
         files = File.objects.using('metadata')
         resources = Resource.objects.using('metadata')
 
@@ -89,7 +90,7 @@ class DatasetViewSet(ReadOnlyModelViewSet):
                 ),
             ),
             Prefetch('resources', queryset=resources),
-        )
+        ).filter(target=None)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -175,31 +176,34 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     def filelist(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         files = File.objects.using('metadata').filter(datasets__in=queryset).distinct()
-        response = Response(
-            {'files': files}, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8'
+        return AttachmentResponse(
+            {'files': files},
+            template_name='metadata/filelist.txt',
+            content_type='text/plain; charset=utf-8',
+            file_name='filelist.txt',
         )
-        response['Content-Disposition'] = 'attachment; filename=filelist.txt'
-        return response
 
     @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])
     def detail_filelist(self, request, pk):
         dataset = self.get_object()
         files = File.objects.using('metadata').filter(datasets=dataset).distinct()
-        response = Response(
-            {'files': files}, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8'
+        return AttachmentResponse(
+            {'files': files},
+            template_name='metadata/filelist.txt',
+            content_type='text/plain; charset=utf-8',
+            file_name=f'{dataset.name}.txt',
         )
-        response['Content-Disposition'] = f'attachment; filename={dataset.name}.txt'
-        return response
 
     @action(detail=True, url_path='manifest', renderer_classes=[TemplateHTMLRenderer])
     def detail_manifest(self, request, pk):
         dataset = self.get_object()
-        files = File.objects.using('metadata').select_related('dataset').filter(dataset=dataset)
-        response = Response(
-            {'files': files}, template_name='metadata/manifest.txt', content_type='text/plain; charset=utf-8'
+        files = File.objects.using('metadata').filter(datasets=dataset).distinct()
+        return AttachmentResponse(
+            {'files': files},
+            template_name='metadata/manifest.txt',
+            content_type='text/plain; charset=utf-8',
+            file_name=f'{dataset.name}-manifest.txt',
         )
-        response['Content-Disposition'] = f'attachment; filename={dataset.name}-manifest.txt'
-        return response
 
 
 class FileViewSet(ReadOnlyModelViewSet):
@@ -227,6 +231,7 @@ class FileViewSet(ReadOnlyModelViewSet):
         ChecksumFilterBackend,
     )
 
+    # stops the ?dataset= parameter from also being treated as identifier in the IdentifierFilterBackend
     filter_exclude_identifier = 'dataset'
 
 
@@ -248,7 +253,7 @@ class ResourceViewSet(ReadOnlyModelViewSet):
         resource = self.get_object()
         base_url = request.build_absolute_uri()
         datasets = Dataset.objects.using('metadata').filter(resources=resource)
-        response = Response(
+        return AttachmentResponse(
             [
                 {
                     'id': dataset.id,
@@ -258,17 +263,16 @@ class ResourceViewSet(ReadOnlyModelViewSet):
                     'metadata_url': base_url + dataset.get_absolute_url(),
                 }
                 for dataset in datasets
-            ]
+            ],
+            file_name=f'{resource.doi}.datasets.json',
         )
-        response['Content-Disposition'] = f'attachment; filename={resource.doi}.datasets.json'
-        return response
 
     @action(detail=True, url_path='files', renderer_classes=[IndentedJSONRenderer])
     def detail_files(self, request, pk):
         resource = self.get_object()
         base_url = request.build_absolute_uri()
         files = File.objects.using('metadata').select_related('dataset').filter(dataset__resources=resource)
-        response = Response(
+        return AttachmentResponse(
             [
                 {
                     'id': file.id,
@@ -282,30 +286,31 @@ class ResourceViewSet(ReadOnlyModelViewSet):
                     'json_url': file.json_url,
                 }
                 for file in files
-            ]
+            ],
+            file_name=f'{resource.doi}.files.json',
         )
-        response['Content-Disposition'] = f'attachment; filename={resource.doi}.files.json'
-        return response
 
     @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])
     def detail_filelist(self, request, pk):
         resource = self.get_object()
         files = File.objects.using('metadata').filter(datasets__resources=resource).distinct()
-        response = Response(
-            {'files': files}, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8'
+        return AttachmentResponse(
+            {'files': files},
+            template_name='metadata/filelist.txt',
+            content_type='text/plain; charset=utf-8',
+            file_name=f'{resource.doi}.txt',
         )
-        response['Content-Disposition'] = f'attachment; filename={resource.doi}-manifest.txt'
-        return response
 
     @action(detail=True, url_path='manifest', renderer_classes=[TemplateHTMLRenderer])
     def detail_manifest(self, request, pk):
         resource = self.get_object()
-        files = File.objects.using('metadata').select_related('dataset').filter(dataset__resources=resource)
-        response = Response(
-            {'files': files}, template_name='metadata/manifest.txt', content_type='text/plain; charset=utf-8'
+        files = File.objects.using('metadata').filter(datasets__resources=resource).distinct()
+        return AttachmentResponse(
+            {'files': files},
+            template_name='metadata/manifest.txt',
+            content_type='text/plain; charset=utf-8',
+            file_name=f'{resource.doi}-manifest.txt',
         )
-        response['Content-Disposition'] = f'attachment; filename={resource.doi}-manifest.txt'
-        return response
 
 
 class TreeViewSet(ViewSet):

@@ -106,6 +106,8 @@ class SearchFilterBackend(BaseFilterBackend):
             else:
                 queryset = queryset.filter(**filter_kwargs)
 
+            queryset = queryset.distinct()
+
         return queryset
 
 
@@ -116,7 +118,7 @@ class VersionFilterBackend(BaseFilterBackend):
 
         if request.GET.get('all') != 'true':
             if queryset.model == File:
-                queryset = queryset.filter(datasets__public=True)
+                queryset = queryset.filter(datasets__public=True).distinct()
             else:
                 queryset = queryset.filter(public=True)
 
@@ -176,7 +178,7 @@ class TreeFilterBackend(BaseFilterBackend):
                 else:
                     q |= Q(**filter_kwargs)
 
-            queryset = queryset.filter(q)
+            queryset = queryset.filter(q).distinct()
 
         return queryset
 
