@@ -175,9 +175,8 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     @action(detail=False, renderer_classes=[TemplateHTMLRenderer])
     def filelist(self, request):
         queryset = self.filter_queryset(self.get_queryset())
-        files = File.objects.using('metadata').filter(datasets__in=queryset).distinct()
         return AttachmentResponse(
-            {'files': files},
+            {'files': [file for dataset in queryset.all() for file in dataset.files.all()]},
             template_name='metadata/filelist.txt',
             content_type='text/plain; charset=utf-8',
             file_name='filelist.txt',
@@ -186,9 +185,8 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])
     def detail_filelist(self, request, pk):
         dataset = self.get_object()
-        files = File.objects.using('metadata').filter(datasets=dataset).distinct()
         return AttachmentResponse(
-            {'files': files},
+            {'files': dataset.files.all()},
             template_name='metadata/filelist.txt',
             content_type='text/plain; charset=utf-8',
             file_name=f'{dataset.name}.txt',
@@ -197,9 +195,8 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     @action(detail=True, url_path='manifest', renderer_classes=[TemplateHTMLRenderer])
     def detail_manifest(self, request, pk):
         dataset = self.get_object()
-        files = File.objects.using('metadata').filter(datasets=dataset).distinct()
         return AttachmentResponse(
-            {'files': files},
+            {'files': dataset.files.all()},
             template_name='metadata/manifest.txt',
             content_type='text/plain; charset=utf-8',
             file_name=f'{dataset.name}-manifest.txt',
@@ -240,7 +237,7 @@ class ResourceViewSet(ReadOnlyModelViewSet):
     serializer_class = ResourceSerializer
     pagination_class = Pagination
 
-    filter_backends = (IdFilterBackend, PathFilterBackend, SearchFilterBackend)
+    filter_backends = (IdFilterBackend,)
 
     @action(detail=False)
     def index(self, request):
@@ -271,7 +268,9 @@ class ResourceViewSet(ReadOnlyModelViewSet):
     def detail_files(self, request, pk):
         resource = self.get_object()
         base_url = request.build_absolute_uri()
-        files = File.objects.using('metadata').select_related('dataset').filter(dataset__resources=resource)
+        files = (
+            File.objects.using('metadata').prefetch_related('datasets').filter(datasets__resources=resource).distinct()
+        )
         return AttachmentResponse(
             [
                 {
@@ -293,7 +292,9 @@ class ResourceViewSet(ReadOnlyModelViewSet):
     @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])
     def detail_filelist(self, request, pk):
         resource = self.get_object()
-        files = File.objects.using('metadata').filter(datasets__resources=resource).distinct()
+        files = (
+            File.objects.using('metadata').prefetch_related('datasets').filter(datasets__resources=resource).distinct()
+        )
         return AttachmentResponse(
             {'files': files},
             template_name='metadata/filelist.txt',
