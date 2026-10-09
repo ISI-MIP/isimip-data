@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict jU9BkfZJC6pZTo6CBAaaTR6vbLofH0XhQUL7gen4KOMNkpw67Gw3PoIGo0afn92
+\restrict PMChnkTgD1mfigJsAg3oDfzr4Px0S0LTVmkamgrbwdg2EJhi5dPmGRUI1owcbtD
 
 -- Dumped from database version 18.0 (Debian 18.0-1.pgdg13+3)
 -- Dumped by pg_dump version 18.6
@@ -152,6 +152,20 @@ CREATE TABLE public.resources_datasets (
 ALTER TABLE public.resources_datasets OWNER TO isimip_metadata;
 
 --
+-- Name: search; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.search (
+    dataset_id uuid NOT NULL,
+    vector tsvector NOT NULL,
+    created timestamp without time zone,
+    updated timestamp without time zone
+);
+
+
+ALTER TABLE public.search OWNER TO postgres;
+
+--
 -- Name: specifiers; Type: MATERIALIZED VIEW; Schema: public; Owner: isimip_metadata
 --
 
@@ -265,6 +279,20 @@ COPY public.resources_datasets (resource_id, dataset_id) FROM stdin;
 
 
 --
+-- Data for Name: search; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.search (dataset_id, vector, created, updated) FROM stdin;
+84e86386-4ba2-45b2-92bc-615f4f0def34	'10.12345':4A '20210818':22A '45b2':15A '4ba2':23A '4f0e':3A '5426c5a9089c':13A '615f4f0def34':21A '7f05e9ad':16A '84e86386':9A '92bc':14A '93b5':5A 'amet':26A 'dolor':17A 'e':8A 'ed3b':2A 'global':28A 'isimip.001':29A 'lorem':20A 'model':24A 'month':18A 'mustermann':7A 'none':19A 'product':6A 'round':1A 'sector':11A 'sector2':10A 'sit':25A 'test':12A 'var':27A	2026-10-09 13:06:17.835236	2026-10-09 13:06:17.838471
+7f05e9ad-ed3b-4f0e-93b5-5426c5a9089c	'10.12345':2A '20210818':21A '45b2':15A '4ba2':23A '4f0e':3A '5426c5a9089c':12A '615f4f0def34':22A '7f05e9ad':16A '84e86386':9A '92bc':14A '93b5':5A 'amet':26A 'dolor':17A 'e':8A 'ed3b':4A 'global':28A 'isimip.001':29A 'lorem':20A 'model':24A 'month':18A 'mustermann':7A 'none':19A 'product':6A 'round':1A 'sector':11A 'sector2':10A 'sit':25A 'test':13A 'var':27A	2026-10-09 13:06:17.838359	2026-10-09 13:06:17.838439
+d0e89231-6932-4e02-8cf9-267862b12f3c	'10.12345':2A '20210818':19A '2297edcee75b':29A '267862b12f3c':14A '42a4':13A '4e02':17A '6932':25A '8cf9':6A '8eb4':20A 'amet':24A 'b9f8fbc2':12A 'd0e89231':7A 'd164':21A 'dolor':15A 'e':5A 'global':27A 'ipsum':9A 'isimip.001':28A 'model':22A 'month':16A 'mustermann':4A 'none':18A 'product':3A 'round':1A 'sector':10A 'sector2':8A 'sit':23A 'test':11A 'var':26A	2026-10-09 13:06:17.841874	2026-10-09 13:06:17.842949
+b9f8fbc2-d164-42a4-8eb4-2297edcee75b	'10.12345':2A '20210818':19A '2297edcee75b':29A '267862b12f3c':14A '42a4':13A '4e02':17A '6932':25A '8cf9':6A '8eb4':20A 'amet':24A 'b9f8fbc2':12A 'd0e89231':7A 'd164':21A 'dolor':15A 'e':5A 'global':27A 'ipsum':9A 'isimip.001':28A 'model':22A 'month':16A 'mustermann':4A 'none':18A 'product':3A 'round':1A 'sector':10A 'sector2':8A 'sit':23A 'test':11A 'var':26A	2026-10-09 13:06:17.842863	2026-10-09 13:06:17.842921
+8503652b-0a06-4eac-9a3f-c230357f2ebc	'0a06':17A '20210818':10A '4eac':4A '8503652b':12A '9a3f':8A 'amet':6A 'c230357f2ebc':9A 'dolor':16A 'global':14A 'ipsum':2A 'model2':7A 'month':11A 'none':18A 'product':15A 'round':1A 'sector':5A 'sit':3A 'var':13A	2026-10-09 13:06:17.845007	\N
+121de27e-4639-46fa-af79-2028bffc8e4c	'121de27e':17A '20210818':9A '2028bffc8e4c':15A '4639':8A '46fa':3A 'af79':11A 'amet':5A 'dolor':16A 'global':13A 'lorem':7A 'model2':6A 'month':10A 'none':18A 'product':14A 'round':1A 'sector':4A 'sit':2A 'var':12A	2026-10-09 13:06:17.846613	\N
+\.
+
+
+--
 -- Data for Name: trees; Type: TABLE DATA; Schema: public; Owner: isimip_metadata
 --
 
@@ -311,6 +339,14 @@ ALTER TABLE ONLY public.resources_datasets
 
 ALTER TABLE ONLY public.resources
     ADD CONSTRAINT resources_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: search search_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.search
+    ADD CONSTRAINT search_pkey PRIMARY KEY (dataset_id);
 
 
 --
@@ -490,6 +526,13 @@ CREATE INDEX resources_paths_idx ON public.resources USING btree (paths);
 
 
 --
+-- Name: search_vector_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX search_vector_idx ON public.search USING gin (vector);
+
+
+--
 -- Name: specifiers_specifier_idx; Type: INDEX; Schema: public; Owner: isimip_metadata
 --
 
@@ -545,6 +588,14 @@ ALTER TABLE ONLY public.resources_datasets
 
 
 --
+-- Name: search search_dataset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.search
+    ADD CONSTRAINT search_dataset_id_fkey FOREIGN KEY (dataset_id) REFERENCES public.datasets(id);
+
+
+--
 -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pg_database_owner
 --
 
@@ -556,6 +607,13 @@ GRANT ALL ON SCHEMA public TO isimip_data;
 --
 
 GRANT SELECT ON TABLE public.datasets TO isimip_data;
+
+
+--
+-- Name: TABLE datasets_files; Type: ACL; Schema: public; Owner: isimip_metadata
+--
+
+GRANT SELECT ON TABLE public.datasets_files TO isimip_data;
 
 
 --
@@ -618,5 +676,5 @@ REFRESH MATERIALIZED VIEW public.specifiers;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict jU9BkfZJC6pZTo6CBAaaTR6vbLofH0XhQUL7gen4KOMNkpw67Gw3PoIGo0afn92
+\unrestrict PMChnkTgD1mfigJsAg3oDfzr4Px0S0LTVmkamgrbwdg2EJhi5dPmGRUI1owcbtD
 

@@ -48,5 +48,6 @@ repos:
     exclude: |
       (?x)^(
         config/settings/environments/.*|
-        isimip_data/download/constants.py
+        isimip_data/download/constants.py|
+        testing/sql.*
       )$
