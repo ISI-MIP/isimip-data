@@ -35,7 +35,7 @@ class DatasetFilterBackend(BaseFilterBackend):
         dataset_ids = request.GET.getlist('dataset')
 
         if dataset_ids:
-            queryset = queryset.filter(dataset_id__in=dataset_ids)
+            queryset = queryset.filter(datasets__in=dataset_ids).distinct()
 
         return queryset
 
@@ -96,7 +96,7 @@ class SearchFilterBackend(BaseFilterBackend):
 
             # last, perform a full text search on the search_vector field
             if queryset.model == File:
-                filter_kwargs = {'dataset__search__vector': search_query}
+                filter_kwargs = {'datasets__search__vector': search_query}
             else:
                 filter_kwargs = {'search__vector': search_query}
 
@@ -105,6 +105,8 @@ class SearchFilterBackend(BaseFilterBackend):
                 queryset = queryset.filter(root_id__in=subquery)
             else:
                 queryset = queryset.filter(**filter_kwargs)
+
+            queryset = queryset.distinct()
 
         return queryset
 
@@ -116,7 +118,7 @@ class VersionFilterBackend(BaseFilterBackend):
 
         if request.GET.get('all') != 'true':
             if queryset.model == File:
-                queryset = queryset.filter(dataset__public=True)
+                queryset = queryset.filter(datasets__public=True).distinct()
             else:
                 queryset = queryset.filter(public=True)
 
@@ -166,7 +168,7 @@ class TreeFilterBackend(BaseFilterBackend):
                 tree = tree.rstrip('/') + '/'
 
                 if queryset.model == File:
-                    filter_kwargs = {'dataset__tree_path__startswith': tree}
+                    filter_kwargs = {'datasets__tree_path__startswith': tree}
                 else:
                     filter_kwargs = {'tree_path__startswith': tree}
 
@@ -176,7 +178,7 @@ class TreeFilterBackend(BaseFilterBackend):
                 else:
                     q |= Q(**filter_kwargs)
 
-            queryset = queryset.filter(q)
+            queryset = queryset.filter(q).distinct()
 
         return queryset
 

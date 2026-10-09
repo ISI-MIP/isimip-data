@@ -8,7 +8,7 @@ from isimip_data.metadata.models import File
 @csrf_exempt
 def download(request, job_id=None):
     paths = request.POST.getlist('paths')
-    files = File.objects.using('metadata').filter(path__in=paths, dataset__public=True)
+    files = File.objects.using('metadata').filter(path__in=paths, datasets__public=True).distinct()
 
     return render(
         request,

@@ -38,6 +38,8 @@ class Dataset(models.Model):
     archived = models.DateTimeField()
     last_changed = models.DateTimeField()
 
+    files = models.ManyToManyField('File', related_name='datasets')
+
     root_id = models.UUIDField(editable=False)
 
     class Meta:
@@ -104,7 +106,6 @@ class Dataset(models.Model):
 
 class File(models.Model):
     id = models.UUIDField(primary_key=True)
-    dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE, related_name='files')
     target = models.ForeignKey('File', on_delete=models.CASCADE, related_name='links')
 
     name = models.TextField()
@@ -133,11 +134,19 @@ class File(models.Model):
 
     @cached_property
     def public(self):
-        return self.dataset.public
+        return any(dataset.public for dataset in self.datasets.all())
+
+    @cached_property
+    def restricted(self):
+        return all(dataset.restricted for dataset in self.datasets.all())
 
     @cached_property
     def resources(self):
-        return self.dataset.resources
+        return [resource for dataset in self.datasets.all() for resource in dataset.resources]
+
+    @cached_property
+    def current_resources(self):
+        return [resource for dataset in self.datasets.all() for resource in dataset.current_resources]
 
     @cached_property
     def json_path(self):
@@ -172,12 +181,12 @@ class File(models.Model):
         return merge_identifiers(self)
 
     @cached_property
-    def rights_dict(self):
-        return RIGHTS.get(self.dataset.rights, {})
+    def rights(self):
+        return [dataset.rights for dataset in self.datasets.all()]
 
     @cached_property
     def rights_list(self):
-        return [self.rights_dict] if self.rights_dict else []
+        return [RIGHTS.get(rights, {}) for rights in self.rights]
 
     @cached_property
     def terms_of_use(self):
@@ -185,14 +194,14 @@ class File(models.Model):
 
     @cached_property
     def file_url(self):
-        if self.dataset.restricted:
+        if self.restricted:
             return f'{settings.FILES_BASE_URL}/restricted/{self.path}'
         else:
             return f'{settings.FILES_BASE_URL}/{self.path}'
 
     @cached_property
     def json_url(self):
-        if self.dataset.restricted:
+        if self.restricted:
             return f'{settings.FILES_BASE_URL}/restricted/{self.json_path}'
         else:
             return f'{settings.FILES_BASE_URL}/{self.json_path}'

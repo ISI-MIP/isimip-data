@@ -5,6 +5,7 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet
 
+from isimip_data.core.response import AttachmentResponse
 from isimip_data.metadata.models import Dataset, File
 
 from .models import Caveat
@@ -29,7 +30,7 @@ class CaveatViewSet(ReadOnlyModelViewSet):
         caveat = self.get_object()
         base_url = request.build_absolute_uri()
         datasets = Dataset.objects.using('metadata').filter(id__in=caveat.datasets)
-        response = Response(
+        return AttachmentResponse(
             [
                 {
                     'id': dataset.id,
@@ -39,21 +40,19 @@ class CaveatViewSet(ReadOnlyModelViewSet):
                     'metadata_url': base_url + dataset.get_absolute_url(),
                 }
                 for dataset in datasets
-            ]
+            ],
+            file_name=f'caveat-{caveat.id}.datasets.json',
         )
-        response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.datasets.json'
-        return response
 
     @action(detail=True, url_path='files', renderer_classes=[JSONRenderer])
     def detail_files(self, request, pk):
         caveat = self.get_object()
         base_url = request.build_absolute_uri()
-        files = File.objects.using('metadata').select_related('dataset').filter(dataset__id__in=caveat.datasets)
-        response = Response(
+        files = File.objects.using('metadata').prefetch_related('datasets').filter(datasets__in=caveat.datasets)
+        return AttachmentResponse(
             [
                 {
                     'id': file.id,
-                    'dataset_id': file.dataset_id,
                     'path': file.path,
                     'version': file.version,
                     'public': file.public,
@@ -62,24 +61,20 @@ class CaveatViewSet(ReadOnlyModelViewSet):
                     'json_url': file.json_url,
                 }
                 for file in files
-            ]
+            ],
+            file_name=f'caveat-{caveat.id}.files.json',
         )
-        response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.files.json'
-        return response
 
     @action(detail=True, url_path='filelist', renderer_classes=[TemplateHTMLRenderer])
     def detail_filelist(self, request, pk):
         caveat = self.get_object()
-        files = (
-            File.objects.using('metadata')
-            .select_related('dataset')
-            .filter(dataset__id__in=caveat.datasets, dataset__public=True)
+        files = File.objects.using('metadata').filter(datasets__in=caveat.datasets, datasets__public=True).distinct()
+        return AttachmentResponse(
+            {'files': files},
+            template_name='metadata/filelist.txt',
+            content_type='text/plain; charset=utf-8',
+            file_name=f'caveat-{caveat.id}.txt',
         )
-        response = Response(
-            {'files': files}, template_name='metadata/filelist.txt', content_type='text/plain; charset=utf-8'
-        )
-        response['Content-Disposition'] = f'attachment; filename=caveat-{caveat.id}.txt'
-        return response
 
 
 class CategoryViewSet(ListModelMixin, GenericViewSet):
