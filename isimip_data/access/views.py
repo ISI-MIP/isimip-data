@@ -43,17 +43,14 @@ def token(request, jwt):
         return render(request, 'access/token_error.html', {'error': 'The no matching token was found in our database.'})
 
     response = render(request, 'access/token.html', {'resource': token.resource, 'token': token})
-
-    for path in token.resource.paths:
-        response.set_cookie(
-            f'isimip_access_token_{token.as_jwt[-8:]}',
-            path=path,
-            value=token.as_jwt,
-            expires=token.expires,
-            domain=settings.FILES_AUTH_DOMAIN,
-            secure=not settings.DEBUG,
-            httponly=False,
-            samesite='Lax',
-        )
+    response.set_cookie(
+        f'isimip_access_token_{token.as_jwt[-8:]}',
+        value=token.as_jwt,
+        expires=token.expires,
+        domain=settings.FILES_AUTH_DOMAIN,
+        secure=not settings.DEBUG,
+        httponly=False,
+        samesite='Lax',
+    )
 
     return response
