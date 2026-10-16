@@ -51,10 +51,16 @@ def metadata(request):
 def dataset(request, pk=None, path=None):
     queryset_datasets = Dataset.objects.using('metadata')
     queryset_files = File.objects.using('metadata')
+
     queryset = queryset_datasets.prefetch_related(
-        Prefetch('files', queryset=queryset_files),
-        Prefetch('files__links', queryset=queryset_files),
         Prefetch('links', queryset=queryset_datasets),
+        Prefetch(
+            'files',
+            queryset=queryset_files.prefetch_related(
+                Prefetch('links', queryset=queryset_files),
+                Prefetch('datasets', queryset=queryset_datasets.prefetch_related('files')),
+            ),
+        ),
     )
 
     if pk is not None:
@@ -101,12 +107,15 @@ def dataset(request, pk=None, path=None):
 
 
 def file(request, pk=None, path=None):
+    queryset_datasets = Dataset.objects.using('metadata')
     queryset_files = File.objects.using('metadata')
-    queryset = queryset_files.select_related('dataset').prefetch_related(
+
+    queryset = queryset_files.prefetch_related(
+        Prefetch('links', queryset=queryset_files),
         Prefetch(
-            'dataset__files',
-            queryset=queryset_files.prefetch_related(
-                Prefetch('links', queryset=queryset_files),
+            'datasets',
+            queryset=queryset_datasets.prefetch_related(
+                Prefetch('links', queryset=queryset_datasets),
             ),
         ),
     )
@@ -125,13 +134,12 @@ def file(request, pk=None, path=None):
 
     versions = File.objects.using('metadata').filter(path=obj.path).order_by('-version')
 
-    caveats = Caveat.objects.filter(datasets__overlap=[obj.dataset_id]).public(request.user)
+    datasets = list(obj.datasets.values_list('id', flat=True))
+    caveats = Caveat.objects.filter(datasets__overlap=datasets).public(request.user)
 
     if versions:
-        caveats_datasets = list(versions.exclude(id=obj.id).values_list('dataset_id', flat=True))
-        caveats_versions = Caveat.objects.exclude(datasets__contains=[obj.id]).filter(
-            datasets__overlap=caveats_datasets
-        )
+        caveats_datasets = list(versions.exclude(id=obj.id).values_list('datasets', flat=True))
+        caveats_versions = Caveat.objects.exclude(datasets__overlap=datasets).filter(datasets__overlap=caveats_datasets)
     else:
         caveats_versions = None
 
@@ -141,9 +149,9 @@ def file(request, pk=None, path=None):
         {
             'title': f'File {obj.name}',
             'file': obj,
-            'parents': [obj.dataset],
+            'parents': obj.datasets,
             'versions': versions,
-            'public_version': versions.exclude(id=obj.id).filter(dataset__public=True).first(),
+            'public_version': versions.exclude(id=obj.id).filter(datasets__public=True).first(),
             'caveats': caveats,
             'caveats_versions': caveats_versions,
             'has_access': check_access(request, obj.path),

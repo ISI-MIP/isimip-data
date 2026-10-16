@@ -9,7 +9,7 @@ from .models import Dataset, File, Identifier, Resource
 
 class DatasetFileSerializer(serializers.ModelSerializer):
     metadata_url = serializers.SerializerMethodField()
-    rights = serializers.JSONField(source='rights_dict')
+    rights = serializers.JSONField(source='rights_list')
 
     class Meta:
         model = File
@@ -233,7 +233,7 @@ class FileSerializer(serializers.ModelSerializer):
     links = FileLinkSerializer(many=True)
     search_rank = serializers.FloatField(required=False, default=0.0)
     metadata_url = serializers.SerializerMethodField()
-    rights = serializers.JSONField(source='rights_dict')
+    rights = serializers.JSONField(source='rights_list')
 
     class Meta:
         model = File

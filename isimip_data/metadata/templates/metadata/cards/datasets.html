@@ -3,7 +3,7 @@
 
 <div class="card">
     <ul class="list-group list-group-flush">
-        {% for dataset in datasets %}
+        {% for dataset in datasets.all %}
         <li class="list-group-item">
             <div class="d-md-flex gap-2 align-items-center mb-1">
                 <a class="d-block" href="{% url 'dataset' dataset.id %}" target="_blank">

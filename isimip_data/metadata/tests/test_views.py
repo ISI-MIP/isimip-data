@@ -63,13 +63,13 @@ def test_dataset_id_target(db, client):
 
 
 def test_file_id(db, client):
-    file = File.objects.using('metadata').filter(dataset__target=None).first()
+    file = File.objects.using('metadata').filter(datasets__target=None).first()
     response = client.get(reverse('file', args=[file.id]))
     assert response.status_code == 200
 
 
 def test_file_id_target(db, client):
-    file = File.objects.using('metadata').exclude(dataset__target=None).first()
+    file = File.objects.using('metadata').exclude(datasets__target=None).first()
     response = client.get(reverse('file', args=[file.id]))
     assert response.status_code == 303
 
