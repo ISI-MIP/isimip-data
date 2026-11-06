@@ -22,7 +22,7 @@ def caveat(request, pk=None):
     if request.path != caveat.get_absolute_url():
         return redirect(caveat)
 
-    comments = caveat.comments.public(request.user)
+    comments = caveat.comments.order_by('created').public(request.user)
     count = Dataset.objects.using('metadata').filter(target=None, id__in=caveat.datasets).count()
     datasets = (
         Dataset.objects.using('metadata')
