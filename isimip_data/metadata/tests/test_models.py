@@ -17,7 +17,7 @@ def test_file_str(db, client):
 
 
 def test_file_json_path(db, client):
-    file = File.objects.using('metadata').filter(dataset__public=True).first()
+    file = File.objects.using('metadata').filter(datasets__public=True).first()
     assert file.json_path == file.path.replace('.nc', '.json')
 
 

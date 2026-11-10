@@ -163,6 +163,8 @@ CACHE_MIDDLEWARE_KEY_PREFIX = 'metadata'
 
 DEBUG_TOOLBAR = False
 
+CONTENT_DISPOSITION = 'attachment'
+
 LOG_LEVEL = False
 LOG_PATH = False
 
