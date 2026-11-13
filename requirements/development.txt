@@ -1,14 +1,8 @@
 -r common.txt
 
 # development only dependencies in alphabetical order
-django-debug-toolbar
-pre-commit
-pre-commit-update
-ruff
-rich
-
-pip-review
-pip-audit
+django-debug-toolbar==6.3.0
+rich==15.0.0
 
 pytest==9.0.3
 pytest-cov==7.1.0
