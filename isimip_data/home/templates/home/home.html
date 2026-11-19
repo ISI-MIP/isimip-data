@@ -284,6 +284,24 @@
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="home-img-wrapper mb-3">
+                        <img class="img-fluid" src="{% static 'images/home/peat.jpg' %}" alt="Peat sector">
+                        <div>
+                            <p>Please select a simulation round:</p>
+                            <ul>
+                                {% home_list 'OutputData' 'peat' %}
+                            </ul>
+                            <p>
+                                Photo by <a href="https://unsplash.com/@kbrembo">K B</a> on <a href="https://unsplash.com/photos/the-sun-is-setting-over-a-vast-expanse-of-water-axa5jckDcg4">Unsplash</a>
+                            </p>
+                        </div>
+                    </div>
+                    <h5 class="mb-2" class="card-title">Peat sector</h5>
+                    <p>
+                        Output data from {% home_inline_list 'OutputData' 'peat' %}.
+                    </p>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="home-img-wrapper mb-3">
                         <img class="img-fluid" src="{% static 'images/home/permafrost.jpg' %}" alt="Permafrost sector">
                         <div>
                             <p>Please select a simulation round:</p>
