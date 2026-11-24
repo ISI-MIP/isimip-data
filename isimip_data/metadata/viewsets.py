@@ -5,7 +5,8 @@ from pathlib import PurePath
 from django.conf import settings
 from django.contrib.postgres.search import TrigramSimilarity
 from django.core.paginator import Paginator as DjangoPaginator
-from django.db.models import Prefetch
+from django.db import ProgrammingError
+from django.db.models import Prefetch, Q
 from django.utils.functional import cached_property
 
 from rest_framework import serializers
@@ -31,7 +32,7 @@ from .filters import (
     TreeFilterBackend,
     VersionFilterBackend,
 )
-from .models import Dataset, File, Identifier, Resource, Specifier, Tree
+from .models import Dataset, FacetCount, FacetPair, File, Identifier, Resource, Specifier, Tree
 from .serializers import (
     DatasetSerializer,
     FileSerializer,
@@ -159,15 +160,97 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         else:
             return Response([])
 
+    # GET parameters that restrict the queryset beyond the identifier specifiers
+    # (all other filter backends besides IdentifierFilterBackend); histograms can
+    # only be served from the precomputed facet tables if none of them is present
+    FAST_HISTOGRAM_EXCLUDED_PARAMS = frozenset({'id', 'name', 'path', 'query', 'all', 'after', 'before', 'tree'})
+
+    def fast_histogram(self, request, identifier):
+        """
+        Try to serve the histogram of the given identifier from the precomputed facet
+        tables: facet_count if no filter is applied, facet_pair if exactly one identifier
+        filter with a single value is applied. The tables match the semantics of the
+        regular path (public rows, count of distinct root datasets per specifier value).
+
+        Returns None if the request cannot be served from the tables (in which case the
+        caller has to fall back to computing the histogram from the datasets table).
+        """
+        if set(request.GET.keys()) & self.FAST_HISTOGRAM_EXCLUDED_PARAMS:
+            return None
+
+        identifiers = set(Identifier.objects.using('metadata').identifiers())
+        active_filters = {
+            key: [value for value in values if value]
+            for key, values in request.GET.lists()
+            if key in identifiers and any(values)
+        }
+
+        try:
+            if len(active_filters) > 1:
+                return None
+
+            if len(active_filters) == 1:
+                (filter_identifier, values), = active_filters.items()
+
+                if filter_identifier == identifier:
+                    # the filter backend excludes the identifiers of a facet from its own histogram anyway
+                    return self.count_histogram(identifier)
+
+                if len(values) != 1:
+                    # pairs are per value, multiple values would need re-counting
+                    return None
+
+                value = values[0]
+                rows = list(
+                    FacetPair.objects.using('metadata')
+                    .filter(
+                        Q(identifier_1=filter_identifier, specifier_1=value, identifier_2=identifier)
+                        | Q(identifier_2=filter_identifier, specifier_2=value, identifier_1=identifier)
+                    )
+                    .values_list('identifier_1', 'specifier_1', 'identifier_2', 'specifier_2', 'count')
+                )
+
+                if not rows:
+                    # cannot distinguish missing table entries from an empty histogram
+                    return None
+
+                return sorted(
+                    (specifier_1, count) if identifier_1 == identifier else (specifier_2, count)
+                    for identifier_1, specifier_1, identifier_2, specifier_2, count in rows
+                )
+
+            return self.count_histogram(identifier)
+        except ProgrammingError:
+            # the facet tables do not (yet) exist in the metadata database
+            return None
+
+    def count_histogram(self, identifier):
+        values = list(
+            FacetCount.objects.using('metadata')
+            .filter(identifier=identifier)
+            .order_by('specifier')
+            .values_list('specifier', 'count')
+        )
+
+        if not values:
+            # facet_count has no entries for this identifier, fall back to computing
+            return None
+
+        return values
+
     @action(detail=False, url_path='histogram/(?P<identifier>[A-Za-z0-9_]+)')
     def histogram(self, request, identifier):
         if Identifier.objects.using('metadata').filter(identifier=identifier).exists():
-            # exclude the identifier from IdentifierFilterBackend and do not resolve links
-            self.filter_exclude_identifier = identifier
-            self.filter_resolve_links = False
+            values = self.fast_histogram(request, identifier)
 
-            queryset = self.filter_queryset(Dataset.objects.using('metadata'))
-            values = queryset.histogram(identifier)
+            if values is None:
+                # exclude the identifier from IdentifierFilterBackend and do not resolve links
+                self.filter_exclude_identifier = identifier
+                self.filter_resolve_links = False
+
+                queryset = self.filter_queryset(Dataset.objects.using('metadata'))
+                values = queryset.histogram(identifier)
+
             return Response(values)
         else:
             raise NotFound

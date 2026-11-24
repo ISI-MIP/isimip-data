@@ -412,3 +412,44 @@ class Search(models.Model):
     class Meta:
         db_table = 'search'
         managed = False
+
+
+class FacetCount(models.Model):
+    """
+    Precomputed facet counts over all public datasets, filled by the metadata
+    pipeline (see the `refresh_facet_tables` management command). The database
+    defines a composite primary key (identifier, specifier); the primary key
+    marker on the `identifier` field below is purely for the ORM, this model is
+    only ever queried with `values_list`.
+    """
+
+    identifier = models.TextField(primary_key=True)
+    specifier = models.TextField()
+    count = models.BigIntegerField()
+
+    class Meta:
+        db_table = 'facet_count'
+        managed = False
+        ordering = ('identifier', 'specifier')
+
+
+class FacetPair(models.Model):
+    """
+    Precomputed facet counts for datasets sharing one (identifier, specifier)
+    filter, i.e. histograms with exactly one identifier filter applied. Filled
+    by the metadata pipeline (see the `refresh_facet_tables` management
+    command), with pairs stored in key order (identifier_1 <= identifier_2) so
+    both lookup directions need to be queried. As for FacetCount the primary
+    key marker is purely for the ORM.
+    """
+
+    identifier_1 = models.TextField(primary_key=True)
+    specifier_1 = models.TextField()
+    identifier_2 = models.TextField()
+    specifier_2 = models.TextField()
+    count = models.BigIntegerField()
+
+    class Meta:
+        db_table = 'facet_pair'
+        managed = False
+        ordering = ('identifier_1', 'specifier_1', 'identifier_2', 'specifier_2')

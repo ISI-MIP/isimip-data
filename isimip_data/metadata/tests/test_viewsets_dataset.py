@@ -1,6 +1,7 @@
 from django.urls import reverse
 
-from isimip_data.metadata.models import Dataset, Identifier
+from isimip_data.metadata.managers import DatasetQuerySet
+from isimip_data.metadata.models import Dataset, FacetCount, FacetPair, Identifier
 
 dataset_id = 'b9f8fbc2-d164-42a4-8eb4-2297edcee75b'
 
@@ -108,6 +109,69 @@ def test_dataset_histogram_not_found(db, client):
     response = client.get(reverse('dataset-histogram', args=['wrong']))
 
     assert response.status_code == 404
+
+
+def test_dataset_histogram_served_from_facet_count(db, client, mocker):
+    mocker.patch.object(DatasetQuerySet, 'histogram', side_effect=AssertionError('should not be called'))
+
+    response = client.get(reverse('dataset-histogram', args=['alpha']))
+    response_data = response.json()
+
+    assert response.status_code == 200
+    assert response_data == [['ipsum', 1], ['lorem', 1]]
+
+    # the response must agree with the facet_count table
+    expected = sorted(
+        FacetCount.objects.using('metadata').filter(identifier='alpha').values_list('specifier', 'count')
+    )
+    assert sorted(response_data) == [list(item) for item in expected]
+
+
+def test_dataset_histogram_served_from_facet_pair(db, client, mocker):
+    mocker.patch.object(DatasetQuerySet, 'histogram', side_effect=AssertionError('should not be called'))
+
+    # 'model' < 'sector', so this exercises the reverse lookup direction in facet_pair
+    response = client.get(reverse('dataset-histogram', args=['model']), {'sector': 'sector2'})
+    response_data = response.json()
+
+    assert response.status_code == 200
+    assert response_data == [['model', 2]]
+
+    assert (
+        FacetPair.objects.using('metadata')
+        .filter(identifier_1='model', specifier_1='model', identifier_2='sector', specifier_2='sector2')
+        .values_list('count', flat=True)
+        .get()
+        == 2
+    )
+
+
+def test_dataset_histogram_serves_own_identifier_from_facet_count(db, client, mocker):
+    # the only identifier filter present is the facet itself, which is excluded from its
+    # own histogram anyway, so this must be served from facet_count
+    mocker.patch.object(DatasetQuerySet, 'histogram', side_effect=AssertionError('should not be called'))
+
+    response = client.get(reverse('dataset-histogram', args=['alpha']), {'alpha': 'ipsum'})
+
+    assert response.status_code == 200
+    assert response.json() == [['ipsum', 1], ['lorem', 1]]
+
+
+def test_dataset_histogram_falls_back_to_query(db, client, mocker):
+    expected = [['model', 2]]
+    mock_histogram = mocker.patch.object(DatasetQuerySet, 'histogram', return_value=expected)
+
+    # two identifier filters cannot be answered from the facet tables
+    response = client.get(reverse('dataset-histogram', args=['variable']), {'sector': 'sector', 'model': 'model'})
+    assert response.status_code == 200
+    assert response.json() == [list(item) for item in expected]
+
+    # nor can a full text search
+    response = client.get(reverse('dataset-histogram', args=['variable']), {'query': 'dolor'})
+    assert response.status_code == 200
+    assert response.json() == [list(item) for item in expected]
+
+    assert mock_histogram.call_count == 2
 
 
 def test_dataset_filelist(db, client):

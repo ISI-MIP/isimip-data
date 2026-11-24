@@ -20,3 +20,4 @@ def django_db_setup(django_db_setup, django_db_blocker):
             'loaddata',
             *[str(f) for fixture_dir in settings.FIXTURE_DIRS for f in Path(fixture_dir).iterdir()],
         )
+        call_command('refresh_facet_tables')
