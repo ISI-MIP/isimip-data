@@ -23,6 +23,16 @@ filter states (multiple identifier filters, full text search, path/tree filters,
 which are either already fast via the GIN index or not covered by the tables. If the
 tables are missing or empty, everything still works through the fallback.
 
+One-shot facets
+---------------
+
+`/api/v1/datasets/facets/` returns the histograms of all facets configured via
+`SEARCH_FACETS` in one request, keyed by identifier, accepting the same filter
+parameters as the dataset list endpoint and using the same fast/fallback mechanics
+as the per-facet endpoint. At most `METADATA_MAX_FACET_VALUES` (default 200) values
+per facet are returned, the most frequent ones. The search page sidebar uses this
+endpoint instead of issuing one histogram request per open facet.
+
 Refresh
 -------
 

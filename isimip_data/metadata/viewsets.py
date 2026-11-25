@@ -165,6 +165,30 @@ class DatasetViewSet(ReadOnlyModelViewSet):
     # only be served from the precomputed facet tables if none of them is present
     FAST_HISTOGRAM_EXCLUDED_PARAMS = frozenset({'id', 'name', 'path', 'query', 'all', 'after', 'before', 'tree'})
 
+    def _active_identifier_filters(self, request):
+        # returns the active identifier filters (parameter -> non-empty values), or None if any
+        # of the other filter parameters is present, since then the precomputed facet tables
+        # cannot answer the request
+        if set(request.GET.keys()) & self.FAST_HISTOGRAM_EXCLUDED_PARAMS:
+            return None
+
+        identifiers = set(Identifier.objects.using('metadata').identifiers())
+        return {
+            key: [value for value in values if value]
+            for key, values in request.GET.lists()
+            if key in identifiers and any(values)
+        }
+
+    def facet_values(self, values):
+        # sort by specifier, in agreement with the histogram endpoint (which yields null values
+        # for datasets without the specifier, sorted last), and keep only the most frequent
+        # values if there are too many
+        limit = settings.METADATA_MAX_FACET_VALUES
+        values = sorted(values, key=lambda value: (value[0] is None, value[0] or ''))
+        if len(values) > limit:
+            values = sorted(sorted(values, key=lambda value: value[1], reverse=True)[:limit])
+        return values
+
     def fast_histogram(self, request, identifier):
         """
         Try to serve the histogram of the given identifier from the precomputed facet
@@ -175,20 +199,11 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         Returns None if the request cannot be served from the tables (in which case the
         caller has to fall back to computing the histogram from the datasets table).
         """
-        if set(request.GET.keys()) & self.FAST_HISTOGRAM_EXCLUDED_PARAMS:
+        active_filters = self._active_identifier_filters(request)
+        if active_filters is None or len(active_filters) > 1:
             return None
 
-        identifiers = set(Identifier.objects.using('metadata').identifiers())
-        active_filters = {
-            key: [value for value in values if value]
-            for key, values in request.GET.lists()
-            if key in identifiers and any(values)
-        }
-
         try:
-            if len(active_filters) > 1:
-                return None
-
             if len(active_filters) == 1:
                 (filter_identifier, values), = active_filters.items()
 
@@ -238,22 +253,101 @@ class DatasetViewSet(ReadOnlyModelViewSet):
 
         return values
 
+    def computed_histogram(self, request, identifier):
+        # exclude the identifier from IdentifierFilterBackend and do not resolve links
+        self.filter_exclude_identifier = identifier
+        self.filter_resolve_links = False
+
+        queryset = self.filter_queryset(Dataset.objects.using('metadata'))
+        return queryset.histogram(identifier)
+
+    def fast_histograms(self, request, identifiers):
+        # like fast_histogram, but for all facet identifiers at once, returning a
+        # mapping of identifier to its list of [specifier, count] values
+        active_filters = self._active_identifier_filters(request)
+        if active_filters is None or len(active_filters) > 1:
+            return None
+
+        try:
+            rows = []
+            if len(active_filters) == 0:
+                rows = list(
+                    FacetCount.objects.using('metadata')
+                    .filter(identifier__in=identifiers)
+                    .values_list('identifier', 'specifier', 'count')
+                )
+            else:
+                (filter_identifier, values), = active_filters.items()
+
+                if len(values) != 1:
+                    # pairs are per value, multiple values would need re-counting
+                    return None
+
+                value = values[0]
+                for identifier_1, specifier_1, identifier_2, specifier_2, count in (
+                    FacetPair.objects.using('metadata')
+                    .filter(
+                        Q(identifier_1=filter_identifier, specifier_1=value, identifier_2__in=identifiers)
+                        | Q(identifier_2=filter_identifier, specifier_2=value, identifier_1__in=identifiers)
+                    )
+                    .values_list('identifier_1', 'specifier_1', 'identifier_2', 'specifier_2', 'count')
+                ):
+                    facet_identifier = identifier_2 if identifier_1 == filter_identifier else identifier_1
+                    if facet_identifier == filter_identifier:
+                        # a facet's own histogram excludes its own filter anyway
+                        continue
+                    specifier = specifier_1 if facet_identifier == identifier_1 else specifier_2
+                    rows.append((facet_identifier, specifier, count))
+
+                # the histogram of the filter identifier itself is the unfiltered one
+                rows += list(
+                    FacetCount.objects.using('metadata')
+                    .filter(identifier=filter_identifier)
+                    .values_list('identifier', 'specifier', 'count')
+                )
+
+            if not rows:
+                # cannot distinguish missing table entries from empty histograms
+                return None
+
+            values = {identifier: [] for identifier in identifiers}
+            for identifier, specifier, count in rows:
+                if identifier in values:
+                    values[identifier].append([specifier, count])
+            for identifier in values:
+                values[identifier] = self.facet_values(values[identifier])
+            return values
+        except ProgrammingError:
+            # the facet tables do not (yet) exist in the metadata database
+            return None
+
+    def computed_histograms(self, request, identifiers):
+        return {
+            identifier: self.facet_values(list(self.computed_histogram(request, identifier)))
+            for identifier in identifiers
+        }
+
     @action(detail=False, url_path='histogram/(?P<identifier>[A-Za-z0-9_]+)')
     def histogram(self, request, identifier):
         if Identifier.objects.using('metadata').filter(identifier=identifier).exists():
             values = self.fast_histogram(request, identifier)
-
             if values is None:
-                # exclude the identifier from IdentifierFilterBackend and do not resolve links
-                self.filter_exclude_identifier = identifier
-                self.filter_resolve_links = False
-
-                queryset = self.filter_queryset(Dataset.objects.using('metadata'))
-                values = queryset.histogram(identifier)
+                values = self.computed_histogram(request, identifier)
 
             return Response(values)
         else:
             raise NotFound
+
+    @action(detail=False, url_path='facets')
+    def facets(self, request):
+        # all facet histograms for the current filter state in one request
+        identifiers = [facet['identifier'] for group in settings.SEARCH_FACETS for facet in group]
+
+        values = self.fast_histograms(request, identifiers)
+        if values is None:
+            values = self.computed_histograms(request, identifiers)
+
+        return Response(values)
 
     @action(detail=False, renderer_classes=[TemplateHTMLRenderer])
     def filelist(self, request):

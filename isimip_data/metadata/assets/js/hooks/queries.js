@@ -37,13 +37,12 @@ export const useDatasetSuggestionsQuery = (params) => {
   })
 }
 
-export const useDatasetsHistogramQuery = (identifier, params, enabled) => {
+export const useDatasetsFacetsQuery = (params) => {
   return useQuery({
-    queryKey: ['histogram', identifier, params],
-    queryFn: () => DatasetApi.fetchDatasetsHistogram(identifier, params),
+    queryKey: ['datasetsFacets', params],
+    queryFn: () => DatasetApi.fetchDatasetsFacets(params),
     placeholderData: keepPreviousData,
-    retry: false,
-    enabled
+    retry: false
   })
 }
 

@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.test import override_settings
 from django.urls import reverse
 
 from isimip_data.metadata.managers import DatasetQuerySet
@@ -172,6 +174,59 @@ def test_dataset_histogram_falls_back_to_query(db, client, mocker):
     assert response.json() == [list(item) for item in expected]
 
     assert mock_histogram.call_count == 2
+
+
+def test_dataset_facets_served_from_facet_count(db, client, mocker):
+    mocker.patch.object(DatasetQuerySet, 'histogram', side_effect=AssertionError('should not be called'))
+
+    response = client.get(reverse('dataset-facets'))
+    response_data = response.json()
+
+    assert response.status_code == 200
+    assert set(response_data.keys()) == {
+        facet['identifier'] for group in settings.SEARCH_FACETS for facet in group
+    }
+    assert response_data['model'] == [['model', 2]]
+    assert response_data['product'] == [['product', 2]]
+
+
+def test_dataset_facets_served_from_facet_pair(db, client, mocker):
+    mocker.patch.object(DatasetQuerySet, 'histogram', side_effect=AssertionError('should not be called'))
+
+    response = client.get(reverse('dataset-facets'), {'sector': 'sector2'})
+    response_data = response.json()
+
+    assert response.status_code == 200
+    assert response_data['model'] == [['model', 2]]
+    assert response_data['variable'] == [['var', 2]]
+
+    # the facet of the applied filter itself is served unfiltered, from facet_count
+    assert response_data['sector'] == [['sector', 2], ['sector2', 2]]
+
+
+def test_dataset_facets_falls_back_to_query(db, client, mocker):
+    mock_histogram = mocker.patch.object(DatasetQuerySet, 'histogram', return_value=[('model', 2)])
+
+    response = client.get(reverse('dataset-facets'), {'query': 'dolor'})
+    response_data = response.json()
+
+    assert response.status_code == 200
+    assert response_data['model'] == [['model', 2]]
+
+    facets = [facet['identifier'] for group in settings.SEARCH_FACETS for facet in group]
+    assert mock_histogram.call_count == len(facets)
+    assert set(response_data.keys()) == set(facets)
+
+
+@override_settings(METADATA_MAX_FACET_VALUES=1)
+def test_dataset_facets_caps_values(db, client, mocker):
+    mocker.patch.object(DatasetQuerySet, 'histogram', side_effect=AssertionError('should not be called'))
+
+    response = client.get(reverse('dataset-facets'))
+    response_data = response.json()
+
+    assert response.status_code == 200
+    assert response_data['sector'] == [['sector', 2]]
 
 
 def test_dataset_filelist(db, client):

@@ -6,16 +6,14 @@ import Icon from 'isimip_data/core/assets/js/components/Icon'
 import Spinner from 'isimip_data/core/assets/js/components/Spinner'
 import Tooltip from 'isimip_data/core/assets/js/components/Tooltip'
 import { useLs } from 'isimip_data/core/assets/js/hooks/ls'
-import { useDatasetsHistogramQuery } from 'isimip_data/metadata/assets/js/hooks/queries'
 
-const Facet = ({ facet, params, glossary, updateParams }) => {
+const Facet = ({ facet, params, glossary, updateParams, items, isFetching }) => {
 
   const [isOpen, setIsOpen] = useLs(`isimip.search.facet.${facet.identifier}`, false)
 
-  const { data: items, isLoading, isFetching } = useDatasetsHistogramQuery(facet.identifier, params, isOpen)
-
   const checked = params[facet.identifier] || []
   const isChecked = checked.length > 0
+  const isLoading = isFetching && isNil(items)
   const hasNoItems = isNil(items) || isEmpty(items) || (items.length == 1 && isNil(items[0][0]))
 
   const handleChange = (event, specifier) => {
@@ -154,7 +152,9 @@ Facet.propTypes = {
   facet: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
   glossary: PropTypes.object.isRequired,
-  updateParams: PropTypes.func.isRequired
+  updateParams: PropTypes.func.isRequired,
+  items: PropTypes.array,
+  isFetching: PropTypes.bool
 }
 
 export default Facet

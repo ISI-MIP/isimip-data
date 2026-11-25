@@ -22,8 +22,8 @@ class DatasetApi {
     })
   }
 
-  static fetchDatasetsHistogram(identifier, urlParams, fetchParams = {}) {
-    return fetch('/api/v1/datasets/histogram/' + identifier + '/?' + encodeParams(urlParams), fetchParams)
+  static fetchDatasetsFacets(urlParams, fetchParams = {}) {
+    return fetch('/api/v1/datasets/facets/?' + encodeParams(urlParams), fetchParams)
       .then(response => {
         if (response.ok) {
           return response.json()
