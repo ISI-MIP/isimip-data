@@ -1,4 +1,5 @@
 import re
+from urllib.parse import parse_qsl, urlencode
 
 from django.db.models import Max
 from django.middleware.cache import CacheMiddleware
@@ -27,9 +28,19 @@ class MetadataCacheMiddleware(CacheMiddleware):
             self._check_cache_invalidation()
 
         if request._in_path_patterns:
+            self._normalize_query_string(request)
             return super().process_request(request)
         else:
             return None
+
+    def _normalize_query_string(self, request):
+        # sort the query parameters, so that the cache key does not depend on their order:
+        # the response is the same for any order of the (independent) filter parameters, and
+        # the webapp and clients construct the parameter order from their filter interaction,
+        # while warm_facet_cache enumerates the states in configuration order
+        query_string = request.META.get('QUERY_STRING')
+        if query_string and '&' in query_string:
+            request.META['QUERY_STRING'] = urlencode(sorted(parse_qsl(query_string, keep_blank_values=True)))
 
     def process_response(self, request, response):
         if getattr(request, '_in_path_patterns', False):

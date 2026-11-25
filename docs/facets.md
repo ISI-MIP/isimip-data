@@ -50,6 +50,30 @@ the `identifiers` and `specifiers` materialized views. Measured timings (Novembe
 (7.6 MB, 54k pairs). Until the pipeline runs them, the app transparently uses the
 slower fallback path.
 
+Cache warming
+-------------
+
+`MetadataCacheMiddleware` caches the dataset API responses but clears the cache
+whenever the metadata changes — so after every ingest all facet responses have to be
+computed again. To spare the first users after an ingest, run on the application
+server:
+
+    ./manage.py warm_facet_cache
+
+The command requests `/api/v1/datasets/facets/` unfiltered and with each single
+identifier value from `facet_count` through the middleware, which caches the
+responses exactly as it would for real requests. Options: `--values-per-identifier`
+limits the values per identifier (most frequent first), `--pairs` additionally warms
+two-identifier combinations of the most frequent values within the first
+`SEARCH_FACETS` group (simulation round, product, period, sector) — those states are
+beyond the facet tables and otherwise cost a full computed round-trip (~2 s) for the
+first user after each ingest. The `--host` option must match the host of the real
+requests (defaults to the first `ALLOWED_HOSTS` entry), since the response cache keys
+include it. The cache keys do not depend on the order of the query parameters —
+`MetadataCacheMiddleware` sorts them — so warmed states are also hit by clients that
+send the filters in another order. Run it after the pipeline has refreshed the facet
+tables.
+
 Development and testing
 -----------------------
 

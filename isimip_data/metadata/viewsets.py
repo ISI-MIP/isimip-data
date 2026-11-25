@@ -183,10 +183,11 @@ class DatasetViewSet(ReadOnlyModelViewSet):
         # sort by specifier, in agreement with the histogram endpoint (which yields null values
         # for datasets without the specifier, sorted last), and keep only the most frequent
         # values if there are too many
+        by_specifier = lambda value: (value[0] is None, value[0] or '')
         limit = settings.METADATA_MAX_FACET_VALUES
-        values = sorted(values, key=lambda value: (value[0] is None, value[0] or ''))
+        values = sorted(values, key=by_specifier)
         if len(values) > limit:
-            values = sorted(sorted(values, key=lambda value: value[1], reverse=True)[:limit])
+            values = sorted(sorted(values, key=lambda value: value[1], reverse=True)[:limit], key=by_specifier)
         return values
 
     def fast_histogram(self, request, identifier):

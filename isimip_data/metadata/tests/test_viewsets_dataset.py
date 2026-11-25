@@ -4,6 +4,7 @@ from django.urls import reverse
 
 from isimip_data.metadata.managers import DatasetQuerySet
 from isimip_data.metadata.models import Dataset, FacetCount, FacetPair, Identifier
+from isimip_data.metadata.viewsets import DatasetViewSet
 
 dataset_id = 'b9f8fbc2-d164-42a4-8eb4-2297edcee75b'
 
@@ -227,6 +228,13 @@ def test_dataset_facets_caps_values(db, client, mocker):
 
     assert response.status_code == 200
     assert response_data['sector'] == [['sector', 2]]
+
+
+@override_settings(METADATA_MAX_FACET_VALUES=3)
+def test_facet_values_keeps_most_frequent_and_nulls_last():
+    # histograms computed from the datasets table contain null specifiers for datasets
+    # without the facet; those sort last, also when the cap keeps the most frequent values
+    assert DatasetViewSet().facet_values([('b', 5), ('a', 4), (None, 3), ('c', 2)]) == [('a', 4), ('b', 5), (None, 3)]
 
 
 def test_dataset_filelist(db, client):
